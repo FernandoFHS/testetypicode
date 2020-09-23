@@ -15,7 +15,7 @@
   <mat-list-item accordion-link *ngFor="let menuItem of menuList" routerLinkActive="selected"
     group="{{menuItem.state}}">
 
-    <a class="" accordion-anchor [routerLink]="['/', menuItem.state]" *ngIf="menuItem.type === 'link'">
+    <a class="" accordion-anchor [routerLink]="[menuItem.state]" *ngIf="menuItem.type === 'link'">
       <mat-icon>
         {{ menuItem.icon }}
       </mat-icon>

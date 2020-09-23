@@ -4,7 +4,7 @@ import { ChangeDetectorRef, Component, OnDestroy, AfterViewInit } from '@angular
 @Component({
   selector: 'app-container',
   templateUrl: './container.component.html',
-  styleUrls: []
+  styleUrls: ['./container.component.scss']
 })
 export class ContainerComponent implements OnDestroy, AfterViewInit {
   mobileQuery: MediaQueryList;
