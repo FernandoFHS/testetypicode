@@ -1,10 +1,11 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnDestroy, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, AfterViewInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-container',
   templateUrl: './container.component.html',
-  styleUrls: ['./container.component.scss']
+  styleUrls: ['./container.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ContainerComponent implements OnDestroy, AfterViewInit {
   mobileQuery: MediaQueryList;

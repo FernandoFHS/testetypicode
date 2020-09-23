@@ -1,11 +1,12 @@
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { menuItems } from 'src/app/@core/consts/menu-items';
 
 @Component({
   selector: 'app-container-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ContainerSidebarComponent implements OnDestroy {
   mobileQuery: MediaQueryList;
