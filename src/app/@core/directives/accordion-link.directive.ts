@@ -26,7 +26,9 @@ export class AccordionLinkDirective implements OnInit, OnDestroy {
   }
 
   toggle(): void {
-    this.selected = !this.selected;
+    if (!this.selected) {
+      this.selected = true;
+    }
   }
 
   @HostBinding('class.selected')

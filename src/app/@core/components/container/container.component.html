@@ -1,14 +1,11 @@
 <div class="main-container">
-  <!-- ============================================================== -->
-  <!-- Topbar - style you can find in header.scss -->
-  <!-- ============================================================== -->
+
   <mat-toolbar color="primary" class="topbar telative">
-    <!-- ============================================================== -->
-    <!-- Logo - style you can find in header.scss -->
-    <!-- ============================================================== -->
+
     <div class="navbar-header">
 
       <a class="navbar-brand" [routerLink]="['/']">
+
         <!-- Logo icon -->
         <div class="fake-logo-icon" fxLayoutAlign="center center">
           <span>
@@ -16,6 +13,7 @@
           </span>
         </div>
         <!--End Logo icon -->
+
         <!-- Logo text -->
         <span fxShow="false" fxShow.gt-xs>
           <div class="fake-logo-text" fxLayoutAlign="center center">
@@ -37,13 +35,8 @@
     <app-container-header></app-container-header>
   </mat-toolbar>
 
-  <!-- ============================================================== -->
-  <!-- End Topbar - style you can find in app.scss -->
-  <!-- ============================================================== -->
-  <mat-sidenav-container class="custom-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 0 : 0">
-    <!-- ============================================================== -->
-    <!-- Sidebar - style you can find in sidebar.scss -->
-    <!-- ============================================================== -->
+  <mat-sidenav-container class="custom-sidenav-container" [style.marginTop.px]="0">
+
     <mat-sidenav #snav id="snav" class="dark-sidebar pl-xs" [mode]="mobileQuery.matches ? 'side' : 'over'"
       fixedTopGap="0" [opened]="mobileQuery.matches" [disableClose]="mobileQuery.matches">
 

@@ -1,5 +1,5 @@
 export class Menu {
-  state: string;
+  route: string;
   name: string;
   type: string;
   icon: string;
