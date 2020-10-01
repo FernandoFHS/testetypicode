@@ -8,12 +8,16 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { CoreModule } from './@core/core.module';
+import { UserComponent } from './pages/user/user.component';
+import { CompanyComponent } from './pages/company/company.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
+    UserComponent,
+    CompanyComponent,
   ],
   imports: [
     BrowserModule,
