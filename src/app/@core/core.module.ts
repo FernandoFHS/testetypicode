@@ -12,6 +12,8 @@ import { AccordionAnchorDirective } from './directives/accordion-anchor.directiv
 import { AccordionLinkDirective } from './directives/accordion-link.directive';
 import { AccordionDirective } from './directives/accordion.directive';
 import { AngularMaterialModule } from './modules/angular-material.module';
+import { LoginComponent } from './components/login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,22 +22,27 @@ import { AngularMaterialModule } from './modules/angular-material.module';
     ContainerSidebarComponent,
     ContainerFooterComponent,
 
+    LoginComponent,
+
     AccordionDirective,
     AccordionLinkDirective,
-    AccordionAnchorDirective
+    AccordionAnchorDirective,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
     AngularMaterialModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
   ],
   exports: [
     ContainerComponent,
     ContainerHeaderComponent,
     ContainerSidebarComponent,
     ContainerFooterComponent,
+
+    LoginComponent,
 
     AccordionDirective,
     AccordionLinkDirective,

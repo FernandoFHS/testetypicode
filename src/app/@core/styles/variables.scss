@@ -8,7 +8,7 @@ $headingfont: "Poppins", sans-serif;
 /*Angular Material Theme Colors*/
 $primary: mat-palette($mat-blue, 600);
 $accent: mat-palette($mat-indigo, 500);
-$warn: mat-palette($mat-pink, 500);
+$warn: mat-palette($mat-red, 500);
 $theme: mat-light-theme($primary, $accent, $warn);
 $background: map-get($theme, background);
 $foreground: map-get($theme, foreground);
@@ -32,7 +32,7 @@ $sidebar-white: #e5edef;
 $sidebar-alt: #f2f6f8;
 $bodycolor: #eef5f9;
 $headingtext: #455a64;
-$bodytext: #67757c;
+$bodytext: white;
 $sidebar-text: #607d8b;
 $sidebar-icons: #99abb4;
 

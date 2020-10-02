@@ -97,6 +97,7 @@ h5,
 h6 {
     font-family: $headingfont;
     font-weight: 400;
+    margin: 0;
 }
 
 h1 {
@@ -449,6 +450,10 @@ html body {
         font-weight: 700;
     }
 
+    .font-light-bold {
+        font-weight: 500;
+    }
+
     .font-normal {
         font-weight: normal;
     }
@@ -762,7 +767,7 @@ Mat card
 .mat-card {
     box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.05) !important;
     -webkit-box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.05) !important;
-    margin: 15px;
+    margin: 0px;
     padding: 0px !important;
     border-radius: $radius;
 
@@ -891,4 +896,3 @@ html .page-wrapper {
 		padding: 5px 15px 15px;
 	}
 }
-
