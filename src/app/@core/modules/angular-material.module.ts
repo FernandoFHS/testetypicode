@@ -30,9 +30,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatRippleModule } from '@angular/material/core';
+import { getPortuguesPaginatorIntl } from '../components/container/data-table/paginator.translate';
 
 @NgModule({
     imports: [
@@ -108,6 +109,7 @@ import { MatRippleModule } from '@angular/material/core';
         MatPaginatorModule,
         MatRippleModule,
         LayoutModule
-    ]
+    ],
+    providers:[{ provide: MatPaginatorIntl, useValue: getPortuguesPaginatorIntl() }]
 })
 export class AngularMaterialModule { }

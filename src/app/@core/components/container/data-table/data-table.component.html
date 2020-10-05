@@ -1,0 +1,43 @@
+<mat-table #table [dataSource]="data" matSort class="mat-cell">
+
+  <ng-container [matColumnDef]="header.value" *ngFor="let header of headers">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{header.text}}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      {{row[header.value]}}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef>
+      <button mat-icon-button color="primary" (click)="addNew()" *ngIf="actions.add">
+        <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+      </button>
+    </mat-header-cell>
+
+    <mat-cell *matCellDef="let row; let i=index;">
+      <button mat-icon-button color="primary" (click)="editItem(i)" *ngIf="actions.edit">
+        <mat-icon aria-label="Edit">edit</mat-icon>
+      </button>
+
+      <button mat-icon-button color="primary" (click)="deleteItem(i)" *ngIf="actions.delete">
+        <mat-icon aria-label="Delete">delete</mat-icon>
+      </button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+</mat-table>
+<!--<div class="no-results" [style.display]="data.length == 0 ? '' : 'none'">
+  Sem resultados
+</div> -->
+<mat-paginator class="margin" #paginator 
+[length]="data.length" 
+[pageIndex]="0" 
+[pageSize]="5"
+[pageSizeOptions]="[5, 10, 25, 50]"
+showFirstLastButtons>
+</mat-paginator>
