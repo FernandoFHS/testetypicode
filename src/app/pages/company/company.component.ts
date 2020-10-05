@@ -55,7 +55,7 @@ export class CompanyComponent implements OnInit {
     this.dataService.getAllProfiles().then((data) => {
 
       this.dataSource = data;
-
+      
     }, (error) => {
       // TODO
     });

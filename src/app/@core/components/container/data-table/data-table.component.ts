@@ -34,8 +34,8 @@ export class DataTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.displayedColumns = this.headers.map((e) => e.value);
-
-    this.displayedColumns.push('actions');
+    
+        this.displayedColumns.push('actions');
   }
 
   deleteItem(index: number) {
@@ -45,5 +45,5 @@ export class DataTableComponent implements OnInit {
   editItem(index: number) {
     this.editEvent.emit(index);
   }
-
+  
 }

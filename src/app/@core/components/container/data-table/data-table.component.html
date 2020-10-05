@@ -31,12 +31,12 @@
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
 </mat-table>
-
-
-<!-- <div class="no-results" [style.display]="data.renderedData.length == 0 ? '' : 'none'">
+<!--<div class="no-results" [style.display]="data.length == 0 ? '' : 'none'">
   Sem resultados
 </div> -->
-
-<!--<mat-paginator #paginator [length]="data.filteredData.length" [pageIndex]="0" [pageSize]="10"
-  [pageSizeOptions]="[5, 10, 25, 100]">
-</mat-paginator> -->
+<mat-paginator class="margin" #paginator 
+[length]="data.length" 
+[pageIndex]="0" 
+[pageSize]="5"
+[pageSizeOptions]="[5, 10, 25, 100]">
+</mat-paginator>
