@@ -10,6 +10,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { CoreModule } from './@core/core.module';
 import { UserComponent } from './pages/user/user.component';
 import { CompanyComponent } from './pages/company/company.component';
+import { PasswordTransactionComponent } from './pages/password-transaction/password-transaction.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { CompanyComponent } from './pages/company/company.component';
     LoginComponent,
     UserComponent,
     CompanyComponent,
+    PasswordTransactionComponent,
   ],
   imports: [
     BrowserModule,

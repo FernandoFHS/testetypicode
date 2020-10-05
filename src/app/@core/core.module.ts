@@ -13,6 +13,7 @@ import { AccordionAnchorDirective } from './directives/accordion-anchor.directiv
 import { AccordionLinkDirective } from './directives/accordion-link.directive';
 import { AccordionDirective } from './directives/accordion.directive';
 import { AngularMaterialModule } from './modules/angular-material.module';
+import { PasswordTransactionComponent } from './components/password-transaction/password-transaction.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AngularMaterialModule } from './modules/angular-material.module';
     AccordionLinkDirective,
     AccordionAnchorDirective,
 
-    DataTableComponent
+    DataTableComponent,
+    PasswordTransactionComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +48,8 @@ import { AngularMaterialModule } from './modules/angular-material.module';
 
     AngularMaterialModule,
 
-    DataTableComponent
+    DataTableComponent,
+    PasswordTransactionComponent
   ],
   bootstrap: [AppComponent]
 

@@ -5,6 +5,7 @@ import { CompanyComponent } from '../pages/company/company.component';
 import { HomeComponent } from '../pages/home/home.component';
 import { LoginComponent } from '../pages/login/login.component';
 import { UserComponent } from '../pages/user/user.component';
+import { PasswordTransactionComponent } from '../pages/password-transaction/password-transaction.component';
 
 export const routes: Routes = [
   {
@@ -27,10 +28,15 @@ export const routes: Routes = [
       {
         path: 'company',
         component: CompanyComponent
-      }
-    
+      }, 
+      {
+        path: 'passwordtransaction',
+        component: PasswordTransactionComponent
+      },
+
     ]
   },
+
   {
     path: 'login',
     component: LoginComponent
