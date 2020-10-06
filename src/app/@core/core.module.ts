@@ -13,7 +13,9 @@ import { AccordionAnchorDirective } from './directives/accordion-anchor.directiv
 import { AccordionLinkDirective } from './directives/accordion-link.directive';
 import { AccordionDirective } from './directives/accordion.directive';
 import { AngularMaterialModule } from './modules/angular-material.module';
-import { PasswordTransactionComponent } from './components/password-transaction/password-transaction.component';
+import { PasswordOfTransactionComponent } from './components/password-of-transaction/password-of-transaction.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInput, MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -27,14 +29,16 @@ import { PasswordTransactionComponent } from './components/password-transaction/
     AccordionAnchorDirective,
 
     DataTableComponent,
-    PasswordTransactionComponent
+    PasswordOfTransactionComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
     AngularMaterialModule,
-    AppRoutingModule
+    AppRoutingModule,    
+    ReactiveFormsModule,
+    MatInputModule
   ],
   exports: [
     ContainerComponent,
@@ -49,7 +53,7 @@ import { PasswordTransactionComponent } from './components/password-transaction/
     AngularMaterialModule,
 
     DataTableComponent,
-    PasswordTransactionComponent
+    PasswordOfTransactionComponent
   ],
   bootstrap: [AppComponent]
 
