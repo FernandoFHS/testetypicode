@@ -15,6 +15,7 @@ import { AccordionDirective } from './directives/accordion.directive';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { LoginComponent } from './components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ThemesComponent } from './components/themes/themes.component';
 
 @NgModule({
   declarations: [
@@ -24,12 +25,13 @@ import { ReactiveFormsModule } from '@angular/forms';
     ContainerFooterComponent,
 
     LoginComponent,
+    ThemesComponent,
 
     AccordionDirective,
     AccordionLinkDirective,
     AccordionAnchorDirective,
 
-    DataTableComponent
+    DataTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,6 +48,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ContainerFooterComponent,
 
     LoginComponent,
+    ThemesComponent,
 
     AccordionDirective,
     AccordionLinkDirective,

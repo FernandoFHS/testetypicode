@@ -1,25 +1,21 @@
-/******************* 
-Global Styles 
-*******************/
-
 * {
     outline: none;
     box-sizing: border-box;
 }
 
 body {
-    font-family: $bodyfont;
+    font-family: $primary-font;
     margin: 0;
     overflow-x: hidden;
-    color: $bodytext;
+    color: white;
     font-weight: 300;
-    background: $white;
+    background: white;
 }
 
 html {
     position: relative;
     min-height: 100%;
-    background: $white;
+    background: white;
 }
 
 a:hover,
@@ -29,11 +25,11 @@ a {
 }
 
 a.link {
-    color: $headingtext;
+    color: #455a64;
     text-decoration: none;
     &:hover,
     &:focus {
-        color: $themecolor;
+        color: $info;
     }
 }
 
@@ -61,7 +57,7 @@ code {
     padding: 0.2rem 0.4rem;
     font-size: 90%;
     color: $danger;
-    background-color: $light-danger;
+    background-color: $danger;
     border-radius: 0.25rem;
 }
 
@@ -95,7 +91,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: $headingfont;
+    font-family: $primary-font;
     font-weight: 400;
     margin: 0;
 }
@@ -199,7 +195,7 @@ Blockquote
 
 html body blockquote {
     border: 1px solid $border;
-    border-left: 5px solid $themecolor;
+    border-left: 5px solid $info;
     padding: 15px;
     margin: 20px 0;
 }
@@ -477,7 +473,7 @@ html body {
     .font-10 {
         font-size: 10px;
     }
-    
+
     .font-12 {
         font-size: 12px;
     }
@@ -554,7 +550,7 @@ Thumb size
 Text Colors
 *******************/
 .text-white {
-    color: $white !important;
+    color: white !important;
 }
 
 .text-danger {
@@ -581,44 +577,6 @@ Text Colors
     color: $inverse !important;
 }
 
-html body {
-    .text-blue {
-        color: $blue;
-    }
-
-    .text-purple {
-        color: $purple;
-    }
-
-    .text-primary {
-        color: $primary;
-    }
-
-    .text-megna {
-        color: $megna;
-    }
-
-    .text-dark {
-        color: $bodytext;
-    }
-
-    .text-themecolor {
-        color: $themecolor;
-    }
-
-    .text-center {
-        text-align: center;
-    }
-
-    .text-right {
-        text-align: right;
-    }
-
-    .text-left {
-        text-align: left;
-    }
-}
-
 /*******************
 Background Colors
 *******************/
@@ -642,60 +600,6 @@ Background Colors
     background-color: $danger !important;
 }
 
-html body {
-    .bg-megna {
-        background-color: $megna;
-    }
-
-    .bg-theme {
-        background-color: $themecolor;
-    }
-
-    .bg-inverse {
-        background-color: $inverse;
-    }
-
-    .bg-purple {
-        background-color: $purple !important;
-    }
-
-    .bg-light-primary {
-        background-color: $light-primary;
-    }
-
-    .bg-light-success {
-        background-color: $light-success;
-    }
-
-    .bg-light-info {
-        background-color: $light-info;
-    }
-
-    .bg-light-extra {
-        background-color: $extra-light;
-    }
-
-    .bg-light-warning {
-        background-color: $light-warning;
-    }
-
-    .bg-light-danger {
-        background-color: $light-danger;
-    }
-
-    .bg-light-inverse {
-        background-color: $light-inverse;
-    }
-
-    .bg-light {
-        background-color: $light;
-    }
-    
-    .bg-white {
-        background-color: $white;
-    }
-}
-
 .img-circle {
     border-radius: 100%;
 }
@@ -715,7 +619,7 @@ Rounds
 *******************/
 .round {
     line-height: 48px;
-    color: $white;
+    color: white;
     width: 45px;
     height: 45px;
     display: inline-block;
@@ -743,14 +647,14 @@ Rounds
 }
 
 /*******************
-froms
+Forms
 *******************/
 .form-control {
     border: 0px;
     line-height: 25px;
     padding: 10px;
     width: 100%;
-    font-size: $font-16;
+    font-size: 16px;
 }
 
 .mat-form-field-underline {
@@ -800,7 +704,7 @@ Mat card
 
         &.text-white {
             .mat-card-title {
-                color: $white;
+                color: white;
             }
 
             .mat-card-subtitle {
@@ -875,24 +779,48 @@ list inline
 }
 
 .main-container {
-	display: flex;
-	flex-direction: column;
-	position: relative;
-	overflow: hidden;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .mat-drawer-container {
-	background: $bodycolor;
+    background: $bodycolor;
 }
 
 html .page-wrapper {
-	height: calc(100vh - 64px);
+    height: calc(100vh - 64px);
 
-	.page-content {
-		padding: 5px 15px 15px;
-	}
+    .page-content {
+        padding: 5px 15px 15px;
+    }
+}
+
+.mat-toolbar {
+    .mat-icon-button {
+        color: $icon-color !important;
+    }
+}
+
+/*******************
+Heleprs
+*******************/
+html,
+body {
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
 }

@@ -1,0 +1,44 @@
+<p>
+  Temas
+</p>
+
+<form [formGroup]="form">
+
+  <mat-form-field appearence="outline">
+    <mat-label>
+      Tema escolhido
+    </mat-label>
+    <mat-select (selectionChange)="onChangeTheme($event)" formControlName="selected_theme">
+      <mat-option *ngFor="let theme of themes" [value]="theme.value">
+        {{theme.text}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <section class="btn-section">
+    <div class="example-label">
+      Buttons
+    </div>
+    <div class="example-button-row">
+      <button mat-raised-button>
+        Basic
+      </button>
+      <button mat-raised-button color="primary">
+        Primary
+      </button>
+      <button mat-raised-button color="accent">
+        Accent
+      </button>
+      <button mat-raised-button color="warn">
+        Warn
+      </button>
+      <button mat-raised-button disabled>
+        Disabled
+      </button>
+      <a mat-raised-button href="https://www.google.com/" target="_blank">
+        Link
+      </a>
+    </div>
+  </section>
+
+</form>

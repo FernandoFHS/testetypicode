@@ -1,3 +1,5 @@
+@import "src/app/@core/styles/variables";
+
 mat-sidenav {
   width: 220px;
   padding-top: 0px;
@@ -15,7 +17,11 @@ mat-toolbar {
   box-shadow: 1px 0px 10px rgba(0, 0, 0, 0.5);
 
   &.topbar {
+    @include get-primary-topbar-background-color();
+
     padding: 0px 15px;
+    position: relative;
+    z-index: 2;
   }
 
   .navbar-header {
@@ -38,9 +44,6 @@ mat-toolbar {
 }
 
 .topbar {
-  position: relative;
-  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
-  z-index: 2;
 }
 
 .custom-sidenav-container {

@@ -1,8 +1,13 @@
+@import "src/app/@core/styles/variables";
+
 .footer {
+  background-color: white;
+
+	@include get-primary-footer-background-color();
+	
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	background-color: white;
 	font-size: 12px;
 	position: fixed;
 
@@ -11,6 +16,6 @@
 	}
 
 	.content {
-		padding: 4px;
+		padding: 5px 10px;
 	}
 }

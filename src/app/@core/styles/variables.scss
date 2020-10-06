@@ -1,17 +1,173 @@
 @import "~@angular/material/theming";
+@import "palletes";
 
 @import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
 
-$bodyfont: "Poppins", sans-serif;
-$headingfont: "Poppins", sans-serif;
+@mixin get-primary-background-color() {
+  .default-theme & {
+    background-color: map-get($map: $mat-teal, $key: 500);
+  }
 
-/*Angular Material Theme Colors*/
-$primary: mat-palette($mat-blue, 600);
-$accent: mat-palette($mat-indigo, 500);
-$warn: mat-palette($mat-red, 500);
-$theme: mat-light-theme($primary, $accent, $warn);
-$background: map-get($theme, background);
-$foreground: map-get($theme, foreground);
+  .orange-theme & {
+    // background-color: #0d2c3f;
+    background-color: map-get($map: $mat-custom-orange, $key: 500);
+  }
+
+  .blue-theme & {
+    background-color: map-get($map: $mat-blue, $key: 500);
+  }
+
+  .grey-theme & {
+    background-color: map-get($map: $mat-custom-grey, $key: 500);
+  }
+
+  .gold-theme & {
+    background-color: map-get($map: $mat-custom-gold, $key: 500);
+  }
+
+  .green-theme & {
+    background-color: map-get($map: $mat-custom-green, $key: 500);
+  }
+
+  .purple-theme & {
+    background-color: map-get($map: $mat-deep-purple, $key: 500);
+  }
+
+  .wine-theme & {
+    background-color: map-get($map: $mat-custom-wine, $key: 500);
+  }
+
+  .dark-theme & {
+    background-color: map-get($map: $mat-custom-dark, $key: 800);
+  }
+
+  .pink-theme & {
+    background-color: map-get($map: $mat-pink, $key: 800);
+  }
+}
+
+@mixin get-primary-topbar-background-color() {
+  @include get-primary-background-color();
+
+  .pink-theme & {
+    background-color: map-get($map: $mat-pink, $key: 800) !important;
+  }
+
+  .dark-theme & {
+    background-color: map-get($map: $mat-custom-dark, $key: 500) !important;
+  }
+}
+
+@mixin get-primary-footer-background-color() {
+  .dark-theme &, .pink-theme &, .purple-theme & {
+    background-color: map-get($map: $mat-custom-dark, $key: 500) !important;
+    color: white;
+  }
+}
+
+.default-theme {
+  $default-primary: mat-palette($mat-teal, 600);
+  $default-accent: mat-palette($mat-blue-grey, 500);
+  $default-warn: mat-palette($mat-red, 500);
+  $default-theme: mat-light-theme($default-primary, $default-accent, $default-warn);
+  $default-background: map-get($default-theme, background);
+  $default-foreground: map-get($default-theme, foreground);
+
+  @include angular-material-theme($default-theme);
+}
+
+.orange-theme {
+  $orange-primary: mat-palette($mat-custom-orange);
+  $orange-accent: mat-palette($mat-custom-orange-accent);
+  $orange-warn: mat-palette($mat-red);
+  $orange-theme: mat-light-theme($orange-primary, $orange-accent, $orange-warn);
+  $orange-background: map-get($orange-theme, background);
+  $orange-foreground: map-get($orange-theme, foreground);
+
+  @include angular-material-theme($orange-theme);
+}
+
+.blue-theme {
+  $blue-primary: mat-palette($mat-blue);
+  $blue-accent: mat-palette($mat-blue-gray);
+  $blue-warn: mat-palette($mat-red);
+  $blue-theme: mat-light-theme($blue-primary, $blue-accent, $blue-warn);
+  $blue-background: map-get($blue-theme, background);
+  $blue-foreground: map-get($blue-theme, foreground);
+
+  @include angular-material-theme($blue-theme);
+}
+
+.grey-theme {
+  $grey-primary: mat-palette($mat-custom-grey);
+  $grey-accent: mat-palette($mat-blue-grey);
+  $grey-warn: mat-palette($mat-red);
+  $grey-theme: mat-light-theme($grey-primary, $grey-accent, $grey-warn);
+  $grey-background: map-get($grey-theme, background);
+  $grey-foreground: map-get($grey-theme, foreground);
+
+  @include angular-material-theme($grey-theme);
+}
+
+.dark-theme {
+  $dark-primary: mat-palette($mat-blue);
+  $dark-accent: mat-palette($mat-blue-gray);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+  @include angular-material-theme($dark-theme);
+}
+
+.gold-theme {
+  $gold-primary: mat-palette($mat-custom-gold);
+  $gold-accent: mat-palette($mat-custom-amber);
+  $gold-warn: mat-palette($mat-red);
+  $gold-theme: mat-light-theme($gold-primary, $gold-accent, $gold-warn);
+  $gold-background: map-get($gold-theme, background);
+  $gold-foreground: map-get($gold-theme, foreground);
+
+  @include angular-material-theme($gold-theme);
+}
+
+.green-theme {
+  $green-primary: mat-palette($mat-custom-green);
+  $green-accent: mat-palette($mat-cyan);
+  $green-warn: mat-palette($mat-red);
+  $green-theme: mat-light-theme($green-primary, $green-accent, $green-warn);
+  $green-background: map-get($green-theme, background);
+  $green-foreground: map-get($green-theme, foreground);
+
+  @include angular-material-theme($green-theme);
+}
+
+.purple-theme {
+  $purple-primary: mat-palette($mat-deep-purple);
+  $purple-accent: mat-palette($mat-custom-green);
+  $purple-warn: mat-palette($mat-red);
+  $purple-theme: mat-dark-theme($purple-primary, $purple-accent, $purple-warn);
+
+  @include angular-material-theme($purple-theme);
+}
+
+.wine-theme {
+  $wine-primary: mat-palette($mat-custom-wine);
+  $wine-accent: mat-palette($mat-custom-wine-accent);
+  $wine-warn: mat-palette($mat-red);
+  $wine-theme: mat-light-theme($wine-primary, $wine-accent, $wine-warn);
+  $wine-background: map-get($wine-theme, background);
+  $wine-foreground: map-get($wine-theme, foreground);
+
+  @include angular-material-theme($wine-theme);
+}
+
+.pink-theme {
+  $pink-primary: mat-palette($mat-pink, 500);
+  $pink-accent: mat-palette($mat-blue-gray);
+  $pink-warn: mat-palette($mat-red);
+  $pink-theme: mat-dark-theme($pink-primary, $pink-accent, $pink-warn);
+
+  @include angular-material-theme($pink-theme);
+}
 
 @include mat-core();
 
@@ -19,33 +175,11 @@ $custom-typography: mat-typography-config(
   $font-family: "Poppins, sans-serif",
 );
 
-// Override the typography in the core CSS.
 @include mat-core($custom-typography);
 
-// Default Theme
-@include angular-material-theme($theme);
-
-/*Theme Colors*/
-$topbar: #2196f3;
-$sidebar: #fff;
-$sidebar-white: #e5edef;
-$sidebar-alt: #f2f6f8;
-$bodycolor: #eef5f9;
-$headingtext: #455a64;
-$bodytext: white;
-$sidebar-text: #607d8b;
-$sidebar-icons: #99abb4;
-
-$font-16: 16px;
-
-$light-text: #a6b7bf;
-$themecolor: #1e88e5;
-$themecolor-alt: #26c6da;
-$themecolor-dark: #028ee1;
-
-/*bootstrap Color*/
-$danger: #fc4b6c;
-$success: #26c6da;
+/*Helper Colors*/
+$danger: darkred;
+$success: darkgreen;
 $warning: #ffb22b;
 $primary: #7460ee;
 $info: #1e88e5;
@@ -56,38 +190,10 @@ $light: #f2f4f8;
 $extra-light: #ebf3f5;
 $secondary: #727b84;
 
-/*Light colors*/
-$light-danger: #f9e7eb;
-$light-success: #e8fdf8;
-$light-warning: #fff8ec;
-$light-primary: #f1effd;
-$light-info: #e3f3fd;
-$light-inverse: #f6f6f6;
-$light-megna: #e0f2f4;
-
-$danger-dark: #e6294b;
-$success-dark: #1eacbe;
-$warning-dark: #e9ab2e;
-$primary-dark: #6352ce;
-$info-dark: #028ee1;
-$red-dark: #d61f1f;
-$inverse-dark: #232a37;
-$dark-transparent: rgba(0, 0, 0, 0.05);
-
-/*Normal Color*/
-$white: #ffffff;
-$red: #fb3a3a;
-$yellow: #a0aec4;
-$purple: #7460ee;
-$blue: #02bec9;
-$megna: #00897b;
-
-/*Extra Variable*/
-$rgt: right;
-$lft: left;
-$border: rgba(120, 130, 140, 0.13);
-$table-border: #f3f1f1;
-$card-brd: #d7dfe3;
-$dark-text: #848a96;
+/*Utils*/
+$bodycolor: #eef5f9;
+$primary-font: "Poppins", sans-serif;
+$icon-color: white;
 $radius: 4px;
-$form-brd: #d9d9d9;
+$border: rgba(120, 130, 140, 0.13);
+

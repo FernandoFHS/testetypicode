@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
 import { ContainerComponent } from '../@core/components/container/container.component';
+import { ThemesComponent } from '../@core/components/themes/themes.component';
 import { CompanyComponent } from '../pages/company/company.component';
 import { HomeComponent } from '../pages/home/home.component';
 import { LoginComponent } from '../pages/login/login.component';
@@ -27,8 +28,11 @@ export const routes: Routes = [
       {
         path: 'company',
         component: CompanyComponent
+      },
+      {
+        path: 'themes',
+        component: ThemesComponent
       }
-    
     ]
   },
   {

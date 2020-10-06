@@ -1,6 +1,6 @@
 <div class="main-container">
 
-  <mat-toolbar color="primary" class="topbar telative">
+  <mat-toolbar color="primary" class="topbar mat-elevation-z3">
 
     <div class="navbar-header">
 
@@ -37,7 +37,7 @@
 
   <mat-sidenav-container class="custom-sidenav-container" [style.marginTop.px]="0">
 
-    <mat-sidenav #snav id="snav" class="dark-sidebar pl-xs" [mode]="mobileQuery.matches ? 'side' : 'over'"
+    <mat-sidenav #snav id="snav" class="pl-xs mat-elevation-z1" [mode]="mobileQuery.matches ? 'side' : 'over'"
       fixedTopGap="0" [opened]="mobileQuery.matches" [disableClose]="mobileQuery.matches">
 
       <app-container-sidebar></app-container-sidebar>
