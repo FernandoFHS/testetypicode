@@ -3,7 +3,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { menuItems } from 'src/app/@core/consts/menu-items';
 
 @Component({
-  selector: 'app-container-sidebar',
+  selector: 'core-container-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   encapsulation: ViewEncapsulation.None

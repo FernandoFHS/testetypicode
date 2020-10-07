@@ -32,7 +32,7 @@
 
     <span fxFlex></span>
 
-    <app-container-header></app-container-header>
+    <core-container-header></core-container-header>
   </mat-toolbar>
 
   <mat-sidenav-container class="custom-sidenav-container" [style.marginTop.px]="0">
@@ -40,7 +40,7 @@
     <mat-sidenav #snav id="snav" class="pl-xs mat-elevation-z1" [mode]="mobileQuery.matches ? 'side' : 'over'"
       fixedTopGap="0" [opened]="mobileQuery.matches" [disableClose]="mobileQuery.matches">
 
-      <app-container-sidebar></app-container-sidebar>
+      <core-container-sidebar></core-container-sidebar>
 
     </mat-sidenav>
 
@@ -50,7 +50,7 @@
         <router-outlet></router-outlet>
       </div>
 
-      <app-container-footer></app-container-footer>
+      <core-container-footer></core-container-footer>
 
     </mat-sidenav-content>
 

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-container',
+  selector: 'core-container',
   templateUrl: './container.component.html',
   styleUrls: ['./container.component.scss'],
   encapsulation: ViewEncapsulation.None

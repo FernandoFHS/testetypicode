@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from '../app-routing.module';
 import { AppComponent } from '../app.component';
 import { ContainerComponent } from './components/container/container.component';
-import { DataTableComponent } from './components/container/data-table/data-table.component';
 import { ContainerFooterComponent } from './components/container/footer/footer.component';
 import { ContainerHeaderComponent } from './components/container/header/header.component';
 import { ContainerSidebarComponent } from './components/container/sidebar/sidebar.component';
@@ -14,8 +13,8 @@ import { AccordionLinkDirective } from './directives/accordion-link.directive';
 import { AccordionDirective } from './directives/accordion.directive';
 import { AngularMaterialModule } from './modules/angular-material.module';
 import { ThemesComponent } from './components/themes/themes.component';
-import { PasswordOfTransactionComponent } from './components/password-of-transaction/password-of-transaction.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DataTableComponent } from './components/container/data-table/data-table.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +24,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     ContainerFooterComponent,
 
     ThemesComponent,
-    PasswordOfTransactionComponent,
 
     AccordionDirective,
     AccordionLinkDirective,
@@ -49,7 +47,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     ContainerFooterComponent,
 
     ThemesComponent,
-    PasswordOfTransactionComponent,
 
     DataTableComponent,
 
