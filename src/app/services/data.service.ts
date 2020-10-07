@@ -8,8 +8,9 @@ import { debounceTime } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class DataService {
-  private readonly API_URL = 'https://api.github.com/repos/angular/angular/issues';
+  //private readonly API_URL = 'https://api.github.com/repos/angular/angular/issues';
   // private readonly API_URL = 'http://138.197.225.217:8080/profiles';
+  private readonly API_URL ='http://register-profile.qa.appmobbuy.tech:8080/profiles';
 
 
   dataChange: BehaviorSubject<Profile[]> = new BehaviorSubject<Profile[]>([]);
