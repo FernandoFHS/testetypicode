@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Profile } from '../../models/profile';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { DataService } from 'src/app/services/data.service';
@@ -20,10 +21,9 @@ export class UserComponent implements OnInit {
     this.loadData();
   }
   headers: HeaderModel[] = [
-    { text: 'Código', value: 'id' },
+    { text: 'Código', value: 'idProfile' },
     { text: 'Empresa', value: 'title' },
-    { text: 'Identificação', value: 'nameprofile' },
-    { text: 'Código', value: 'description' },
+    { text: 'Descrição', value: 'description' },
     { text: 'Situação', value: 'situation' },
     // { text: 'Ações', value: 'action' }
   ];

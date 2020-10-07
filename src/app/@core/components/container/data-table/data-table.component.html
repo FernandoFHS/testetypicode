@@ -1,4 +1,4 @@
-<mat-table #table [dataSource]="data" matSort class="mat-cell">
+<mat-table #table [dataSource]="data.content" matSort class="mat-cell">
 
   <ng-container [matColumnDef]="header.value" *ngFor="let header of headers">
     <mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -37,7 +37,7 @@
 </div> -->
 
 <mat-paginator class="margin" #paginator 
-[length]="data.length" 
+[length]="data.content.length" 
 [pageIndex]="0" 
 [pageSize]="5"
 [pageSizeOptions]="[5, 10, 25, 50]"
