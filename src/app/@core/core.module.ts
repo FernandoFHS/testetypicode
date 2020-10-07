@@ -13,9 +13,9 @@ import { AccordionAnchorDirective } from './directives/accordion-anchor.directiv
 import { AccordionLinkDirective } from './directives/accordion-link.directive';
 import { AccordionDirective } from './directives/accordion.directive';
 import { AngularMaterialModule } from './modules/angular-material.module';
-import { LoginComponent } from './components/login/login.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ThemesComponent } from './components/themes/themes.component';
+import { PasswordOfTransactionComponent } from './components/password-of-transaction/password-of-transaction.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,8 +24,8 @@ import { ThemesComponent } from './components/themes/themes.component';
     ContainerSidebarComponent,
     ContainerFooterComponent,
 
-    LoginComponent,
     ThemesComponent,
+    PasswordOfTransactionComponent,
 
     AccordionDirective,
     AccordionLinkDirective,
@@ -38,8 +38,9 @@ import { ThemesComponent } from './components/themes/themes.component';
     BrowserAnimationsModule,
     FlexLayoutModule,
     AngularMaterialModule,
-    AppRoutingModule,
     ReactiveFormsModule,
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   exports: [
     ContainerComponent,
@@ -47,16 +48,17 @@ import { ThemesComponent } from './components/themes/themes.component';
     ContainerSidebarComponent,
     ContainerFooterComponent,
 
-    LoginComponent,
     ThemesComponent,
+    PasswordOfTransactionComponent,
+
+    DataTableComponent,
 
     AccordionDirective,
     AccordionLinkDirective,
     AccordionAnchorDirective,
 
     AngularMaterialModule,
-
-    DataTableComponent
+    ReactiveFormsModule,
   ],
   bootstrap: [AppComponent]
 

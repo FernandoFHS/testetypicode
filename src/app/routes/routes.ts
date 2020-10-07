@@ -6,34 +6,32 @@ import { CompanyComponent } from '../pages/company/company.component';
 import { HomeComponent } from '../pages/home/home.component';
 import { LoginComponent } from '../pages/login/login.component';
 import { UserComponent } from '../pages/user/user.component';
+import { PasswordTransactionComponent } from '../pages/password-transaction/password-transaction.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: ContainerComponent,
-    children: [
-      {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
-      },
-      {
-        path: 'home',
-        component: HomeComponent
-      },
-      {
-        path: 'user',
-        component: UserComponent
-      },
-      {
-        path: 'company',
-        component: CompanyComponent
-      },
-      {
-        path: 'themes',
-        component: ThemesComponent
-      }
-    ]
+    children: [{
+      path: '',
+      redirectTo: 'home',
+      pathMatch: 'full'
+    }, {
+      path: 'home',
+      component: HomeComponent
+    }, {
+      path: 'user',
+      component: UserComponent
+    }, {
+      path: 'company',
+      component: CompanyComponent
+    }, {
+      path: 'themes',
+      component: ThemesComponent
+    }, {
+      path: 'passwordtransaction',
+      component: PasswordTransactionComponent
+    }]
   },
   {
     path: 'login',
