@@ -1,9 +1,21 @@
 <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
   <img src="assets/images/users/profile.png" alt="user" class="profile-pic" />
 </button>
-<mat-menu #profile="matMenu" class="mymegamenu">
+
+<mat-menu #profile="matMenu">
+
+  <button mat-menu-item [routerLink]="['themes']">
+    <mat-icon color="primary">
+      color_lens
+    </mat-icon>
+    Temas
+  </button>
+
   <button mat-menu-item>
-    <mat-icon>exit_to_app</mat-icon>
+    <mat-icon color="primary">
+      exit_to_app
+    </mat-icon>
     Sair
   </button>
+
 </mat-menu>

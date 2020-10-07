@@ -5,8 +5,6 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { HeaderModel } from 'src/app/models/header-model';
-
 @Component({
   selector: 'app-container',
   templateUrl: './container.component.html',
@@ -36,7 +34,7 @@ export class ContainerComponent implements OnDestroy, AfterViewInit, OnInit {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         if (!this.mobileQuery.matches) {
-          this.snav.toggle();
+          this.snav.close();
         }
       });
   }

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Profile } from '../models/profile';
+import { Profile } from '../models/Profile';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { debounceTime } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +10,9 @@ export class DataService {
   private readonly API_URL = 'https://api.github.com/repos/angular/angular/issues';
   // private readonly API_URL = 'http://138.197.225.217:8080/profiles';
 
-
   dataChange: BehaviorSubject<Profile[]> = new BehaviorSubject<Profile[]>([]);
   // Temporarily stores data from dialogs
   dialogData: any;
-
 
   constructor(private httpClient: HttpClient) { }
 

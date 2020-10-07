@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined");
+
 * {
     outline: none;
     box-sizing: border-box;
@@ -801,11 +803,11 @@ html .page-wrapper {
     }
 }
 
-.mat-toolbar {
-    .mat-icon-button {
-        color: $icon-color !important;
-    }
-}
+// .mat-toolbar {
+//     .mat-icon-button {
+//         color: $icon-color !important;
+//     }
+// }
 
 /*******************
 Heleprs
@@ -822,5 +824,54 @@ body {
 
     .text-left {
         text-align: left;
+    }
+}
+
+/*******************
+Snacks
+*******************/
+.mat-snack-success {
+    background: darkgreen !important;
+    color: white !important;
+    box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14),
+        0px 6px 30px 5px rgba(0, 0, 0, 0.12) !important;
+    max-width: 400px;
+
+    @include media-breakpoint("sm") {
+        margin: 10px !important;
+        max-width: 360px;
+    }
+
+    simple-snack-bar {
+        text-align: justify;
+        -moz-text-align-last: center;
+        text-align-last: center;
+
+        span {
+            width: 100%;
+        }
+    }
+}
+
+.mat-snack-error {
+    background: darkred !important;
+    color: white !important;
+    box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14),
+        0px 6px 30px 5px rgba(0, 0, 0, 0.12) !important;
+    max-width: 400px;
+
+    @include media-breakpoint("sm") {
+        margin: 10px !important;
+        max-width: 360px;
+    }
+
+    simple-snack-bar {
+        text-align: justify;
+        -moz-text-align-last: center;
+        text-align-last: center;
+
+        span {
+            width: 100%;
+        }
     }
 }

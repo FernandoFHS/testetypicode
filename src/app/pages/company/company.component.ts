@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActionModel } from 'src/app/models/actions-model';
-import { HeaderModel } from 'src/app/models/header-model';
+import { ActionModel } from 'src/app/@core/models/action.model';
+import { HeaderModel } from 'src/app/@core/models/header.model';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({

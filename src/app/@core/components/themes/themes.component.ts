@@ -11,15 +11,15 @@ export class ThemesComponent implements OnInit {
   form: FormGroup;
 
   themes = [
-    { text: 'Padrão', value: 'default-theme' },
-    { text: 'Laranja', value: 'orange-theme' },
-    { text: 'Azul', value: 'blue-theme' },
-    { text: 'Cinza', value: 'grey-theme' },
-    { text: 'Dourado', value: 'gold-theme' },
-    { text: 'Verde', value: 'green-theme' },
-    { text: 'Roxo', value: 'purple-theme' },
-    { text: 'Vinho', value: 'wine-theme' },
-    { text: 'Rosa', value: 'pink-theme' },
+    { text: 'Tema Padrão', value: 'default-theme' },
+    { text: 'Tema Laranja', value: 'orange-theme' },
+    { text: 'Tema Azul', value: 'blue-theme' },
+    { text: 'Tema Cinza', value: 'grey-theme' },
+    { text: 'Tema Dourado', value: 'gold-theme' },
+    { text: 'Tema Verde', value: 'green-theme' },
+    { text: 'Tema Roxo', value: 'purple-theme' },
+    { text: 'Tema Vinho', value: 'wine-theme' },
+    { text: 'Tema Rosa', value: 'pink-theme' },
     { text: 'Tema Escuro', value: 'dark-theme' },
   ];
 
