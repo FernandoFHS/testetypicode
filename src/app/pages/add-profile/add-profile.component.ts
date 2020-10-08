@@ -20,6 +20,7 @@ export class AddProfileComponent implements OnInit {
     idProfile: null,
     nameProfile: '',
     description: ''
+    
   }
 
   constructor(
