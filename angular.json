@@ -30,7 +30,10 @@
             "styles": [
               "src/app/@core/styles/core.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "crypto-js"
+            ]
           },
           "configurations": {
             "production": {
