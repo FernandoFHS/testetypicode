@@ -11,13 +11,13 @@
 
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef>
-      <button mat-icon-button color="primary" (click)="addNew()" *ngIf="actions.add">
+      <button mat-icon-button color="primary" routerLink="/profile-list/add-profile" *ngIf="actions.add">
         <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
       </button>
     </mat-header-cell>
 
     <mat-cell *matCellDef="let row; let i=index;">
-      <button mat-icon-button color="primary" (click)="editItem(i)" *ngIf="actions.edit">
+      <button mat-icon-button color="primary"  routerLink="/profile-list/edit-profile/{{row.idProfile}}" *ngIf="actions.edit">
         <mat-icon aria-label="Edit">edit</mat-icon>
       </button>
 

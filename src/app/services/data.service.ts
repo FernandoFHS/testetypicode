@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Profile } from '../models/Profile';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Profile, Content } from '../models/Profile';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
@@ -52,13 +52,18 @@ export class DataService {
     });
   }
 
-  // DEMO ONLY, you can find working methods below
-  addProfile(Profile: Profile): void {
-    this.dialogData = Profile;
+  create(profile: Content): Observable<Content> {
+    return this.httpClient.post<Content>(this.API_URL, profile);
   }
 
-  updateProfile(Profile: Profile): void {
-    this.dialogData = Profile;
+  readById(idProfile: number): Observable<Content> {
+    const url = `${this.API_URL}/${idProfile}`;
+    return this.httpClient.get<Content>(url);
+  }
+
+  update(profile: Content): Observable<Content> {
+    const url = `${this.API_URL}/${profile.idProfile}`;
+    return this.httpClient.put<Content>(url, profile);
   }
 
   deleteProfile(id: number): void {

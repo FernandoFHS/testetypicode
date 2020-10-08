@@ -12,7 +12,7 @@ export class Profile {
   empty: boolean;
 }
 
-interface Pageable {
+export class Pageable {
   sort: Sort;
   pageNumber: number;
   pageSize: number;
@@ -21,13 +21,13 @@ interface Pageable {
   unpaged: boolean;
 }
 
-interface Sort {
+export class Sort {
   sorted: boolean;
   unsorted: boolean;
   empty: boolean;
 }
 
-interface Content {
+export class Content {
   idProfile: number;
   nameProfile: string;
   description: string;

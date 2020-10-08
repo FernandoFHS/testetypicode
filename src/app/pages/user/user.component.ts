@@ -22,7 +22,7 @@ export class UserComponent implements OnInit {
   }
   headers: HeaderModel[] = [
     { text: 'Código', value: 'idProfile' },
-    { text: 'Empresa', value: 'title' },
+    { text: 'Empresa', value: 'nameProfile' },
     { text: 'Descrição', value: 'description' },
     { text: 'Situação', value: 'situation' },
     // { text: 'Ações', value: 'action' }

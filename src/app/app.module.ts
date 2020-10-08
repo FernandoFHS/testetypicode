@@ -11,6 +11,10 @@ import { CoreModule } from './@core/core.module';
 import { UserComponent } from './pages/user/user.component';
 import { CompanyComponent } from './pages/company/company.component';
 import { PasswordTransactionComponent } from './pages/password-transaction/password-transaction.component';
+import { AddProfileComponent } from './pages/add-profile/add-profile.component';
+import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
+import { ProfileListComponent } from './pages/profile-list/profile-list.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,6 +24,9 @@ import { PasswordTransactionComponent } from './pages/password-transaction/passw
     UserComponent,
     CompanyComponent,
     PasswordTransactionComponent,
+    AddProfileComponent,
+    EditProfileComponent,
+    ProfileListComponent,
   ],
   imports: [
     BrowserModule,
@@ -27,6 +34,7 @@ import { PasswordTransactionComponent } from './pages/password-transaction/passw
     HttpClientModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    FormsModule,
     
     CoreModule
   ],
