@@ -1,8 +1,41 @@
-.container span{
+.container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px!important;
+    min-width: 300px;
+}
+
+.container h3.mat-dialog-title{
+    font-size: 22px!important;
+    width: 100%;
+    text-align: center;
+}
+
+.container div.mat-dialog-content{
+    width: 115%!important;
+}
+
+.container div.mat-dialog-content span{
+    margin-right: 2px;
     font-size: 18px;
     font-weight: 400;
 }
 
-.container{
-    padding: 45px!important;
+.container div.mat-dialog-actions{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+button {
+    padding: 5px;
+    width: 45%;
+}
+
+@media (max-width: 360px){
+    .container{
+        min-width: 0px;
+    }
 }

@@ -1,5 +1,5 @@
 <div class="container">
-    <h3 mat-dialog-title>Deseja Deletar ?</h3>
+    <h3 mat-dialog-title>Deseja Deletar?</h3>
     <div mat-dialog-content>
       <span>Código:</span> {{profile.idProfile}}
       <p></p>
@@ -11,6 +11,6 @@
   
     <div mat-dialog-actions>
       <button mat-raised-button color="warn" [mat-dialog-close]="1" (click)="confirmDelete()">Deletar</button>
-      <button mat-raised-button (click)="onNoClick()" tabindex="-1">Cancelar</button>
+      <button mat-raised-button color="accent" (click)="onNoClick()" tabindex="-1">Cancelar</button>
     </div>
   </div>

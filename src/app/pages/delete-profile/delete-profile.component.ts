@@ -28,13 +28,12 @@ export class DeleteProfileComponent implements OnInit {
   confirmDelete(): void {
     this.dataService.delete(this.profile.idProfile).subscribe(() => {
       this.dataService.openSnackBar('Produto deletado com sucesso', 'X');
-      this.dataService.read();
-      //this.loadData
+      location.reload(); 
     });
   }
   
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close();      ;
   }
 
 }
