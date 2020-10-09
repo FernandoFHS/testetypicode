@@ -34,7 +34,7 @@ export class DeleteProfileComponent implements OnInit {
   }
   
   onNoClick(): void {
-    this.router.navigate(['/profile-list']);
+    this.dialogRef.close();
   }
 
 }
