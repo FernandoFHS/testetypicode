@@ -47,6 +47,6 @@ export class EditProfileComponent implements OnInit {
   }
 
   onNoClick(): void {
-    this.router.navigate(['/user-group']);
+    this.router.navigate(['/profile-list']);
   }
 }

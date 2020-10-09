@@ -57,7 +57,7 @@ export class AddProfileComponent implements OnInit {
   }
 
   onNoClick(): void {
-    this.router.navigate(['/user-group']);
+    this.router.navigate(['/profile-list']);
   }
 
   //confirmAdd(): void {
