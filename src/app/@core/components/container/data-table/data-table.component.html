@@ -21,7 +21,7 @@
         <mat-icon aria-label="Edit">edit</mat-icon>
       </button>
 
-      <button mat-icon-button color="primary" (click)="deleteItem(i)" *ngIf="actions.delete">
+      <button mat-icon-button color="warn" (click)="openDeleteDialog(row.idProfile)" *ngIf="actions.delete">
         <mat-icon aria-label="Delete">delete</mat-icon>
       </button>
     </mat-cell>

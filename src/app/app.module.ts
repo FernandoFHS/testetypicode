@@ -15,6 +15,7 @@ import { AddProfileComponent } from './pages/add-profile/add-profile.component';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
 import { ProfileListComponent } from './pages/profile-list/profile-list.component';
 import { FormsModule } from '@angular/forms';
+import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { FormsModule } from '@angular/forms';
     AddProfileComponent,
     EditProfileComponent,
     ProfileListComponent,
+    DeleteProfileComponent,
   ],
   imports: [
     BrowserModule,

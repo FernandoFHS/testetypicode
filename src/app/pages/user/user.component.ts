@@ -42,7 +42,7 @@ export class UserComponent implements OnInit {
   dataSource: any[] = [];
 
   public loadData() {
-    this.exampleDatabase = new DataService(this.httpClient);
+    //this.exampleDatabase = new DataService(this.httpClient);
 
     this.dataService.getAllProfiles().then((data) => {
 
