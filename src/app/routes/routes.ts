@@ -10,6 +10,9 @@ import { PasswordTransactionComponent } from '../pages/password-transaction/pass
 import { ProfileListComponent } from '../pages/profile-list/profile-list.component';
 import { AddProfileComponent } from '../pages/add-profile/add-profile.component';
 import { EditProfileComponent } from '../pages/edit-profile/edit-profile.component';
+import { CompanyListComponent } from '../pages/company-list/company-list.component';
+import { AddCompanyComponent } from '../pages/add-company/add-company.component';
+import { EditCompanyComponent } from '../pages/edit-company/edit-company.component';
 
 export const routes: Routes = [
   {
@@ -45,13 +48,32 @@ export const routes: Routes = [
           },
         ],
       },{
-      path: 'company',
-      component: CompanyComponent
+      path: 'company-list',
+      component: CompanyListComponent,
+      children: [
+        {
+          path: '',
+          redirectTo: 'company',
+          pathMatch: 'full'
+        },
+        {
+          path: 'company',
+          component: CompanyComponent,
+        },
+        {
+          path: 'add-company',
+          component: AddCompanyComponent,
+        },
+        {
+          path: 'edit-company',
+          component: EditCompanyComponent,
+        },
+      ]
     }, {
       path: 'themes',
       component: ThemesComponent
     }, {
-      path: 'passwordtransaction',
+      path: 'password-transaction',
       component: PasswordTransactionComponent
     }]
   },

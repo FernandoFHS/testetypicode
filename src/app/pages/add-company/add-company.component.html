@@ -1,0 +1,240 @@
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <mat-step
+    label="Step 1"
+    state="identification"
+    [stepControl]="firstFormGroup"
+  >
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Identificação</ng-template>
+
+      <div class="initial-data">
+        <div class="establishment-container">
+          <h2><span>Estabelecimento: </span> 1</h2>
+        </div>
+
+        <div class="status-container">
+          <h2><span>Status: </span>Credenciado</h2>
+        </div>
+      </div>
+      <div class="line-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select name="type" required>
+            <mat-option> Pessoa Física </mat-option>
+            <mat-option> Pessoa Jurídica </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CPF/CNPJ</mat-label>
+          <input
+            matInput
+            placeholder="CPF/CNPJ"
+            formControlName="firstCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>assignment_ind</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="line-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Estabelecimento Adquirente</mat-label>
+          <input
+            matInput
+            placeholder="Estabelecimento Adquirente"
+            formControlName="secondCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>home_work</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Inscrição Estadual</mat-label>
+          <input
+            matInput
+            placeholder="Inscrição Estadual"
+            formControlName="thirdCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>business_center</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <mat-divider></mat-divider>
+      <h3>Dados Principais</h3>
+
+      <div class="line-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Razão Social</mat-label>
+          <input
+            matInput
+            placeholder="Razão Social"
+            formControlName="fourthCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>business_center</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome Fantasia</mat-label>
+          <input
+            matInput
+            placeholder="Nome Fantasia"
+            formControlName="fifthCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>business_center</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="line-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome Reduzido</mat-label>
+          <input
+            matInput
+            placeholder="Razão Social"
+            formControlName="sixthCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>business_center</mat-icon>
+        </mat-form-field>
+
+        <div class="short-line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>MCC</mat-label>
+            <input
+              matInput
+              placeholder="MCC"
+              formControlName="seventhCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>business_center</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Departamento</mat-label>
+            <input
+              matInput
+              placeholder="Departamento"
+              formControlName="eighthCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>business_center</mat-icon>
+          </mat-form-field>
+
+          <mat-checkbox class="example-margin">Ativo</mat-checkbox>
+        </div>
+      </div>
+
+      <div class="line-form">
+        <mat-form-field appearance="outline">
+          <mat-label>CNAE</mat-label>
+          <input
+            matInput
+            placeholder="Razão Social"
+            formControlName="ninethCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>business_center</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome Fantasia</mat-label>
+          <input
+            matInput
+            placeholder="Nome Fantasia"
+            formControlName="tenthCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>business_center</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Atividade comercial</mat-label>
+        <textarea matInput formControlName="eleventhCtrl"></textarea>
+      </mat-form-field>
+
+      <div>
+        <button mat-raised-button color="primary" matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step label="Endereço" state="adress" [stepControl]="secondFormGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>CEP</mat-label>
+      <input
+      matInput
+      placeholder="CEP"
+      formControlName="firstCtrl"
+      required
+    />
+    <mat-error *ngIf="formControl.invalid">{{
+      getErrorMessage()
+    }}</mat-error>
+    <mat-icon matSuffix>business_center</mat-icon>
+    </mat-form-field>
+
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="Condição" state="condition">
+    <p>You're welcome.</p>
+  </mat-step>
+
+  <mat-step label="Complemento">
+    <p>You're welcome.</p>
+  </mat-step>
+
+  <mat-step label="Sócio">
+    <p>You're welcome.</p>
+  </mat-step>
+
+  <!-- Icon overrides. -->
+  <ng-template matStepperIcon="identification">
+    <mat-icon>people_alt</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="adress">
+    <mat-icon>home</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="condition">
+    <mat-icon>grading</mat-icon>
+  </ng-template>
+</mat-horizontal-stepper>

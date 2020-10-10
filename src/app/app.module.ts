@@ -16,6 +16,9 @@ import { EditProfileComponent } from './pages/edit-profile/edit-profile.componen
 import { ProfileListComponent } from './pages/profile-list/profile-list.component';
 import { FormsModule } from '@angular/forms';
 import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
+import { CompanyListComponent } from './pages/company-list/company-list.component';
+import { AddCompanyComponent } from './pages/add-company/add-company.component';
+import { EditCompanyComponent } from './pages/edit-company/edit-company.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,9 @@ import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.co
     EditProfileComponent,
     ProfileListComponent,
     DeleteProfileComponent,
+    CompanyListComponent,
+    AddCompanyComponent,
+    EditCompanyComponent,
   ],
   imports: [
     BrowserModule,
