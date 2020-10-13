@@ -38,7 +38,16 @@ export class AddCompanyComponent implements OnInit {
       eleventhCtrl: ['', Validators.required],
     });
     this.secondFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
+      firstCtrl: ['', Validators.required],
+      secondCtrl: ['', Validators.required],
+      thirdCtrl: ['', Validators.required],
+      fourthCtrl: ['', Validators.required],
+      fifthCtrl: ['', Validators.required],
+      sixthCtrl: ['', Validators.required],
+      seventhCtrl: ['', Validators.required],
+      eighthCtrl: ['', Validators.required],
+      ninethCtrl: ['', Validators.required],
+      tenCtrl: ['', Validators.required],
     });
   }
 
