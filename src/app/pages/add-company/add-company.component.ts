@@ -1,6 +1,7 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { CepService } from 'src/app/services/cep.service';
 
 @Component({
   selector: 'app-add-company',
@@ -15,8 +16,12 @@ export class AddCompanyComponent implements OnInit {
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  cep: number;
 
-  constructor(private _formBuilder: FormBuilder) { }
+  constructor(
+    private _formBuilder: FormBuilder,
+    private CepService: CepService
+    ) { }
   
   formControl = new FormControl('', [
     Validators.required,
@@ -57,6 +62,26 @@ export class AddCompanyComponent implements OnInit {
       : this.formControl.hasError('email')
       ? 'Not a valid email'
       : '';
+  }
+
+  getEndereco(value) {
+    this.cep = value
+    console.log(this.cep)
+    this.CepService.getCep(this.cep).subscribe(
+      (response: any) => {
+        console.log(response);
+        
+        let obj = {
+        cidade : response.localidade,
+        logradouro : response.logradouro,
+        bairro : response.bairro,
+        estado : response.uf
+        }
+
+        this.secondFormGroup.patchValue( { secondFormGroup : obj } );
+      },
+
+    );
   }
 
 }

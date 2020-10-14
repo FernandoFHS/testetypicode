@@ -144,6 +144,9 @@
     </form>
   </mat-step>
 
+  <!--   
+      segundo step de formulario 
+  -->
   <mat-step label="Endereço" state="adress" [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <mat-divider></mat-divider>
@@ -232,7 +235,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>CEP</mat-label>
-          <input matInput placeholder="CEP" formControlName="sixthCtrl" required />
+          <input matInput placeholder="CEP" formControlName="sixthCtrl" required #cep (blur)="getEndereco(cep.value)" />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>business_center</mat-icon>
         </mat-form-field>
