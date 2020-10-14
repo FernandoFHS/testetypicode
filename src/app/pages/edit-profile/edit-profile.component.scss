@@ -51,9 +51,9 @@
   
   mat-radio-group {
     display: flex;
-    flex-direction: flex-start;
+    flex-direction: column;
     width: 80%;
-    justify-content: start;
+    justify-content: flex-start;
     font-family: Poppins;
     margin-bottom: 2%;
   }
