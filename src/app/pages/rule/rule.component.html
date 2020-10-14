@@ -1,0 +1,99 @@
+<div>
+
+  <core-breadcrumb [model]="breadcrumb_model"></core-breadcrumb>
+
+  <div class="m-b-25">
+    <label class="mat-display-1 page-title">
+      Incluir Regra
+    </label>
+  </div>
+
+  <mat-expansion-panel class="m-b-25" [expanded]="true">
+
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Detalhes e Condições
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <form name="form" [formGroup]="form" novalidate *ngIf="form" class="m-b-15" autocomplete="off">
+
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>
+          Descrição
+        </mat-label>
+        <mat-icon matSuffix
+          [color]="form.get('description').hasError('required') && form.get('description').touched ? 'warn' : 'primary'">
+          title
+        </mat-icon>
+        <input matInput formControlName="description">
+        <mat-error *ngIf="form.get('description').hasError('required')">
+          Obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <div formArrayName="conditions">
+
+        <div class="m-t-10 m-b-20" fxLayout="row wrap" fxLayoutAlign="center center">
+          <label class="subtitle-label" fxFlex="50%">
+            Condições
+          </label>
+          <div fxFlex="50%">
+            <button mat-flat-button color="accent" class="float-right">
+              Nova Condição
+            </button>
+          </div>
+        </div>
+
+        <div *ngFor="let _ of form_conditions.controls; index as i" [formGroupName]="i" fxLayout="row wrap"
+          fxLayoutGap="2% grid">
+
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%">
+            <mat-label>
+              Operador Lógico
+            </mat-label>
+            <input matInput formControlName="operador_logico">
+            <!-- <mat-error *ngIf="form.get('operador_logico').hasError('required')">
+              Obrigatório
+            </mat-error> -->
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="30%">
+            <mat-label>
+              Variável
+            </mat-label>
+            <input matInput formControlName="variavel">
+            <!-- <mat-error *ngIf="form.get('operador_logico').hasError('required')">
+              Obrigatório
+            </mat-error> -->
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="25%">
+            <mat-label>
+              Op. Comparação
+            </mat-label>
+            <input matInput formControlName="op_comparacao">
+            <!-- <mat-error *ngIf="form.get('operador_logico').hasError('required')">
+              Obrigatório
+            </mat-error> -->
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="25%">
+            <mat-label>
+              Valor
+            </mat-label>
+            <input matInput formControlName="valor">
+            <!-- <mat-error *ngIf="form.get('operador_logico').hasError('required')">
+              Obrigatório
+            </mat-error> -->
+          </mat-form-field>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </mat-expansion-panel>
+
+</div>

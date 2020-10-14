@@ -11,6 +11,7 @@ import { CoreModule } from './@core/core.module';
 import { UserComponent } from './pages/user/user.component';
 import { CompanyComponent } from './pages/company/company.component';
 import { PasswordTransactionComponent } from './pages/password-transaction/password-transaction.component';
+import { RuleComponent } from './pages/rule/rule.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { PasswordTransactionComponent } from './pages/password-transaction/passw
     UserComponent,
     CompanyComponent,
     PasswordTransactionComponent,
+    RuleComponent,
   ],
   imports: [
     BrowserModule,

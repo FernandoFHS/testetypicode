@@ -9,32 +9,44 @@ import { UserComponent } from '../pages/user/user.component';
 import { PasswordTransactionComponent } from '../pages/password-transaction/password-transaction.component';
 import { ContainerGuard } from '../@core/components/container/container.guard';
 import { LoginGuard } from '../pages/login/login.guard';
+import { RuleComponent } from '../pages/rule/rule.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: ContainerComponent,
     canActivateChild: [ContainerGuard],
-    children: [{
-      path: '',
-      redirectTo: 'home',
-      pathMatch: 'full'
-    }, {
-      path: 'home',
-      component: HomeComponent,
-    }, {
-      path: 'user',
-      component: UserComponent
-    }, {
-      path: 'company',
-      component: CompanyComponent
-    }, {
-      path: 'themes',
-      component: ThemesComponent
-    }, {
-      path: 'passwordtransaction',
-      component: PasswordTransactionComponent
-    }]
+    children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      }
+      , {
+        path: 'home',
+        component: HomeComponent,
+      },
+      {
+        path: 'user',
+        component: UserComponent
+      },
+      {
+        path: 'company',
+        component: CompanyComponent
+      },
+      {
+        path: 'themes',
+        component: ThemesComponent
+      },
+      {
+        path: 'passwordtransaction',
+        component: PasswordTransactionComponent
+      },
+      {
+        path: 'rule',
+        component: RuleComponent
+      }
+    ]
   },
   {
     path: 'login',

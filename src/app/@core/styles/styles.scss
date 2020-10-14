@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined');
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined");
 
 * {
     outline: none;
@@ -405,6 +405,10 @@ html body {
 
     .m-b-20 {
         margin-bottom: 20px;
+    }
+
+    .m-b-25 {
+        margin-bottom: 25px;
     }
 
     .m-b-30 {
@@ -875,4 +879,32 @@ Snacks
             width: 100%;
         }
     }
+}
+
+.page-title {
+    font-size: 30px !important;
+}
+
+mat-expansion-panel {
+    .mat-expansion-panel-header {
+        padding: 0 15px !important;
+        height: 50px !important;
+    }
+
+    .mat-expansion-panel-body {
+        padding: 0 15px 15px !important;
+        font-weight: 300 !important;
+    }
+}
+
+.subtitle-label {
+    font-weight: 400;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
 }
