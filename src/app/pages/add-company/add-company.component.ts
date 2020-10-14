@@ -53,6 +53,10 @@ export class AddCompanyComponent implements OnInit {
       eighthCtrl: ['', Validators.required],
       ninethCtrl: ['', Validators.required],
       tenCtrl: ['', Validators.required],
+      cidade: ['', Validators.required],
+      logradouro: ['', Validators.required],
+      bairro: ['', Validators.required],
+      estado: ['', Validators.required],
     });
   }
 
@@ -78,7 +82,9 @@ export class AddCompanyComponent implements OnInit {
         estado : response.uf
         }
 
-        this.secondFormGroup.patchValue( { secondFormGroup : obj } );
+        this.secondFormGroup.patchValue( {  ...obj } );
+
+        console.log(this.secondFormGroup);
       },
 
     );
