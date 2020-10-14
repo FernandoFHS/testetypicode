@@ -12,6 +12,9 @@ import { AddProfileComponent } from '../pages/add-profile/add-profile.component'
 import { EditProfileComponent } from '../pages/edit-profile/edit-profile.component';
 import { RuleAreaComponent } from '../pages/rule-area/rule-area.component';
 import { AddRuleComponent } from '../pages/rule-area/add-rule/add-rule.component';
+import { CompanyListComponent } from '../pages/company-list/company-list.component';
+import { AddCompanyComponent } from '../pages/add-company/add-company.component';
+import { EditCompanyComponent } from '../pages/edit-company/edit-company.component';
 
 export const routes: Routes = [
   {
@@ -66,8 +69,27 @@ export const routes: Routes = [
         ],
       },
       {
-        path: 'company',
-        component: CompanyComponent
+        path: 'company-list',
+        component: CompanyListComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'company',
+            pathMatch: 'full'
+          },
+          {
+            path: 'company',
+            component: CompanyComponent,
+          },
+          {
+            path: 'add-company',
+            component: AddCompanyComponent,
+          },
+          {
+            path: 'edit-company',
+            component: EditCompanyComponent,
+          },
+        ]
       },
       {
         path: 'themes',

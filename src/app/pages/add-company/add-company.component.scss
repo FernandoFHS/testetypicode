@@ -1,0 +1,57 @@
+form .initial-data {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 35%;
+  padding: 5px;
+}
+
+form .initial-data h2 {
+  font-size: 16px;
+}
+
+form .initial-data .establishment-container{
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+}
+
+form .initial-data .status-container h2 {
+  color: green;
+}
+
+form .initial-data h2 span{
+  font-weight: 500;
+  color: black;
+}
+
+form .line-form{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+form .line-form .mat-form-field{
+  width: 48%;
+}
+
+form .line-form .short-line-form{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 48%;
+}
+
+form .line-form .short-line-form .mat-form-field{
+  width: 40%;
+} 
+
+.mat-divider {
+  border-top-color: black;
+}
+
+h3 {
+  margin-top: 1%;
+  margin-bottom: 1%;
+}

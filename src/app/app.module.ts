@@ -18,6 +18,9 @@ import { FormsModule } from '@angular/forms';
 import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
 import { AddRuleComponent } from './pages/rule-area/add-rule/add-rule.component';
 import { RuleAreaComponent } from './pages/rule-area/rule-area.component';
+import { CompanyListComponent } from './pages/company-list/company-list.component';
+import { AddCompanyComponent } from './pages/add-company/add-company.component';
+import { EditCompanyComponent } from './pages/edit-company/edit-company.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,9 @@ import { RuleAreaComponent } from './pages/rule-area/rule-area.component';
     EditProfileComponent,
     ProfileListComponent,
     DeleteProfileComponent,
+    CompanyListComponent,
+    AddCompanyComponent,
+    EditCompanyComponent,
   ],
   imports: [
     BrowserModule,
