@@ -3,11 +3,11 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 
 @Component({
-  selector: 'app-rule',
-  templateUrl: './rule.component.html',
-  styleUrls: ['./rule.component.scss']
+  selector: 'app-add-rule',
+  templateUrl: './add-rule.component.html',
+  styleUrls: ['./add-rule.component.scss']
 })
-export class RuleComponent implements OnInit {
+export class AddRuleComponent implements OnInit {
 
   breadcrumb_model: BreadcrumbModel = {
     active: {
