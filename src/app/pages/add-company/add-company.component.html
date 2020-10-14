@@ -153,12 +153,22 @@
       <mat-divider></mat-divider>
       <h3>Comercial</h3>
       <div class="line-form">
+        <div class="short-line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>CEP</mat-label>
+            <input matInput placeholder="CEP" formControlName="sixthCtrl" required #cep
+              (blur)="getEndereco(cep.value)" />
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="line-form">
         <mat-form-field appearance="outline">
           <mat-label>Logradouro</mat-label>
           <input matInput placeholder="Nome Fantasia" formControlName="logradouro" required />
-          <mat-error *ngIf="formControl.invalid">{{
-          getErrorMessage()
-        }}</mat-error>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>business_center</mat-icon>
         </mat-form-field>
 
@@ -166,15 +176,13 @@
           <mat-form-field appearance="outline">
             <mat-label>Numero</mat-label>
             <input matInput placeholder="Nome Fantasia" formControlName="secondCtrl" required />
-            <mat-error *ngIf="formControl.invalid">{{
-          getErrorMessage()
-        }}</mat-error>
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>business_center</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Complemento</mat-label>
-            <input matInput placeholder="Nome Fantasia" formControlName="thirdCtrl" required />
+            <input matInput placeholder="Nome Fantasia" formControlName="thirdCtrl"/>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>business_center</mat-icon>
           </mat-form-field>
@@ -189,33 +197,27 @@
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>business_center</mat-icon>
         </mat-form-field>
+        <div class="short-line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Município</mat-label>
+            <input matInput placeholder="Nome Fantasia" formControlName="cidade" required />
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <mat-icon matSuffix>business_center</mat-icon>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Município</mat-label>
-          <input matInput placeholder="Nome Fantasia" formControlName="cidade" required />
-          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-          <mat-icon matSuffix>business_center</mat-icon>
-        </mat-form-field>
 
+          <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <input matInput placeholder="Estado" formControlName="estado" required />
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <mat-icon matSuffix>business_center</mat-icon>
+          </mat-form-field>
+
+        </div>
       </div>
+
       <div class="line-form">
 
-        <mat-form-field appearance="outline">
-          <mat-label>Estado</mat-label>
-          <input matInput placeholder="Estado" formControlName="estado" required />
-          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-          <mat-icon matSuffix>business_center</mat-icon>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>CEP</mat-label>
-          <input matInput placeholder="CEP" formControlName="sixthCtrl" required #cep (blur)="getEndereco(cep.value)" />
-          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-          <mat-icon matSuffix>business_center</mat-icon>
-        </mat-form-field>
-
-      </div>
-      <div class="line-form">
 
         <mat-form-field appearance="outline">
           <mat-label>Nome Responsável</mat-label>
@@ -259,7 +261,7 @@
         }}</mat-error>
             <mat-icon matSuffix>business_center</mat-icon>
           </mat-form-field>
-          
+
           <mat-form-field appearance="outline">
             <mat-label>Complemento</mat-label>
             <input matInput placeholder="Complemento" formControlName="tenCtrl" required />
@@ -332,8 +334,8 @@
       </div>
     </form>
     <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
+      <button mat-raised-button matStepperPrevious color="primary"> Anterior</button>
+      <button mat-raised-button matStepperNext color="primary">Proximo</button>
     </div>
   </mat-step>
   <mat-step label="Condição" state="condition">
