@@ -11,7 +11,13 @@ import { CoreModule } from './@core/core.module';
 import { UserComponent } from './pages/user/user.component';
 import { CompanyComponent } from './pages/company/company.component';
 import { PasswordTransactionComponent } from './pages/password-transaction/password-transaction.component';
-import { RuleComponent } from './pages/rule/rule.component';
+import { AddProfileComponent } from './pages/add-profile/add-profile.component';
+import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
+import { ProfileListComponent } from './pages/profile-list/profile-list.component';
+import { FormsModule } from '@angular/forms';
+import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
+import { AddRuleComponent } from './pages/rule-area/add-rule/add-rule.component';
+import { RuleAreaComponent } from './pages/rule-area/rule-area.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +27,12 @@ import { RuleComponent } from './pages/rule/rule.component';
     UserComponent,
     CompanyComponent,
     PasswordTransactionComponent,
-    RuleComponent,
+    RuleAreaComponent,
+    AddRuleComponent,
+    AddProfileComponent,
+    EditProfileComponent,
+    ProfileListComponent,
+    DeleteProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,6 +40,7 @@ import { RuleComponent } from './pages/rule/rule.component';
     HttpClientModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    FormsModule,
     
     CoreModule
   ],

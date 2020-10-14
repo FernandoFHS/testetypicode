@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Profile } from '../models/Profile';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Profile, Content } from '../models/Profile';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,10 @@ export class DataService {
   // Temporarily stores data from dialogs
   dialogData: any;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, public _snackBar: MatSnackBar) { }
+
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   headers = new HttpHeaders({
     "Authorization": "Basic YWRtaW46MTIzNDU2",
@@ -52,18 +56,39 @@ export class DataService {
     });
   }
 
-  // DEMO ONLY, you can find working methods below
-  addProfile(Profile: Profile): void {
-    this.dialogData = Profile;
+  create(profile: Content): Observable<Content> {
+    return this.httpClient.post<Content>(this.API_URL, profile);
   }
 
-  updateProfile(Profile: Profile): void {
-    this.dialogData = Profile;
+  readById(idProfile: number): Observable<Content> {
+    const url = `${this.API_URL}/${idProfile}`;
+    return this.httpClient.get<Content>(url);
   }
 
-  deleteProfile(id: number): void {
-    console.log(id);
+  update(profile: Content): Observable<Content> {
+    const url = `${this.API_URL}/${profile.idProfile}`;
+    return this.httpClient.put<Content>(url, profile);
   }
+
+  read(): Observable<Profile[]> {
+    return this.httpClient.get<Profile[]>(this.API_URL);
+  }
+
+  delete(id: number): Observable<Profile> {
+    const url = `${this.API_URL}/${id}`;
+    return this.httpClient.delete<Profile>(url);
+    //this.getAllProfiles();
+  }
+
+  openSnackBar(message: string, action: string): void {
+    this._snackBar.open(message, action, {
+      duration: 3000,
+      panelClass: ['green-snackbar'],
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+  }
+
 
 
 /* REAL LIFE CRUD Methods I've used in my projects. ToasterService uses Material Toasts for displaying messages:

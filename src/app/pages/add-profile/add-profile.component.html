@@ -1,0 +1,46 @@
+<div class="add-profile-container">
+    <div class="form-box-content mat-elevation-z2">
+      <h3>Adicionar Perfil</h3>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Empresa</mat-label>
+        <input
+          matInput
+          placeholder="Empresa"
+          [(ngModel)]="profile.nameProfile"
+          name="name"
+          required
+        />
+        <mat-icon matSuffix>business_center</mat-icon>
+        <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <input
+          matInput
+          placeholder="Descrição"
+          [(ngModel)]="profile.description"
+          name="description"
+          required
+        />
+        <mat-icon matSuffix>subject</mat-icon>
+        <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
+      </mat-form-field>
+  
+      <div mat-dialog-actions class="group-buttons-actions">
+        <button mat-raised-button color="primary" (click)="createProfile()">
+          Salvar
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          tabindex="-1"
+          (click)="onNoClick()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+  

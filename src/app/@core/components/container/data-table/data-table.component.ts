@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { DeleteProfileComponent } from 'src/app/pages/delete-profile/delete-profile.component';
 
 @Component({
   selector: 'core-data-table',
@@ -30,7 +32,7 @@ export class DataTableComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild('filter',  {static: true}) filter: ElementRef;
 
-  constructor() { }
+  constructor(public dialog: MatDialog,) { }
 
   ngOnInit(): void {
     this.displayedColumns = this.headers.map((e) => e.value);
@@ -44,6 +46,12 @@ export class DataTableComponent implements OnInit {
 
   editItem(index: number) {
     this.editEvent.emit(index);
+  }
+
+  openDeleteDialog(idProfile: number) {
+    const dialogRef = this.dialog.open(DeleteProfileComponent, {
+      data: {id: idProfile}
+    });
   }
   
 }
