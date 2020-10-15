@@ -40,6 +40,7 @@ export class UserComponent implements OnInit {
   id: number;
 
   dataSource: any[] = [];
+  router="/profile-list/add-profile";
 
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);

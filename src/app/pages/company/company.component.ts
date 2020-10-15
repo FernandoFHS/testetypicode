@@ -48,6 +48,7 @@ export class CompanyComponent implements OnInit {
   id: number;
 
   dataSource: any[] = [];
+  router="/company-list/add-company";
 
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);

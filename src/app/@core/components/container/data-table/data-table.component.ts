@@ -22,6 +22,9 @@ export class DataTableComponent implements OnInit {
   @Input() 
   actions
 
+  @Input()
+  router
+
   @Output()
   deleteEvent: EventEmitter<number> = new EventEmitter();
 
