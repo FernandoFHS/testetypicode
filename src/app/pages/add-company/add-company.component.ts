@@ -16,6 +16,7 @@ export class AddCompanyComponent implements OnInit {
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
   cep: number;
 
   constructor(
@@ -53,6 +54,13 @@ export class AddCompanyComponent implements OnInit {
       eighthCtrl: ['', Validators.required],
       ninethCtrl: ['', Validators.required],
       tenCtrl: ['', Validators.required],
+    });
+    this.thirdFormGroup = this._formBuilder.group({
+      tableSaleCtrl: ['', Validators.required],
+      transactionCostCtrl: ['', Validators.required],
+      tedCostCtrl: ['', Validators.required],
+      benefitedNameCtrl: ['', Validators.required],
+      cnpjCtrl: ['', Validators.required],
     });
   }
 
