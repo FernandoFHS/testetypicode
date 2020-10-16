@@ -5,6 +5,7 @@ import { Profile } from '../../models/profile';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { DataService } from 'src/app/services/data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -15,7 +16,8 @@ export class UserComponent implements OnInit {
 
   constructor(public httpClient: HttpClient,
     public dialog: MatDialog,
-    private dataService: DataService) { }
+    private dataService: DataService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -59,6 +61,6 @@ export class UserComponent implements OnInit {
 
 
   onEdit(index: number) {
-    console.log('esse é o meu index para editar ' + index);
+    this.router.navigate
   }
 }

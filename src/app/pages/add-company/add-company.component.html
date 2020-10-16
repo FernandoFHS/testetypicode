@@ -192,16 +192,13 @@
         <textarea matInput formControlName="eleventhCtrl"></textarea>
       </mat-form-field>
 
-      <div>
-        <button mat-raised-button color="primary" matStepperNext>Next</button>
+      <div class="next-button">
+        <button mat-raised-button matStepperNext color="primary">Avançar</button>
       </div>
     </form>
   </mat-step>
 
-  <!--   
-    
-      segundo step de formulario 
-  -->
+  <!--Adress Step-->
   <mat-step label="Endereço" state="adress" [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <mat-divider></mat-divider>
@@ -210,9 +207,17 @@
         <div class="short-line-form">
           <mat-form-field appearance="outline">
             <mat-label>CEP</mat-label>
-            <input matInput placeholder="CEP" formControlName="sixthCtrl" required #cep
-              (blur)="getEndereco(cep.value)" />
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <input
+              matInput
+              placeholder="CEP"
+              formControlName="sixthCtrl"
+              required
+              #cep
+              (blur)="getEndereco(cep.value)"
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
         </div>
@@ -221,23 +226,43 @@
       <div class="line-form">
         <mat-form-field appearance="outline">
           <mat-label>Logradouro</mat-label>
-          <input matInput placeholder="Nome Fantasia" formControlName="logradouro" required />
-          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          <input
+            matInput
+            placeholder="Nome Fantasia"
+            formControlName="logradouro"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
           <mat-icon matSuffix>business_center</mat-icon>
         </mat-form-field>
 
         <div class="short-line-form">
           <mat-form-field appearance="outline">
             <mat-label>Numero</mat-label>
-            <input matInput placeholder="Nome Fantasia" formControlName="secondCtrl" required />
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <input
+              matInput
+              placeholder="Nome Fantasia"
+              formControlName="secondCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
             <mat-icon matSuffix>business_center</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Complemento</mat-label>
-            <input matInput placeholder="Nome Fantasia" formControlName="thirdCtrl"/>
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <input
+              matInput
+              placeholder="Nome Fantasia"
+              formControlName="thirdCtrl"
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
             <mat-icon matSuffix>business_center</mat-icon>
           </mat-form-field>
         </div>
@@ -246,32 +271,49 @@
       <div class="line-form">
         <mat-form-field appearance="outline">
           <mat-label>Bairro</mat-label>
-          <input matInput placeholder="Nome Fantasia" formControlName="bairro" required />
-          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          <input
+            matInput
+            placeholder="Nome Fantasia"
+            formControlName="bairro"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
           <mat-icon matSuffix>business_center</mat-icon>
         </mat-form-field>
         <div class="short-line-form">
           <mat-form-field appearance="outline">
             <mat-label>Município</mat-label>
-            <input matInput placeholder="Nome Fantasia" formControlName="cidade" required />
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <input
+              matInput
+              placeholder="Nome Fantasia"
+              formControlName="cidade"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
             <mat-icon matSuffix>business_center</mat-icon>
           </mat-form-field>
-
 
           <mat-form-field appearance="outline">
             <mat-label>Estado</mat-label>
-            <input matInput placeholder="Estado" formControlName="estado" required />
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <input
+              matInput
+              placeholder="Estado"
+              formControlName="estado"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
             <mat-icon matSuffix>business_center</mat-icon>
           </mat-form-field>
-
         </div>
       </div>
 
       <div class="line-form">
-
-
         <mat-form-field appearance="outline">
           <mat-label>Nome Responsável</mat-label>
           <input
@@ -434,15 +476,22 @@
           <mat-icon matSuffix>business_center</mat-icon>
         </mat-form-field>
       </div>
+
+      <div class="group-actions-buttons">
+        <button mat-raised-button matStepperPrevious color="warn">Voltar</button>
+        <button mat-raised-button matStepperNext color="primary">Avançar</button>
+      </div>
+
     </form>
-    <div>
-      <button mat-raised-button matStepperPrevious color="primary"> Anterior</button>
-      <button mat-raised-button matStepperNext color="primary">Proximo</button>
-    </div>
   </mat-step>
   <!--Condition Step-->
-  <mat-step label="Condição" state="condition" [stepControl]="thirdFormGroup">
-    <form [formGroup]="thirdFormGroup">
+  <mat-step
+    label="Condição"
+    state="condition"
+    [stepControl]="conditionFormGroup"
+  >
+    <form [formGroup]="conditionFormGroup">
+      <mat-divider></mat-divider>
       <h3>Condições Comerciais</h3>
       <div class="line-form">
         <mat-form-field appearance="outline">
@@ -507,7 +556,7 @@
           <input
             matInput
             placeholder="R$ 0,00"
-            formControlName="transactionCostCtrl"
+            formControlName="referralTransacionCtrl"
             required
           />
           <mat-error *ngIf="formControl.invalid">{{
@@ -522,7 +571,7 @@
             <input
               matInput
               placeholder="R$ 0,00"
-              formControlName="tedCostCtrl"
+              formControlName="anticipationFeeCtrl"
               required
             />
             <mat-error *ngIf="formControl.invalid">{{
@@ -586,7 +635,7 @@
             <input
               matInput
               placeholder="Agência"
-              formControlName="tedCostCtrl"
+              formControlName="agencyCtrl"
               required
             />
             <mat-error *ngIf="formControl.invalid">{{
@@ -600,7 +649,7 @@
             <input
               matInput
               placeholder="R$ 0,00"
-              formControlName="tedCostCtrl"
+              formControlName="agencyDigitCtrl"
               required
             />
             <mat-error *ngIf="formControl.invalid">{{
@@ -617,7 +666,7 @@
           <input
             matInput
             placeholder="Conta Corrente"
-            formControlName="tedCostCtrl"
+            formControlName="currentAccountCtrl"
             required
           />
           <mat-error *ngIf="formControl.invalid">{{
@@ -632,7 +681,7 @@
             <input
               matInput
               placeholder="Agência"
-              formControlName="tedCostCtrl"
+              formControlName="currentAccountDigitCtrl"
               required
             />
             <mat-error *ngIf="formControl.invalid">{{
@@ -646,7 +695,7 @@
             <input
               matInput
               placeholder="R$ 0,00"
-              formControlName="tedCostCtrl"
+              formControlName="currentAccountAgencyCtrl"
               required
             />
             <mat-error *ngIf="formControl.invalid">{{
@@ -706,18 +755,249 @@
       </mat-form-field>
 
       <div class="group-actions-buttons">
-        <button mat-raised-button matStepperPrevious color="warn">Back</button>
-        <button mat-raised-button matStepperNext color="primary">Next</button>
+        <button mat-raised-button matStepperPrevious color="warn">Voltar</button>
+        <button mat-raised-button matStepperNext color="primary">Próximo</button>
       </div>
     </form>
   </mat-step>
 
-  <mat-step label="Complemento">
-    <p>You're welcome.</p>
+  <mat-step label="Complemento" [stepControl]="complementFormGroup">
+    <form [formGroup]="complementFormGroup">
+      <h3>Dados Complementares</h3>
+
+      <div class="line-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Horário de funcionamento</mat-label>
+          <mat-select name="type" required>
+            <mat-option> Horário Comercial </mat-option>
+            <mat-option> 24 horas </mat-option>
+            <mat-option> Manhã </mat-option>
+            <mat-option> Tarde </mat-option>
+            <mat-option> Noite </mat-option>
+            <mat-option> Outros </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>URL Ecommerce</mat-label>
+          <input
+            matInput
+            placeholder="URL Ecommerce"
+            formControlName="urlEcommerceCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>link</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="line-form">
+        <mat-form-field appearance="outline">
+          <mat-label>URL</mat-label>
+          <input
+            matInput
+            placeholder="URL"
+            formControlName="urlCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>link</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            placeholder="Email"
+            formControlName="emailCtrl"
+            required
+          />
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          <mat-icon matSuffix>mail</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="line-form">
+        <div class="short-line-2-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Quantidade POS</mat-label>
+            <input
+              matInput
+              placeholder="Quantidade POS"
+              formControlName="posAmountCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>link</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Número Lógico (MID)</mat-label>
+            <input
+              matInput
+              placeholder="Número Lógico (MID)"
+              formControlName="logicNumberCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>mail</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="short-line-2-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Id. Terminal (TID)</mat-label>
+            <input
+              matInput
+              placeholder="Id. Terminal (TID)"
+              formControlName="idTerminalCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>mail</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cód. Software Express</mat-label>
+            <input
+              matInput
+              placeholder="Cód. Software Express"
+              formControlName="codeSoftwareCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>more_horiz</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <h3>Datas</h3>
+
+      <div class="line-form">
+        <div class="short-line-3-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Data Cadastro BF</mat-label>
+            <input
+              matInput
+              placeholder="Data Cadastro BF"
+              formControlName="codeSoftwareCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>more_horiz</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data Envio GP</mat-label>
+            <input
+              matInput
+              placeholder="Data Envio GP"
+              formControlName="codeSoftwareCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>more_horiz</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data Credenciamento GP</mat-label>
+            <input
+              matInput
+              placeholder="Data Credenciamento GP"
+              formControlName="codeSoftwareCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>more_horiz</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="line-form">
+        <div class="short-line-3-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Data Afiliação GP</mat-label>
+            <input
+              matInput
+              placeholder="Data Afiliação GP"
+              formControlName="codeSoftwareCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>more_horiz</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data Cadastramento SE</mat-label>
+            <input
+              matInput
+              placeholder="Data Cadastramento SE"
+              formControlName="codeSoftwareCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>more_horiz</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data Descredenciamento</mat-label>
+            <input
+              matInput
+              placeholder="Data Descredenciamento"
+              formControlName="codeSoftwareCtrl"
+              required
+            />
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+            <mat-icon matSuffix>more_horiz</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="group-actions-buttons">
+        <button mat-raised-button matStepperPrevious color="warn">Voltar</button>
+        <button mat-raised-button matStepperNext color="primary">Avançar</button>
+      </div>
+
+    </form>
   </mat-step>
 
-  <mat-step label="Sócio">
-    <p>You're welcome.</p>
+  <mat-step label="Sócio" [stepControl]="partnerFormGroup">
+    <core-data-table
+      [headers]="headers"
+      [data]="dataSource"
+      [actions]="actions"
+      (deleteEvent)="onDelete($event)"
+      (editEvent)="onEdit($event)"
+    >
+    </core-data-table>
   </mat-step>
 
   <!-- Icon overrides. -->

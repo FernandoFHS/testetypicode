@@ -36,4 +36,19 @@ export class DeleteProfileComponent implements OnInit {
     this.dialogRef.close();      ;
   }
 
+  dataSource: any[] = [];
+  
+  public loadData() {
+    //this.exampleDatabase = new DataService(this.httpClient);
+
+    this.dataService.getAllProfiles().then((data) => {
+
+      this.dataSource = data;
+      
+    }, (error) => {
+      // TODO
+    });
+  
+  }
+
 }

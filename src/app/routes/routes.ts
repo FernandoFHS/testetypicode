@@ -13,26 +13,30 @@ import { EditProfileComponent } from '../pages/edit-profile/edit-profile.compone
 import { CompanyListComponent } from '../pages/company-list/company-list.component';
 import { AddCompanyComponent } from '../pages/add-company/add-company.component';
 import { EditCompanyComponent } from '../pages/edit-company/edit-company.component';
+import { AddPartnerComponent } from '../pages/add-partner/add-partner.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: ContainerComponent,
-    children: [{
-      path: '',
-      redirectTo: 'home',
-      pathMatch: 'full'
-    }, {
-      path: 'home',
-      component: HomeComponent
-    },{
+    children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
+      {
+        path: 'home',
+        component: HomeComponent,
+      },
+      {
         path: 'profile-list',
         component: ProfileListComponent,
         children: [
           {
             path: '',
             redirectTo: 'user',
-            pathMatch: 'full'
+            pathMatch: 'full',
           },
           {
             path: 'user',
@@ -47,38 +51,46 @@ export const routes: Routes = [
             component: EditProfileComponent,
           },
         ],
-      },{
-      path: 'company-list',
-      component: CompanyListComponent,
-      children: [
-        {
-          path: '',
-          redirectTo: 'company',
-          pathMatch: 'full'
-        },
-        {
-          path: 'company',
-          component: CompanyComponent,
-        },
-        {
-          path: 'add-company',
-          component: AddCompanyComponent,
-        },
-        {
-          path: 'edit-company',
-          component: EditCompanyComponent,
-        },
-      ]
-    }, {
-      path: 'themes',
-      component: ThemesComponent
-    }, {
-      path: 'password-transaction',
-      component: PasswordTransactionComponent
-    }]
+      },
+      {
+        path: 'company-list',
+        component: CompanyListComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'company',
+            pathMatch: 'full',
+          },
+          {
+            path: 'company',
+            component: CompanyComponent,
+          },
+          {
+            path: 'add-company',
+            component: AddCompanyComponent,
+          },
+          {
+            path: 'edit-company',
+            component: EditCompanyComponent,
+          },
+          {
+            path: 'add-partner',
+            component: AddPartnerComponent,
+          },
+        ],
+      },
+      {
+        path: 'themes',
+        component: ThemesComponent,
+      },
+      {
+        path: 'password-transaction',
+        component: PasswordTransactionComponent,
+      },
+    ],
   },
   {
     path: 'login',
-    component: LoginComponent
-  }
+    component: LoginComponent,
+  },
 ];

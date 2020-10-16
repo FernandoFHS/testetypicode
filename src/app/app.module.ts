@@ -19,6 +19,7 @@ import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.co
 import { CompanyListComponent } from './pages/company-list/company-list.component';
 import { AddCompanyComponent } from './pages/add-company/add-company.component';
 import { EditCompanyComponent } from './pages/edit-company/edit-company.component';
+import { AddPartnerComponent } from './pages/add-partner/add-partner.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { EditCompanyComponent } from './pages/edit-company/edit-company.componen
     CompanyListComponent,
     AddCompanyComponent,
     EditCompanyComponent,
+    AddPartnerComponent,
   ],
   imports: [
     BrowserModule,
