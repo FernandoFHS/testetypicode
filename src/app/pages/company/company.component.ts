@@ -29,8 +29,8 @@ export class CompanyComponent implements OnInit {
     { text: 'MCC	', value: 'mcc' },
     { text: 'Parceiro', value: 'parner' },
     { text: 'Status', value: 'status' },
-    { text: 'Tab.Vendas', value: 'tabsell'},
-    { text: 'Situação', value: 'situation'},
+    { text: 'Tab.Vendas', value: 'tabsell' },
+    { text: 'Situação', value: 'situation' },
 
 
     // { text: 'Ações', value: 'action' }
@@ -48,7 +48,7 @@ export class CompanyComponent implements OnInit {
   id: number;
 
   dataSource: any[] = [];
-  router="/company-list/add-company";
+  routerdynamic = "/company-list/add-company";
 
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);
@@ -56,18 +56,18 @@ export class CompanyComponent implements OnInit {
     this.dataService.getAllProfiles().then((data) => {
 
       this.dataSource = data;
-      
+
     }, (error) => {
       // TODO
     });
-  
+
   }
   onDelete(index: number) {
     console.log('esse é o meu index para deletar ' + index);
-   }
+  }
 
-   
+
   onEdit(index: number) {
     console.log('esse é o meu index para editar ' + index);
-   }
+  }
 }
