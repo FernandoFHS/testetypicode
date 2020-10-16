@@ -25,7 +25,6 @@ export class AddCompanyComponent implements OnInit {
   cep: number;
   isChecked = false;
 
-
   teste;
 
 
@@ -175,8 +174,11 @@ export class AddCompanyComponent implements OnInit {
         this.secondFormGroup.patchValue(obj);
         console.log(this.secondFormGroup);
       },
-    
     );
+
+   if (this.isChecked == true) {
+      this.getSecondcep(value);
+    }
   }
 
   getfisrtcep() {
@@ -188,6 +190,7 @@ export class AddCompanyComponent implements OnInit {
     this.CepService.getCep(this.cep).subscribe(
       (response: any) => {
         let cep2 = {
+          secondcep: response.cep,
           secondcidade: response.localidade,
           secondlogradouro: response.logradouro,
           secondbairro: response.bairro,
@@ -202,6 +205,7 @@ export class AddCompanyComponent implements OnInit {
 
     let a = e.checked
     if (a == true) {
+      this.isChecked = true;
       console.log(this.teste)
       let obj = {
         secondcep: this.teste.cep,
@@ -219,6 +223,7 @@ export class AddCompanyComponent implements OnInit {
       }
       this.secondFormGroup.patchValue(obj);
     } if (a == false) {
+      this.isChecked = false;
       console.log('falso')
       let obj = {
         secondcep: '',

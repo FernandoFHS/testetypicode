@@ -1,45 +1,57 @@
-<div class="edit-profile-container">
-  <div class="form-box-content mat-elevation-z2">
-    <h3>Editar Perfil</h3>
+<div fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
+  <div class="card-box">
+    <mat-card class="mat-elevation-z2">
+      <mat-card-content>
+        <div class="text-center m-b-20 font-light-bold title-size">
+          <label>
+            Editar Perfil
+          </label>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Empresa</mat-label>
+          <input
+            matInput
+            placeholder="Empresa"
+            [(ngModel)]="profile.nameProfile"
+            name="name"
+            required
+          />
+          <mat-icon matSuffix>business_center</mat-icon>
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Empresa</mat-label>
-      <input
-        matInput
-        placeholder="Empresa"
-        [(ngModel)]="profile.nameProfile"
-        name="name"
-        required
-      />
-      <mat-icon matSuffix>business_center</mat-icon>
-      <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
-    </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <input
+            matInput
+            placeholder="Descrição"
+            [(ngModel)]="profile.description"
+            name="description"
+            required
+          />
+          <mat-icon matSuffix>subject</mat-icon>
+          <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Descrição</mat-label>
-      <input
-        matInput
-        placeholder="Descrição"
-        [(ngModel)]="profile.description"
-        name="description"
-        required
-      />
-      <mat-icon matSuffix>subject</mat-icon>
-      <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
-    </mat-form-field>
-
-    <div mat-dialog-actions class="group-buttons-actions">
-      <button mat-raised-button color="primary" (click)="updateProfile()">
-        Salvar
-      </button>
-      <button
-        mat-raised-button
-        color="warn"
-        tabindex="-1"
-        (click)="onNoClick()"
-      >
-        Cancelar
-      </button>
-    </div>
+        <div mat-dialog-actions class="group-buttons-actions">
+          <button mat-raised-button color="primary" (click)="updateProfile()">
+            Salvar
+          </button>
+          <button
+            mat-raised-button
+            color="warn"
+            tabindex="-1"
+            (click)="onNoClick()"
+          >
+            Cancelar
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
+

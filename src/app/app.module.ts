@@ -20,7 +20,7 @@ import { CompanyListComponent } from './pages/company-list/company-list.componen
 import { AddCompanyComponent } from './pages/add-company/add-company.component';
 import { EditCompanyComponent } from './pages/edit-company/edit-company.component';
 import { AddPartnerComponent } from './pages/add-partner/add-partner.component';
-import { NgxMaskModule, IConfig } from 'ngx-mask'
+import { NgxMaskModule, IConfig } from 'ngx-mask';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
