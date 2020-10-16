@@ -23,7 +23,7 @@ export class AddCompanyComponent implements OnInit {
   complementFormGroup: FormGroup;
   partnerFormGroup: FormGroup;
   cep: number;
-  isChecked = false;
+  isChecked: boolean = false;
 
   teste;
 
@@ -217,9 +217,6 @@ export class AddCompanyComponent implements OnInit {
         secondcomplemento: this.secondFormGroup.get('complemento').value,
         secondnomeresponsavel: this.secondFormGroup.get('nomeresponsavel').value,
         secondpontodereferencia: this.secondFormGroup.get('pontodereferencia').value,
-
-
-
       }
       this.secondFormGroup.patchValue(obj);
     } if (a == false) {
@@ -235,9 +232,38 @@ export class AddCompanyComponent implements OnInit {
         secondcomplemento: '',
         secondnomeresponsavel: '',
         secondpontodereferencia: '',
-
       }
       this.secondFormGroup.patchValue(obj);
+    }
+  }
+  onSelectionChanged(value) {
+    let a = value.checked
+    console.log(value.checked);
+    if (a === true) {
+      this.secondFormGroup.get('secondcep').disable();
+      this.secondFormGroup.get('secondbairro').disable();
+      this.secondFormGroup.get('secondcidade').disable();
+      this.secondFormGroup.get('secondlogradouro').disable();
+      this.secondFormGroup.get('secondstate').disable();
+      this.secondFormGroup.get('secondnumero').disable();
+      this.secondFormGroup.get('secondcomplemento').disable();
+      this.secondFormGroup.get('secondnomeresponsavel').disable();
+      this.secondFormGroup.get('secondpontodereferencia').disable();
+
+      this.isChecked = true;
+
+    } else {
+      this.secondFormGroup.get('secondcep').enable();
+      this.secondFormGroup.get('secondbairro').enable();
+      this.secondFormGroup.get('secondcidade').enable();
+      this.secondFormGroup.get('secondlogradouro').enable();
+      this.secondFormGroup.get('secondstate').enable();
+      this.secondFormGroup.get('secondnumero').enable();
+      this.secondFormGroup.get('secondcomplemento').enable();
+      this.secondFormGroup.get('secondnomeresponsavel').enable();
+      this.secondFormGroup.get('secondpontodereferencia').enable();
+
+      this.isChecked = false;
     }
   }
 
