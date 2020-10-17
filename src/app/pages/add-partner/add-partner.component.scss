@@ -1,0 +1,66 @@
+@import '~src/app/@core/styles/breakpoints';
+
+:host {
+  .card-box {
+    margin: 0 15px;
+    vertical-align: middle;
+    margin-top: 280px;
+    margin-bottom: 50px;
+    width: 100%;
+  }
+
+  .title-size {
+    font-size: 26px;
+  }
+  
+  form .line-form{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  form .line-form .mat-form-field{
+    width: 48%;
+  }
+
+  form .line-form .short-line-25-form{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 25%;
+  }
+
+  form .line-form .short-line-25-form .mat-form-field{
+    width: 100%;
+  }
+  
+  form .line-form .short-line-form{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 48%;
+  }
+  
+  form .line-form .short-line-form .mat-form-field{
+    width: 45%;
+  }
+
+  h3 {
+    padding: 1% 0 1%;
+  }
+
+  .group-buttons-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  button {
+    height: 60px;
+    width: 45%;
+    font-size: 16px;
+    text-align: center;
+  }
+
+}

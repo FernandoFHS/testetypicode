@@ -23,7 +23,7 @@ export class DataTableComponent implements OnInit {
   actions
 
   @Input()
-  routerdynamic
+  dinamicAddRouter
 
   @Output()
   deleteEvent: EventEmitter<number> = new EventEmitter();

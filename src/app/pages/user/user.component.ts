@@ -42,7 +42,8 @@ export class UserComponent implements OnInit {
   id: number;
 
   dataSource: any[] = [];
-  routerdynamic = "/profile-list/add-profile";
+  
+  dinamicAddRouter = "/profile-list/add-profile";
 
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);

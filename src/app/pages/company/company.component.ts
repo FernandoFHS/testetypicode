@@ -48,7 +48,8 @@ export class CompanyComponent implements OnInit {
   id: number;
 
   dataSource: any[] = [];
-  routerdynamic = "/company-list/add-company";
+
+  dinamicAddRouter = "/company-list/add-company";
 
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);

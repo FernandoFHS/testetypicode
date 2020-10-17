@@ -836,7 +836,7 @@
 
   <mat-step label="Sócio" [stepControl]="partnerFormGroup">
     <core-data-table [headers]="headers" [data]="dataSource" [actions]="actions" (deleteEvent)="onDelete($event)"
-      (editEvent)="onEdit($event)">
+      (editEvent)="onEdit($event)" [dinamicAddRouter]="dinamicAddRouter">
     </core-data-table>
   </mat-step>
 

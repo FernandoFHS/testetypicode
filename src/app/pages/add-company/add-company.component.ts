@@ -160,6 +160,8 @@ export class AddCompanyComponent implements OnInit {
 
   dataSource: any[] = [];
 
+  dinamicAddRouter = "/company-list/add-partner";
+
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);
 
