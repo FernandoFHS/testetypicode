@@ -54,13 +54,13 @@ export class AddCompanyComponent implements OnInit {
   isChecked = false;
   isCheckedBankAdress = false;
 
-  teste: any;
+  teste;
 
   constructor(
     private _formBuilder: FormBuilder,
     private CepService: CepService,
     private dataService: DataService
-  ) { }
+  ) {}
 
   formControl = new FormControl('', [
     Validators.required,
@@ -69,10 +69,6 @@ export class AddCompanyComponent implements OnInit {
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
-      establishment: [{ value: '', disabled: true }],
-      timechange:[{ value: '', disabled: true }],
-      username: [{ value: '', disabled: true }],
-      type: ['', Validators.required],
       firstCtrl: ['', Validators.required],
       secondCtrl: ['', Validators.required],
       thirdCtrl: ['', Validators.required],
@@ -191,8 +187,8 @@ export class AddCompanyComponent implements OnInit {
     return this.formControl.hasError('required')
       ? 'Campo Obrigatório'
       : this.formControl.hasError('email')
-        ? 'Not a valid email'
-        : '';
+      ? 'Not a valid email'
+      : '';
   }
 
   getEndereco(value) {
@@ -217,7 +213,7 @@ export class AddCompanyComponent implements OnInit {
     }
   }
 
-  getfisrtcep() { }
+  getfisrtcep() {}
 
   getSecondcep(cep) {
     this.cep = cep;
@@ -314,17 +310,6 @@ export class AddCompanyComponent implements OnInit {
       this.conditionFormGroup.get('benefitedTypeCtrl').disable();
       this.conditionFormGroup.get('benefitedNameCtrl').disable();
       this.conditionFormGroup.get('cnpjCtrl').disable();
-    }
-  }
-
-  getCpfCnpjMask(a) {
-    
-    if (a == 'Pessoa Física') {
-      return '000.000.000-00';
-    } if (a == 'Pessoa Jurídica') {
-      return '00.000.000/0000-00';
-    }else{
-      return'00000000000000000000';
     }
   }
 }
