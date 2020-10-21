@@ -10,7 +10,6 @@ import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { CepService } from 'src/app/services/cep.service';
 import { DataService } from 'src/app/services/data.service';
-
 import {
   MAT_MOMENT_DATE_FORMATS,
   MomentDateAdapter,
@@ -53,14 +52,16 @@ export class AddCompanyComponent implements OnInit {
   cep: number;
   isChecked = false;
   isCheckedBankAdress = false;
-
-  teste;
+  mask = '0000000000000000';
+  response: any;
+  dataSource: any[] = [];
+  dinamicAddRouter = "/company-list/add-partner";
 
   constructor(
     private _formBuilder: FormBuilder,
     private CepService: CepService,
     private dataService: DataService
-  ) {}
+  ) { }
 
   formControl = new FormControl('', [
     Validators.required,
@@ -69,6 +70,11 @@ export class AddCompanyComponent implements OnInit {
 
   ngOnInit(): void {
     this.firstFormGroup = this._formBuilder.group({
+      establishment: [{ value: '', disabled: true }],
+      timechange: [{ value: '', disabled: true }],
+      timecreate: [{ value: '', disabled: true }],
+      usernamecreate: [{ value: '', disabled: true }],
+      usernamechange: [{ value: '', disabled: true }],
       firstCtrl: ['', Validators.required],
       secondCtrl: ['', Validators.required],
       thirdCtrl: ['', Validators.required],
@@ -158,10 +164,6 @@ export class AddCompanyComponent implements OnInit {
     delete: true,
   };
 
-  dataSource: any[] = [];
-
-  dinamicAddRouter = "/company-list/add-partner";
-
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);
 
@@ -191,31 +193,24 @@ export class AddCompanyComponent implements OnInit {
       : '';
   }
 
-  getEndereco(value) {
+  getFirstCep(value) {
     this.cep = value;
-    console.log(this.cep);
     this.CepService.getCep(this.cep).subscribe((response: any) => {
-      console.log(response);
-
-      let obj = {
+      let cep1 = {
         cidade: response.localidade,
         logradouro: response.logradouro,
         bairro: response.bairro,
         estado: response.uf,
       };
-      this.teste = response;
-      this.secondFormGroup.patchValue(obj);
-      console.log(this.secondFormGroup);
+      this.response = response;
+      this.secondFormGroup.patchValue(cep1);
     });
-
     if (this.isChecked == true) {
-      this.getSecondcep(value);
+      this.getSecondCep(value);
     }
   }
 
-  getfisrtcep() {}
-
-  getSecondcep(cep) {
+  getSecondCep(cep) {
     this.cep = cep;
     this.CepService.getCep(this.cep).subscribe((response: any) => {
       let cep2 = {
@@ -233,13 +228,12 @@ export class AddCompanyComponent implements OnInit {
     let a = e.checked;
     if (a == true) {
       this.isChecked = true;
-      console.log(this.teste);
       let obj = {
-        secondcep: this.teste.cep,
-        secondbairro: this.teste.bairro,
-        secondcidade: this.teste.localidade,
-        secondlogradouro: this.teste.logradouro,
-        secondstate: this.teste.uf,
+        secondcep: this.response.cep,
+        secondbairro: this.response.bairro,
+        secondcidade: this.response.localidade,
+        secondlogradouro: this.response.logradouro,
+        secondstate: this.response.uf,
         secondnumero: this.secondFormGroup.get('numero').value,
         secondcomplemento: this.secondFormGroup.get('complemento').value,
         secondnomeresponsavel: this.secondFormGroup.get('nomeresponsavel').value,
@@ -249,7 +243,6 @@ export class AddCompanyComponent implements OnInit {
     }
     if (a == false) {
       this.isChecked = false;
-      console.log('falso');
       let obj = {
         secondcep: '',
         secondbairro: '',
@@ -277,9 +270,7 @@ export class AddCompanyComponent implements OnInit {
       this.secondFormGroup.get('secondcomplemento').disable();
       this.secondFormGroup.get('secondnomeresponsavel').disable();
       this.secondFormGroup.get('secondpontodereferencia').disable();
-
       this.isChecked = true;
-
     } else {
       this.secondFormGroup.get('secondcep').enable();
       this.secondFormGroup.get('secondbairro').enable();
@@ -290,26 +281,30 @@ export class AddCompanyComponent implements OnInit {
       this.secondFormGroup.get('secondcomplemento').enable();
       this.secondFormGroup.get('secondnomeresponsavel').enable();
       this.secondFormGroup.get('secondpontodereferencia').enable();
-
       this.isChecked = false;
     }
   }
 
   checkValueBankAdress(e) {
     let isCheckedBankAdress = e.checked;
-
     if (isCheckedBankAdress == true) {
       this.isCheckedBankAdress = true;
-
       this.conditionFormGroup.get('benefitedTypeCtrl').enable();
       this.conditionFormGroup.get('benefitedNameCtrl').enable();
       this.conditionFormGroup.get('cnpjCtrl').enable();
     } else {
       this.isCheckedBankAdress = false;
-
       this.conditionFormGroup.get('benefitedTypeCtrl').disable();
       this.conditionFormGroup.get('benefitedNameCtrl').disable();
       this.conditionFormGroup.get('cnpjCtrl').disable();
+    }
+  }
+
+  getCpfCnpjMask(a) {
+    if (a === 'pf') {
+      this.mask = '000.000.000-00';
+    } if (a === 'pj') {
+      this.mask = '00.000.000/0000-00';
     }
   }
 }
