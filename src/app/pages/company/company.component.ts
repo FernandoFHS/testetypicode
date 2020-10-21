@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { DataService } from 'src/app/services/data.service';
+import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
 
 @Component({
   selector: 'app-company',
@@ -14,9 +16,14 @@ export class CompanyComponent implements OnInit {
 
   constructor(public httpClient: HttpClient,
     public dialog: MatDialog,
-    private dataService: DataService) { }
+    private dataService: DataService,
+    private router: Router) { }
 
   ngOnInit(): void {
+    this.dataService.refreshTable().subscribe(() => {
+      this.loadData();
+    });
+
     this.loadData();
   }
 
@@ -63,12 +70,19 @@ export class CompanyComponent implements OnInit {
     });
 
   }
-  onDelete(index: number) {
-    console.log('esse é o meu index para deletar ' + index);
+
+  onDelete(idProfile: number) {
+    const dialogRef = this.dialog.open(DeleteProfileComponent, {
+      data: { id: idProfile },
+    });
   }
 
 
   onEdit(index: number) {
     console.log('esse é o meu index para editar ' + index);
+  }
+
+  onAdd(index: number) {
+    this.router.navigate(['/company-list/add-company']);
   }
 }

@@ -6,15 +6,15 @@ import { Content } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
-  selector: 'app-delete-profile',
-  templateUrl: './delete-profile.component.html',
-  styleUrls: ['./delete-profile.component.scss']
+  selector: 'app-delete-bank-account',
+  templateUrl: './delete-bank-account.component.html',
+  styleUrls: ['./delete-bank-account.component.scss']
 })
-export class DeleteProfileComponent implements OnInit {
+export class DeleteBankAccountComponent implements OnInit {
 
   profile: Content;
 
-  constructor(private router: Router, public dialogRef: MatDialogRef<DeleteProfileComponent>,
+  constructor(private router: Router, public dialogRef: MatDialogRef<DeleteBankAccountComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, public httpClient: HttpClient,) { }
   
     ngOnInit(): void {
@@ -28,7 +28,7 @@ export class DeleteProfileComponent implements OnInit {
   confirmDelete(): void {
     this.dataService.delete(this.profile.idProfile).subscribe(() => {
       this.dataService.openSnackBar('Produto deletado com sucesso', 'X');
-      this.dialogRef.close();
+      this.dialogRef.close(); 
     });
   }
   

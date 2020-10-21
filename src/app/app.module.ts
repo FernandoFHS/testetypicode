@@ -21,6 +21,9 @@ import { AddCompanyComponent } from './pages/add-company/add-company.component';
 import { EditCompanyComponent } from './pages/edit-company/edit-company.component';
 import { AddPartnerComponent } from './pages/add-partner/add-partner.component';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
+import { AddBankAccountComponent } from './pages/dialogs/add-bank-account/add-bank-account.component';
+import { EditBankAccountComponent } from './pages/dialogs/edit-bank-account/edit-bank-account.component';
+import { DeleteBankAccountComponent } from './pages/dialogs/delete-bank-account/delete-bank-account.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -40,6 +43,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     AddCompanyComponent,
     EditCompanyComponent,
     AddPartnerComponent,
+    AddBankAccountComponent,
+    EditBankAccountComponent,
+    DeleteBankAccountComponent,
   ],
   imports: [
     BrowserModule,

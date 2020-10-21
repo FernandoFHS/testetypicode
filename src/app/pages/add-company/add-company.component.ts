@@ -21,6 +21,11 @@ import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { AddBankAccountComponent } from '../dialogs/add-bank-account/add-bank-account.component';
+import { EditBankAccountComponent } from '../dialogs/edit-bank-account/edit-bank-account.component';
+import { DeleteBankAccountComponent } from '../dialogs/delete-bank-account/delete-bank-account.component';
 
 @Component({
   selector: 'app-add-company',
@@ -59,7 +64,9 @@ export class AddCompanyComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private CepService: CepService,
-    private dataService: DataService
+    private dataService: DataService,
+    public dialog: MatDialog,
+    private router: Router
   ) {}
 
   formControl = new FormControl('', [
@@ -134,6 +141,10 @@ export class AddCompanyComponent implements OnInit {
     });
     this.partnerFormGroup = this._formBuilder.group({});
 
+    this.dataService.refreshTable().subscribe(() => {
+      this.loadData();
+    });
+
     this.loadData();
   }
 
@@ -152,6 +163,17 @@ export class AddCompanyComponent implements OnInit {
     // { text: 'Ações', value: 'action' }
   ];
 
+  headersBankTable: HeaderModel[] = [
+    { text: 'Banco', value: 'id' },
+    { text: 'Agência', value: 'nameprofile' },
+    { text: 'Dígito Agência', value: 'title' },
+    { text: 'Conta Corrente', value: 'description' },
+    { text: 'Dígito Conta', value: 'razsoc' },
+    { text: 'Dígito Agência/Conta', value: 'mcc' },
+
+    // { text: 'Ações', value: 'action' }
+  ];
+
   actions: ActionModel = {
     add: true,
     edit: true,
@@ -159,8 +181,6 @@ export class AddCompanyComponent implements OnInit {
   };
 
   dataSource: any[] = [];
-
-  dinamicAddRouter = "/company-list/add-partner";
 
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);
@@ -175,12 +195,32 @@ export class AddCompanyComponent implements OnInit {
     );
   }
 
-  onDelete(index: number) {
-    console.log('esse é o meu index para deletar ' + index);
+  onDelete(idProfile: number) {
+    const dialogRef = this.dialog.open(DeleteBankAccountComponent, {
+      data: { id: idProfile },
+    });
   }
 
-  onEdit(index: number) {
-    console.log('esse é o meu index para editar ' + index);
+  onEdit(idProfile: number) {
+    const dialogRef = this.dialog.open(EditBankAccountComponent, {
+      data: { id: idProfile },
+    });
+  }
+
+  onEditPartner(idProfile: number) {
+    const dialogRef = this.dialog.open(EditBankAccountComponent, {
+      data: { id: idProfile },
+    });
+  }
+
+  onAdd(idProfile: number) {
+    const dialogRef = this.dialog.open(AddBankAccountComponent, {
+      data: { id: idProfile },
+    });
+  }
+
+  onAddPartner(index: number) {
+    this.router.navigate(['/company-list/add-partner']);
   }
 
   getErrorMessage() {
@@ -242,9 +282,11 @@ export class AddCompanyComponent implements OnInit {
         secondstate: this.teste.uf,
         secondnumero: this.secondFormGroup.get('numero').value,
         secondcomplemento: this.secondFormGroup.get('complemento').value,
-        secondnomeresponsavel: this.secondFormGroup.get('nomeresponsavel').value,
-        secondpontodereferencia: this.secondFormGroup.get('pontodereferencia').value,
-      }
+        secondnomeresponsavel: this.secondFormGroup.get('nomeresponsavel')
+          .value,
+        secondpontodereferencia: this.secondFormGroup.get('pontodereferencia')
+          .value,
+      };
       this.secondFormGroup.patchValue(obj);
     }
     if (a == false) {
@@ -265,7 +307,7 @@ export class AddCompanyComponent implements OnInit {
     }
   }
   onSelectionChanged(value) {
-    let a = value.checked
+    let a = value.checked;
     console.log(value.checked);
     if (a === true) {
       this.secondFormGroup.get('secondcep').disable();
@@ -279,7 +321,6 @@ export class AddCompanyComponent implements OnInit {
       this.secondFormGroup.get('secondpontodereferencia').disable();
 
       this.isChecked = true;
-
     } else {
       this.secondFormGroup.get('secondcep').enable();
       this.secondFormGroup.get('secondbairro').enable();

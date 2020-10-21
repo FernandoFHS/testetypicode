@@ -6,6 +6,8 @@ import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { DataService } from 'src/app/services/data.service';
 import { Router } from '@angular/router';
+import { DeleteBankAccountComponent } from '../dialogs/delete-bank-account/delete-bank-account.component';
+import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
 
 @Component({
   selector: 'app-user',
@@ -20,6 +22,10 @@ export class UserComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+    this.dataService.refreshTable().subscribe(() => {
+      this.loadData();
+    });
+
     this.loadData();
   }
   headers: HeaderModel[] = [
@@ -57,12 +63,19 @@ export class UserComponent implements OnInit {
     });
 
   }
-  onDelete(index: number) {
-    console.log('esse é o meu index para deletar ' + index);
+
+  onDelete(idProfile: number) {
+    const dialogRef = this.dialog.open(DeleteProfileComponent, {
+      data: { id: idProfile },
+    });
   }
 
 
-  onEdit(index: number) {
-    this.router.navigate
+  onEdit(idProfile: number) {
+    this.router.navigate([`/profile-list/edit-profile/${idProfile}`])
+  }
+
+  onAdd(index: number) {
+    this.router.navigate(['/profile-list/add-profile']);
   }
 }

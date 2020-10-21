@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter, ViewChild, ElementRef }
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { Router } from '@angular/router';
 import { DeleteProfileComponent } from 'src/app/pages/delete-profile/delete-profile.component';
 
 @Component({
@@ -31,11 +32,14 @@ export class DataTableComponent implements OnInit {
   @Output()
   editEvent: EventEmitter<number> = new EventEmitter();
 
+  @Output()
+  addEvent: EventEmitter<number> = new EventEmitter();
+
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild('filter',  {static: true}) filter: ElementRef;
 
-  constructor(public dialog: MatDialog,) { }
+  constructor(public dialog: MatDialog, private router: Router) { }
 
   ngOnInit(): void {
     this.displayedColumns = this.headers.map((e) => e.value);
@@ -43,18 +47,16 @@ export class DataTableComponent implements OnInit {
         this.displayedColumns.push('actions');
   }
 
+  addItem(index: number) {
+    this.addEvent.emit(index);
+  }
+
   deleteItem(index: number) {
     this.deleteEvent.emit(index);
   }
 
-  editItem(index: number) {
-    this.editEvent.emit(index);
+  editItem(idProfile: number) {
+    this.editEvent.emit(idProfile);
   }
-
-  openDeleteDialog(idProfile: number) {
-    const dialogRef = this.dialog.open(DeleteProfileComponent, {
-      data: {id: idProfile}
-    });
-  }
-  
+   
 }

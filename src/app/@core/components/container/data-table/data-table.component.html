@@ -11,17 +11,17 @@
 
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef>
-      <button mat-icon-button color="primary" routerLink="{{dinamicAddRouter}}" *ngIf="actions.add">
+      <button mat-icon-button color="primary" (click)="addItem()" *ngIf="actions.add">
         <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
       </button>
     </mat-header-cell>
 
     <mat-cell *matCellDef="let row; let i=index;">
-      <button mat-icon-button color="primary"  routerLink="/profile-list/edit-profile/{{row.idProfile}}" *ngIf="actions.edit">
+      <button mat-icon-button color="primary" (click)="editItem(row.idProfile)" *ngIf="actions.edit">
         <mat-icon aria-label="Edit">edit</mat-icon>
       </button>
 
-      <button mat-icon-button color="warn" (click)="openDeleteDialog(row.idProfile)" *ngIf="actions.delete">
+      <button mat-icon-button color="warn" (click)="deleteItem(row.idProfile)" *ngIf="actions.delete">
         <mat-icon aria-label="Delete">delete</mat-icon>
       </button>
     </mat-cell>

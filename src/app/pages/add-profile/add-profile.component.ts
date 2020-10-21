@@ -19,8 +19,7 @@ export class AddProfileComponent implements OnInit {
   profile: Content = {
     idProfile: null,
     nameProfile: '',
-    description: ''
-    
+    description: '' 
   }
 
   constructor(
