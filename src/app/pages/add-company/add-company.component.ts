@@ -43,6 +43,7 @@ import {
   ],
 })
 export class AddCompanyComponent implements OnInit {
+
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -155,6 +156,17 @@ export class AddCompanyComponent implements OnInit {
     { text: 'Tab.Vendas', value: 'tabsell' },
     { text: 'Situação', value: 'situation' },
 
+    // { text: 'Ações', value: 'action' }
+  ];
+
+  headersBankTable: HeaderModel[] = [
+    { text: 'Banco', value: 'id' },
+    { text: 'Agência', value: 'nameprofile' },
+    { text: 'Dígito Agência', value: 'title' },
+    { text: 'Conta Corrente', value: 'description' },
+    { text: 'Dígito Conta', value: 'razsoc' },
+    { text: 'Dígito Agência/Conta', value: 'mcc' },
+    
     // { text: 'Ações', value: 'action' }
   ];
 
