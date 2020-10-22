@@ -26,6 +26,10 @@ import { AddBankAccountComponent } from '../dialogs/add-bank-account/add-bank-ac
 import { EditBankAccountComponent } from '../dialogs/edit-bank-account/edit-bank-account.component';
 import { DeleteBankAccountComponent } from '../dialogs/delete-bank-account/delete-bank-account.component';
 import { LocalStorageService } from './../../services/local-storage.service';
+import { DeletePhoneComponent } from '../dialogs/delete-phone/delete-phone.component';
+import { DeletePartnerComponent } from '../dialogs/delete-partner/delete-partner.component';
+import { EditPhoneComponent } from '../dialogs/edit-phone/edit-phone.component';
+import { AddPhoneComponent } from '../dialogs/add-phone/add-phone.component';
 
 @Component({
   selector: 'app-add-company',
@@ -51,8 +55,8 @@ import { LocalStorageService } from './../../services/local-storage.service';
 export class AddCompanyComponent implements OnInit {
 
   isLinear = false;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
+  identificationFormGroup: FormGroup;
+  adressFormGroup: FormGroup;
   conditionFormGroup: FormGroup;
   complementFormGroup: FormGroup;
   partnerFormGroup: FormGroup;
@@ -80,43 +84,45 @@ export class AddCompanyComponent implements OnInit {
   ]);
 
   ngOnInit(): void {
-    this.firstFormGroup = this._formBuilder.group({
-      establishment: [{ value: '', disabled: true }],
-      timechange: [{ value: '', disabled: true }],
-      timecreate: [{ value: '', disabled: true }],
-      usernamecreate: [{ value: '', disabled: true }],
-      usernamechange: [{ value: '', disabled: true }],
-      firstCtrl: ['', Validators.required],
-      secondCtrl: ['', Validators.required],
-      thirdCtrl: ['', Validators.required],
-      fourthCtrl: ['', Validators.required],
-      fifthCtrl: ['', Validators.required],
-      sixthCtrl: ['', Validators.required],
-      seventhCtrl: ['', Validators.required],
-      eighthCtrl: ['', Validators.required],
-      ninethCtrl: ['', Validators.required],
-      tenthCtrl: ['', Validators.required],
-      eleventhCtrl: ['', Validators.required],
+    this.identificationFormGroup = this._formBuilder.group({
+      establishmentCtrl: [{ value: '', disabled: true }],
+      companyTypeCtrl: ['', Validators.required],
+      companyResponsibleNameCtrl: ['', Validators.required],
+      acquiringEstablishmentCtrl: ['', Validators.required],
+      stateRegistrationCtrl: ['', Validators.required],
+      companyNameCtrl: ['', Validators.required],
+      fantasyNameCtrl: ['', Validators.required],
+      companyShortNameCtrl: ['', Validators.required],
+      merchantCategoryCodeCtrl: ['', Validators.required],
+      departamentCtrl: ['', Validators.required],
+      nationalClassificationCtrl: ['', Validators.required],
+      commercialActivityCtrl: ['', Validators.required],
+      openingDateCtrl: ['', Validators.required],
+      commercialPartnerCtrl: ['', Validators.required],
+      createUserNameCtrl: [{ value: '', disabled: true }],
+      createTimeCtrl: [{ value: '', disabled: true }],
+      changeUserNameCtrl: [{ value: '', disabled: true }],
+      changeTimeCtrl: [{ value: '', disabled: true }],
     });
-    this.secondFormGroup = this._formBuilder.group({
-      cidade: ['', Validators.required],
-      logradouro: ['', Validators.required],
-      bairro: ['', Validators.required],
-      estado: ['', Validators.required],
-      numero: ['', Validators.required],
-      complemento: ['', Validators.required],
-      nomeresponsavel: ['', Validators.required],
-      pontodereferencia: ['', Validators.required],
-      fisrtcep: ['', Validators.required],
-      secondcep: ['', Validators.required],
-      secondbairro: ['', Validators.required],
-      secondcidade: ['', Validators.required],
-      secondlogradouro: ['', Validators.required],
-      secondnumero: ['', Validators.required],
-      secondcomplemento: ['', Validators.required],
-      secondstate: ['', Validators.required],
-      secondnomeresponsavel: ['', Validators.required],
-      secondpontodereferencia: ['', Validators.required],
+    this.adressFormGroup = this._formBuilder.group({
+      streetCtrl: ['', Validators.required],
+      numberCtrl: ['', Validators.required],
+      complementCtrl: ['', Validators.required],
+      neighborhoodCtrl: ['', Validators.required],
+      cityCtrl: ['', Validators.required],
+      stateCtrl: ['', Validators.required],
+      responsibleNameCtrl: ['', Validators.required],
+      referencePointCtrl: ['', Validators.required],
+      keyZipCode: ['', Validators.required],
+      subordinateZipCode: ['', Validators.required],
+      subordinateNeighborhoodCtrl: ['', Validators.required],
+      subordinateCityCtrl: ['', Validators.required],
+      subordinateStreetCtrl: ['', Validators.required],
+      subordinateNumberCtrl: ['', Validators.required],
+      subordinateComplementCtrl: ['', Validators.required],
+      subordinateStateCtrl: ['', Validators.required],
+      subordinateResponsibleNameCtrl: ['', Validators.required],
+      subordinateReferencePointCtrl: ['', Validators.required],
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: ['', Validators.required],
@@ -207,32 +213,59 @@ export class AddCompanyComponent implements OnInit {
     );
   }
 
-  onDelete(idProfile: number) {
-    const dialogRef = this.dialog.open(DeleteBankAccountComponent, {
-      data: { id: idProfile },
+  //Add Methods
+  onAddPhone(idPhone: number) {
+    const dialogRef = this.dialog.open(AddPhoneComponent, {
+      data: { id: idPhone },
     });
-  }
+  } 
 
-  onEdit(idProfile: number) {
-    const dialogRef = this.dialog.open(EditBankAccountComponent, {
-      data: { id: idProfile },
-    });
-  }
-
-  onEditPartner(idProfile: number) {
-    const dialogRef = this.dialog.open(EditBankAccountComponent, {
-      data: { id: idProfile },
-    });
-  }
-
-  onAdd(idProfile: number) {
+  onAddBankAccount(idBankAccount: number) {
     const dialogRef = this.dialog.open(AddBankAccountComponent, {
-      data: { id: idProfile },
+      data: { id: idBankAccount },
     });
   }
 
   onAddPartner(index: number) {
     this.router.navigate(['/company-list/add-partner']);
+  }
+
+  //Edit Methods
+  onEditPhone(idProfile: number) {
+    const dialogRef = this.dialog.open(EditPhoneComponent, {
+      data: { id: idProfile },
+    });
+  }
+
+  onEditBankAccount(idPhone: number) {
+    const dialogRef = this.dialog.open(EditBankAccountComponent, {
+      data: { id: idPhone },
+    });
+  }
+
+  onEditPartner(idPartner: number) {
+    const dialogRef = this.dialog.open(EditBankAccountComponent, {
+      data: { id: idPartner },
+    });
+  }
+
+  //Delete Methods
+  onDeletePhone(idPhone: number) {
+    const dialogRef = this.dialog.open(DeletePhoneComponent, {
+      data: { id: idPhone },
+    });
+  }
+
+  onDeleteBankAccount(idBankAccount: number) {
+    const dialogRef = this.dialog.open(DeleteBankAccountComponent, {
+      data: { id: idBankAccount },
+    });
+  }
+
+  onDeletePartner(idPartner: number) {
+    const dialogRef = this.dialog.open(DeletePartnerComponent, {
+      data: { id: idPartner },
+    });
   }
 
   getErrorMessage() {
@@ -243,17 +276,18 @@ export class AddCompanyComponent implements OnInit {
       : '';
   }
 
+  
   getFirstCep(value) {
     this.cep = value;
     this.CepService.getCep(this.cep).subscribe((response: any) => {
       let cep1 = {
-        cidade: response.localidade,
-        logradouro: response.logradouro,
-        bairro: response.bairro,
-        estado: response.uf,
+        cityCtrl: response.localidade,
+        streetCtrl: response.logradouro,
+        neighborhoodCtrl: response.bairro,
+        stateCtrl: response.uf,
       };
       this.response = response;
-      this.secondFormGroup.patchValue(cep1);
+      this.adressFormGroup.patchValue(cep1);
     });
     if (this.isChecked == true) {
       this.getSecondCep(value);
@@ -264,13 +298,13 @@ export class AddCompanyComponent implements OnInit {
     this.cep = cep;
     this.CepService.getCep(this.cep).subscribe((response: any) => {
       let cep2 = {
-        secondcep: response.cep,
-        secondcidade: response.localidade,
-        secondlogradouro: response.logradouro,
-        secondbairro: response.bairro,
-        secondstate: response.uf,
+        subordinateZipCode: response.cep,
+        subordinateCityCtrl: response.localidade,
+        subordinateStreetCtrl: response.logradouro,
+        subordinateNeighborhoodCtrl: response.bairro,
+        subordinateStateCtrl: response.uf,
       };
-      this.secondFormGroup.patchValue(cep2);
+      this.adressFormGroup.patchValue(cep2);
     });
   }
 
@@ -279,63 +313,62 @@ export class AddCompanyComponent implements OnInit {
     if (a == true) {
       this.isChecked = true;
       let obj = {
-        secondcep: this.response.cep,
-        secondbairro: this.response.bairro,
-        secondcidade: this.response.localidade,
-        secondlogradouro: this.response.logradouro,
-        secondstate: this.response.uf,
-        secondnumero: this.secondFormGroup.get('numero').value,
-        secondcomplemento: this.secondFormGroup.get('complemento').value,
-        secondnomeresponsavel: this.secondFormGroup.get('nomeresponsavel')
-          .value,
-        secondpontodereferencia: this.secondFormGroup.get('pontodereferencia')
-          .value,
+        subordinateZipCode: this.response.cep,
+        subordinateNeighborhoodCtrl: this.response.bairro,
+        subordinateCityCtrl: this.response.localidade,
+        subordinateStreetCtrl: this.response.logradouro,
+        subordinateStateCtrl: this.response.uf,
+        subordinateNumberCtrl: this.adressFormGroup.get('numberCtrl').value,
+        subordinateComplementCtrl: this.adressFormGroup.get('complementCtrl').value,
+        subordinateResponsibleNameCtrl: this.adressFormGroup.get('responsibleNameCtrl').value,
+        subordinateReferencePointCtrl: this.adressFormGroup.get('referencePointCtrl').value,
       };
-      this.secondFormGroup.patchValue(obj);
+      this.adressFormGroup.patchValue(obj);
     }
     if (a == false) {
       this.isChecked = false;
       let obj = {
-        secondcep: '',
-        secondbairro: '',
-        secondcidade: '',
-        secondlogradouro: '',
-        secondstate: '',
-        secondnumero: '',
-        secondcomplemento: '',
-        secondnomeresponsavel: '',
-        secondpontodereferencia: '',
+        subordinateZipCode: '',
+        subordinateNeighborhoodCtrl: '',
+        subordinateCityCtrl: '',
+        subordinateStreetCtrl: '',
+        subordinateStateCtrl: '',
+        subordinateNumberCtrl: '',
+        subordinateComplementCtrl: '',
+        subordinateResponsibleNameCtrl: '',
+        subordinateReferencePointCtrl: '',
       };
-      this.secondFormGroup.patchValue(obj);
+      this.adressFormGroup.patchValue(obj);
     }
   }
   onSelectionChanged(value) {
     let a = value.checked;
     console.log(value.checked);
     if (a === true) {
-      this.secondFormGroup.get('secondcep').disable();
-      this.secondFormGroup.get('secondbairro').disable();
-      this.secondFormGroup.get('secondcidade').disable();
-      this.secondFormGroup.get('secondlogradouro').disable();
-      this.secondFormGroup.get('secondstate').disable();
-      this.secondFormGroup.get('secondnumero').disable();
-      this.secondFormGroup.get('secondcomplemento').disable();
-      this.secondFormGroup.get('secondnomeresponsavel').disable();
-      this.secondFormGroup.get('secondpontodereferencia').disable();
+      this.adressFormGroup.get('subordinateZipCode').disable();
+      this.adressFormGroup.get('subordinateNeighborhoodCtrl').disable();
+      this.adressFormGroup.get('subordinateCityCtrl').disable();
+      this.adressFormGroup.get('subordinateStreetCtrl').disable();
+      this.adressFormGroup.get('subordinateStateCtrl').disable();
+      this.adressFormGroup.get('subordinateNumberCtrl').disable();
+      this.adressFormGroup.get('subordinateComplementCtrl').disable();
+      this.adressFormGroup.get('subordinateResponsibleNameCtrl').disable();
+      this.adressFormGroup.get('subordinateReferencePointCtrl').disable();
       this.isChecked = true;
     } else {
-      this.secondFormGroup.get('secondcep').enable();
-      this.secondFormGroup.get('secondbairro').enable();
-      this.secondFormGroup.get('secondcidade').enable();
-      this.secondFormGroup.get('secondlogradouro').enable();
-      this.secondFormGroup.get('secondstate').enable();
-      this.secondFormGroup.get('secondnumero').enable();
-      this.secondFormGroup.get('secondcomplemento').enable();
-      this.secondFormGroup.get('secondnomeresponsavel').enable();
-      this.secondFormGroup.get('secondpontodereferencia').enable();
+      this.adressFormGroup.get('subordinateZipCode').enable();
+      this.adressFormGroup.get('subordinateNeighborhoodCtrl').enable();
+      this.adressFormGroup.get('subordinateCityCtrl').enable();
+      this.adressFormGroup.get('subordinateStreetCtrl').enable();
+      this.adressFormGroup.get('subordinateStateCtrl').enable();
+      this.adressFormGroup.get('subordinateNumberCtrl').enable();
+      this.adressFormGroup.get('subordinateComplementCtrl').enable();
+      this.adressFormGroup.get('subordinateResponsibleNameCtrl').enable();
+      this.adressFormGroup.get('subordinateReferencePointCtrl').enable();
       this.isChecked = false;
     }
   }
+
 
   checkValueBankAdress(e) {
     let isCheckedBankAdress = e.checked;
@@ -372,6 +405,6 @@ export class AddCompanyComponent implements OnInit {
       fourthCtrl: this.selecionado.fourthCtrl,
       ninethCtrl: this.selecionado.ninethCtrl,
     };
-    this.firstFormGroup.patchValue(teste);
+    this.identificationFormGroup.patchValue(teste);
   }
 }
