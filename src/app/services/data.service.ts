@@ -57,7 +57,6 @@ export class DataService {
     return new Promise<Profile[]>((resolve, reject) => {
       this.httpClient.get<Profile[]>(this.API_URL).subscribe(
         (data) => {
-          console.log(data);
           resolve(data);
           // this.dataChange.next(data);
         },

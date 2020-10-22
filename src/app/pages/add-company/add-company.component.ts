@@ -25,6 +25,7 @@ import { Router } from '@angular/router';
 import { AddBankAccountComponent } from '../dialogs/add-bank-account/add-bank-account.component';
 import { EditBankAccountComponent } from '../dialogs/edit-bank-account/edit-bank-account.component';
 import { DeleteBankAccountComponent } from '../dialogs/delete-bank-account/delete-bank-account.component';
+import { LocalStorageService } from './../../services/local-storage.service';
 
 @Component({
   selector: 'app-add-company',
@@ -62,13 +63,15 @@ export class AddCompanyComponent implements OnInit {
   response: any;
   dataSource: any[] = [];
   dinamicAddRouter = "/company-list/add-partner";
+  selecionado: any = this.LocalStorageService.get('1');
 
   constructor(
     private _formBuilder: FormBuilder,
     private CepService: CepService,
     private dataService: DataService,
     public dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private LocalStorageService: LocalStorageService,
   ) {}
 
   formControl = new FormControl('', [
@@ -153,6 +156,11 @@ export class AddCompanyComponent implements OnInit {
     });
 
     this.loadData();
+    if(this.selecionado != undefined){
+      this.getLocalStorage();
+    }else{
+      console.log("localstorage vazio");
+    }
   }
 
   headers: HeaderModel[] = [
@@ -350,5 +358,20 @@ export class AddCompanyComponent implements OnInit {
     } if (a === 'pj') {
       this.mask = '00.000.000/0000-00';
     }
+  }
+
+  saveForm(form){
+    console.log(form.value);
+    this.LocalStorageService.set('1',form.value);
+  }
+  
+  getLocalStorage(){
+    let teste = {
+      firstCtrl: this.selecionado.fifthCtrl,
+      fifthCtrl: this.selecionado.firstCtrl,
+      fourthCtrl: this.selecionado.fourthCtrl,
+      ninethCtrl: this.selecionado.ninethCtrl,
+    };
+    this.firstFormGroup.patchValue(teste);
   }
 }
