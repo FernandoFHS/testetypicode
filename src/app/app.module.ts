@@ -24,6 +24,10 @@ import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { AddBankAccountComponent } from './pages/dialogs/add-bank-account/add-bank-account.component';
 import { EditBankAccountComponent } from './pages/dialogs/edit-bank-account/edit-bank-account.component';
 import { DeleteBankAccountComponent } from './pages/dialogs/delete-bank-account/delete-bank-account.component';
+import { DeletePhoneComponent } from './pages/dialogs/delete-phone/delete-phone.component';
+import { DeletePartnerComponent } from './pages/dialogs/delete-partner/delete-partner.component';
+import { EditPhoneComponent } from './pages/dialogs/edit-phone/edit-phone.component';
+import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -46,6 +50,10 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     AddBankAccountComponent,
     EditBankAccountComponent,
     DeleteBankAccountComponent,
+    DeletePhoneComponent,
+    DeletePartnerComponent,
+    EditPhoneComponent,
+    AddPhoneComponent,
   ],
   imports: [
     BrowserModule,
