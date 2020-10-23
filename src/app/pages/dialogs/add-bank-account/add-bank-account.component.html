@@ -1,109 +1,77 @@
-<div
-  fxLayout="column"
-  fxLayoutAlign="center center"
-  fxFlexFill
-  class="dialog-size-container"
->
+<div fxLayout="column" fxLayoutAlign="center center" fxFlexFill class="dialog-size-container">
   <h3 mat-dialog-title class="text-center m-b-20 font-light-bold title-size">
     Adicionar Conta Bancária
   </h3>
   <div mat-dialog-content>
     <form [formGroup]="accountFormGroup">
-      <mat-form-field appearance="outline">
-        <mat-label>Banco</mat-label>
-        <input
-          matInput
-          placeholder="Dígito Agência"
-          formControlName="bank"
-          required
-        />
-        <mat-icon matSuffix>business_center</mat-icon>
-        <mat-error *ngIf="formControl.invalid">{{
-          getErrorMessage()
-        }}</mat-error>
-      </mat-form-field>
-
-      <div class="line-form">
+      
         <mat-form-field appearance="outline">
-          <mat-label>Agência</mat-label>
-          <input
-            matInput
-            placeholder="Agência"
-            formControlName="agency"
-          />
+          <mat-label>Banco</mat-label>
+          <input matInput placeholder="Dígito Agência" formControlName="bank" required />
           <mat-icon matSuffix>business_center</mat-icon>
           <mat-error *ngIf="formControl.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Dígito Agência</mat-label>
-          <input
-            matInput
-            placeholder="Dígito Agência"
-            formControlName="agencyDigit"
-          />
-          <mat-icon matSuffix>business_center</mat-icon>
-          <mat-error *ngIf="formControl.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
-        </mat-form-field>
-      </div>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Conta Corrente</mat-label>
-        <input
-          matInput
-          placeholder="Conta Corrente"
-          formControlName="account"
-        />
-        <mat-icon matSuffix>subject</mat-icon>
-        <mat-error *ngIf="formControl.invalid">{{
           getErrorMessage()
         }}</mat-error>
-      </mat-form-field>
-
-      <div class="line-form">
-        <mat-form-field appearance="outline">
-          <mat-label>Dígito Conta</mat-label>
-          <input
-            matInput
-            placeholder="Dígito Conta"
-            formControlName="digit"
-          />
-          <mat-icon matSuffix>subject</mat-icon>
-          <mat-error *ngIf="formControl.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Dígito Agência/Conta</mat-label>
-          <input
-            matInput
-            placeholder="Dígito Agência/Conta"
-            formControlName="accountDigit"
-          />
-          <mat-icon matSuffix>subject</mat-icon>
-          <mat-error *ngIf="formControl.invalid">{{
+        <div class="line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Agência</mat-label>
+            <input matInput placeholder="Agência" formControlName="agency" />
+            <mat-icon matSuffix>business_center</mat-icon>
+            <mat-error *ngIf="formControl.invalid">{{
             getErrorMessage()
           }}</mat-error>
-        </mat-form-field>
-      </div>
+          </mat-form-field>
 
-      <div mat-dialog-actions class="dialog-actions-buttons">
-        <button
-        mat-raised-button
-        color="primary"
-        tabindex="-1"
+          <mat-form-field appearance="outline">
+            <mat-label>Dígito Agência</mat-label>
+            <input matInput placeholder="Dígito Agência" formControlName="agencyDigit" />
+            <mat-icon matSuffix>business_center</mat-icon>
+            <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Conta Corrente</mat-label>
+          <input matInput placeholder="Conta Corrente" formControlName="account" />
+          <mat-icon matSuffix>subject</mat-icon>
+          <mat-error *ngIf="formControl.invalid">{{
+          getErrorMessage()
+        }}</mat-error>
+        </mat-form-field>
+
+        <div class="line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Dígito Conta</mat-label>
+            <input matInput placeholder="Dígito Conta" formControlName="digit" />
+            <mat-icon matSuffix>subject</mat-icon>
+            <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Dígito Agência/Conta</mat-label>
+            <input matInput placeholder="Dígito Agência/Conta" formControlName="accountDigit" />
+            <mat-icon matSuffix>subject</mat-icon>
+            <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div mat-dialog-actions class="dialog-actions-buttons">
+          <button mat-raised-button color="primary" tabindex="-1">
+            Salvar
+          </button>
+          <button mat-raised-button color="warn" (click)="onNoClick();saveAccount(accountFormGroup)">
+            Cancelar
+          </button>
+
         
-      >
-        Salvar
-      </button>
-        <button mat-raised-button color="warn" (click)="onNoClick()">
-          Cancelar
-        </button>
       </div>
     </form>
   </div>

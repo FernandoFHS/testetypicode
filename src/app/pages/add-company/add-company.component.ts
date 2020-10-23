@@ -73,6 +73,7 @@ export class AddCompanyComponent implements OnInit {
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
   partner: any = this.localStorageService.get('partnerFormGroup');
+  bankAccount : any = this.localStorageService.get('bankAccount');
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -132,7 +133,7 @@ export class AddCompanyComponent implements OnInit {
       subordinateReferencePointCtrl: ['', Validators.required],
     });
     this.conditionFormGroup = this._formBuilder.group({
-      externalBankAccount: [{}],
+      externalBankAccount: [[this.bankAccount]],
       tableSaleCtrl: ['', Validators.required],
       comercialCredit: ['', Validators.required],
       transactionCostCtrl: ['', Validators.required],
