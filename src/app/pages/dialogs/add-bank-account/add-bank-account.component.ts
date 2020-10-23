@@ -26,16 +26,16 @@ export class AddBankAccountComponent implements OnInit {
 
     ngOnInit(): void {
 
-      /*
-      this.accountFormGroup = this._formBuilder.array([
+      
+      this.accountFormGroup = this._formBuilder.group({
         bank: ['', Validators.required],
         agency: ['', Validators.required],
         agencyDigit: ['', Validators.required],
         account: ['', Validators.required],
         digit: ['', Validators.required],
         accountDigit: ['', Validators.required]
-      ]);*/
-
+    });
+/*
       this.accountFormGroup = new FormGroup({
 
         accountsBank: new FormArray([
@@ -48,6 +48,7 @@ export class AddBankAccountComponent implements OnInit {
 
       });
 
+*/
       
   }
 
@@ -90,11 +91,14 @@ export class AddBankAccountComponent implements OnInit {
   }
 
   saveAccount(form){
-    let i = 0;
-    for(i; i <3;i++){
-      this.localStorageService.set('bankAccount', form.value);
-    }
     
+    let bankAccountArray = this.localStorageService.get('bankAccount');
+    if(!bankAccountArray){
+      bankAccountArray= [];
+    }
+    bankAccountArray.push(form.value);
+
+    this.localStorageService.set('bankAccount', bankAccountArray);
   }
 
   dataSource: any[] = [];
