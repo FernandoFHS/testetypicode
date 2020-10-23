@@ -134,7 +134,7 @@ export class AddCompanyComponent implements OnInit {
       subordinateReferencePointCtrl: ['', Validators.required],
     });
     this.conditionFormGroup = this._formBuilder.group({
-      externalBankAccount: [[this.bankAccount]],
+     // externalBankAccount: [[this.bankAccount]],
       tableSaleCtrl: ['', Validators.required],
       comercialCredit: ['', Validators.required],
       transactionCostCtrl: ['', Validators.required],
@@ -224,12 +224,12 @@ export class AddCompanyComponent implements OnInit {
   ];
 
   headersBankTable: HeaderModel[] = [
-    { text: 'Banco', value: 'id' },
-    { text: 'Agência', value: 'nameprofile' },
-    { text: 'Dígito Agência', value: 'title' },
-    { text: 'Conta Corrente', value: 'description' },
-    { text: 'Dígito Conta', value: 'razsoc' },
-    { text: 'Dígito Agência/Conta', value: 'mcc' },
+    { text: 'Banco', value: 'bank' },
+    { text: 'Agência', value: 'agency' },
+    { text: 'Dígito Agência', value: 'agencyDigit' },
+    { text: 'Conta Corrente', value: 'account' },
+    { text: 'Dígito Conta', value: 'accountDigit' },
+    { text: 'Dígito Agência/Conta', value: 'digit' },
     // { text: 'Ações', value: 'action' }
   ];
 
@@ -271,6 +271,10 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(AddBankAccountComponent, {
       data: { id: idBankAccount },
     });
+    dialogRef.afterClosed().subscribe(()=>{
+      this.bankAccount= this.localStorageService.get('bankAccount');
+
+    })
   }
 
   onAddPartner(index: number) {

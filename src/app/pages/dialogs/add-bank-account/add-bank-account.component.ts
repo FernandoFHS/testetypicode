@@ -26,7 +26,7 @@ export class AddBankAccountComponent implements OnInit {
     ngOnInit(): void {
 
       
-      this.accountFormGroup = this._formBuilder.group({    
+      this.accountFormGroup = this._formBuilder.group({
         bank: ['', Validators.required],
         agency: ['', Validators.required],
         agencyDigit: ['', Validators.required],
@@ -74,6 +74,17 @@ export class AddBankAccountComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close();
     this.loadData();
+  }
+
+  saveAccount(form){
+    
+    let bankAccountArray = this.localStorageService.get('bankAccount');
+    if(!bankAccountArray){
+      bankAccountArray= [];
+    }
+    bankAccountArray.push(form.value);
+
+    this.localStorageService.set('bankAccount', bankAccountArray);
   }
 
   dataSource: any[] = [];
