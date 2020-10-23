@@ -1,1 +1,29 @@
-<p>add-phone works!</p>
+<div fxLayout="column" fxLayoutAlign="center center" fxFlexFill class="dialog-size-container">
+  <h3 mat-dialog-title class="text-center m-b-20 font-light-bold title-size">
+    Adicionar Telefone
+  </h3>
+  <div mat-dialog-content>
+    <form [formGroup]="phoneFormGroup">
+      
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone</mat-label>
+          <input matInput placeholder="Número de telefone" formControlName="phone" required />
+          <mat-icon matSuffix>phone</mat-icon>
+          <mat-error *ngIf="formControl.invalid">{{
+          getErrorMessage()
+        }}</mat-error>
+        </mat-form-field>
+
+        <div mat-dialog-actions class="dialog-actions-buttons">
+          <button mat-raised-button color="primary" tabindex="-1">
+            Salvar
+          </button>
+          <button mat-raised-button color="warn" (click)="onNoClick()">
+            Cancelar
+          </button>
+
+        
+      </div>
+    </form>
+  </div>
+</div>

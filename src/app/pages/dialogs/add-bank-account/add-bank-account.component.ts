@@ -2,8 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { Content } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from './../../../services/local-storage.service';
 
@@ -12,9 +10,10 @@ import { LocalStorageService } from './../../../services/local-storage.service';
   templateUrl: './add-bank-account.component.html',
   styleUrls: ['./add-bank-account.component.scss']
 })
+
 export class AddBankAccountComponent implements OnInit {
 
-  accountFormGroup: any;
+  accountFormGroup: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<AddBankAccountComponent>,
     @Inject(MAT_DIALOG_DATA) 
@@ -26,30 +25,18 @@ export class AddBankAccountComponent implements OnInit {
 
     ngOnInit(): void {
 
-      /*
-      this.accountFormGroup = this._formBuilder.array([
+      
+      this.accountFormGroup = this._formBuilder.group({    
         bank: ['', Validators.required],
         agency: ['', Validators.required],
         agencyDigit: ['', Validators.required],
         account: ['', Validators.required],
         digit: ['', Validators.required],
         accountDigit: ['', Validators.required]
-      ]);*/
+      })  
 
-      this.accountFormGroup = new FormGroup({
-
-        accountsBank: new FormArray([
-          this._formBuilder.group({
-            bank: [''],
-            agency: [''],
-            agencyDigit: [''],
-          })
-        ]),
-
-      });
-
-      
   }
+  
 
   formControl = new FormControl('', [
     Validators.required,
@@ -89,14 +76,6 @@ export class AddBankAccountComponent implements OnInit {
     this.loadData();
   }
 
-  saveAccount(form){
-    let i = 0;
-    for(i; i <3;i++){
-      this.localStorageService.set('bankAccount', form.value);
-    }
-    
-  }
-
   dataSource: any[] = [];
-  
+
 }

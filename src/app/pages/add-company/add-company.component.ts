@@ -1,6 +1,7 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -250,6 +251,14 @@ export class AddCompanyComponent implements OnInit {
       }
     );
   }
+
+  /**   bank: ['', Validators.required],
+        agency: ['', Validators.required],
+        agencyDigit: ['', Validators.required],
+        account: ['', Validators.required],
+        digit: ['', Validators.required],
+        accountDigit: ['', Validators.required] */
+
 
   //Add Methods
   onAddPhone(idPhone: number) {
