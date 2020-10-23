@@ -32,8 +32,25 @@ form .line-form{
   justify-content: space-between;
 }
 
+form .line-form{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 form .line-form .mat-form-field{
   width: 48%;
+}
+
+form .line-form .line-3-form{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+form .line-form .line-3-form .mat-form-field{
+  width: 30%;
 }
 
 form .line-form .short-line-form{
@@ -62,7 +79,7 @@ form .line-form .short-line-3-form{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 48%;
 }
 
 form .line-form .short-line-3-form .mat-form-field{
@@ -79,6 +96,14 @@ form .line-form .short-line-2-form .mat-checkbox{
 
 h3 {
   padding: 1% 0 1%;
+}
+
+.mat-input {
+  height: 50px!important;
+}
+
+textarea {
+  height: 16px;
 }
 
 .next-button {

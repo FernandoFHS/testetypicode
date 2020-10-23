@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Content } from 'src/app/models/Profile';
@@ -13,22 +13,24 @@ import { DataService } from 'src/app/services/data.service';
 })
 export class AddBankAccountComponent implements OnInit {
 
-  profile: Content = {
-    idProfile: null,
-    nameProfile: '',
-    description: '' 
-  }
+  accountFormGroup: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<AddBankAccountComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, public httpClient: HttpClient,) { }
-
+    @Inject(MAT_DIALOG_DATA) 
+    public data: any, 
+    public dataService: DataService, 
+    public httpClient: HttpClient,
+    private _formBuilder: FormBuilder,) { }
 
     ngOnInit(): void {
-    const id = this.data.id;   
-    //const id = +this.route.snapshot.paramMap.get('id');
-    this.dataService.readById(id).subscribe(profile => {
-      this.profile = profile
-    })
+      this.accountFormGroup = this._formBuilder.group({
+        bank: ['', Validators.required],
+        agency: ['', Validators.required],
+        agencyDigit: ['', Validators.required],
+        account: ['', Validators.required],
+        digit: ['', Validators.required],
+        accountDigit: ['', Validators.required]
+      });
   }
 
   formControl = new FormControl('', [
@@ -57,12 +59,12 @@ export class AddBankAccountComponent implements OnInit {
   
   }
 
-  createBankAccount(): void {
+/*  createBankAccount(): void {
     this.dataService.create(this.profile).subscribe(() => {
       this.dataService.openSnackBar('Perfil adicionado com sucesso!', 'X')
       this.dialogRef.close();
     })
-  }
+  }*/
   
   onNoClick(): void {
     this.dialogRef.close();
@@ -70,6 +72,5 @@ export class AddBankAccountComponent implements OnInit {
   }
 
   dataSource: any[] = [];
-
-
+  
 }

@@ -6,6 +6,26 @@
 
       <ng-template matStepLabel>Identificação</ng-template>
 
+      <h3>Dados Iniciais</h3>
+
+      <div class="line-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Alvo do Cadastro</mat-label>
+          <input matInput placeholder="Quero cadastrar..." formControlName="registerTargetCtrl" required />
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          <mat-icon matSuffix>assignment_ind</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Empresa Administradora</mat-label>
+          <input matInput placeholder="Empresa Administradora" formControlName="managingCompanyCtrl" required />
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          <mat-icon matSuffix>assignment_ind</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <mat-divider></mat-divider>
+
       <h3>Identificação</h3>
 
       <div class="initial-data">
@@ -99,7 +119,7 @@
           <mat-icon matSuffix>business_center</mat-icon>
         </mat-form-field>
 
-        <div class="short-line-form">
+        <div class="short-line-3-form">
 
           <mat-form-field appearance="outline">
             <mat-label>MCC</mat-label>
@@ -113,6 +133,13 @@
             <input matInput placeholder="Departamento" formControlName="departamentCtrl" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>business_center</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data de abertura</mat-label>
+            <input matInput [matDatepicker]="dp" formControlName="openingDateCtrl">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp></mat-datepicker>
           </mat-form-field>
 
         </div>
@@ -129,45 +156,11 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Nome Fantasia</mat-label>
-          <input matInput placeholder="Nome Fantasia" required />
-          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-          <mat-icon matSuffix>business_center</mat-icon>
-        </mat-form-field>
-
-      </div>
-
-      <div class="line-form">
-
-        <mat-form-field appearance="outline">
           <mat-label>Atividade comercial</mat-label>
           <textarea matInput formControlName="commercialActivityCtrl"></textarea>
         </mat-form-field>
 
-        <div class="short-line-form">
-
-          <mat-form-field appearance="outline">
-            <mat-label>Data de abertura</mat-label>
-            <input matInput [matDatepicker]="dp" formControlName="openingDateCtrl">
-            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-            <mat-datepicker #dp></mat-datepicker>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Parceiro Comercial</mat-label>
-            <mat-select placeholder="selecione o tipo" formControlName="commercialPartnerCtrl">
-              <mat-option value="Pessoa Física"> Triboo </mat-option>
-              <mat-option value="Pessoa Jurídica"> Bem facil </mat-option>
-              <mat-option value="Pessoa Jurídica"> Carteira Zona Leste </mat-option>
-              <mat-option value="Pessoa Jurídica"> BLM_Inativos </mat-option>
-            </mat-select>
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-          </mat-form-field>
-
-        </div>
-        
       </div>
-
 
       <div class="line-form">
 
@@ -604,6 +597,9 @@
       >
       </core-data-table>
 
+      <mat-divider></mat-divider>
+      <br />
+
       <div class="space-bottom">
         <mat-checkbox class="example-margin" [(ngModel)]="isCheckedBankAdress" (change)="checkValueBankAdress($event)">
           Desassociar Domicílio Bancário do Estabelecimento?
@@ -652,7 +648,7 @@
   </mat-step>
 
   <!--complemento Step-->
-  <mat-step label="Complemento" [stepControl]="complementFormGroup">
+  <mat-step label="Complemento" state="complement" [stepControl]="complementFormGroup">
 
     <form [formGroup]="complementFormGroup">
 
@@ -748,7 +744,7 @@
 
       <div class="line-form">
 
-        <div class="short-line-3-form">
+        <div class="line-3-form">
 
           <mat-form-field appearance="outline">
             <mat-label>Data Cadastro BF</mat-label>
@@ -848,6 +844,14 @@
 
   <ng-template matStepperIcon="condition">
     <mat-icon>grading</mat-icon>
+  </ng-template>
+
+  <ng-template matStepperIcon="complement">
+    <mat-icon>attachment</mat-icon>
+  </ng-template>
+
+  <ng-template matStepperIcon="partner">
+    <mat-icon>group</mat-icon>
   </ng-template>
   
 </mat-horizontal-stepper>

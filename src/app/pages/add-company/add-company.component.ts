@@ -8,8 +8,10 @@ import {
 } from '@angular/forms';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
+import { CompanyContent, Mcc, RootObject } from 'src/app/models/Company';
 import { CepService } from 'src/app/services/cep.service';
 import { DataService } from 'src/app/services/data.service';
+import { CompanyService } from 'src/app/services/company.service';
 import {
   MAT_MOMENT_DATE_FORMATS,
   MomentDateAdapter,
@@ -83,11 +85,12 @@ export class AddCompanyComponent implements OnInit {
 
   formControl = new FormControl('', [
     Validators.required,
-    // Validators.email,
   ]);
 
   ngOnInit(): void {
     this.identificationFormGroup = this._formBuilder.group({
+      registerTargetCtrl: ['', Validators.required],
+      managingCompanyCtrl: ['', Validators.required], 
       establishmentCtrl: [{ value: '', disabled: true }],
       companyTypeCtrl: ['', Validators.required],
       companyResponsibleNameCtrl: ['', Validators.required],
@@ -300,6 +303,11 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(DeletePartnerComponent, {
       data: { id: idPartner },
     });
+  }
+
+  //submit form
+  submitForm() {
+    console.log(this.identificationFormGroup.value);
   }
 
   getErrorMessage() {
