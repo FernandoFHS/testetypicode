@@ -60,14 +60,17 @@ export class AddCompanyComponent implements OnInit {
   conditionFormGroup: FormGroup;
   complementFormGroup: FormGroup;
   partnerFormGroup: FormGroup;
-  cep: number;
   isChecked = false;
   isCheckedBankAdress = false;
-  mask = '0000000000000000';
+  mask: any;
   response: any;
   dataSource: any[] = [];
   dinamicAddRouter = "/company-list/add-partner";
-  selecionado: any = this.LocalStorageService.get('1');
+  identification: any = this.localStorageService.get('identificationFormGroup');
+  adress: any = this.localStorageService.get('adressFormGroup');
+  condition: any = this.localStorageService.get('conditionFormGroup');
+  complement: any = this.localStorageService.get('complementFormGroup');
+  partner: any = this.localStorageService.get('partnerFormGroup');
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -75,8 +78,8 @@ export class AddCompanyComponent implements OnInit {
     private dataService: DataService,
     public dialog: MatDialog,
     private router: Router,
-    private LocalStorageService: LocalStorageService,
-  ) {}
+    private localStorageService: LocalStorageService,
+  ) { }
 
   formControl = new FormControl('', [
     Validators.required,
@@ -114,6 +117,7 @@ export class AddCompanyComponent implements OnInit {
       responsibleNameCtrl: ['', Validators.required],
       referencePointCtrl: ['', Validators.required],
       keyZipCode: ['', Validators.required],
+      checkboxAdress: ['', Validators.required],
       subordinateZipCode: ['', Validators.required],
       subordinateNeighborhoodCtrl: ['', Validators.required],
       subordinateCityCtrl: ['', Validators.required],
@@ -125,6 +129,7 @@ export class AddCompanyComponent implements OnInit {
       subordinateReferencePointCtrl: ['', Validators.required],
     });
     this.conditionFormGroup = this._formBuilder.group({
+      externalBankAccount: [{}],
       tableSaleCtrl: ['', Validators.required],
       comercialCredit: ['', Validators.required],
       transactionCostCtrl: ['', Validators.required],
@@ -138,12 +143,9 @@ export class AddCompanyComponent implements OnInit {
       currentAccountCtrl: ['', Validators.required],
       currentAccountDigitCtrl: ['', Validators.required],
       currentAccountAgencyCtrl: ['', Validators.required],
-      benefitedTypeCtrl: [
-        { value: 'Pessoa Jurídica', disabled: true },
-        Validators.required,
-      ],
-      benefitedNameCtrl: [{ value: '', disabled: true }, Validators.required],
-      cnpjCtrl: [{ value: '', disabled: true }, Validators.required],
+      benefitedTypeCtrl: ['',{ value: '', disabled: true },Validators.required,],
+      benefitedNameCtrl: ['',{ value: '', disabled: true }, Validators.required],
+      cnpjCtrl: ['',{ value: '', disabled: true }, Validators.required],
     });
     this.complementFormGroup = this._formBuilder.group({
       openingHoursCtrl: [Validators.required],
@@ -162,10 +164,42 @@ export class AddCompanyComponent implements OnInit {
     });
 
     this.loadData();
-    if(this.selecionado != undefined){
-      this.getLocalStorage();
-    }else{
+
+    if (this.identification != undefined) {
+      this.getLocalStorage('identification');
+    } else {
       console.log("localstorage vazio");
+    }
+
+    if(this.adress != undefined){
+      this.getLocalStorage('adress');
+    }else {
+      console.log("localstorage vazio");
+    }
+
+    if(this.condition != undefined){
+      this.getLocalStorage('condition');
+    }else {
+      console.log("localstorage vazio");
+    }
+    if(this.complement != undefined){
+      this.getLocalStorage('complement');
+    }else {
+      console.log("localstorage vazio");
+    }
+    if(this.partner != undefined){
+      this.getLocalStorage('partner');
+    }else {
+      console.log("localstorage vazio");
+    }
+
+    
+    if(this.response == null){
+      this.response = this.localStorageService.get('cep');
+    }
+
+    if (this.mask == undefined) {
+      this.getCpfCnpjMask(this.identificationFormGroup.get('companyTypeCtrl').value);
     }
   }
 
@@ -218,7 +252,7 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(AddPhoneComponent, {
       data: { id: idPhone },
     });
-  } 
+  }
 
   onAddBankAccount(idBankAccount: number) {
     const dialogRef = this.dialog.open(AddBankAccountComponent, {
@@ -272,14 +306,13 @@ export class AddCompanyComponent implements OnInit {
     return this.formControl.hasError('required')
       ? 'Campo Obrigatório'
       : this.formControl.hasError('email')
-      ? 'Not a valid email'
-      : '';
+        ? 'Not a valid email'
+        : '';
   }
 
-  
+
   getFirstCep(value) {
-    this.cep = value;
-    this.CepService.getCep(this.cep).subscribe((response: any) => {
+    this.CepService.getCep(value).subscribe((response: any) => {
       let cep1 = {
         cityCtrl: response.localidade,
         streetCtrl: response.logradouro,
@@ -295,8 +328,7 @@ export class AddCompanyComponent implements OnInit {
   }
 
   getSecondCep(cep) {
-    this.cep = cep;
-    this.CepService.getCep(this.cep).subscribe((response: any) => {
+    this.CepService.getCep(cep).subscribe((response: any) => {
       let cep2 = {
         subordinateZipCode: response.cep,
         subordinateCityCtrl: response.localidade,
@@ -345,26 +377,8 @@ export class AddCompanyComponent implements OnInit {
     let a = value.checked;
     console.log(value.checked);
     if (a === true) {
-      this.adressFormGroup.get('subordinateZipCode').disable();
-      this.adressFormGroup.get('subordinateNeighborhoodCtrl').disable();
-      this.adressFormGroup.get('subordinateCityCtrl').disable();
-      this.adressFormGroup.get('subordinateStreetCtrl').disable();
-      this.adressFormGroup.get('subordinateStateCtrl').disable();
-      this.adressFormGroup.get('subordinateNumberCtrl').disable();
-      this.adressFormGroup.get('subordinateComplementCtrl').disable();
-      this.adressFormGroup.get('subordinateResponsibleNameCtrl').disable();
-      this.adressFormGroup.get('subordinateReferencePointCtrl').disable();
       this.isChecked = true;
     } else {
-      this.adressFormGroup.get('subordinateZipCode').enable();
-      this.adressFormGroup.get('subordinateNeighborhoodCtrl').enable();
-      this.adressFormGroup.get('subordinateCityCtrl').enable();
-      this.adressFormGroup.get('subordinateStreetCtrl').enable();
-      this.adressFormGroup.get('subordinateStateCtrl').enable();
-      this.adressFormGroup.get('subordinateNumberCtrl').enable();
-      this.adressFormGroup.get('subordinateComplementCtrl').enable();
-      this.adressFormGroup.get('subordinateResponsibleNameCtrl').enable();
-      this.adressFormGroup.get('subordinateReferencePointCtrl').enable();
       this.isChecked = false;
     }
   }
@@ -374,14 +388,8 @@ export class AddCompanyComponent implements OnInit {
     let isCheckedBankAdress = e.checked;
     if (isCheckedBankAdress == true) {
       this.isCheckedBankAdress = true;
-      this.conditionFormGroup.get('benefitedTypeCtrl').enable();
-      this.conditionFormGroup.get('benefitedNameCtrl').enable();
-      this.conditionFormGroup.get('cnpjCtrl').enable();
     } else {
       this.isCheckedBankAdress = false;
-      this.conditionFormGroup.get('benefitedTypeCtrl').disable();
-      this.conditionFormGroup.get('benefitedNameCtrl').disable();
-      this.conditionFormGroup.get('cnpjCtrl').disable();
     }
   }
 
@@ -393,18 +401,93 @@ export class AddCompanyComponent implements OnInit {
     }
   }
 
-  saveForm(form){
-    console.log(form.value);
-    this.LocalStorageService.set('1',form.value);
+  saveForm(form, text) {
+    console.log(form)
+    this.localStorageService.set(text, form.value);
+    this.localStorageService.set('cep',this.response);
   }
-  
-  getLocalStorage(){
-    let teste = {
-      firstCtrl: this.selecionado.fifthCtrl,
-      fifthCtrl: this.selecionado.firstCtrl,
-      fourthCtrl: this.selecionado.fourthCtrl,
-      ninethCtrl: this.selecionado.ninethCtrl,
-    };
-    this.identificationFormGroup.patchValue(teste);
+
+  getLocalStorage(item) {
+
+    if (item == 'identification') {
+
+      let localStorageIdentification = {
+        companyTypeCtrl: this.identification.companyTypeCtrl,
+        companyResponsibleNameCtrl: this.identification.companyResponsibleNameCtrl,
+        acquiringEstablishmentCtrl: this.identification.acquiringEstablishmentCtrl,
+        stateRegistrationCtrl: this.identification.stateRegistrationCtrl,
+        companyNameCtrl: this.identification.companyNameCtrl,
+        fantasyNameCtrl: this.identification.fantasyNameCtrl,
+        companyShortNameCtrl: this.identification.companyShortNameCtrl,
+        merchantCategoryCodeCtrl: this.identification.merchantCategoryCodeCtrl,
+        departamentCtrl: this.identification.departamentCtrl,
+        nationalClassificationCtrl: this.identification.nationalClassificationCtrl,
+        commercialActivityCtrl: this.identification.commercialActivityCtrl,
+        openingDateCtrl: this.identification.openingDateCtrl,
+        commercialPartnerCtrl: this.identification.commercialPartnerCtrl,
+      };
+      this.identificationFormGroup.patchValue(localStorageIdentification);
+    }
+
+    if (item == 'adress') {
+      let localStorageAdress = {
+        streetCtrl: this.adress.streetCtrl,
+        numberCtrl: this.adress.numberCtrl,
+        complementCtrl: this.adress.complementCtrl,
+        neighborhoodCtrl: this.adress.neighborhoodCtrl,
+        cityCtrl: this.adress.cityCtrl,
+        stateCtrl: this.adress.stateCtrl,
+        responsibleNameCtrl: this.adress.responsibleNameCtrl,
+        referencePointCtrl: this.adress.referencePointCtrl,
+        keyZipCode: this.adress.keyZipCode,
+        subordinateZipCode: this.adress.subordinateZipCode,
+        subordinateNeighborhoodCtrl: this.adress.subordinateNeighborhoodCtrl,
+        subordinateCityCtrl: this.adress.subordinateCityCtrl,
+        subordinateStreetCtrl: this.adress.subordinateStreetCtrl,
+        subordinateNumberCtrl: this.adress.subordinateNumberCtrl,
+        subordinateComplementCtrl: this.adress.subordinateComplementCtrl,
+        subordinateStateCtrl: this.adress.subordinateStateCtrl,
+        subordinateResponsibleNameCtrl: this.adress.subordinateResponsibleNameCtrl,
+        subordinateReferencePointCtrl: this.adress.subordinateReferencePointCtrl,
+      };
+      this.isChecked = this.adress.checkboxAdress;
+      this.adressFormGroup.patchValue(localStorageAdress);
+    }
+
+    if(item == 'condition'){
+      let localStorageCondition = {
+        agencyCtrl: this.condition.agencyCtrl,
+        agencyDigitCtrl: this.condition.agencyDigitCtrl,
+        anticipationFeeCtrl: this.condition.anticipationFeeCtrl,
+        comercialCredit: this.condition.comercialCredit,
+        currentAccountAgencyCtrl: this.condition.currentAccountAgencyCtrl,
+        currentAccountCtrl: this.condition.currentAccountCtrl,
+        currentAccountDigitCtrl: this.condition.currentAccountDigitCtrl,
+        ignoreRuleAjCtrl: this.condition.ignoreRuleAjCtrl,
+        referralTransacionCtrl: this.condition.referralTransacionCtrl,
+        tableSaleCtrl: this.condition.tableSaleCtrl,
+        tedCostCtrl: this.condition.tedCostCtrl,
+        transactionCostCtrl: this.condition.transactionCostCtrl,
+        tratamentAjCtrl: this.condition.tratamentAjCtrl,
+      }
+      this.conditionFormGroup.patchValue(localStorageCondition);
+    }
+
+    if(item == 'complement'){
+      let localStorageComplement = {
+        codeSoftwareCtrl: this.complement.codeSoftwareCtrl,
+        emailCtrl: this.complement.emailCtrl,
+        idTerminalCtrl: this.complement.idTerminalCtrl,
+        logicNumberCtrl: this.complement.logicNumberCtrl,
+        posAmountCtrl: this.complement.posAmountCtrl,
+        urlCtrl: this.complement.urlCtrl,
+        urlEcommerceCtrl: this.complement.urlEcommerceCtrl,
+      }
+      this.complementFormGroup.patchValue(localStorageComplement);
+    }
+
+    if(item == 'partner'){
+
+    }
   }
 }
