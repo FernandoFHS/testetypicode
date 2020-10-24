@@ -1,0 +1,98 @@
+<div id="plans" fxLayout="row wrap">
+
+  <div class="plans-container mat-elevation-z2">
+    <h2>Acordos</h2>
+    <h3>Dados iniciais</h3>
+    <form [formGroup]="planFormGroup">
+      <div class="line-form">
+        <div class="max-short-line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Adquirente</mat-label>
+            <mat-select formControlName="idAcquirer" required>
+              <mat-option></mat-option>
+              <mat-option value="Vero"> Vero </mat-option>
+              <mat-option value="Rede"> Rede </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Início Validade</mat-label>
+            <input matInput [matDatepicker]="dp" formControlName="idPaymentDeadLine">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="line-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <input matInput placeholder="Descrição" formControlName="description" required
+            />
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          <mat-icon matSuffix>subject</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Parcelado Acelerado</mat-label>
+          <mat-select formControlName="isFastInstallments" required>
+            <mat-option></mat-option>
+            <mat-option value="Vero"> Sim </mat-option>
+            <mat-option value="Rede"> Não </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>  
+
+      <mat-divider></mat-divider>
+      <br />
+      <h3>Serviços</h3>
+
+      <div class="line-form">
+        <div class="short-line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Código de Serviço</mat-label>
+            <mat-select formControlName="idServiceEntity" required>
+              <mat-option></mat-option>
+              <mat-option value="Vero"> Recarga de Celular </mat-option>
+              <mat-option value="Rede"> Boleto </mat-option>
+              <mat-option value="Rede"> Detran </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Bandeira Cartão de Crédito</mat-label>
+            <mat-select formControlName="idCreditCardFlag" required>
+              <mat-option></mat-option>
+              <mat-option value="Vero"> Sim </mat-option>
+              <mat-option value="Rede"> Não </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="short-line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de Remuneração</mat-label>
+            <mat-select formControlName="idPaymentMethod" required>
+              <mat-option></mat-option>
+              <mat-option value="Remuneração por percentual"> Remuneração por percentual </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Valor da Remuneração</mat-label>
+            <input matInput placeholder="Valor da Remuneração" formControlName="value" required
+              />
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <mat-icon matSuffix>attach_money</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>

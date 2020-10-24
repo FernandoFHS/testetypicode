@@ -331,7 +331,6 @@ export class AddCompanyComponent implements OnInit {
         : '';
   }
 
-
   getFirstCep(value) {
     this.CepService.getCep(value).subscribe((response: any) => {
       let cep1 = {
