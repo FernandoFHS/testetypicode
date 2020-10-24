@@ -67,13 +67,20 @@ export class AddCompanyComponent implements OnInit {
   mask: any;
   response: any;
   dataSource: any[] = [];
+  bankSource: any[] = [];
+  FoneSource: any[] = [];
   dinamicAddRouter = "/company-list/add-partner";
   identification: any = this.localStorageService.get('identificationFormGroup');
   adress: any = this.localStorageService.get('adressFormGroup');
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
   partner: any = this.localStorageService.get('partnerFormGroup');
+
   bankAccount : any = this.localStorageService.get('bankAccount');
+  FoneAdress: any = this.localStorageService.get('foneAdress');
+
+
+  
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -172,30 +179,39 @@ export class AddCompanyComponent implements OnInit {
     if (this.identification != undefined) {
       this.getLocalStorage('identification');
     } else {
-      console.log("localstorage vazio");
+      
     }
 
     if(this.adress != undefined){
       this.getLocalStorage('adress');
     }else {
-      console.log("localstorage vazio");
+     
     }
 
     if(this.condition != undefined){
       this.getLocalStorage('condition');
     }else {
-      console.log("localstorage vazio");
+   
     }
     if(this.complement != undefined){
       this.getLocalStorage('complement');
     }else {
-      console.log("localstorage vazio");
+      
     }
     if(this.partner != undefined){
       this.getLocalStorage('partner');
     }else {
-      console.log("localstorage vazio");
+      
     }
+    
+    if(this.bankAccount!= undefined){
+      this.bankSource= this.bankAccount;
+    }
+
+    if(this.FoneAdress!= undefined){
+      this.FoneSource= this.FoneAdress;
+    }
+   
 
     
     if(this.response == null){
@@ -229,6 +245,11 @@ export class AddCompanyComponent implements OnInit {
     { text: 'Conta Corrente', value: 'account' },
     { text: 'Dígito Conta', value: 'accountDigit' },
     { text: 'Dígito Agência/Conta', value: 'digit' },
+    // { text: 'Ações', value: 'action' }
+  ];
+
+  headersFoneTable: HeaderModel[] = [
+    { text: 'Telefone', value: 'phone' },
     // { text: 'Ações', value: 'action' }
   ];
 
@@ -270,9 +291,9 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(AddBankAccountComponent, {
       data: { id: idBankAccount },
     });
-    dialogRef.afterClosed().subscribe(()=>{
-      this.bankAccount= this.localStorageService.get('bankAccount');
-
+    dialogRef.afterClosed().subscribe(()=>{  
+      this.bankSource = this.localStorageService.get('bankAccount');
+      //this.bankSource = this.localStorageService.get('bankAccount'); 
     })
   }
 
@@ -496,6 +517,7 @@ export class AddCompanyComponent implements OnInit {
 
     if(item == 'complement'){
       let localStorageComplement = {
+        openingHoursCtrl: this.complement.openingHoursCtrl,
         codeSoftwareCtrl: this.complement.codeSoftwareCtrl,
         emailCtrl: this.complement.emailCtrl,
         idTerminalCtrl: this.complement.idTerminalCtrl,

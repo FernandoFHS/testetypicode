@@ -51,18 +51,6 @@ export class AddBankAccountComponent implements OnInit {
       : '';
   }
 
-  public loadData() {
-    //this.exampleDatabase = new DataService(this.httpClient);
-
-    this.dataService.getAllProfiles().then((data) => {
-
-      this.dataSource = data;
-      
-    }, (error) => {
-      // TODO
-    });
-  
-  }
 
 /*  createBankAccount(): void {
     this.dataService.create(this.profile).subscribe(() => {
@@ -71,10 +59,6 @@ export class AddBankAccountComponent implements OnInit {
     })
   }*/
   
-  onNoClick(): void {
-    this.dialogRef.close();
-    this.loadData();
-  }
 
   saveAccount(form){
     
@@ -85,8 +69,12 @@ export class AddBankAccountComponent implements OnInit {
     bankAccountArray.push(form.value);
 
     this.localStorageService.set('bankAccount', bankAccountArray);
+
+    this.dialogRef.close();
   }
 
-  dataSource: any[] = [];
+  closeDialog(): void{
+    this.dialogRef.close();
+  }
 
 }

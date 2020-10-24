@@ -7,7 +7,7 @@
       
         <mat-form-field appearance="outline">
           <mat-label>Telefone</mat-label>
-          <input matInput placeholder="Número de telefone" formControlName="phone" required />
+          <input matInput placeholder="(00) 00000-0000" formControlName="phone" required mask="(00) 00000-0000"/>
           <mat-icon matSuffix>phone</mat-icon>
           <mat-error *ngIf="formControl.invalid">{{
           getErrorMessage()
@@ -15,7 +15,7 @@
         </mat-form-field>
 
         <div mat-dialog-actions class="dialog-actions-buttons">
-          <button mat-raised-button color="primary" tabindex="-1">
+          <button mat-raised-button color="primary" tabindex="-1"(click)="onNoClick();saveFone(phoneFormGroup)" >
             Salvar
           </button>
           <button mat-raised-button color="warn" (click)="onNoClick();">

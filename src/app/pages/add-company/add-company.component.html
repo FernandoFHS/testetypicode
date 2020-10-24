@@ -62,7 +62,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>CPF/CNPJ</mat-label>
-          <input matInput placeholder="{{mask}}" formControlName="companyResponsibleNameCtrl" required mask="{{mask}}" />
+          <input matInput placeholder="{{mask}}" formControlName="companyResponsibleNameCtrl" required mask="{{mask}}"[showMaskTyped] = "true" />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>assignment_ind</mat-icon>
         </mat-form-field>
@@ -219,7 +219,7 @@
           <mat-form-field appearance="outline">
             <mat-label>CEP</mat-label>
             <input matInput placeholder="Digite o seu cep" formControlName="keyZipCode" required #keyZipCode
-              (blur)="getFirstCep(keyZipCode.value)" mask="00000-000" />
+              (blur)="getFirstCep(keyZipCode.value)" mask="00000-000" [showMaskTyped] = "true" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>place</mat-icon>
           </mat-form-field>
@@ -324,7 +324,7 @@
           <mat-form-field appearance="outline">
             <mat-label>CEP</mat-label>
             <input matInput placeholder="Digite o seu cep" formControlName="subordinateZipCode" required #subordinateZipCode
-              (blur)="getSecondCep(subordinateZipCode.value)" mask="00000-000" [readonly]="isChecked" />
+              (blur)="getSecondCep(subordinateZipCode.value)" mask="00000-000" [readonly]="isChecked" [showMaskTyped] = "true"/>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix [ngStyle]="{'color': isChecked? 'grey' : ''}">place</mat-icon>
           </mat-form-field>
@@ -473,8 +473,8 @@
       <h4>Telefones Cadastrados</h4>
 
       <core-data-table
-        [headers]="headersBankTable"
-        [data]="dataSource"
+        [headers]="headersFoneTable"
+        [data]="FoneSource"
         [actions]="actions"
         (addEvent)="onAddPhone($event)"
         (deleteEvent)="onDeletePhone($event)"
@@ -543,7 +543,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Transação Referencial</mat-label>
-          <input matInput placeholder="R$ 0,00" formControlName="referralTransacionCtrl" required />
+          <input matInput placeholder="R$ 0,00" formControlName="referralTransacionCtrl" required/>
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>swap_horizontal_circle</mat-icon>
         </mat-form-field>
@@ -589,7 +589,7 @@
 
       <core-data-table
         [headers]="headersBankTable"
-        [data]="bankAccount"
+        [data]="bankSource"
         [actions]="actions"
         (addEvent)="onAddBankAccount($event)"
         (deleteEvent)="onDeleteBankAccount($event)"
@@ -658,14 +658,12 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Horário de funcionamento</mat-label>
-          <mat-select name="type" required>
-            <mat-option value="Horário Comercial">
-              Horário Comercial
-            </mat-option>
+          <mat-select name="type" required formControlName="openingHoursCtrl">
+            <mat-option value="Horário Comercial">Horário Comercial</mat-option>
             <mat-option value="24 horas"> 24 horas </mat-option>
             <mat-option value="Manhã"> Manhã </mat-option>
             <mat-option value="Tarde"> Tarde </mat-option>
-            <mat-option value=" Noite"> Noite </mat-option>
+            <mat-option value="Noite"> Noite </mat-option>
             <mat-option value="Outros"> Outros </mat-option>
           </mat-select>
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
@@ -673,7 +671,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>URL Ecommerce</mat-label>
-          <input matInput placeholder="URL Ecommerce" formControlName="urlEcommerceCtrl" required />
+          <input matInput placeholder="Ex: www.site.com.br" formControlName="urlEcommerceCtrl" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>link</mat-icon>
         </mat-form-field>
@@ -684,14 +682,14 @@
 
         <mat-form-field appearance="outline">
           <mat-label>URL</mat-label>
-          <input matInput placeholder="URL" formControlName="urlCtrl" required />
+          <input matInput placeholder="Ex: www.site.com.br" formControlName="urlCtrl" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>link</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput placeholder="Email" formControlName="emailCtrl" required />
+          <input matInput placeholder="Ex: teste@email.com" formControlName="emailCtrl" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>mail</mat-icon>
         </mat-form-field>
@@ -773,7 +771,7 @@
 
       <div class="line-form">
 
-        <div class="short-line-3-form">
+        <div class="line-3-form">
 
           <mat-form-field appearance="outline">
             <mat-label>Data Afiliação GP</mat-label>
@@ -827,7 +825,7 @@
 
       <button mat-raised-button matStepperPrevious color="warn">Voltar</button>
 
-      <button mat-raised-button matStepperNext color="primary">Avançar</button>
+      <button mat-raised-button matStepperNext color="primary">Criar </button>
 
     </div>
 

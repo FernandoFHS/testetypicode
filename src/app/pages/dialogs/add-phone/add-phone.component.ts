@@ -3,6 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DataService } from 'src/app/services/data.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-add-phone',
@@ -19,16 +20,12 @@ export class AddPhoneComponent implements OnInit {
     public data: any,
     public httpClient: HttpClient,
     private _formBuilder: FormBuilder,
+    private localStorageService: LocalStorageService,
     ) { }
 
   ngOnInit(): void {
     this.phoneFormGroup = this._formBuilder.group({    
-      bank: ['', Validators.required],
-      agency: ['', Validators.required],
-      agencyDigit: ['', Validators.required],
-      account: ['', Validators.required],
-      digit: ['', Validators.required],
-      accountDigit: ['', Validators.required]
+      phone: ['', Validators.required],
     })  
   
   }
@@ -69,6 +66,20 @@ this.dataService.create(this.profile).subscribe(() => {
 onNoClick(): void {
 this.dialogRef.close();
 this.loadData();
+}
+
+
+saveFone(form){
+    
+  let foneAdresstArray = this.localStorageService.get('foneAdress');
+  if(!foneAdresstArray){
+    foneAdresstArray= [];
+  }
+  foneAdresstArray.push(form.value);
+
+  this.localStorageService.set('foneAdress', foneAdresstArray);
+
+  this.dialogRef.close();
 }
 
 dataSource: any[] = [];
