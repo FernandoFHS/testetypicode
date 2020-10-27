@@ -267,7 +267,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Ponto de Referência</mat-label>
-          <input matInput placeholder="Ponto de Referência" formControlName="referencePointCtrl" required />
+          <input matInput placeholder="Ponto de Referência" formControlName="referencePointCtrl"/>
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>gps_fixed</mat-icon>
         </mat-form-field>
@@ -432,7 +432,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Ponto de Referência</mat-label>
           <input matInput placeholder="Ponto de Referência" formControlName="subordinateReferencePointCtrl"
-            required [readonly]="isChecked" />
+            [readonly]="isChecked" />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix [ngStyle]="{'color': isChecked? 'grey' : ''}">gps_fixed</mat-icon>
         </mat-form-field>

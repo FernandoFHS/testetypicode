@@ -115,7 +115,7 @@ export class AddCompanyComponent implements OnInit {
       cityCtrl: ['', Validators.required],
       stateCtrl: ['', Validators.required],
       responsibleNameCtrl: ['', Validators.required],
-      referencePointCtrl: ['', Validators.required],
+      referencePointCtrl: [''],
       keyZipCode: ['', Validators.required],
       checkboxAdress: ['', Validators.required],
       subordinateZipCode: ['', Validators.required],
@@ -126,7 +126,7 @@ export class AddCompanyComponent implements OnInit {
       subordinateComplementCtrl: ['', Validators.required],
       subordinateStateCtrl: ['', Validators.required],
       subordinateResponsibleNameCtrl: ['', Validators.required],
-      subordinateReferencePointCtrl: ['', Validators.required],
+      subordinateReferencePointCtrl: [''],
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: ['', Validators.required],
@@ -469,6 +469,9 @@ getLocalStorage(item) {
   if (item == 'identification') {
 
     let localStorageIdentification = {
+      registerTarget: this.identification.registerTarget,
+      managingCompanyCtrl: this.identification.managingCompanyCtrl,
+      establishmentCtrl: this.identification.establishmentCtrl,
       companyTypeCtrl: this.identification.companyTypeCtrl,
       companyResponsibleNameCtrl: this.identification.companyResponsibleNameCtrl,
       acquiringEstablishmentCtrl: this.identification.acquiringEstablishmentCtrl,
@@ -476,12 +479,11 @@ getLocalStorage(item) {
       companyNameCtrl: this.identification.companyNameCtrl,
       fancyName: this.identification.fancyName,
       companyShortName: this.identification.companyShortName,
-      merchantCategoryCodeCtrl: this.identification.merchantCategoryCodeCtrl,
-      departamentCtrl: this.identification.departamentCtrl,
-      nationalClassificationCtrl: this.identification.nationalClassificationCtrl,
-      commercialActivityCtrl: this.identification.commercialActivityCtrl,
-      openingDateCtrl: this.identification.openingDateCtrl,
-      commercialPartnerCtrl: this.identification.commercialPartnerCtrl,
+      mcccode: this.identification.mcccode,
+      idDepartament: this.identification.idDepartament,
+      idCnae: this.identification.idCnae,
+      businessActivity: this.identification.businessActivity,
+      openingDate: this.identification.openingDate,
     };
     this.identificationFormGroup.patchValue(localStorageIdentification);
   }
@@ -533,13 +535,18 @@ getLocalStorage(item) {
   if (item == 'complement') {
     let localStorageComplement = {
       openingHoursCtrl: this.complement.openingHoursCtrl,
-      codeSoftwareCtrl: this.complement.codeSoftwareCtrl,
-      emailCtrl: this.complement.emailCtrl,
-      idTerminalCtrl: this.complement.idTerminalCtrl,
-      logicNumberCtrl: this.complement.logicNumberCtrl,
-      posAmountCtrl: this.complement.posAmountCtrl,
-      urlCtrl: this.complement.urlCtrl,
       urlEcommerceCtrl: this.complement.urlEcommerceCtrl,
+      urlCtrl: this.complement.urlCtrl,
+      emailCtrl: this.complement.emailCtrl,
+      posAmountCtrl: this.complement.posAmountCtrl,
+      logicNumberCtrl: this.complement.logicNumberCtrl,
+      idTerminalCtrl: this.complement.idTerminalCtrl,
+      registrationDateCtrl: this.complement.registrationDateCtrl,
+      sendDateCtrl: this.complement.sendDateCtrl,
+      accreditationDateCtrl: this.complement.accreditationDateCtrl,
+      gpAffiliationDateCtrl: this.complement.gpAffiliationDateCtrl,
+      seRegistrationDateCtrl: this.complement.seRegistrationDateCtrl,
+      discreditationDateCtrl: this.complement.discreditationDateCtrl,
     }
     this.complementFormGroup.patchValue(localStorageComplement);
   }
