@@ -138,7 +138,6 @@ export class AddCompanyComponent implements OnInit {
       subordinateReferencePointCtrl: ['', Validators.required],
     });
     this.conditionFormGroup = this._formBuilder.group({
-      // externalBankAccount: [[this.bankAccount]],
       tableSaleCtrl: ['', Validators.required],
       comercialCredit: ['', Validators.required],
       transactionCostCtrl: ['', Validators.required],
@@ -147,11 +146,6 @@ export class AddCompanyComponent implements OnInit {
       anticipationFeeCtrl: ['', Validators.required],
       ignoreRuleAjCtrl: ['', Validators.required],
       tratamentAjCtrl: ['', Validators.required],
-      agencyCtrl: ['', Validators.required],
-      agencyDigitCtrl: ['', Validators.required],
-      currentAccountCtrl: ['', Validators.required],
-      currentAccountDigitCtrl: ['', Validators.required],
-      currentAccountAgencyCtrl: ['', Validators.required],
       benefitedTypeCtrl: ['', { value: '', disabled: true }, Validators.required,],
       benefitedNameCtrl: ['', { value: '', disabled: true }, Validators.required],
       cnpjCtrl: ['', { value: '', disabled: true }, Validators.required],
@@ -433,7 +427,7 @@ export class AddCompanyComponent implements OnInit {
       this.isCheckedBankAdress = false;
       let obj = {
         cnpjCtrl: this.identificationFormGroup.get('companyResponsibleNameCtrl').value,
-        benefitedNameCtrl: this.identificationFormGroup.get('fantasyNameCtrl').value,
+        benefitedNameCtrl: this.identificationFormGroup.get('fancyName').value,
         benefitedTypeCtrl: this.identificationFormGroup.get('companyTypeCtrl').value,
       };
       this.conditionFormGroup.patchValue(obj);
@@ -451,7 +445,7 @@ export class AddCompanyComponent implements OnInit {
       this.isCheckedBankAdress = false;
       let obj = {
         cnpjCtrl: this.identificationFormGroup.get('companyResponsibleNameCtrl').value,
-        benefitedNameCtrl: this.identificationFormGroup.get('fantasyNameCtrl').value,
+        benefitedNameCtrl: this.identificationFormGroup.get('fancyName').value,
         benefitedTypeCtrl: this.identificationFormGroup.get('companyTypeCtrl').value,
       };
       this.conditionFormGroup.patchValue(obj);
@@ -481,8 +475,8 @@ getLocalStorage(item) {
       acquiringEstablishmentCtrl: this.identification.acquiringEstablishmentCtrl,
       stateRegistrationCtrl: this.identification.stateRegistrationCtrl,
       companyNameCtrl: this.identification.companyNameCtrl,
-      fantasyNameCtrl: this.identification.fantasyNameCtrl,
-      companyShortNameCtrl: this.identification.companyShortNameCtrl,
+      fancyName: this.identification.fancyName,
+      companyShortName: this.identification.companyShortName,
       merchantCategoryCodeCtrl: this.identification.merchantCategoryCodeCtrl,
       departamentCtrl: this.identification.departamentCtrl,
       nationalClassificationCtrl: this.identification.nationalClassificationCtrl,
