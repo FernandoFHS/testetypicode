@@ -13,7 +13,7 @@
                 <input
                   matInput
                   placeholder="Número Sequência"
-                  formControlName="sequenceNumberCtrl"
+                  formControlName="sequenceNumber"
                   required
                 />
                 <mat-icon matSuffix>business_center</mat-icon>
@@ -30,7 +30,7 @@
               <input
                 matInput
                 placeholder="Nome"
-                formControlName="nameCtrl"
+                formControlName="name"
                 required
               />
               <mat-icon matSuffix>subject</mat-icon>
@@ -44,8 +44,8 @@
                 <mat-label>CPF</mat-label>
                 <input
                   matInput
-                  placeholder="CPF"
-                  formControlName="cpfCtrl"
+                  placeholder="000.000.000-00"
+                  formControlName="cpf"
                   mask="000.000.000-00"
                   required
                 />
@@ -54,13 +54,30 @@
                   getErrorMessage()
                 }}</mat-error>
               </mat-form-field>
+              
+              <mat-form-field appearance="outline">
+                <mat-label>Data de nascimento</mat-label>
+                <input
+                  matInput
+                  placeholder="00/00/0000"
+                  formControlName="dateOfBirth"
+                  mask="00/00/0000"
+                  required
+                />
+                <mat-icon matSuffix>subject</mat-icon>
+                <mat-error *ngIf="formControl.invalid">{{
+                  getErrorMessage()
+                }}</mat-error>
+              </mat-form-field>
 
+              <!--
               <mat-form-field appearance="outline">
                 <mat-label>Data de nascimento</mat-label>
                 <input
                   matInput
                   [matDatepicker]="dp"
-                  formControlName="dateOfBirthCtrl"
+                  formControlName="dateOfBirth"
+                  placeholder="00/00/0000"
                   required
                 />
                 <mat-datepicker-toggle
@@ -72,6 +89,7 @@
                   getErrorMessage()
                 }}</mat-error>
               </mat-form-field>
+              -->
             </div>
           </div>
 
@@ -85,11 +103,12 @@
                 <input
                   matInput
                   placeholder="CEP"
-                  formControlName="cepCtrl"
-                  #cepCtrl
-                  (blur)="getAdressByCep(cepCtrl.value)"
+                  formControlName="cep"
+                  #cep
+                  (blur)="getAdressByCep(cep.value)"
                   mask="00000-000"
                   required
+                  [showMaskTyped] = "true"
                 />
                 <mat-icon matSuffix>place</mat-icon>
                 <mat-error *ngIf="formControl.invalid">{{
@@ -105,7 +124,7 @@
               <input
                 matInput
                 placeholder="Logradouro"
-                formControlName="streetCtrl"
+                formControlName="street"
                 required
               />
               <mat-icon matSuffix>subject</mat-icon>
@@ -120,7 +139,7 @@
                 <input
                   matInput
                   placeholder="Número"
-                  formControlName="numberCtrl"
+                  formControlName="number"
                   required
                 />
                 <mat-icon matSuffix>subject</mat-icon>
@@ -134,8 +153,7 @@
                 <input
                   matInput
                   placeholder="Complemento"
-                  formControlName="complementCtrl"
-                  required
+                  formControlName="complement"
                 />
                 <mat-icon matSuffix>subject</mat-icon>
                 <mat-error *ngIf="formControl.invalid">{{
@@ -151,7 +169,7 @@
               <input
                 matInput
                 placeholder="Bairro"
-                formControlName="neighborhoodCtrl"
+                formControlName="neighborhood"
                 required
               />
               <mat-icon matSuffix>subject</mat-icon>
@@ -166,7 +184,7 @@
                 <input
                   matInput
                   placeholder="Bairro"
-                  formControlName="countyCtrl"
+                  formControlName="county"
                   required
                 />
                 <mat-icon matSuffix>subject</mat-icon>
@@ -180,7 +198,7 @@
                 <input
                   matInput
                   placeholder="Estado"
-                  formControlName="stateCtrl"
+                  formControlName="state"
                   required
                 />
                 <mat-icon matSuffix>subject</mat-icon>
@@ -196,12 +214,12 @@
 
           <div class="line-form">
             <mat-form-field appearance="outline">
-              <mat-label>Telefone</mat-label>
+              <mat-label>Telefone/Celular</mat-label>
               <input
                 matInput
-                placeholder="() 00000-0000"
-                formControlName="contactCtrl"
-                mask="(00) 00000-0000"
+                placeholder="(00) 0000-0000"
+                formControlName="contact"
+                mask="(00) 0000-0000 || (00) 0 0000-0000"
                 required
               />
               <mat-icon matSuffix>subject</mat-icon>
@@ -211,15 +229,10 @@
             </mat-form-field>
           </div>
           <div mat-dialog-actions class="group-buttons-actions">
-            <button mat-raised-button color="primary" (click)="createProfile()">
+            <button mat-raised-button color="primary" (click)="savePartner(partnerFormGroup)">
               Salvar
             </button>
-            <button
-              mat-raised-button
-              color="warn"
-              tabindex="-1"
-              (click)="onNoClick()"
-            >
+            <button mat-raised-button color="warn" tabindex="-1"(click)="onNoClick()">
               Cancelar
             </button>
           </div>
