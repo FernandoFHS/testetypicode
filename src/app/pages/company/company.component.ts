@@ -71,7 +71,8 @@ export class CompanyComponent implements OnInit {
 
   }
 
-  onDelete(idProfile: number) {
+  onDelete(row: any) {
+    const {idProfile} = row;
     const dialogRef = this.dialog.open(DeleteProfileComponent, {
       data: { id: idProfile },
     });

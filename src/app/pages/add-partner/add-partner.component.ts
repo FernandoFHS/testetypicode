@@ -47,7 +47,6 @@ export class AddPartnerComponent implements OnInit {
     idProfile: null,
     nameProfile: '',
     description: ''
-    
   }
 
   formControl = new FormControl('', [
@@ -67,18 +66,18 @@ export class AddPartnerComponent implements OnInit {
 
   ngOnInit(): void {
     this.partnerFormGroup = this._formBuilder.group({
-      sequenceNumberCtrl: [{value: '', disabled: true}, Validators.required],
-      nameCtrl: ['', Validators.required],
-      cpfCtrl: ['', Validators.required],
-      dateOfBirthCtrl: ['', Validators.required],
-      cepCtrl: ['', Validators.required],
-      streetCtrl: ['', Validators.required],
-      numberCtrl: ['', Validators.required],
-      complementCtrl: ['', Validators.required],
-      neighborhoodCtrl: ['', Validators.required],
-      countyCtrl: ['', Validators.required],
-      stateCtrl: ['', Validators.required],
-      contactCtrl: ['', Validators.required]
+      sequenceNumber: [{value: '', disabled: true}, Validators.required],
+      name: ['', Validators.required],
+      cpf: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      cep: ['', Validators.required],
+      street: ['', Validators.required],
+      number: ['', Validators.required],
+      complement: ['', Validators.required],
+      neighborhood: ['', Validators.required],
+      county: ['', Validators.required],
+      state: ['', Validators.required],
+      contact: ['', Validators.required]
     });
   }
 

@@ -1,233 +1,233 @@
-<div fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
-  <div class="card-box">
-    <mat-card class="mat-elevation-z2">
-      <mat-card-content>
-        <div class="text-center m-b-20 font-light-bold title-size">
-          <label> Adicionar Sócio </label>
+<div class="card-box">
+  <mat-card class="mat-elevation-z2">
+    <mat-card-content>
+      <div class="text-center m-b-20 font-light-bold title-size">
+        <label> Adicionar Sócio </label>
+      </div>
+      <form [formGroup]="partnerFormGroup">
+        <div class="line-form">
+          <div class="short-line-form">
+            <mat-form-field appearance="outline">
+              <mat-label>Número Sequência</mat-label>
+              <input
+                matInput
+                placeholder="Número Sequência"
+                formControlName="sequenceNumber"
+                required
+              />
+              <mat-icon matSuffix>fast_forward</mat-icon>
+              <mat-error *ngIf="formControl.invalid">{{
+                getErrorMessage()
+              }}</mat-error>
+            </mat-form-field>
+          </div>
         </div>
-        <form [formGroup]="partnerFormGroup">
-          <div class="line-form">
-            <div class="short-line-25-form">
-              <mat-form-field appearance="outline">
-                <mat-label>Número Sequência</mat-label>
-                <input
-                  matInput
-                  placeholder="Número Sequência"
-                  formControlName="sequenceNumberCtrl"
-                  required
-                />
-                <mat-icon matSuffix>business_center</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-            </div>
-          </div>
 
-          <div class="line-form">
+        <div class="line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Nome</mat-label>
+            <input
+              matInput
+              placeholder="Nome"
+              formControlName="name"
+              required
+            />
+            <mat-icon matSuffix>subject</mat-icon>
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+          </mat-form-field>
+
+          <div class="short-line-form">
             <mat-form-field appearance="outline">
-              <mat-label>Nome</mat-label>
+              <mat-label>CPF</mat-label>
               <input
                 matInput
-                placeholder="Nome"
-                formControlName="nameCtrl"
+                placeholder="CPF"
+                formControlName="cpf"
+                mask="000.000.000-00"
                 required
               />
-              <mat-icon matSuffix>subject</mat-icon>
+              <mat-icon matSuffix>assignment_ind</mat-icon>
               <mat-error *ngIf="formControl.invalid">{{
                 getErrorMessage()
               }}</mat-error>
             </mat-form-field>
 
-            <div class="short-line-form">
-              <mat-form-field appearance="outline">
-                <mat-label>CPF</mat-label>
-                <input
-                  matInput
-                  placeholder="CPF"
-                  formControlName="cpfCtrl"
-                  mask="000.000.000-00"
-                  required
-                />
-                <mat-icon matSuffix>subject</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Data de nascimento</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="dp"
-                  formControlName="dateOfBirthCtrl"
-                  required
-                />
-                <mat-datepicker-toggle
-                  matSuffix
-                  [for]="dp"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #dp></mat-datepicker>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-
-          <mat-divider></mat-divider>
-          <h3>Endereço</h3>
-
-          <div class="line-form">
-            <div class="short-line-form">
-              <mat-form-field appearance="outline">
-                <mat-label>CEP</mat-label>
-                <input
-                  matInput
-                  placeholder="CEP"
-                  formControlName="cepCtrl"
-                  #cepCtrl
-                  (blur)="getAdressByCep(cepCtrl.value)"
-                  mask="00000-000"
-                  required
-                />
-                <mat-icon matSuffix>place</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-
-          <div class="line-form">
             <mat-form-field appearance="outline">
-              <mat-label>Logradouro</mat-label>
+              <mat-label>Data de nascimento</mat-label>
               <input
                 matInput
-                placeholder="Logradouro"
-                formControlName="streetCtrl"
+                [matDatepicker]="dp"
+                formControlName="dateOfBirth"
                 required
               />
-              <mat-icon matSuffix>subject</mat-icon>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="dp"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #dp></mat-datepicker>
+              <mat-error *ngIf="formControl.invalid">{{
+                getErrorMessage()
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+        <h3>Endereço</h3>
+
+        <div class="line-form">
+          <div class="short-line-form">
+            <mat-form-field appearance="outline">
+              <mat-label>CEP</mat-label>
+              <input
+                matInput
+                placeholder="CEP"
+                formControlName="cep"
+                #cepCtrl
+                (blur)="getAdressByCep(cepCtrl.value)"
+                mask="00000-000"
+                required
+              />
+              <mat-icon matSuffix>place</mat-icon>
+              <mat-error *ngIf="formControl.invalid">{{
+                getErrorMessage()
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Logradouro</mat-label>
+            <input
+              matInput
+              placeholder="Logradouro"
+              formControlName="street"
+              required
+            />
+            <mat-icon matSuffix>add_road</mat-icon>
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+          </mat-form-field>
+
+          <div class="short-line-form">
+            <mat-form-field appearance="outline">
+              <mat-label>Número</mat-label>
+              <input
+                matInput
+                placeholder="Número"
+                formControlName="number"
+                required
+              />
+              <mat-icon matSuffix>looks_one</mat-icon>
               <mat-error *ngIf="formControl.invalid">{{
                 getErrorMessage()
               }}</mat-error>
             </mat-form-field>
 
-            <div class="short-line-form">
-              <mat-form-field appearance="outline">
-                <mat-label>Número</mat-label>
-                <input
-                  matInput
-                  placeholder="Número"
-                  formControlName="numberCtrl"
-                  required
-                />
-                <mat-icon matSuffix>subject</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Complemento</mat-label>
-                <input
-                  matInput
-                  placeholder="Complemento"
-                  formControlName="complementCtrl"
-                  required
-                />
-                <mat-icon matSuffix>subject</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-
-          <div class="line-form">
             <mat-form-field appearance="outline">
-              <mat-label>Bairro</mat-label>
+              <mat-label>Complemento</mat-label>
+              <input
+                matInput
+                placeholder="Complemento"
+                formControlName="complement"
+                required
+              />
+              <mat-icon matSuffix>note_add</mat-icon>
+              <mat-error *ngIf="formControl.invalid">{{
+                getErrorMessage()
+              }}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="line-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Bairro</mat-label>
+            <input
+              matInput
+              placeholder="Bairro"
+              formControlName="neighborhood"
+              required
+            />
+            <mat-icon matSuffix>map</mat-icon>
+            <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
+          </mat-form-field>
+
+          <div class="short-line-form">
+            <mat-form-field appearance="outline">
+              <mat-label>Município</mat-label>
               <input
                 matInput
                 placeholder="Bairro"
-                formControlName="neighborhoodCtrl"
+                formControlName="county"
                 required
               />
-              <mat-icon matSuffix>subject</mat-icon>
+              <mat-icon matSuffix>map</mat-icon>
               <mat-error *ngIf="formControl.invalid">{{
                 getErrorMessage()
               }}</mat-error>
             </mat-form-field>
 
-            <div class="short-line-form">
-              <mat-form-field appearance="outline">
-                <mat-label>Município</mat-label>
-                <input
-                  matInput
-                  placeholder="Bairro"
-                  formControlName="countyCtrl"
-                  required
-                />
-                <mat-icon matSuffix>subject</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Estado</mat-label>
-                <input
-                  matInput
-                  placeholder="Estado"
-                  formControlName="stateCtrl"
-                  required
-                />
-                <mat-icon matSuffix>subject</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>Estado</mat-label>
+              <input
+                matInput
+                placeholder="Estado"
+                formControlName="state"
+                required
+              />
+              <mat-icon matSuffix>map</mat-icon>
+              <mat-error *ngIf="formControl.invalid">{{
+                getErrorMessage()
+              }}</mat-error>
+            </mat-form-field>
           </div>
+        </div>
 
-          <mat-divider></mat-divider>
-          <h3>Contato</h3>
+        <mat-divider></mat-divider>
+        <h3>Contato</h3>
 
-          <div class="line-form">
+        <div class="line-form">
+          <div class="short-line-form">
             <mat-form-field appearance="outline">
               <mat-label>Telefone</mat-label>
               <input
                 matInput
                 placeholder="() 00000-0000"
-                formControlName="contactCtrl"
+                formControlName="contact"
                 mask="(00) 00000-0000"
                 required
               />
-              <mat-icon matSuffix>subject</mat-icon>
+              <mat-icon matSuffix>call</mat-icon>
               <mat-error *ngIf="formControl.invalid">{{
                 getErrorMessage()
               }}</mat-error>
             </mat-form-field>
           </div>
-          <div mat-dialog-actions class="group-buttons-actions">
-            <button mat-raised-button color="primary" (click)="createProfile()">
-              Salvar
-            </button>
-            <button
-              mat-raised-button
-              color="warn"
-              tabindex="-1"
-              (click)="onNoClick()"
-            >
-              Cancelar
-            </button>
-          </div>
-        </form>
-      </mat-card-content>
-    </mat-card>
+        </div>
+        <div mat-dialog-actions class="group-buttons-actions">
+          <button
+          mat-raised-button
+          color="warn"
+          tabindex="-1"
+          (click)="onNoClick()"
+        >
+          Cancelar
+        </button>
+          <button mat-raised-button color="primary" (click)="createProfile()">
+            Salvar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
     
-  </div>
-  
 </div>
+  
 

@@ -1,8 +1,6 @@
-@import '~src/app/@core/styles/breakpoints';
 
-:host {
   .card-box {
-    margin: 0 15px;
+    margin: 15px 15px;
     vertical-align: middle;
     width: 100%;
   }
@@ -19,17 +17,6 @@
   
   form .line-form .mat-form-field{
     width: 48%;
-  }
-
-  form .line-form .short-line-25-form{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 25%;
-  }
-
-  form .line-form .short-line-25-form .mat-form-field{
-    width: 100%;
   }
   
   form .line-form .short-line-form{
@@ -54,11 +41,14 @@
     width: 100%;
   }
   
-  button {
-    height: 60px;
-    width: 45%;
+  .group-buttons-actions button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3em;
+    width: 12em;
     font-size: 16px;
     text-align: center;
   }
 
-}
+
