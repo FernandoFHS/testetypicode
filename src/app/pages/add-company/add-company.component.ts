@@ -207,8 +207,6 @@ export class AddCompanyComponent implements OnInit {
 
     }
 
-
-
     if (this.response == null) {
       this.response = this.localStorageService.get('cep');
     }
