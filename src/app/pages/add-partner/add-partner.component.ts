@@ -111,10 +111,10 @@ export class AddPartnerComponent implements OnInit {
       console.log(response);
 
       let obj = {
-        countyCtrl: response.localidade,
-        streetCtrl: response.logradouro,
-        neighborhoodCtrl: response.bairro,
-        stateCtrl: response.uf,
+        county: response.localidade,
+        street: response.logradouro,
+        neighborhood: response.bairro,
+        state: response.uf,
       };
       this.teste = response;
       this.partnerFormGroup.patchValue(obj);
