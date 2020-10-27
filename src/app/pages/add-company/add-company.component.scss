@@ -104,14 +104,7 @@ h3 {
 
 textarea {
   height: 16px;
-}
-
-.next-button {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 16px;
-
-  width: 100%;
+  resize: none!important;
 }
 
 .next-button button{
@@ -138,8 +131,8 @@ h1{
   font-size: 14px;
 }
 
-.mat-focus-indicator{
-  font-weight: bold !important;
+.mat-error {
+  height: 14px;
 }
 
 @media (max-width: 1800px) {

@@ -32,7 +32,6 @@ export class UserComponent implements OnInit {
     { text: 'Código', value: 'idProfile' },
     { text: 'Empresa', value: 'nameProfile' },
     { text: 'Descrição', value: 'description' },
-    { text: 'Situação', value: 'situation' },
     // { text: 'Ações', value: 'action' }
   ];
 
@@ -41,11 +40,6 @@ export class UserComponent implements OnInit {
     edit: true,
     delete: true
   };
-
-  exampleDatabase: DataService | null;
-  // dataSource: ExampleDataSource | null;
-  index: number;
-  id: number;
 
   dataSource: any[] = [];
   
@@ -64,14 +58,16 @@ export class UserComponent implements OnInit {
 
   }
 
-  onDelete(idProfile: number) {
+  onDelete(row: any) {
+    const {idProfile} = row
     const dialogRef = this.dialog.open(DeleteProfileComponent, {
-      data: { id: idProfile },
+      data: {id: idProfile},
     });
   }
 
 
-  onEdit(idProfile: number) {
+  onEdit(row: any) {
+    const {idProfile} = row
     this.router.navigate([`/profile-list/edit-profile/${idProfile}`])
   }
 

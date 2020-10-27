@@ -76,9 +76,6 @@ export class AddCompanyComponent implements OnInit {
   bankAccount: any = this.localStorageService.get('bankAccount');
   phoneNumber: any = this.localStorageService.get('phoneNumber');
 
-
-
-
   constructor(
     private _formBuilder: FormBuilder,
     private CepService: CepService,
@@ -94,7 +91,7 @@ export class AddCompanyComponent implements OnInit {
 
   ngOnInit(): void {
     this.identificationFormGroup = this._formBuilder.group({
-      registerTargetCtrl: ['', Validators.required],
+      registerTarget: [{ value: 'Estabelecimento', disabled: true }],
       managingCompanyCtrl: ['', Validators.required],
       establishmentCtrl: [{ value: '', disabled: true }],
       companyTypeCtrl: ['', Validators.required],
@@ -108,12 +105,7 @@ export class AddCompanyComponent implements OnInit {
       idDepartament: ['', Validators.required],
       idCnae: ['', Validators.required],
       businessActivity: ['', Validators.required],
-      openingDate: ['', Validators.required],
-      commercialPartnerCtrl: ['', Validators.required],
-      createUserNameCtrl: [{ value: '', disabled: true }],
-      inclusionRegistrationDateTime: [{ value: '', disabled: true }],
-      userChangeCode: [{ value: '', disabled: true }],
-      recordChangeDateTime: [{ value: '', disabled: true }],
+      openingDate: ['', Validators.required]
     });
     this.adressFormGroup = this._formBuilder.group({
       streetCtrl: ['', Validators.required],
@@ -268,18 +260,10 @@ export class AddCompanyComponent implements OnInit {
         this.dataSource = data;
       },
       (error) => {
-        // TODO
+        console.log('Not found data')
       }
     );
   }
-
-  /**   bank: ['', Validators.required],
-        agency: ['', Validators.required],
-        agencyDigit: ['', Validators.required],
-        account: ['', Validators.required],
-        digit: ['', Validators.required],
-        accountDigit: ['', Validators.required] */
-
 
   //Add Methods
   onAddPhone(idPhone: number) {
@@ -343,6 +327,11 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(DeletePartnerComponent, {
       data: { id: idPartner },      
     });
+  }
+
+  //Navigation Functions
+  navigateToCompanyList() {
+    this.router.navigate(['/company-list/company'])
   }
 
   //submit form
