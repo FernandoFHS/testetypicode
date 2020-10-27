@@ -55,13 +55,13 @@
             <mat-label>Código de Serviço</mat-label>
             <mat-select formControlName="idServiceEntity" required *ngIf="serviceEntity$ | async as serviceEntity;">
               <mat-option>Selecione um serviço</mat-option>
-              <mat-option *ngFor="let item of serviceEntity" [value]="item.id">{{item.description}}</mat-option>
+              <mat-option *ngFor="let item of serviceEntity" [value]="item.id" ([noFlag])="item.noFlag">{{item.description}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Bandeira Cartão de Crédito</mat-label>
-            <mat-select formControlName="idCreditCardFlag" required *ngIf="creditCardFlag$ | async as creditCardFlag;">
+            <mat-select formControlName="idCreditCardFlag" required *ngIf="creditCardFlag$ | async as creditCardFlag;" disable>
               <mat-option>Selecione uma bandeira de cartão</mat-option>
               <mat-option *ngFor="let item of creditCardFlag" [value]="item.id">{{item.flagName}}</mat-option>
             </mat-select>
