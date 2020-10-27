@@ -25,7 +25,8 @@ export class AddPhoneComponent implements OnInit {
 
   ngOnInit(): void {
     this.phoneFormGroup = this._formBuilder.group({    
-      phone: ['', Validators.required],
+      contactName: ['', Validators.required],
+      companyPhone: ['', Validators.required],
     })  
   
   }
@@ -71,13 +72,13 @@ this.loadData();
 
 saveFone(form){
     
-  let foneAdresstArray = this.localStorageService.get('foneAdress');
+  let foneAdresstArray = this.localStorageService.get('phoneNumber');
   if(!foneAdresstArray){
     foneAdresstArray= [];
   }
   foneAdresstArray.push(form.value);
 
-  this.localStorageService.set('foneAdress', foneAdresstArray);
+  this.localStorageService.set('phoneNumber', foneAdresstArray);
 
   this.dialogRef.close();
 }

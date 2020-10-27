@@ -42,6 +42,10 @@ export class DataTableComponent implements OnInit {
   constructor(public dialog: MatDialog, private router: Router) { }
 
   ngOnInit(): void {
+    if(!this.data){
+      this.data = [];
+    }
+
     if(!this.data.content){
       this.data.content = this.data;
     }

@@ -6,12 +6,17 @@
     <form [formGroup]="phoneFormGroup">
       
         <mat-form-field appearance="outline">
-          <mat-label>Telefone</mat-label>
-          <input matInput placeholder="(00) 00000-0000" formControlName="phone" required mask="(00) 00000-0000"/>
+          <mat-label>Nome do contato</mat-label>
+          <input matInput placeholder="nome do contato" formControlName="contactName" required />
           <mat-icon matSuffix>phone</mat-icon>
-          <mat-error *ngIf="formControl.invalid">{{
-          getErrorMessage()
-        }}</mat-error>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone</mat-label>
+          <input matInput placeholder="(00) 00000-0000" formControlName="companyPhone"  mask="(00) 0000-0000 || (00) 0 0000-0000" />
+          <mat-icon matSuffix>phone</mat-icon>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
         </mat-form-field>
 
         <div mat-dialog-actions class="dialog-actions-buttons">
@@ -21,8 +26,6 @@
           <button mat-raised-button color="warn" (click)="onNoClick();">
             Cancelar
           </button>
-
-        
       </div>
     </form>
   </div>
