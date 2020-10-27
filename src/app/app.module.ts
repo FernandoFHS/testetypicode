@@ -29,6 +29,7 @@ import { DeletePartnerComponent } from './pages/dialogs/delete-partner/delete-pa
 import { EditPhoneComponent } from './pages/dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component';
 import { PlansComponent } from './pages/plans/plans.component';
+import { DeleteTaxComponent } from './pages/plans/delete-tax/delete-tax.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -56,6 +57,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     EditPhoneComponent,
     AddPhoneComponent,
     PlansComponent,
+    DeleteTaxComponent,
   ],
   imports: [
     BrowserModule,

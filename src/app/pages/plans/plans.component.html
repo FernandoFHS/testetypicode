@@ -3,7 +3,7 @@
   <div class="plans-container mat-elevation-z2">
     <h2>Acordos</h2>
     <h3>Dados iniciais</h3>
-    <form [formGroup]="planFormGroup">
+    <form [formGroup]="agreementFormGroup">
       <div class="line-form">
         <div class="max-short-line-form">
           <mat-form-field appearance="outline">
@@ -53,21 +53,17 @@
         <div class="short-line-form">
           <mat-form-field appearance="outline">
             <mat-label>Código de Serviço</mat-label>
-            <mat-select formControlName="idServiceEntity" required>
-              <mat-option></mat-option>
-              <mat-option value="Vero"> Recarga de Celular </mat-option>
-              <mat-option value="Rede"> Boleto </mat-option>
-              <mat-option value="Rede"> Detran </mat-option>
+            <mat-select formControlName="idServiceEntity" required *ngIf="serviceEntity$ | async as serviceEntity;">
+              <mat-option>Selecione um serviço</mat-option>
+              <mat-option *ngFor="let item of serviceEntity" [value]="item.id">{{item.description}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
-
           <mat-form-field appearance="outline">
             <mat-label>Bandeira Cartão de Crédito</mat-label>
-            <mat-select formControlName="idCreditCardFlag" required>
-              <mat-option></mat-option>
-              <mat-option value="Vero"> Sim </mat-option>
-              <mat-option value="Rede"> Não </mat-option>
+            <mat-select formControlName="idCreditCardFlag" required *ngIf="creditCardFlag$ | async as creditCardFlag;">
+              <mat-option>Selecione uma bandeira de cartão</mat-option>
+              <mat-option *ngFor="let item of creditCardFlag" [value]="item.id">{{item.flagName}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
@@ -76,9 +72,9 @@
         <div class="short-line-form">
           <mat-form-field appearance="outline">
             <mat-label>Tipo de Remuneração</mat-label>
-            <mat-select formControlName="idPaymentMethod" required>
-              <mat-option></mat-option>
-              <mat-option value="Remuneração por percentual"> Remuneração por percentual </mat-option>
+            <mat-select formControlName="idRemunerationType" required  *ngIf="remunerationType$ | async as remunetationType;">
+              <mat-option>Selecione o tipo de remuneração</mat-option>
+              <mat-option *ngFor="let item of remunetationType" [value]="item.id">{{item.description}}</mat-option>
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
@@ -92,6 +88,9 @@
           </mat-form-field>
         </div>
       </div>
+      <core-data-table [headers]="headers" [data]="dataSource" [actions]="actions" (addEvent)="onAdd($event)" (deleteEvent)="onDelete($event)"
+        (editEvent)="onEdit($event)">
+      </core-data-table>
     </form>
   </div>
 

@@ -30,7 +30,7 @@ import { DataTableComponent } from './components/container/data-table/data-table
     AccordionLinkDirective,
     AccordionAnchorDirective,
 
-    DataTableComponent
+    DataTableComponent,
   ],
   imports: [
     BrowserModule,

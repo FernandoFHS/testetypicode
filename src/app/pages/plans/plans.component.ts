@@ -1,8 +1,20 @@
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { DeleteTaxComponent } from './delete-tax/delete-tax.component';
+import { ActionModel } from 'src/app/@core/models/action.model';
+import { HeaderModel } from 'src/app/@core/models/header.model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-
+import { ServiceEntityService } from '../../services/service-entity.service';
+import { CreditCardFlagService } from '../../services/credit-card-flag.service';
+import { RemunerationTypeService } from '../../services/remuneration-type.service';
+import { ServiceEntityRequest } from '../../models/ServiceEntity';
+import { CreditCardFlagRequest } from '../../models/CreditCardFlag';
+import { RemunerationTypeRequest } from '../../models/RemunerationType';
+import { take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 @Component({
   selector: 'app-plans',
   templateUrl: './plans.component.html',
@@ -22,21 +34,51 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 })
 export class PlansComponent implements OnInit {
 
-  planFormGroup: FormGroup;
+  agreementFormGroup: FormGroup;
+  serviceEntity$: Observable<Array<ServiceEntityRequest>>;
+  creditCardFlag$: Observable<Array<CreditCardFlagRequest>>;
+  remunerationType$: Observable<Array<RemunerationTypeRequest>>;
 
-  constructor(private _formBuilder: FormBuilder) { }
+  headers: HeaderModel[] = [
+    { text: 'Código', value: 'id' },
+    { text: 'Produto', value: 'title' },
+    { text: '% Taxa Administração', value: 'nameprofile' },
+    { text: '% Taxa Financeira', value: 'description' },
+    { text: '% Tarifa Crédito', value: 'razsoc' },
+    { text: '% Custo Transação	', value: 'mcc' },
+  ];
+  noFlag: Boolean;
+  actions: ActionModel = {
+    add: true,
+    edit: true,
+    delete: true
+  };
+
+  dataSource: any[] = [];
+
+  constructor(private _formBuilder: FormBuilder,
+    private creditCardFlagService: CreditCardFlagService,
+    private remunerationTypeService: RemunerationTypeService,
+    private serviceEntityService: ServiceEntityService,
+    public dialog: MatDialog,
+    private router: Router
+    ) { }
 
   ngOnInit(): void {
-    this.planFormGroup = this._formBuilder.group({
+    this.agreementFormGroup = this._formBuilder.group({
       idAcquirer: ['', Validators.required],
-      idPaymentDeadLine: ['Vero', Validators.required],
+      idPaymentDeadLine: ['', Validators.required],
       description: ['', Validators.required],
       isFastInstallments: ['', Validators.required],
       idServiceEntity: ['', Validators.required],
       idCreditCardFlag: ['', Validators.required],
       idPaymentMethod: ['', Validators.required],
+      idRemunerationType: ['', Validators.required],
       value: ['', Validators.required]
     })
+    this.getAllServices();
+    this.getAllRemunetarionType();
+    this.getAllCreditCardFlag();
   }
 
   formControl = new FormControl('', [
@@ -51,4 +93,41 @@ export class PlansComponent implements OnInit {
         : '';
   }
 
+  getAllServices() {
+    this.serviceEntityService.getAll()
+      .pipe(take(1))
+      .subscribe((data) => {
+        this.serviceEntity$ = of(data.content);
+        console.log(this.serviceEntity$);
+      });
+    }
+  getAllCreditCardFlag(){
+    this.creditCardFlagService.getAll()
+      .pipe(take(1))
+      .subscribe((data) => {
+        this.creditCardFlag$ = of(data.content)
+      });
+  }
+  getAllRemunetarionType(){
+    this.remunerationTypeService.getAll()
+      .pipe(take(1))
+      .subscribe((data) => {
+        this.remunerationType$ = of(data.content);
+        //this.remunerationType = data.content
+      });
+  }
+  onDelete(idProfile: number) {
+    const dialogRef = this.dialog.open(DeleteTaxComponent, {
+      data: { id: idProfile },
+    });
+  }
+
+
+  onEdit(index: number) {
+    console.log('esse é o meu index para editar ' + index);
+  }
+
+  onAdd(index: number) {
+    this.router.navigate(['/company-list/add-company']);
+  }
 }
