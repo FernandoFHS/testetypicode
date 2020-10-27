@@ -103,18 +103,18 @@ export class AddCompanyComponent implements OnInit {
       acquiringEstablishmentCtrl: ['', Validators.required],
       stateRegistrationCtrl: ['', Validators.required],
       companyNameCtrl: ['', Validators.required],
-      fantasyNameCtrl: ['', Validators.required],
-      companyShortNameCtrl: ['', Validators.required],
-      merchantCategoryCodeCtrl: ['', Validators.required],
-      departamentCtrl: ['', Validators.required],
-      nationalClassificationCtrl: ['', Validators.required],
-      commercialActivityCtrl: ['', Validators.required],
-      openingDateCtrl: ['', Validators.required],
+      fancyName: ['', Validators.required],
+      companyShortName: ['', Validators.required],
+      mcccode: ['', Validators.required],
+      idDepartament: ['', Validators.required],
+      idCnae: ['', Validators.required],
+      businessActivity: ['', Validators.required],
+      openingDate: ['', Validators.required],
       commercialPartnerCtrl: ['', Validators.required],
       createUserNameCtrl: [{ value: '', disabled: true }],
-      createTimeCtrl: [{ value: '', disabled: true }],
-      changeUserNameCtrl: [{ value: '', disabled: true }],
-      changeTimeCtrl: [{ value: '', disabled: true }],
+      inclusionRegistrationDateTime: [{ value: '', disabled: true }],
+      userChangeCode: [{ value: '', disabled: true }],
+      recordChangeDateTime: [{ value: '', disabled: true }],
     });
     this.adressFormGroup = this._formBuilder.group({
       streetCtrl: ['', Validators.required],
@@ -164,7 +164,12 @@ export class AddCompanyComponent implements OnInit {
       posAmountCtrl: ['', Validators.required],
       logicNumberCtrl: ['', Validators.required],
       idTerminalCtrl: ['', Validators.required],
-      codeSoftwareCtrl: ['', Validators.required],
+      registrationDateCtrl: ['', Validators.required],
+      sendDateCtrl: ['', Validators.required],
+      accreditationDateCtrl: ['', Validators.required],
+      gpAffiliationDateCtrl: ['', Validators.required],
+      seRegistrationDateCtrl: ['', Validators.required],
+      discreditationDateCtrl: ['', Validators.required]
     });
     this.partnerFormGroup = this._formBuilder.group({});
 
