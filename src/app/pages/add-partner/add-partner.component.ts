@@ -67,7 +67,7 @@ export class AddPartnerComponent implements OnInit {
 
   ngOnInit(): void {
     this.partnerFormGroup = this._formBuilder.group({
-      sequenceNumberCtrl: [{value: '1', disabled: true}, Validators.required],
+      sequenceNumberCtrl: [{value: '', disabled: true}, Validators.required],
       nameCtrl: ['', Validators.required],
       cpfCtrl: ['', Validators.required],
       dateOfBirthCtrl: ['', Validators.required],

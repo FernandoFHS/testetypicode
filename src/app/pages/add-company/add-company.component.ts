@@ -63,7 +63,7 @@ export class AddCompanyComponent implements OnInit {
   complementFormGroup: FormGroup;
   partnerFormGroup: FormGroup;
   isChecked = false;
-  isCheckedBankAdress = false;
+  isCheckedBankAdress = true;
   mask: any;
   response: any;
   dataSource: any[] = [];
@@ -73,7 +73,12 @@ export class AddCompanyComponent implements OnInit {
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
   partner: any = this.localStorageService.get('partnerFormGroup');
-  bankAccount : any = this.localStorageService.get('bankAccount');
+
+  bankAccount: any = this.localStorageService.get('bankAccount');
+  phoneNumber: any = this.localStorageService.get('phoneNumber');
+
+
+
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -91,25 +96,25 @@ export class AddCompanyComponent implements OnInit {
   ngOnInit(): void {
     this.identificationFormGroup = this._formBuilder.group({
       registerTargetCtrl: ['', Validators.required],
-      managingCompanyCtrl: ['', Validators.required], 
+      managingCompanyCtrl: ['', Validators.required],
       establishmentCtrl: [{ value: '', disabled: true }],
       companyTypeCtrl: ['', Validators.required],
       companyResponsibleNameCtrl: ['', Validators.required],
       acquiringEstablishmentCtrl: ['', Validators.required],
       stateRegistrationCtrl: ['', Validators.required],
       companyNameCtrl: ['', Validators.required],
-      fantasyNameCtrl: ['', Validators.required],
-      companyShortNameCtrl: ['', Validators.required],
-      merchantCategoryCodeCtrl: ['', Validators.required],
-      departamentCtrl: ['', Validators.required],
-      nationalClassificationCtrl: ['', Validators.required],
-      commercialActivityCtrl: ['', Validators.required],
-      openingDateCtrl: ['', Validators.required],
+      fancyName: ['', Validators.required],
+      companyShortName: ['', Validators.required],
+      mcccode: ['', Validators.required],
+      idDepartament: ['', Validators.required],
+      idCnae: ['', Validators.required],
+      businessActivity: ['', Validators.required],
+      openingDate: ['', Validators.required],
       commercialPartnerCtrl: ['', Validators.required],
       createUserNameCtrl: [{ value: '', disabled: true }],
-      createTimeCtrl: [{ value: '', disabled: true }],
-      changeUserNameCtrl: [{ value: '', disabled: true }],
-      changeTimeCtrl: [{ value: '', disabled: true }],
+      inclusionRegistrationDateTime: [{ value: '', disabled: true }],
+      userChangeCode: [{ value: '', disabled: true }],
+      recordChangeDateTime: [{ value: '', disabled: true }],
     });
     this.adressFormGroup = this._formBuilder.group({
       streetCtrl: ['', Validators.required],
@@ -133,7 +138,6 @@ export class AddCompanyComponent implements OnInit {
       subordinateReferencePointCtrl: ['', Validators.required],
     });
     this.conditionFormGroup = this._formBuilder.group({
-     // externalBankAccount: [[this.bankAccount]],
       tableSaleCtrl: ['', Validators.required],
       comercialCredit: ['', Validators.required],
       transactionCostCtrl: ['', Validators.required],
@@ -142,14 +146,9 @@ export class AddCompanyComponent implements OnInit {
       anticipationFeeCtrl: ['', Validators.required],
       ignoreRuleAjCtrl: ['', Validators.required],
       tratamentAjCtrl: ['', Validators.required],
-      agencyCtrl: ['', Validators.required],
-      agencyDigitCtrl: ['', Validators.required],
-      currentAccountCtrl: ['', Validators.required],
-      currentAccountDigitCtrl: ['', Validators.required],
-      currentAccountAgencyCtrl: ['', Validators.required],
-      benefitedTypeCtrl: ['',{ value: '', disabled: true },Validators.required,],
-      benefitedNameCtrl: ['',{ value: '', disabled: true }, Validators.required],
-      cnpjCtrl: ['',{ value: '', disabled: true }, Validators.required],
+      benefitedTypeCtrl: ['', { value: '', disabled: true }, Validators.required,],
+      benefitedNameCtrl: ['', { value: '', disabled: true }, Validators.required],
+      cnpjCtrl: ['', { value: '', disabled: true }, Validators.required],
     });
     this.complementFormGroup = this._formBuilder.group({
       openingHoursCtrl: [Validators.required],
@@ -159,7 +158,12 @@ export class AddCompanyComponent implements OnInit {
       posAmountCtrl: ['', Validators.required],
       logicNumberCtrl: ['', Validators.required],
       idTerminalCtrl: ['', Validators.required],
-      codeSoftwareCtrl: ['', Validators.required],
+      registrationDateCtrl: ['', Validators.required],
+      sendDateCtrl: ['', Validators.required],
+      accreditationDateCtrl: ['', Validators.required],
+      gpAffiliationDateCtrl: ['', Validators.required],
+      seRegistrationDateCtrl: ['', Validators.required],
+      discreditationDateCtrl: ['', Validators.required]
     });
     this.partnerFormGroup = this._formBuilder.group({});
 
@@ -172,39 +176,40 @@ export class AddCompanyComponent implements OnInit {
     if (this.identification != undefined) {
       this.getLocalStorage('identification');
     } else {
-      console.log("localstorage vazio");
+
     }
 
-    if(this.adress != undefined){
+    if (this.adress != undefined) {
       this.getLocalStorage('adress');
-    }else {
-      console.log("localstorage vazio");
+    } else {
+
     }
 
-    if(this.condition != undefined){
+    if (this.condition != undefined) {
       this.getLocalStorage('condition');
-    }else {
-      console.log("localstorage vazio");
+    } else {
+
     }
-    if(this.complement != undefined){
+    if (this.complement != undefined) {
       this.getLocalStorage('complement');
-    }else {
-      console.log("localstorage vazio");
+    } else {
+
     }
-    if(this.partner != undefined){
+    if (this.partner != undefined) {
       this.getLocalStorage('partner');
-    }else {
-      console.log("localstorage vazio");
+    } else {
+
     }
 
-    
-    if(this.response == null){
+    if (this.response == null) {
       this.response = this.localStorageService.get('cep');
     }
 
     if (this.mask == undefined) {
       this.getCpfCnpjMask(this.identificationFormGroup.get('companyTypeCtrl').value);
     }
+
+    this.checkValueBankAdress(true);
   }
 
   headers: HeaderModel[] = [
@@ -229,6 +234,12 @@ export class AddCompanyComponent implements OnInit {
     { text: 'Conta Corrente', value: 'account' },
     { text: 'Dígito Conta', value: 'accountDigit' },
     { text: 'Dígito Agência/Conta', value: 'digit' },
+    // { text: 'Ações', value: 'action' }
+  ];
+
+  headersFoneTable: HeaderModel[] = [
+    { text: 'Nome do contato', value: 'contactName' },
+    { text: 'Telefone', value: 'companyPhone' },
     // { text: 'Ações', value: 'action' }
   ];
 
@@ -264,15 +275,19 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(AddPhoneComponent, {
       data: { id: idPhone },
     });
+    dialogRef.afterClosed().subscribe(() => {
+      this.phoneNumber = this.localStorageService.get('phoneNumber');
+      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+    })
   }
 
   onAddBankAccount(idBankAccount: number) {
     const dialogRef = this.dialog.open(AddBankAccountComponent, {
       data: { id: idBankAccount },
     });
-    dialogRef.afterClosed().subscribe(()=>{
-      this.bankAccount= this.localStorageService.get('bankAccount');
-
+    dialogRef.afterClosed().subscribe(() => {
+      this.bankAccount = this.localStorageService.get('bankAccount');
+      this.bankAccount.content = this.localStorageService.get('bankAccount');
     })
   }
 
@@ -403,111 +418,132 @@ export class AddCompanyComponent implements OnInit {
     }
   }
 
-
-  checkValueBankAdress(e) {
-    let isCheckedBankAdress = e.checked;
-    if (isCheckedBankAdress == true) {
-      this.isCheckedBankAdress = true;
-    } else {
+  checkValueBankAdress(value) {
+    let a = value.checked;
+    if (a == false) {
       this.isCheckedBankAdress = false;
-    }
-  }
-
-  getCpfCnpjMask(a) {
-    if (a === 'pf') {
-      this.mask = '000.000.000-00';
-    } if (a === 'pj') {
-      this.mask = '00.000.000/0000-00';
-    }
-  }
-
-  saveForm(form, text) {
-    console.log(form)
-    this.localStorageService.set(text, form.value);
-    this.localStorageService.set('cep',this.response);
-  }
-
-  getLocalStorage(item) {
-
-    if (item == 'identification') {
-
-      let localStorageIdentification = {
-        companyTypeCtrl: this.identification.companyTypeCtrl,
-        companyResponsibleNameCtrl: this.identification.companyResponsibleNameCtrl,
-        acquiringEstablishmentCtrl: this.identification.acquiringEstablishmentCtrl,
-        stateRegistrationCtrl: this.identification.stateRegistrationCtrl,
-        companyNameCtrl: this.identification.companyNameCtrl,
-        fantasyNameCtrl: this.identification.fantasyNameCtrl,
-        companyShortNameCtrl: this.identification.companyShortNameCtrl,
-        merchantCategoryCodeCtrl: this.identification.merchantCategoryCodeCtrl,
-        departamentCtrl: this.identification.departamentCtrl,
-        nationalClassificationCtrl: this.identification.nationalClassificationCtrl,
-        commercialActivityCtrl: this.identification.commercialActivityCtrl,
-        openingDateCtrl: this.identification.openingDateCtrl,
-        commercialPartnerCtrl: this.identification.commercialPartnerCtrl,
+      let obj = {
+        cnpjCtrl: this.identificationFormGroup.get('companyResponsibleNameCtrl').value,
+        benefitedNameCtrl: this.identificationFormGroup.get('fancyName').value,
+        benefitedTypeCtrl: this.identificationFormGroup.get('companyTypeCtrl').value,
       };
-      this.identificationFormGroup.patchValue(localStorageIdentification);
+      this.conditionFormGroup.patchValue(obj);
     }
-
-    if (item == 'adress') {
-      let localStorageAdress = {
-        streetCtrl: this.adress.streetCtrl,
-        numberCtrl: this.adress.numberCtrl,
-        complementCtrl: this.adress.complementCtrl,
-        neighborhoodCtrl: this.adress.neighborhoodCtrl,
-        cityCtrl: this.adress.cityCtrl,
-        stateCtrl: this.adress.stateCtrl,
-        responsibleNameCtrl: this.adress.responsibleNameCtrl,
-        referencePointCtrl: this.adress.referencePointCtrl,
-        keyZipCode: this.adress.keyZipCode,
-        subordinateZipCode: this.adress.subordinateZipCode,
-        subordinateNeighborhoodCtrl: this.adress.subordinateNeighborhoodCtrl,
-        subordinateCityCtrl: this.adress.subordinateCityCtrl,
-        subordinateStreetCtrl: this.adress.subordinateStreetCtrl,
-        subordinateNumberCtrl: this.adress.subordinateNumberCtrl,
-        subordinateComplementCtrl: this.adress.subordinateComplementCtrl,
-        subordinateStateCtrl: this.adress.subordinateStateCtrl,
-        subordinateResponsibleNameCtrl: this.adress.subordinateResponsibleNameCtrl,
-        subordinateReferencePointCtrl: this.adress.subordinateReferencePointCtrl,
+    if (a == true) {
+      this.isCheckedBankAdress = true;
+      let obj = {
+        cnpjCtrl: '',
+        benefitedNameCtrl: '',
+        benefitedTypeCtrl: '',
       };
-      this.isChecked = this.adress.checkboxAdress;
-      this.adressFormGroup.patchValue(localStorageAdress);
+      this.conditionFormGroup.patchValue(obj);
     }
-
-    if(item == 'condition'){
-      let localStorageCondition = {
-        agencyCtrl: this.condition.agencyCtrl,
-        agencyDigitCtrl: this.condition.agencyDigitCtrl,
-        anticipationFeeCtrl: this.condition.anticipationFeeCtrl,
-        comercialCredit: this.condition.comercialCredit,
-        currentAccountAgencyCtrl: this.condition.currentAccountAgencyCtrl,
-        currentAccountCtrl: this.condition.currentAccountCtrl,
-        currentAccountDigitCtrl: this.condition.currentAccountDigitCtrl,
-        ignoreRuleAjCtrl: this.condition.ignoreRuleAjCtrl,
-        referralTransacionCtrl: this.condition.referralTransacionCtrl,
-        tableSaleCtrl: this.condition.tableSaleCtrl,
-        tedCostCtrl: this.condition.tedCostCtrl,
-        transactionCostCtrl: this.condition.transactionCostCtrl,
-        tratamentAjCtrl: this.condition.tratamentAjCtrl,
-      }
-      this.conditionFormGroup.patchValue(localStorageCondition);
-    }
-
-    if(item == 'complement'){
-      let localStorageComplement = {
-        codeSoftwareCtrl: this.complement.codeSoftwareCtrl,
-        emailCtrl: this.complement.emailCtrl,
-        idTerminalCtrl: this.complement.idTerminalCtrl,
-        logicNumberCtrl: this.complement.logicNumberCtrl,
-        posAmountCtrl: this.complement.posAmountCtrl,
-        urlCtrl: this.complement.urlCtrl,
-        urlEcommerceCtrl: this.complement.urlEcommerceCtrl,
-      }
-      this.complementFormGroup.patchValue(localStorageComplement);
-    }
-
-    if(item == 'partner'){
-
+    if(value == false){
+      this.isCheckedBankAdress = false;
+      let obj = {
+        cnpjCtrl: this.identificationFormGroup.get('companyResponsibleNameCtrl').value,
+        benefitedNameCtrl: this.identificationFormGroup.get('fancyName').value,
+        benefitedTypeCtrl: this.identificationFormGroup.get('companyTypeCtrl').value,
+      };
+      this.conditionFormGroup.patchValue(obj);
     }
   }
+
+getCpfCnpjMask(a) {
+  if (a === 'pf') {
+    this.mask = '000.000.000-00';
+  } if (a === 'pj') {
+    this.mask = '00.000.000/0000-00';
+  }
+}
+
+saveForm(form, text) {
+  this.localStorageService.set(text, form.value);
+  this.localStorageService.set('cep', this.response);
+}
+
+getLocalStorage(item) {
+
+  if (item == 'identification') {
+
+    let localStorageIdentification = {
+      companyTypeCtrl: this.identification.companyTypeCtrl,
+      companyResponsibleNameCtrl: this.identification.companyResponsibleNameCtrl,
+      acquiringEstablishmentCtrl: this.identification.acquiringEstablishmentCtrl,
+      stateRegistrationCtrl: this.identification.stateRegistrationCtrl,
+      companyNameCtrl: this.identification.companyNameCtrl,
+      fancyName: this.identification.fancyName,
+      companyShortName: this.identification.companyShortName,
+      merchantCategoryCodeCtrl: this.identification.merchantCategoryCodeCtrl,
+      departamentCtrl: this.identification.departamentCtrl,
+      nationalClassificationCtrl: this.identification.nationalClassificationCtrl,
+      commercialActivityCtrl: this.identification.commercialActivityCtrl,
+      openingDateCtrl: this.identification.openingDateCtrl,
+      commercialPartnerCtrl: this.identification.commercialPartnerCtrl,
+    };
+    this.identificationFormGroup.patchValue(localStorageIdentification);
+  }
+
+  if (item == 'adress') {
+    let localStorageAdress = {
+      streetCtrl: this.adress.streetCtrl,
+      numberCtrl: this.adress.numberCtrl,
+      complementCtrl: this.adress.complementCtrl,
+      neighborhoodCtrl: this.adress.neighborhoodCtrl,
+      cityCtrl: this.adress.cityCtrl,
+      stateCtrl: this.adress.stateCtrl,
+      responsibleNameCtrl: this.adress.responsibleNameCtrl,
+      referencePointCtrl: this.adress.referencePointCtrl,
+      keyZipCode: this.adress.keyZipCode,
+      subordinateZipCode: this.adress.subordinateZipCode,
+      subordinateNeighborhoodCtrl: this.adress.subordinateNeighborhoodCtrl,
+      subordinateCityCtrl: this.adress.subordinateCityCtrl,
+      subordinateStreetCtrl: this.adress.subordinateStreetCtrl,
+      subordinateNumberCtrl: this.adress.subordinateNumberCtrl,
+      subordinateComplementCtrl: this.adress.subordinateComplementCtrl,
+      subordinateStateCtrl: this.adress.subordinateStateCtrl,
+      subordinateResponsibleNameCtrl: this.adress.subordinateResponsibleNameCtrl,
+      subordinateReferencePointCtrl: this.adress.subordinateReferencePointCtrl,
+    };
+    this.isChecked = this.adress.checkboxAdress;
+    this.adressFormGroup.patchValue(localStorageAdress);
+  }
+
+  if (item == 'condition') {
+    let localStorageCondition = {
+      agencyCtrl: this.condition.agencyCtrl,
+      agencyDigitCtrl: this.condition.agencyDigitCtrl,
+      anticipationFeeCtrl: this.condition.anticipationFeeCtrl,
+      comercialCredit: this.condition.comercialCredit,
+      currentAccountAgencyCtrl: this.condition.currentAccountAgencyCtrl,
+      currentAccountCtrl: this.condition.currentAccountCtrl,
+      currentAccountDigitCtrl: this.condition.currentAccountDigitCtrl,
+      ignoreRuleAjCtrl: this.condition.ignoreRuleAjCtrl,
+      referralTransacionCtrl: this.condition.referralTransacionCtrl,
+      tableSaleCtrl: this.condition.tableSaleCtrl,
+      tedCostCtrl: this.condition.tedCostCtrl,
+      transactionCostCtrl: this.condition.transactionCostCtrl,
+      tratamentAjCtrl: this.condition.tratamentAjCtrl,
+    }
+    this.conditionFormGroup.patchValue(localStorageCondition);
+  }
+
+  if (item == 'complement') {
+    let localStorageComplement = {
+      openingHoursCtrl: this.complement.openingHoursCtrl,
+      codeSoftwareCtrl: this.complement.codeSoftwareCtrl,
+      emailCtrl: this.complement.emailCtrl,
+      idTerminalCtrl: this.complement.idTerminalCtrl,
+      logicNumberCtrl: this.complement.logicNumberCtrl,
+      posAmountCtrl: this.complement.posAmountCtrl,
+      urlCtrl: this.complement.urlCtrl,
+      urlEcommerceCtrl: this.complement.urlEcommerceCtrl,
+    }
+    this.complementFormGroup.patchValue(localStorageComplement);
+  }
+
+  if (item == 'partner') {
+
+  }
+}
 }

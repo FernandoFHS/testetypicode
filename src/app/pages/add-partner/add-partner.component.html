@@ -210,22 +210,24 @@
               }}</mat-error>
             </mat-form-field>
           </div>
+          <div mat-dialog-actions class="group-buttons-actions">
+            <button mat-raised-button color="primary" (click)="createProfile()">
+              Salvar
+            </button>
+            <button
+              mat-raised-button
+              color="warn"
+              tabindex="-1"
+              (click)="onNoClick()"
+            >
+              Cancelar
+            </button>
+          </div>
         </form>
-
-        <div mat-dialog-actions class="group-buttons-actions">
-          <button mat-raised-button color="primary" (click)="createProfile()">
-            Salvar
-          </button>
-          <button
-            mat-raised-button
-            color="warn"
-            tabindex="-1"
-            (click)="onNoClick()"
-          >
-            Cancelar
-          </button>
-        </div>
       </mat-card-content>
     </mat-card>
+    
   </div>
+  
 </div>
+
