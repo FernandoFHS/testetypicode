@@ -797,8 +797,8 @@
   <!--socio Step-->
   <mat-step #partnerStep label="Sócio" state="partner" [stepControl]="partnerFormGroup">
     <core-data-table
-      [headers]="headersPartner"
-      [data]="dataSource"
+      [headers]="headersPartnerTable"
+      [data]="partner"
       [actions]="actions"
       (addEvent)="onAddPartner($event)"
       (deleteEvent)="onDeletePartner($event)"

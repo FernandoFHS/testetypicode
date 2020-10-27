@@ -73,7 +73,6 @@ export class AddCompanyComponent implements OnInit {
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
   partner: any = this.localStorageService.get('partnerFormGroup');
-
   bankAccount: any = this.localStorageService.get('bankAccount');
   phoneNumber: any = this.localStorageService.get('phoneNumber');
 
@@ -188,7 +187,8 @@ export class AddCompanyComponent implements OnInit {
 
     }
     if (this.partner != undefined) {
-      this.getLocalStorage('partner');
+      this.partner = this.localStorageService.get('partnerFormGroup');
+      this.partner.content = this.localStorageService.get('partnerFormGroup');
     } else {
 
     }
@@ -235,13 +235,16 @@ export class AddCompanyComponent implements OnInit {
     // { text: 'Ações', value: 'action' }
   ];
 
-  headersPartner: HeaderModel[] = [
+  headersPartnerTable: HeaderModel[] = [
     { text: 'Número Sequência', value: 'sequenceNumber' },
     { text: 'Nome', value: 'name' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
     { text: 'Telefone', value: 'contact' },
-  ]
+    // { text: 'Ações', value: 'action' }
+  ];
+
+
 
   actions: ActionModel = {
     add: true,
@@ -281,6 +284,7 @@ export class AddCompanyComponent implements OnInit {
       this.bankAccount = this.localStorageService.get('bankAccount');
       this.bankAccount.content = this.localStorageService.get('bankAccount');
     })
+   
   }
 
   onAddPartner(index: number) {
@@ -321,7 +325,7 @@ export class AddCompanyComponent implements OnInit {
 
   onDeletePartner(idPartner: number) {
     const dialogRef = this.dialog.open(DeletePartnerComponent, {
-      data: { id: idPartner },
+      data: { id: idPartner },      
     });
   }
 
