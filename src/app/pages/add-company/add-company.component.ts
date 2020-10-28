@@ -333,10 +333,18 @@ export class AddCompanyComponent implements OnInit {
   }
 
   //Edit Methods
-  onEditPhone(idProfile: number) {
+  onEditPhone(row: object) {
+    const index = this.phoneNumber.content.indexOf(row)
+    
+  
     const dialogRef = this.dialog.open(EditPhoneComponent, {
-      data: { id: idProfile },
+      data: index
     });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.phoneNumber = this.localStorageService.get('phoneNumber');
+      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+    })
   }
 
   onEditBankAccount(idPhone: number) {
