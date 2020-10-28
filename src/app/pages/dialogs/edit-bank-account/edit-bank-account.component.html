@@ -104,6 +104,9 @@
       </div>
 
       <div mat-dialog-actions class="dialog-actions-buttons">
+        <button mat-raised-button color="warn" (click)="onNoClick()">
+          Cancelar
+        </button>
         <button
         mat-raised-button
         color="primary"
@@ -112,9 +115,6 @@
       >
         Salvar
       </button>
-        <button mat-raised-button color="warn" (click)="onNoClick()">
-          Cancelar
-        </button>
       </div>
     </form>
   </div>
