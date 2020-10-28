@@ -72,7 +72,7 @@ export class AddCompanyComponent implements OnInit {
   adress: any = this.localStorageService.get('adressFormGroup');
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
-  partner: any = this.localStorageService.get('partnerFormGroup');
+  partnerSource: any = this.localStorageService.get('partnerFormGroup');
   bankAccount: any = this.localStorageService.get('bankAccount');
   phoneNumber: any = this.localStorageService.get('phoneNumber');
 
@@ -186,9 +186,9 @@ export class AddCompanyComponent implements OnInit {
     } else {
 
     }
-    if (this.partner != undefined) {
-      this.partner = this.localStorageService.get('partnerFormGroup');
-      this.partner.content = this.localStorageService.get('partnerFormGroup');
+    if (this.partnerSource != undefined) {
+      this.partnerSource = this.localStorageService.get('partnerFormGroup');
+      this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
     } else {
 
     }
@@ -284,7 +284,6 @@ export class AddCompanyComponent implements OnInit {
       this.bankAccount = this.localStorageService.get('bankAccount');
       this.bankAccount.content = this.localStorageService.get('bankAccount');
     })
-   
   }
 
   onAddPartner(index: number) {
@@ -311,22 +310,34 @@ export class AddCompanyComponent implements OnInit {
   }
 
   //Delete Methods
-  onDeletePhone(idPhone: number) {
-    const dialogRef = this.dialog.open(DeletePhoneComponent, {
-      data: { id: idPhone },
-    });
+  onDeletePhone(row: object) {
+    const deleteItem = this.phoneNumber.content.indexOf(row);
+    const dialogRef = this.dialog.open(DeletePhoneComponent, {data: deleteItem});
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.phoneNumber = this.localStorageService.get('phoneNumber');
+      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+    })
   }
 
-  onDeleteBankAccount(idBankAccount: number) {
-    const dialogRef = this.dialog.open(DeleteBankAccountComponent, {
-      data: { id: idBankAccount },
-    });
+  onDeleteBankAccount(row: object) {
+    const deleteItem = this.bankAccount.content.indexOf(row);
+    const dialogRef = this.dialog.open(DeleteBankAccountComponent, {data: deleteItem});
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.bankAccount = this.localStorageService.get('bankAccount');
+      this.bankAccount.content = this.localStorageService.get('bankAccount');
+    })
   }
 
-  onDeletePartner(idPartner: number) {
-    const dialogRef = this.dialog.open(DeletePartnerComponent, {
-      data: { id: idPartner },      
-    });
+  onDeletePartner(row: object) {
+    const deleteItem = this.partnerSource.content.indexOf(row);
+    const dialogRef = this.dialog.open(DeletePartnerComponent, {data: deleteItem});
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.partnerSource = this.localStorageService.get('partnerFormGroup');
+      this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
+    })
   }
 
   //Navigation Functions

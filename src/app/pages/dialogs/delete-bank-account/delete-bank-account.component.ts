@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Content } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-delete-bank-account',
@@ -14,8 +15,11 @@ export class DeleteBankAccountComponent implements OnInit {
 
   profile: Content;
 
+  bankAccount: any = this.localStorageService.get('bankAccount');
+
   constructor(private router: Router, public dialogRef: MatDialogRef<DeleteBankAccountComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, public httpClient: HttpClient,) { }
+    @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService, public httpClient: HttpClient,
+    private localStorageService: LocalStorageService) { }
   
     ngOnInit(): void {
     const id = this.data.id;   
@@ -25,11 +29,16 @@ export class DeleteBankAccountComponent implements OnInit {
     })
   }
 
-  confirmDelete(): void {
-    this.dataService.delete(this.profile.idProfile).subscribe(() => {
-      this.dataService.openSnackBar('Produto deletado com sucesso', 'X');
-      this.dialogRef.close(); 
-    });
+  deleteBankAccount() {
+    let deleteItem = this.data;
+
+    if (deleteItem > -1) {
+      this.bankAccount.splice(deleteItem, 1);
+      localStorage.setItem('bankAccount', JSON.stringify(this.bankAccount));
+    } else {
+      console.log(deleteItem);
+    }
+    this.dialogRef.close();
   }
   
   onNoClick(): void {
