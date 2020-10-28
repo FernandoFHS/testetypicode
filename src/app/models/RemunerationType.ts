@@ -1,10 +1,12 @@
 export interface RemunerationTypeRequest {
     id: number,
-    description: String;
+    description: String
 }
 export interface RemunerationTypeResponse {
-  content: {
+  content: [
+    {
     id: number,
-    description: String;
-  }
+    description: String
+    }
+  ]
 }

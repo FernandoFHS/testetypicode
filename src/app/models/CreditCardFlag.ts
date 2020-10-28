@@ -1,4 +1,12 @@
 export interface CreditCardFlagRequest{
   id: number,
-  flagName: string;
+  flagName: string
+}
+export interface CreditCardFlagResponse{
+  content:[
+    {
+      id: number,
+      flagName: string
+    }
+  ]
 }

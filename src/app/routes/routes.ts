@@ -14,6 +14,7 @@ import { CompanyListComponent } from '../pages/company-list/company-list.compone
 import { AddCompanyComponent } from '../pages/add-company/add-company.component';
 import { EditCompanyComponent } from '../pages/edit-company/edit-company.component';
 import { AddPartnerComponent } from '../pages/add-partner/add-partner.component';
+import { PlansComponent } from '../pages/plans/plans.component';
 
 export const routes: Routes = [
   {
@@ -86,6 +87,11 @@ export const routes: Routes = [
       {
         path: 'password-transaction',
         component: PasswordTransactionComponent,
+      },
+
+      {
+        path: 'plans',
+        component: PlansComponent,
       },
     ],
   },

@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit,Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DataService } from 'src/app/services/data.service';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { FormControl, Validators} from '@angular/forms';
+import { LocalStorageService } from './../../../services/local-storage.service';
 
 @Component({
   selector: 'app-delete-partner',
@@ -14,21 +14,16 @@ export class DeletePartnerComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<DeletePartnerComponent>, 
     @Inject(MAT_DIALOG_DATA) public data: any, 
-    private dataService: DataService,
     private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
   }
+  
+  formControl = new FormControl('', [
+    Validators.required,
+    // Validators.email,
+  ]);
 
-  // deletePartner() {
-  //   let row = this.data.id;
-    
-  //   row = [];
-
-  //   console.log(row);
-
-  //   this.dialogRef.close();
-  // }
 
   deletePartner() {
     let deleteItem = this.data;

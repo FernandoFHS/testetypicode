@@ -1,3 +1,4 @@
+import { map, take, startWith, filter } from 'rxjs/operators';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
 import {
@@ -8,10 +9,8 @@ import {
 } from '@angular/forms';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
-import { CompanyContent, Mcc, RootObject } from 'src/app/models/Company';
 import { CepService } from 'src/app/services/cep.service';
 import { DataService } from 'src/app/services/data.service';
-import { CompanyService } from 'src/app/services/company.service';
 import {
   MAT_MOMENT_DATE_FORMATS,
   MomentDateAdapter,
@@ -32,7 +31,15 @@ import { DeletePhoneComponent } from '../dialogs/delete-phone/delete-phone.compo
 import { DeletePartnerComponent } from '../dialogs/delete-partner/delete-partner.component';
 import { EditPhoneComponent } from '../dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from '../dialogs/add-phone/add-phone.component';
+import { CnaeService } from '../../services/company/cnae.service';
+import { Cnae } from '../../models/company/Cnae'
+import { Observable, of } from 'rxjs';
 
+export interface State {
+  flag: string;
+  name: string;
+  population: string;
+}
 @Component({
   selector: 'app-add-company',
   templateUrl: './add-company.component.html',
@@ -56,6 +63,8 @@ import { AddPhoneComponent } from '../dialogs/add-phone/add-phone.component';
 })
 export class AddCompanyComponent implements OnInit {
 
+  cnaeForm = new FormControl();
+
   isLinear = false;
   identificationFormGroup: FormGroup;
   adressFormGroup: FormGroup;
@@ -76,20 +85,37 @@ export class AddCompanyComponent implements OnInit {
   bankAccount: any = this.localStorageService.get('bankAccount');
   phoneNumber: any = this.localStorageService.get('phoneNumber');
 
+  cnae: Array<Cnae>;
+  cnae$: Observable<Array<Cnae>>;
+  filteredCnaes: Observable<Cnae[]>;
+
   constructor(
     private _formBuilder: FormBuilder,
     private CepService: CepService,
     private dataService: DataService,
+    private cnaeService: CnaeService,
     public dialog: MatDialog,
     private router: Router,
     private localStorageService: LocalStorageService,
-  ) { }
+  ) { 
+  }
+  private _filterCnaes(value: string): Cnae[] {
+    const filterValue = value.toLowerCase();
+    console.log('passei aqui');
+    this.cnae$.subscribe(cnaes => {
+      this.cnae =  cnaes.filter(cnae => cnae.description.toLowerCase().indexOf(filterValue) === 0);
+    })
+    return this.cnae;
+
+  }
 
   formControl = new FormControl('', [
     Validators.required,
   ]);
 
+
   ngOnInit(): void {
+
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
       managingCompanyCtrl: ['', Validators.required],
@@ -157,12 +183,12 @@ export class AddCompanyComponent implements OnInit {
       discreditationDateCtrl: ['', Validators.required]
     });
     this.partnerFormGroup = this._formBuilder.group({});
-
+    
     this.dataService.refreshTable().subscribe(() => {
       this.loadData();
     });
-
     this.loadData();
+    this.gelAllCnaes();
 
     if (this.identification != undefined) {
       this.getLocalStorage('identification');
@@ -202,6 +228,22 @@ export class AddCompanyComponent implements OnInit {
     }
 
     this.checkValueBankAdress(true);
+  }
+
+  gelAllCnaes(){
+    this.cnaeService.getAllCnae()
+    // .pipe(take(1))
+    .subscribe((data) => {
+      //console.log(data.content);
+      this.cnae$ = of(data.content);
+
+      this.filteredCnaes = this.cnaeForm.valueChanges
+      .pipe(
+        startWith(''),
+        map(cnae => this._filterCnaes(cnae))
+        //map(cnae => cnae ? this._filterCnaes(cnae) : this.cnae$.subscribe(cnaes => {return cnaes.slice()}))
+      );
+    });
   }
 
   headers: HeaderModel[] = [
@@ -357,7 +399,6 @@ export class AddCompanyComponent implements OnInit {
         ? 'Not a valid email'
         : '';
   }
-
 
   getFirstCep(value) {
     this.CepService.getCep(value).subscribe((response: any) => {

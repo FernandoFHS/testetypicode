@@ -1,4 +1,4 @@
-import { CreditCardFlagRequest } from './../models/CreditCardFlag';
+import { CreditCardFlagRequest, CreditCardFlagResponse } from './../models/CreditCardFlag';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -7,12 +7,12 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CreditCardFlagService {
-  private readonly url = `${environment.baseUrl}creditCardFlag`;
+  private readonly url = `${environment.baseUrl}creditcardflag`;
 
   constructor(private http: HttpClient) { }
 
   getAll() {
-    return this.http.get<CreditCardFlagRequest>(this.url)
+    return this.http.get<CreditCardFlagResponse>(this.url)
   }
   getById(id:number) {
     return this.http.get<CreditCardFlagRequest>(`${this.url}/${id}`)
