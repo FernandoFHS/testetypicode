@@ -1,3 +1,7 @@
+*{
+  overflow: hidden!important;
+}
+
 form .line-form {
   display: flex;
   flex-direction: row;
@@ -28,4 +32,23 @@ form .line-form .short-line-form .mat-form-field {
 .dialog-actions-buttons button {
   width: 15em;
   height: 3em;
+}
+
+@media (max-width: 600px) {
+  .dialog-actions-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+
+  .dialog-actions-buttons button {
+    width: 100%;
+    height: 3em;
+  }  
+
+  .dialog-actions-buttons button + button{
+    margin-top: 15px;
+    margin-left: 0;
+  }
 }

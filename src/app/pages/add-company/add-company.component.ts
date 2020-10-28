@@ -82,7 +82,6 @@ export class AddCompanyComponent implements OnInit {
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
   partner: any = this.localStorageService.get('partnerFormGroup');
-
   bankAccount: any = this.localStorageService.get('bankAccount');
   phoneNumber: any = this.localStorageService.get('phoneNumber');
 
@@ -118,7 +117,7 @@ export class AddCompanyComponent implements OnInit {
   ngOnInit(): void {
 
     this.identificationFormGroup = this._formBuilder.group({
-      registerTargetCtrl: ['', Validators.required],
+      registerTarget: [{ value: 'Estabelecimento', disabled: true }],
       managingCompanyCtrl: ['', Validators.required],
       establishmentCtrl: [{ value: '', disabled: true }],
       companyTypeCtrl: ['', Validators.required],
@@ -132,12 +131,7 @@ export class AddCompanyComponent implements OnInit {
       idDepartament: ['', Validators.required],
       idCnae: ['', Validators.required],
       businessActivity: ['', Validators.required],
-      openingDate: ['', Validators.required],
-      commercialPartnerCtrl: ['', Validators.required],
-      createUserNameCtrl: [{ value: '', disabled: true }],
-      inclusionRegistrationDateTime: [{ value: '', disabled: true }],
-      userChangeCode: [{ value: '', disabled: true }],
-      recordChangeDateTime: [{ value: '', disabled: true }],
+      openingDate: ['', Validators.required]
     });
     this.adressFormGroup = this._formBuilder.group({
       streetCtrl: ['', Validators.required],
@@ -147,7 +141,7 @@ export class AddCompanyComponent implements OnInit {
       cityCtrl: ['', Validators.required],
       stateCtrl: ['', Validators.required],
       responsibleNameCtrl: ['', Validators.required],
-      referencePointCtrl: ['', Validators.required],
+      referencePointCtrl: [''],
       keyZipCode: ['', Validators.required],
       checkboxAdress: ['', Validators.required],
       subordinateZipCode: ['', Validators.required],
@@ -158,7 +152,7 @@ export class AddCompanyComponent implements OnInit {
       subordinateComplementCtrl: ['', Validators.required],
       subordinateStateCtrl: ['', Validators.required],
       subordinateResponsibleNameCtrl: ['', Validators.required],
-      subordinateReferencePointCtrl: ['', Validators.required],
+      subordinateReferencePointCtrl: [''],
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: ['', Validators.required],
@@ -219,7 +213,8 @@ export class AddCompanyComponent implements OnInit {
 
     }
     if (this.partner != undefined) {
-      this.getLocalStorage('partner');
+      this.partner = this.localStorageService.get('partnerFormGroup');
+      this.partner.content = this.localStorageService.get('partnerFormGroup');
     } else {
 
     }
@@ -282,6 +277,17 @@ export class AddCompanyComponent implements OnInit {
     // { text: 'Ações', value: 'action' }
   ];
 
+  headersPartnerTable: HeaderModel[] = [
+    { text: 'Número Sequência', value: 'sequenceNumber' },
+    { text: 'Nome', value: 'name' },
+    { text: 'Data de Nascimento', value: 'dateOfBirth' },
+    { text: 'CPF', value: 'cpf' },
+    { text: 'Telefone', value: 'contact' },
+    // { text: 'Ações', value: 'action' }
+  ];
+
+
+
   actions: ActionModel = {
     add: true,
     edit: true,
@@ -296,17 +302,10 @@ export class AddCompanyComponent implements OnInit {
         this.dataSource = data;
       },
       (error) => {
-        // TODO
+        console.log('Not found data')
       }
     );
   }
-  /**   bank: ['', Validators.required],
-        agency: ['', Validators.required],
-        agencyDigit: ['', Validators.required],
-        account: ['', Validators.required],
-        digit: ['', Validators.required],
-        accountDigit: ['', Validators.required] */
-
 
   //Add Methods
   onAddPhone(idPhone: number) {
@@ -327,6 +326,7 @@ export class AddCompanyComponent implements OnInit {
       this.bankAccount = this.localStorageService.get('bankAccount');
       this.bankAccount.content = this.localStorageService.get('bankAccount');
     })
+   
   }
 
   onAddPartner(index: number) {
@@ -367,8 +367,13 @@ export class AddCompanyComponent implements OnInit {
 
   onDeletePartner(idPartner: number) {
     const dialogRef = this.dialog.open(DeletePartnerComponent, {
-      data: { id: idPartner },
+      data: { id: idPartner },      
     });
+  }
+
+  //Navigation Functions
+  navigateToCompanyList() {
+    this.router.navigate(['/company-list/company'])
   }
 
   //submit form
@@ -505,6 +510,9 @@ getLocalStorage(item) {
   if (item == 'identification') {
 
     let localStorageIdentification = {
+      registerTarget: this.identification.registerTarget,
+      managingCompanyCtrl: this.identification.managingCompanyCtrl,
+      establishmentCtrl: this.identification.establishmentCtrl,
       companyTypeCtrl: this.identification.companyTypeCtrl,
       companyResponsibleNameCtrl: this.identification.companyResponsibleNameCtrl,
       acquiringEstablishmentCtrl: this.identification.acquiringEstablishmentCtrl,
@@ -512,12 +520,11 @@ getLocalStorage(item) {
       companyNameCtrl: this.identification.companyNameCtrl,
       fancyName: this.identification.fancyName,
       companyShortName: this.identification.companyShortName,
-      merchantCategoryCodeCtrl: this.identification.merchantCategoryCodeCtrl,
-      departamentCtrl: this.identification.departamentCtrl,
-      nationalClassificationCtrl: this.identification.nationalClassificationCtrl,
-      commercialActivityCtrl: this.identification.commercialActivityCtrl,
-      openingDateCtrl: this.identification.openingDateCtrl,
-      commercialPartnerCtrl: this.identification.commercialPartnerCtrl,
+      mcccode: this.identification.mcccode,
+      idDepartament: this.identification.idDepartament,
+      idCnae: this.identification.idCnae,
+      businessActivity: this.identification.businessActivity,
+      openingDate: this.identification.openingDate,
     };
     this.identificationFormGroup.patchValue(localStorageIdentification);
   }
@@ -569,13 +576,18 @@ getLocalStorage(item) {
   if (item == 'complement') {
     let localStorageComplement = {
       openingHoursCtrl: this.complement.openingHoursCtrl,
-      codeSoftwareCtrl: this.complement.codeSoftwareCtrl,
-      emailCtrl: this.complement.emailCtrl,
-      idTerminalCtrl: this.complement.idTerminalCtrl,
-      logicNumberCtrl: this.complement.logicNumberCtrl,
-      posAmountCtrl: this.complement.posAmountCtrl,
-      urlCtrl: this.complement.urlCtrl,
       urlEcommerceCtrl: this.complement.urlEcommerceCtrl,
+      urlCtrl: this.complement.urlCtrl,
+      emailCtrl: this.complement.emailCtrl,
+      posAmountCtrl: this.complement.posAmountCtrl,
+      logicNumberCtrl: this.complement.logicNumberCtrl,
+      idTerminalCtrl: this.complement.idTerminalCtrl,
+      registrationDateCtrl: this.complement.registrationDateCtrl,
+      sendDateCtrl: this.complement.sendDateCtrl,
+      accreditationDateCtrl: this.complement.accreditationDateCtrl,
+      gpAffiliationDateCtrl: this.complement.gpAffiliationDateCtrl,
+      seRegistrationDateCtrl: this.complement.seRegistrationDateCtrl,
+      discreditationDateCtrl: this.complement.discreditationDateCtrl,
     }
     this.complementFormGroup.patchValue(localStorageComplement);
   }

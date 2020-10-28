@@ -1,1 +1,20 @@
-<p>delete-partner works!</p>
+<div class="container">
+  <h3 mat-dialog-title>Deseja Deletar?</h3>
+  <div mat-dialog-content>
+    <span>Número Sequência:</span> {{partner}}
+    <p></p>
+    <span>Nome:</span> 
+    <p></p>
+    <span>Data de Nascimento:</span> 
+    <p></p>
+    <span>CPF:</span> 
+    <p></p>
+    <span>Telefone:</span> 
+    <p></p>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-raised-button color="warn" [mat-dialog-close]="1" (click)="removeItem()">Deletar</button>
+    <button mat-raised-button color="primary" (click)="onNoClick()" tabindex="-1">Cancelar</button>
+  </div>
+</div>

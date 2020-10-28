@@ -27,13 +27,13 @@ export class DataTableComponent implements OnInit {
   dinamicAddRouter
 
   @Output()
-  deleteEvent: EventEmitter<number> = new EventEmitter();
+  deleteEvent: EventEmitter<Object> = new EventEmitter();
 
   @Output()
-  editEvent: EventEmitter<number> = new EventEmitter();
+  editEvent: EventEmitter<Object> = new EventEmitter();
 
   @Output()
-  addEvent: EventEmitter<number> = new EventEmitter();
+  addEvent: EventEmitter<Object> = new EventEmitter();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -55,16 +55,16 @@ export class DataTableComponent implements OnInit {
         this.displayedColumns.push('actions');
   }
 
-  addItem(index: number) {
-    this.addEvent.emit(index);
+  addItem(row: object) {
+    this.addEvent.emit(row);
   }
 
-  deleteItem(index: number) {
-    this.deleteEvent.emit(index);
+  deleteItem(row: object) {
+    this.deleteEvent.emit(row);
   }
 
-  editItem(idProfile: number) {
-    this.editEvent.emit(idProfile);
+  editItem(row: object) {
+    this.editEvent.emit(row);
   }
    
 }
