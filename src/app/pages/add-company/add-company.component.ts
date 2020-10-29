@@ -291,6 +291,12 @@ export class AddCompanyComponent implements OnInit {
   actions: ActionModel = {
     add: true,
     edit: true,
+    delete: false,
+  };
+
+  actionsPartner: ActionModel = {
+    add: true,
+    edit: true,
     delete: true,
   };
 
