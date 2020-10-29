@@ -361,10 +361,11 @@ export class AddCompanyComponent implements OnInit {
     })
   }
 
-  onEditPartner(idPartner: number) {
-    const dialogRef = this.dialog.open(EditBankAccountComponent, {
-      data: { id: idPartner },
-    });
+  onEditPartner(row: object) {
+    console.log(this.partnerSource.content);
+    const index = this.partnerSource.content.findIndex((c) => c == row);
+ 
+    this.router.navigate([`/company-list/edit-partner/${index}`]);
   }
 
   //Delete Methods
