@@ -22,7 +22,11 @@ export class EditPhoneComponent implements OnInit {
     this.phoneFormGroup = this._formBuilder.group({    
       contactName: ['', Validators.required],
       companyPhone: ['', Validators.required],
-    })  
+    })
+    
+    if (this.phoneNumber != undefined) {
+      this.getLocalStorage('phoneNumber');
+    }
   }
 
   formControl = new FormControl('', [
@@ -58,5 +62,17 @@ export class EditPhoneComponent implements OnInit {
   onNoClick() {
     this.dialogRef.close();
   }
+
+  getLocalStorage(item) {
+  if (item == 'phoneNumber') {
+    let localStorage = {
+      contactName: this.phoneNumber[this.data].contactName,
+      companyPhone: this.phoneNumber[this.data].companyPhone,
+    }
+    this.phoneFormGroup.patchValue(localStorage);
+  }
+}
+
+  
 
 }
