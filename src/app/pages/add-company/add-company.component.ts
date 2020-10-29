@@ -341,22 +341,24 @@ export class AddCompanyComponent implements OnInit {
   //Edit Methods
   onEditPhone(row: object) {
     const index = this.phoneNumber.content.indexOf(row)
-    
-  
     const dialogRef = this.dialog.open(EditPhoneComponent, {
       data: index
     });
-
     dialogRef.afterClosed().subscribe(() => {
       this.phoneNumber = this.localStorageService.get('phoneNumber');
       this.phoneNumber.content = this.localStorageService.get('phoneNumber');
     })
   }
 
-  onEditBankAccount(idPhone: number) {
+  onEditBankAccount(row: object) {
+    const index = this.bankAccount.content.indexOf(row)
     const dialogRef = this.dialog.open(EditBankAccountComponent, {
-      data: { id: idPhone },
+      data: index
     });
+    dialogRef.afterClosed().subscribe(() => {
+      this.bankAccount = this.localStorageService.get('bankAccount');
+      this.bankAccount.content = this.localStorageService.get('bankAccount');
+    })
   }
 
   onEditPartner(idPartner: number) {

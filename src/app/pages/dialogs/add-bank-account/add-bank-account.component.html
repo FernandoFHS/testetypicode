@@ -5,12 +5,7 @@
   <form [formGroup]="accountFormGroup">
     <mat-form-field appearance="outline">
       <mat-label>Banco</mat-label>
-      <input
-        matInput
-        placeholder="Dígito Agência"
-        formControlName="bank"
-        required
-      />
+      <input matInput placeholder="Dígito Agência" formControlName="bank" required />
       <mat-icon matSuffix>business_center</mat-icon>
       <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
     </mat-form-field>
@@ -37,11 +32,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Dígito Agência</mat-label>
-        <input
-          matInput
-          placeholder="Dígito Agência"
-          formControlName="agencyDigit"
-        />
+        <input matInput placeholder="Dígito Agência" formControlName="agencyDigit" />
         <mat-icon matSuffix>looks_one</mat-icon>
         <mat-error *ngIf="formControl.invalid">{{
           getErrorMessage()
@@ -68,11 +59,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Dígito Agência/Conta</mat-label>
-        <input
-          matInput
-          placeholder="Dígito Agência/Conta"
-          formControlName="accountDigit"
-        />
+        <input matInput placeholder="Dígito Agência/Conta" formControlName="accountDigit" />
         <mat-icon matSuffix>looks_3</mat-icon>
         <mat-error *ngIf="formControl.invalid">{{
           getErrorMessage()
@@ -84,12 +71,7 @@
       <button mat-raised-button color="warn" (click)="closeDialog()">
         Cancelar
       </button>
-      <button
-        mat-raised-button
-        color="primary"
-        tabindex="-1"
-        (click)="saveAccount(accountFormGroup)"
-      >
+      <button mat-raised-button color="primary" tabindex="-1" (click)="saveAccount(accountFormGroup)">
         Salvar
       </button>
     </div>

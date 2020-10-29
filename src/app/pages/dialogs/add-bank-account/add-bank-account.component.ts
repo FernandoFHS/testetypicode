@@ -15,7 +15,8 @@ export class AddBankAccountComponent implements OnInit {
 
   accountFormGroup: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<AddBankAccountComponent>,
+  constructor(
+    public dialogRef: MatDialogRef<AddBankAccountComponent>,
     @Inject(MAT_DIALOG_DATA) 
     public data: any, 
     public dataService: DataService, 
