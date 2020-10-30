@@ -35,11 +35,6 @@ import { CnaeService } from '../../services/company/cnae.service';
 import { Cnae } from '../../models/company/Cnae'
 import { Observable, of } from 'rxjs';
 
-export interface State {
-  flag: string;
-  name: string;
-  population: string;
-}
 @Component({
   selector: 'app-add-company',
   templateUrl: './add-company.component.html',
@@ -96,9 +91,9 @@ export class AddCompanyComponent implements OnInit {
     private cnaeService: CnaeService,
     public dialog: MatDialog,
     private router: Router,
-    private localStorageService: LocalStorageService,
-  ) { 
-  }
+    private localStorageService: LocalStorageService,) 
+    {}
+
   private _filterCnaes(value: string): Cnae[] {
     const filterValue = value.toLowerCase();
     console.log('passei aqui');
@@ -262,7 +257,7 @@ export class AddCompanyComponent implements OnInit {
   ];
 
   headersBankTable: HeaderModel[] = [
-    { text: 'Banco', value: 'bank' },
+    { text: 'Banco', value: 'bank.name' },
     { text: 'Agência', value: 'agency' },
     { text: 'Dígito Agência', value: 'agencyDigit' },
     { text: 'Conta Corrente', value: 'account' },

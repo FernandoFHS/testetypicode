@@ -1,9 +1,13 @@
+import { startWith, map, take } from 'rxjs/operators';
+import { BankService } from './../../../services/company/bank.service';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from './../../../services/local-storage.service';
+import { Bank } from '../../../models/company/Bank';
 
 @Component({
   selector: 'app-add-bank-account',
@@ -14,11 +18,17 @@ import { LocalStorageService } from './../../../services/local-storage.service';
 export class AddBankAccountComponent implements OnInit {
 
   accountFormGroup: FormGroup;
+  idBank: number;
+  bankForm = new FormControl();
+  bank: Array<Bank>;
+  bank$: Observable<Array<Bank>>;
+  filteredBanks: Observable<Bank[]>;
 
   constructor(public dialogRef: MatDialogRef<AddBankAccountComponent>,
     @Inject(MAT_DIALOG_DATA) 
     public data: any, 
-    public dataService: DataService, 
+    public dataService: DataService,
+    private bankService: BankService,
     public httpClient: HttpClient,
     private _formBuilder: FormBuilder,
     private localStorageService: LocalStorageService) { }
@@ -33,10 +43,37 @@ export class AddBankAccountComponent implements OnInit {
         account: ['', Validators.required],
         digit: ['', Validators.required],
         accountDigit: ['', Validators.required]
-      })  
+      })
+
+      this.gelAllBanks();
+  }
+  gelAllBanks(){
+    this.bankService.getAllCnae()
+    .pipe(take(1))
+    .subscribe((data) => {
+      this.bank$ = of(data.content);
+      this.filteredBanks = this.bankForm.valueChanges
+      .pipe(
+        startWith(''),
+        map(bank => this._filterBanks(bank))
+      );
+    });
+  }
+  displayFn = (item): string =>{
+    if (item) {
+      return item.name;
+    }else {
+      return '';
+    }
+  }
+  private _filterBanks(value: string): Bank[] {
+    const filterValue = value.toLowerCase();
+    this.bank$.subscribe(banks => {
+      this.bank = banks.filter(bank => bank.name.toLowerCase().indexOf(filterValue) === 0);
+    })
+    return this.bank;
 
   }
-  
 
   formControl = new FormControl('', [
     Validators.required,
@@ -51,23 +88,12 @@ export class AddBankAccountComponent implements OnInit {
       : '';
   }
 
-
-/*  createBankAccount(): void {
-    this.dataService.create(this.profile).subscribe(() => {
-      this.dataService.openSnackBar('Perfil adicionado com sucesso!', 'X')
-      this.dialogRef.close();
-    })
-  }*/
-  
-
   saveAccount(form){
-    
     let bankAccountArray = this.localStorageService.get('bankAccount');
     if(!bankAccountArray){
       bankAccountArray= [];
     }
     bankAccountArray.push(form.value);
-
     this.localStorageService.set('bankAccount', bankAccountArray);
 
     this.dialogRef.close();
