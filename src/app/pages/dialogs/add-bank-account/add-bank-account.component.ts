@@ -24,7 +24,8 @@ export class AddBankAccountComponent implements OnInit {
   bank$: Observable<Array<Bank>>;
   filteredBanks: Observable<Bank[]>;
 
-  constructor(public dialogRef: MatDialogRef<AddBankAccountComponent>,
+  constructor(
+    public dialogRef: MatDialogRef<AddBankAccountComponent>,
     @Inject(MAT_DIALOG_DATA) 
     public data: any, 
     public dataService: DataService,

@@ -33,7 +33,7 @@ export class DeleteProfileComponent implements OnInit {
   }
   
   onNoClick(): void {
-    this.dialogRef.close();      ;
+    this.dialogRef.close();
   }
 
   dataSource: any[] = [];

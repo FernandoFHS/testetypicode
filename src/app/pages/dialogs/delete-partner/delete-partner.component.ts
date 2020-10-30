@@ -1,8 +1,6 @@
 import { Component, OnInit,Inject } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { FormControl, Validators} from '@angular/forms';
 import { LocalStorageService } from './../../../services/local-storage.service';
 
 @Component({
@@ -12,19 +10,13 @@ import { LocalStorageService } from './../../../services/local-storage.service';
 })
 export class DeletePartnerComponent implements OnInit {
 
-  partnerFormGroup: FormGroup;
+  partnerSource: any = this.localStorageService.get('partnerFormGroup');
 
-  partner = this.localStorageService.get('partnerFormGroup');
-  
-
-  constructor(
-    public dialogRef: MatDialogRef<DeletePartnerComponent>, 
-    @Inject(MAT_DIALOG_DATA)
-    public _snackBar: MatSnackBar,    
-    private localStorageService: LocalStorageService,) { }
+  constructor(public dialogRef: MatDialogRef<DeletePartnerComponent>, 
+    @Inject(MAT_DIALOG_DATA) public data: any, 
+    private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
-    console.log(this.partner)
   }
   
   formControl = new FormControl('', [
@@ -32,12 +24,20 @@ export class DeletePartnerComponent implements OnInit {
     // Validators.email,
   ]);
 
-  onNoClick(): void {
+
+  deletePartner() {
+    let deleteItem = this.data;
+
+    if (deleteItem > -1) {
+      this.partnerSource.splice(deleteItem, 1);
+      localStorage.setItem('partnerFormGroup', JSON.stringify(this.partnerSource));
+    } else {
+      console.log(deleteItem);
+    }
     this.dialogRef.close();
   }
 
-  removeItem(){
-    //const index = this.partner.indexOf();
-   // this.partner.splice(index, 1);
+  onNoClick() {
+    this.dialogRef.close();
   }
 }

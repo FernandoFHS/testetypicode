@@ -1,24 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Content, Profile } from 'src/app/models/profile';
 import { DataService } from 'src/app/services/data.service';
-
-import {
-  MAT_MOMENT_DATE_FORMATS,
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
 import { CepService } from 'src/app/services/cep.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
@@ -31,19 +15,7 @@ export class AddPartnerComponent implements OnInit {
 
   cep: number;
   teste;
-  partnerArray:any [];
-
-  profile: Content = {
-    idProfile: null,
-    nameProfile: '',
-    description: ''
-
-  }
-
-  formControl = new FormControl('', [
-    Validators.required,
-    // Validators.email,
-  ]);
+  partnerArray: any[];
 
   partnerFormGroup: FormGroup;
 
@@ -72,6 +44,11 @@ export class AddPartnerComponent implements OnInit {
       contact: ['', Validators.required]
     });
   }
+
+  formControl = new FormControl('', [
+    Validators.required,
+    // Validators.email,
+  ]);
 
   getErrorMessage() {
     return this.formControl.hasError('required')
@@ -114,5 +91,3 @@ export class AddPartnerComponent implements OnInit {
   }
 
 }
-
-

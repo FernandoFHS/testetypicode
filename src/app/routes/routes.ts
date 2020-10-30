@@ -15,6 +15,7 @@ import { AddCompanyComponent } from '../pages/add-company/add-company.component'
 import { EditCompanyComponent } from '../pages/edit-company/edit-company.component';
 import { AddPartnerComponent } from '../pages/add-partner/add-partner.component';
 import { PlansComponent } from '../pages/plans/plans.component';
+import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 
 export const routes: Routes = [
   {
@@ -77,6 +78,10 @@ export const routes: Routes = [
           {
             path: 'add-partner',
             component: AddPartnerComponent,
+          },
+          {
+            path: 'edit-partner/:index',
+            component: EditPartnerComponent,
           },
         ],
       },

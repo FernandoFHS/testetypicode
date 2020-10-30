@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Profile, Content } from '../models/Profile';
+import { Partner } from '../models/Partner';
 import {
   HttpClient,
   HttpErrorResponse,
@@ -20,7 +21,6 @@ export class DataService {
   private readonly API_URL =
     'http://register-profile.qa.appmobbuy.tech:8080/profiles';
 
-  dataChange: BehaviorSubject<Profile[]> = new BehaviorSubject<Profile[]>([]);
   // Temporarily stores data from dialogs
   dialogData: any;
 
@@ -43,10 +43,6 @@ export class DataService {
   httpOptions = {
     headers: this.headers,
   };
-
-  get data(): Profile[] {
-    return this.dataChange.value;
-  }
 
   getDialogData() {
     return this.dialogData;
@@ -95,8 +91,7 @@ export class DataService {
       tap(() => {
         this._refreshTable.next();
       })
-    );;
-    //this.getAllProfiles();
+    );
   }
 
   openSnackBar(message: string, action: string): void {

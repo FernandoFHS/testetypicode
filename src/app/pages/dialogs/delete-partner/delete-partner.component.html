@@ -1,20 +1,8 @@
 <div class="container">
-  <h3 mat-dialog-title>Deseja Deletar?</h3>
-  <div mat-dialog-content>
-    <span>Número Sequência:</span> {{partner}}
-    <p></p>
-    <span>Nome:</span> 
-    <p></p>
-    <span>Data de Nascimento:</span> 
-    <p></p>
-    <span>CPF:</span> 
-    <p></p>
-    <span>Telefone:</span> 
-    <p></p>
-  </div>
+  <h3 mat-dialog-title>Deseja realmente deletar esse sócio?</h3>
 
-  <div mat-dialog-actions>
-    <button mat-raised-button color="warn" [mat-dialog-close]="1" (click)="removeItem()">Deletar</button>
-    <button mat-raised-button color="primary" (click)="onNoClick()" tabindex="-1">Cancelar</button>
+  <div mat-dialog-actions class="dialog-actions-buttons">
+    <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancelar</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="1" (click)="deletePartner()">Deletar</button>    
   </div>
 </div>

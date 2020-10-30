@@ -13,29 +13,18 @@
   text-align: center;
 }
 
-.container div.mat-dialog-content{
-  width: 115%!important;
-}
-
-.container div.mat-dialog-content span{
-  margin-right: 2px;
-  font-size: 18px;
-  font-weight: 400;
-}
-
-.container div.mat-dialog-actions{
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-button {
-  padding: 5px;
-  width: 45%;
-}
-
 @media (max-width: 360px){
   .container{
       min-width: 0px;
   }
 }
+
+.dialog-actions-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .dialog-actions-buttons button {
+    width: 15em;
+    height: 3em;
+  }

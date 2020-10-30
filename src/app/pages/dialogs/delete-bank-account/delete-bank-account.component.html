@@ -1,23 +1,9 @@
 <div class="container">
-    <h3 mat-dialog-title class="text-center m-b-20 font-light-bold title-size">Deseja Deletar?</h3>
-    <div mat-dialog-content>
-      <span>Banco:</span> {{profile.idProfile}}
-      <p></p>
-      <span>Agência:</span> {{profile.nameProfile}}
-      <p></p>
-      <span>Dígito Agência:</span> {{profile.description}}
-      <p></p>
-      <span>Conta Corrente:</span>
-      <p></p>
-      <span>Dígito Conta:</span>
-      <p></p>
-      <span>Dígito Conta/Agência:</span>
-      <p></p>
-    </div>
-  
-    <div mat-dialog-actions class="dialog-actions-buttons">
-      <button mat-raised-button color="warn" [mat-dialog-close]="1" (click)="confirmDelete()">Deletar</button>
-      <button mat-raised-button color="accent" (click)="onNoClick()" tabindex="-1">Cancelar</button>
-    </div>
+  <h3 mat-dialog-title>Deseja deletar esse banco?</h3>
+
+  <div mat-dialog-actions class="dialog-actions-buttons">
+    <button mat-raised-button color="accent" (click)="onNoClick()" tabindex="-1">Cancelar</button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="1" (click)="deleteBankAccount()">Deletar</button>
   </div>
+</div>
 

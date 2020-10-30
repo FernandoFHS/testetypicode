@@ -600,7 +600,7 @@
           (click)="saveForm(conditionFormGroup,'conditionFormGroup')">Voltar</button>
 
         <button mat-raised-button matStepperNext color="primary"
-          (click)="saveForm(conditionFormGroup,'conditionFormGroup')">Próximo</button>
+          (click)="saveForm(conditionFormGroup,'conditionFormGroup')">Avançar</button>
 
       </div>
 
@@ -782,8 +782,8 @@
   <mat-step #partnerStep label="Sócio" state="partner" [stepControl]="partnerFormGroup">
     <core-data-table
       [headers]="headersPartnerTable"
-      [data]="partner"
-      [actions]="actions"
+      [data]="partnerSource"
+      [actions]="actionsPartner"
       (addEvent)="onAddPartner($event)"
       (deleteEvent)="onDeletePartner($event)"
       (editEvent)="onEditPartner($event)"

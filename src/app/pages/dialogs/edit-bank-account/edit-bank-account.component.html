@@ -1,121 +1,79 @@
-<div
-  fxLayout="column"
-  fxLayoutAlign="center center"
-  fxFlexFill
-  class="dialog-size-container"
->
-  <h3 mat-dialog-title class="text-center m-b-20 font-light-bold title-size">
-    Adicionar Conta Bancária
-  </h3>
-  <div mat-dialog-content>
-    <form>
+<h3 mat-dialog-title class="text-center m-b-20 font-light-bold title-size">
+  Editar Conta Bancária
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="accountFormGroup">
+    <mat-form-field appearance="outline">
+      <mat-label>Banco</mat-label>
+      <input matInput placeholder="Dígito Agência" formControlName="bank" required />
+      <mat-icon matSuffix>business_center</mat-icon>
+      <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Banco</mat-label>
+      <mat-select name="type" formControlName="bank" required>
+        <mat-option></mat-option>
+        <mat-option value=""> </mat-option>
+        <mat-option value=""> </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
+    </mat-form-field>
+
+    <div class="line-form">
       <mat-form-field appearance="outline">
-        <mat-label>Banco</mat-label>
-        <input
-          matInput
-          placeholder="Banco"
-          [(ngModel)]="profile.nameProfile"
-          name="name"
-          required
-        />
-        <mat-icon matSuffix>business_center</mat-icon>
+        <mat-label>Agência</mat-label>
+        <input matInput placeholder="Agência" formControlName="agency" />
+        <mat-icon matSuffix>account_balance</mat-icon>
         <mat-error *ngIf="formControl.invalid">{{
           getErrorMessage()
         }}</mat-error>
       </mat-form-field>
 
-      <div class="line-form">
-        <mat-form-field appearance="outline">
-          <mat-label>Agência</mat-label>
-          <input
-            matInput
-            placeholder="Agência"
-            [(ngModel)]="profile.nameProfile"
-            name="name"
-            required
-          />
-          <mat-icon matSuffix>business_center</mat-icon>
-          <mat-error *ngIf="formControl.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Dígito Agência</mat-label>
-          <input
-            matInput
-            placeholder="Dígito Agência"
-            [(ngModel)]="profile.nameProfile"
-            name="name"
-            required
-          />
-          <mat-icon matSuffix>business_center</mat-icon>
-          <mat-error *ngIf="formControl.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
-        </mat-form-field>
-      </div>
-
       <mat-form-field appearance="outline">
-        <mat-label>Conta Corrente</mat-label>
-        <input
-          matInput
-          placeholder="Conta Corrente"
-          [(ngModel)]="profile.description"
-          name="description"
-          required
-        />
-        <mat-icon matSuffix>subject</mat-icon>
+        <mat-label>Dígito Agência</mat-label>
+        <input matInput placeholder="Dígito Agência" formControlName="agencyDigit" />
+        <mat-icon matSuffix>looks_one</mat-icon>
+        <mat-error *ngIf="formControl.invalid">{{
+          getErrorMessage()
+        }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Conta Corrente</mat-label>
+      <input matInput placeholder="Conta Corrente" formControlName="account" />
+      <mat-icon matSuffix>payment</mat-icon>
+      <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
+    </mat-form-field>
+
+    <div class="line-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Dígito Conta</mat-label>
+        <input matInput placeholder="Dígito Conta" formControlName="digit" />
+        <mat-icon matSuffix>looks_3</mat-icon>
         <mat-error *ngIf="formControl.invalid">{{
           getErrorMessage()
         }}</mat-error>
       </mat-form-field>
 
-      <div class="line-form">
-        <mat-form-field appearance="outline">
-          <mat-label>Dígito Conta</mat-label>
-          <input
-            matInput
-            placeholder="Dígito Conta"
-            [(ngModel)]="profile.description"
-            name="description"
-            required
-          />
-          <mat-icon matSuffix>subject</mat-icon>
-          <mat-error *ngIf="formControl.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Dígito Agência/Conta</mat-label>
+        <input matInput placeholder="Dígito Agência/Conta" formControlName="accountDigit" />
+        <mat-icon matSuffix>looks_3</mat-icon>
+        <mat-error *ngIf="formControl.invalid">{{
+          getErrorMessage()
+        }}</mat-error>
+      </mat-form-field>
+    </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Dígito Agência/Conta</mat-label>
-          <input
-            matInput
-            placeholder="Dígito Agência/Conta"
-            [(ngModel)]="profile.description"
-            name="description"
-            required
-          />
-          <mat-icon matSuffix>subject</mat-icon>
-          <mat-error *ngIf="formControl.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
-        </mat-form-field>
-      </div>
-
-      <div mat-dialog-actions class="dialog-actions-buttons">
-        <button
-        mat-raised-button
-        color="primary"
-        tabindex="-1"
-        (click)="updateBankAccount()"
-      >
+    <div mat-dialog-actions class="dialog-actions-buttons">
+      <button mat-raised-button color="warn" (click)="closeDialog()">
+        Cancelar
+      </button>
+      <button mat-raised-button color="primary" tabindex="-1" (click)="editAccount()">
         Salvar
       </button>
-        <button mat-raised-button color="warn" (click)="onNoClick()">
-          Cancelar
-        </button>
-      </div>
-    </form>
-  </div>
+    </div>
+  </form>
 </div>

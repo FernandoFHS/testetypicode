@@ -15,6 +15,14 @@ export class LocalStorageService {
     }
   }
 
+  deleteItem(key: string): void {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      console.error('Error deleting to localStorage', e);
+    }
+  }
+
   get(key: string) {
     try {
       return JSON.parse(localStorage.getItem(key));
