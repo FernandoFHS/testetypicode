@@ -125,14 +125,21 @@
 
           <mat-form-field appearance="outline">
             <mat-label>CNAE</mat-label>
-            <input matInput placeholder="CNAE" formControlName="idCnae" required mask="0000000" />
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-            <mat-icon matSuffix>assignment</mat-icon>
+            <input matInput
+                   aria-label="Cnae"
+                   formControlName="cnae"
+                   [matAutocomplete]="auto"
+                   [formControl]="cnaeForm">
+            <mat-autocomplete #auto="matAutocomplete" required  [displayWith]="displayFn">
+              <mat-option *ngFor="let item of filteredCnaes | async" [value]="item">
+                <span>{{item.description}}</span>
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>MCC</mat-label>
-            <input matInput placeholder="MCC" formControlName="mcccode" required mask="0000" />
+            <input matInput placeholder="MCC" formControlName="cnae" required mask="0000" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>assignment</mat-icon>
           </mat-form-field>
@@ -162,19 +169,6 @@
       </div>
 
       <div class="line-form">
-        <mat-form-field appearance="outline">
-          <mat-label>CNAE</mat-label>
-          <input matInput
-                 aria-label="Cnae"
-                 [matAutocomplete]="auto"
-                 [formControl]="cnaeForm">
-          <mat-autocomplete #auto="matAutocomplete" required formControlName="idCnae">
-            <mat-option *ngFor="let item of filteredCnaes | async" [value]="item.description">
-              <span>{{item.description}}</span>
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-
         <mat-form-field appearance="outline">
           <mat-label>Atividade comercial</mat-label>
           <textarea matInput formControlName="businessActivity"></textarea>
@@ -541,8 +535,8 @@
           <mat-form-field appearance="outline">
             <mat-label>Trata AJ Pelo Liquido ou Bruto</mat-label>
             <mat-select name="type" formControlName="tratamentAjCtrl" required>
-              <mat-option value="Pelo Bruto"> Pelo Bruto </mat-option>
-              <mat-option value="Pelo Líquido"> Pelo Líquido </mat-option>
+              <mat-option value="B"> Pelo Bruto </mat-option>
+              <mat-option value="L"> Pelo Líquido </mat-option>
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>

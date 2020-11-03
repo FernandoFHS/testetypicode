@@ -37,11 +37,6 @@ import { Observable, of } from 'rxjs';
 import { Profile } from 'src/app/models/Profile';
 import { MatPaginator } from '@angular/material/paginator';
 
-export interface State {
-  flag: string;
-  name: string;
-  population: string;
-}
 @Component({
   selector: 'app-add-company',
   templateUrl: './add-company.component.html',
@@ -100,12 +95,11 @@ export class AddCompanyComponent implements OnInit {
     private cnaeService: CnaeService,
     public dialog: MatDialog,
     private router: Router,
-    private localStorageService: LocalStorageService,
-  ) { 
-  }
+    private localStorageService: LocalStorageService,) 
+    {}
+
   private _filterCnaes(value: string): Cnae[] {
     const filterValue = value.toLowerCase();
-    console.log('passei aqui');
     this.cnae$.subscribe(cnaes => {
       this.cnae =  cnaes.filter(cnae => cnae.description.toLowerCase().indexOf(filterValue) === 0);
     })
@@ -133,7 +127,7 @@ export class AddCompanyComponent implements OnInit {
       companyShortName: ['', Validators.required],
       mcccode: ['', Validators.required],
       idDepartament: ['', Validators.required],
-      idCnae: ['', Validators.required],
+      cnae: ['', Validators.required],
       businessActivity: ['', Validators.required],
       openingDate: ['', Validators.required]
     });
@@ -343,28 +337,30 @@ export class AddCompanyComponent implements OnInit {
   //Edit Methods
   onEditPhone(row: object) {
     const index = this.phoneNumber.content.indexOf(row)
-    
-  
     const dialogRef = this.dialog.open(EditPhoneComponent, {
       data: index
     });
-
     dialogRef.afterClosed().subscribe(() => {
       this.phoneNumber = this.localStorageService.get('phoneNumber');
       this.phoneNumber.content = this.localStorageService.get('phoneNumber');
     })
   }
 
-  onEditBankAccount(idPhone: number) {
+  onEditBankAccount(row: object) {
+    const index = this.bankAccount.content.indexOf(row)
     const dialogRef = this.dialog.open(EditBankAccountComponent, {
-      data: { id: idPhone },
+      data: index
     });
+    dialogRef.afterClosed().subscribe(() => {
+      this.bankAccount = this.localStorageService.get('bankAccount');
+      this.bankAccount.content = this.localStorageService.get('bankAccount');
+    })
   }
 
-  onEditPartner(idPartner: number) {
-    const dialogRef = this.dialog.open(EditBankAccountComponent, {
-      data: { id: idPartner },
-    });
+  onEditPartner(row: object) {
+    const index = this.partnerSource.content.findIndex((c) => c == row);
+ 
+    this.router.navigate([`/company-list/edit-partner/${index}`]);
   }
 
   //Delete Methods
@@ -429,6 +425,14 @@ export class AddCompanyComponent implements OnInit {
     });
     if (this.isChecked == true) {
       this.getSecondCep(value);
+    }
+  }
+
+  displayFn = (item): string =>{
+    if (item) {
+      return item.description;
+    }else {
+      return '';
     }
   }
 
@@ -549,7 +553,7 @@ getLocalStorage(item) {
       companyShortName: this.identification.companyShortName,
       mcccode: this.identification.mcccode,
       idDepartament: this.identification.idDepartament,
-      idCnae: this.identification.idCnae,
+      cnae: this.identification.cnae,
       businessActivity: this.identification.businessActivity,
       openingDate: this.identification.openingDate,
     };

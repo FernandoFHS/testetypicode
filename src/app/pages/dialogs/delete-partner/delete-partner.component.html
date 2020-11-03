@@ -1,8 +1,8 @@
 <div class="container">
-  <h3 mat-dialog-title>Deseja deletar esse sócio?</h3>
+  <h3 mat-dialog-title>Deseja realmente deletar esse sócio?</h3>
 
   <div mat-dialog-actions class="dialog-actions-buttons">
-    <button mat-raised-button color="warn" [mat-dialog-close]="1" (click)="deletePartner()">Deletar</button>
-    <button mat-raised-button color="accent" (click)="onNoClick()" tabindex="-1">Cancelar</button>
+    <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancelar</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="1" (click)="deletePartner()">Deletar</button>    
   </div>
 </div>
