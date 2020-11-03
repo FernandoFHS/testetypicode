@@ -96,7 +96,6 @@ export class AddCompanyComponent implements OnInit {
 
   private _filterCnaes(value: string): Cnae[] {
     const filterValue = value.toLowerCase();
-    console.log('passei aqui');
     this.cnae$.subscribe(cnaes => {
       this.cnae =  cnaes.filter(cnae => cnae.description.toLowerCase().indexOf(filterValue) === 0);
     })
@@ -124,7 +123,7 @@ export class AddCompanyComponent implements OnInit {
       companyShortName: ['', Validators.required],
       mcccode: ['', Validators.required],
       idDepartament: ['', Validators.required],
-      idCnae: ['', Validators.required],
+      cnae: ['', Validators.required],
       businessActivity: ['', Validators.required],
       openingDate: ['', Validators.required]
     });
@@ -257,7 +256,7 @@ export class AddCompanyComponent implements OnInit {
   ];
 
   headersBankTable: HeaderModel[] = [
-    { text: 'Banco', value: 'bank.name' },
+    { text: 'Banco', value: 'bank' },
     { text: 'Agência', value: 'agency' },
     { text: 'Dígito Agência', value: 'agencyDigit' },
     { text: 'Conta Corrente', value: 'account' },
@@ -357,7 +356,6 @@ export class AddCompanyComponent implements OnInit {
   }
 
   onEditPartner(row: object) {
-    console.log(this.partnerSource.content);
     const index = this.partnerSource.content.findIndex((c) => c == row);
  
     this.router.navigate([`/company-list/edit-partner/${index}`]);
@@ -425,6 +423,14 @@ export class AddCompanyComponent implements OnInit {
     });
     if (this.isChecked == true) {
       this.getSecondCep(value);
+    }
+  }
+
+  displayFn = (item): string =>{
+    if (item) {
+      return item.description;
+    }else {
+      return '';
     }
   }
 
@@ -545,7 +551,7 @@ getLocalStorage(item) {
       companyShortName: this.identification.companyShortName,
       mcccode: this.identification.mcccode,
       idDepartament: this.identification.idDepartament,
-      idCnae: this.identification.idCnae,
+      cnae: this.identification.cnae,
       businessActivity: this.identification.businessActivity,
       openingDate: this.identification.openingDate,
     };

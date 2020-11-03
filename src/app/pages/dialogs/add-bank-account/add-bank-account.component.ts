@@ -46,9 +46,9 @@ export class AddBankAccountComponent implements OnInit {
         accountDigit: ['', Validators.required]
       })
 
-      this.gelAllBanks();
+      this.getAllBanks();
   }
-  gelAllBanks(){
+  getAllBanks(){
     this.bankService.getAllCnae()
     .pipe(take(1))
     .subscribe((data) => {
@@ -73,7 +73,6 @@ export class AddBankAccountComponent implements OnInit {
       this.bank = banks.filter(bank => bank.name.toLowerCase().indexOf(filterValue) === 0);
     })
     return this.bank;
-
   }
 
   formControl = new FormControl('', [

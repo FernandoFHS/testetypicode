@@ -1,3 +1,7 @@
+import { BankService } from './../../../services/company/bank.service';
+import { take, startWith, map } from 'rxjs/operators';
+import { Bank } from './../../../models/company/Bank';
+import { Observable, of } from 'rxjs';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -12,14 +16,19 @@ export class EditBankAccountComponent implements OnInit {
 
   accountFormGroup: FormGroup;
   bankAccount: any = this.localStorageService.get('bankAccount'); 
+  bankForm = new FormControl();
+  bank: Array<Bank>;
+  bank$: Observable<Array<Bank>>;
+  filteredBanks: Observable<Bank[]>;
 
   constructor(
     public dialogRef: MatDialogRef<EditBankAccountComponent>,
     @Inject(MAT_DIALOG_DATA) 
     public data: any, 
+    private bankService: BankService,
     private _formBuilder: FormBuilder,
     private localStorageService: LocalStorageService) { }
-
+ 
 
   ngOnInit(): void {
    
@@ -34,6 +43,36 @@ export class EditBankAccountComponent implements OnInit {
 
     if (this.bankAccount != undefined) {
       this.getLocalStorage('bankAccount');
+    }
+
+    this.getAllBanks();
+  }
+
+  private _filterBanks(value: string): Bank[] {
+    const filterValue = value.toLowerCase();
+    this.bank$.subscribe(banks => {
+      this.bank = banks.filter(bank => bank.name.toLowerCase().indexOf(filterValue) === 0);
+    })
+    return this.bank;
+  }
+  getAllBanks(){
+    this.bankService.getAllCnae()
+    .pipe(take(1))
+    .subscribe((data) => {
+      this.bank$ = of(data.content);
+      this.filteredBanks = this.bankForm.valueChanges
+      .pipe(
+        startWith(''),
+        map(bank => this._filterBanks(bank))
+      );
+    });
+  }
+
+  displayFn = (item): string =>{
+    if (item) {
+      return item.name;
+    }else {
+      return '';
     }
   }
 
