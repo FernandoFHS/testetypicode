@@ -61,7 +61,7 @@ export class CompanyComponent implements OnInit {
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);
 
-    this.dataService.getAllProfiles().then((data) => {
+    this.dataService.getAllProfiles(5,1).then((data) => {
 
       this.dataSource = data;
 

@@ -14,9 +14,10 @@ export class Profile {
 
 export class Pageable {
   sort: Sort;
-  pageNumber: number;
-  pageSize: number;
+  number: number;
+  size: number;
   offset: number;
+  totalElements: number;
   paged: boolean;
   unpaged: boolean;
 }

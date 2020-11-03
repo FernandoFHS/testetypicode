@@ -1,6 +1,6 @@
 import { map, take, startWith, filter } from 'rxjs/operators';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -34,6 +34,8 @@ import { AddPhoneComponent } from '../dialogs/add-phone/add-phone.component';
 import { CnaeService } from '../../services/company/cnae.service';
 import { Cnae } from '../../models/company/Cnae'
 import { Observable, of } from 'rxjs';
+import { Profile } from 'src/app/models/Profile';
+import { MatPaginator } from '@angular/material/paginator';
 
 export interface State {
   flag: string;
@@ -88,6 +90,8 @@ export class AddCompanyComponent implements OnInit {
   cnae: Array<Cnae>;
   cnae$: Observable<Array<Cnae>>;
   filteredCnaes: Observable<Cnae[]>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -286,8 +290,6 @@ export class AddCompanyComponent implements OnInit {
     // { text: 'Ações', value: 'action' }
   ];
 
-
-
   actions: ActionModel = {
     add: true,
     edit: true,
@@ -303,7 +305,7 @@ export class AddCompanyComponent implements OnInit {
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);
 
-    this.dataService.getAllProfiles().then(
+    this.dataService.getAllProfiles(5, this.paginator.pageIndex).then(
       (data) => {
         this.dataSource = data;
       },

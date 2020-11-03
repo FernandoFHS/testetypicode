@@ -43,19 +43,6 @@ export class EditBankAccountComponent implements OnInit {
       ? 'Not a valid email'
       : '';
   }
-
-  public loadData() {
-    //this.exampleDatabase = new DataService(this.httpClient);
-
-    this.dataService.getAllProfiles().then((data) => {
-
-      this.dataSource = data;
-      
-    }, (error) => {
-      // TODO
-    });
-  
-  }
   
   updateBankAccount(): void {
     this.dataService.update(this.profile).subscribe(() => {
@@ -66,7 +53,6 @@ export class EditBankAccountComponent implements OnInit {
   
   onNoClick(): void {
     this.dialogRef.close();
-    this.loadData();
   }
 
   dataSource: any[] = [];

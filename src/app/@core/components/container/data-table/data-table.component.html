@@ -1,40 +1,56 @@
-<mat-table #table [dataSource]="data.content" matSort class="mat-cell">
+<div class="mat-cell mat-elevation-z8">
+  <mat-table #table [dataSource]="data.content" matSort class="mat-cell">
+    <ng-container [matColumnDef]="header.value" *ngFor="let header of headers">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ header.text }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        {{ row[header.value] }}
+      </mat-cell>
+    </ng-container>
 
-  <ng-container [matColumnDef]="header.value" *ngFor="let header of headers">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>
-      {{header.text}}
-    </mat-header-cell>
-    <mat-cell *matCellDef="let row">
-      {{row[header.value]}}
-    </mat-cell>
-  </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="addItem()"
+          *ngIf="actions.add"
+        >
+          <mat-icon aria-label="Add icon">add</mat-icon>
+        </button>
+      </mat-header-cell>
 
-  <ng-container matColumnDef="actions">
-    <mat-header-cell *matHeaderCellDef>
-      <button mat-icon-button color="primary" (click)="addItem()" *ngIf="actions.add">
-        <mat-icon aria-label="Add icon">add</mat-icon>
-      </button>
-    </mat-header-cell>
+      <mat-cell *matCellDef="let row; let i = index">
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="editItem(row)"
+          *ngIf="actions.edit"
+        >
+          <mat-icon aria-label="Edit icon">edit</mat-icon>
+        </button>
 
-    <mat-cell *matCellDef="let row; let i=index;">
-      <button mat-icon-button color="primary" (click)="editItem(row)" *ngIf="actions.edit">
-        <mat-icon aria-label="Edit icon">edit</mat-icon>
-      </button>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteItem(row)"
+          *ngIf="actions.delete"
+        >
+          <mat-icon aria-label="Delete icon">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
 
-      <button mat-icon-button color="warn" (click)="deleteItem(row)" *ngIf="actions.delete">
-        <mat-icon aria-label="Delete icon">delete</mat-icon>
-      </button>
-    </mat-cell>
-  </ng-container>
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <mat-paginator [length]="resultsLength" [pageSize]="5"></mat-paginator>
+</div>
 
-</mat-table>
-
-<mat-paginator class="margin" #paginator 
-  [length]="5" 
-  [pageIndex]="0" 
-  [pageSize]="5"
-  [pageSizeOptions]="[5, 10, 25]"
-  showFirstLastButtons>
-</mat-paginator>
+<!--
+    length = totalElements //recebe da API
+    pageIndex = number //recebe da API
+    [(pageSize)] = size //manda pra API
+    pageSizeOptions = ?
+  -->

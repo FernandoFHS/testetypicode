@@ -19,7 +19,7 @@ import { tap } from 'rxjs/operators';
 })
 export class DataService {
   private readonly API_URL =
-    'http://register-profile.qa.appmobbuy.tech:8080/profiles';
+    'http://register-profile.qa.appmobbuy.tech:8080/profiles/';
 
   // Temporarily stores data from dialogs
   dialogData: any;
@@ -49,9 +49,9 @@ export class DataService {
   }
 
   /** CRUD METHODS */
-  getAllProfiles(): Promise<Profile[]> {
+  getAllProfiles(size: number, page: number): Promise<Profile[]> {
     return new Promise<Profile[]>((resolve, reject) => {
-      this.httpClient.get<Profile[]>(this.API_URL).subscribe(
+      this.httpClient.get<Profile[]>(`${this.API_URL}?size=${size}&page=${page}`).subscribe(
         (data) => {
           resolve(data);
         },
