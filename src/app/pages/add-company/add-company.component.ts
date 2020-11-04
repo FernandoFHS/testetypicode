@@ -182,10 +182,10 @@ export class AddCompanyComponent implements OnInit {
     });
     this.partnerFormGroup = this._formBuilder.group({});
     
-    this.dataService.refreshTable().subscribe(() => {
-      this.loadData();
-    });
-    this.loadData();
+    // this.dataService.refreshTable().subscribe(() => {
+    //   this.loadData();
+    // });
+    // this.loadData();
     this.gelAllCnaes();
 
     if (this.identification != undefined) {
@@ -296,18 +296,18 @@ export class AddCompanyComponent implements OnInit {
     delete: true,
   };
 
-  public loadData() {
-    //this.exampleDatabase = new DataService(this.httpClient);
+  // public loadData() {
+  //   //this.exampleDatabase = new DataService(this.httpClient);
 
-    this.dataService.getAllProfiles(5, this.paginator.pageIndex).then(
-      (data) => {
-        this.dataSource = data;
-      },
-      (error) => {
-        console.log('Not found data')
-      }
-    );
-  }
+  //   this.dataService.getAllProfiles(5, 1).then(
+  //     (data) => {
+  //       this.dataSource = data;
+  //     },
+  //     (error) => {
+  //       console.log('Not found data')
+  //     }
+  //   );
+  // }
 
   //Add Methods
   onAddPhone(idPhone: number) {

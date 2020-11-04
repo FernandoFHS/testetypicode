@@ -19,7 +19,7 @@ import { tap } from 'rxjs/operators';
 })
 export class DataService {
   private readonly API_URL =
-    'http://register-profile.qa.appmobbuy.tech:8080/profiles/';
+    'http://register-profile.qa.appmobbuy.tech:8080/profiles';
 
   // Temporarily stores data from dialogs
   dialogData: any;
@@ -49,18 +49,25 @@ export class DataService {
   }
 
   /** CRUD METHODS */
-  getAllProfiles(size: number, page: number): Promise<Profile[]> {
-    return new Promise<Profile[]>((resolve, reject) => {
-      this.httpClient.get<Profile[]>(`${this.API_URL}?size=${size}&page=${page}`).subscribe(
-        (data) => {
-          resolve(data);
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error.name + ' ' + error.message);
-          reject(error);
-        }
-      );
-    });
+  // getAllProfiles(size: number, page: number): Promise<Profile[]> {
+  //   return new Promise<Profile[]>((resolve, reject) => {
+  //     this.httpClient.get<Profile[]>(`${this.API_URL}?size=${size}&page=${page + 1}`).subscribe(
+  //       (data) => {
+  //         resolve(data);
+  //       },
+  //       (error: HttpErrorResponse) => {
+  //         console.log(error.name + ' ' + error.message);
+  //         reject(error);
+  //       }
+  //     );
+  //   });
+  // }
+
+  getAllProfiles(sort: string, order: string, page: number, size: number): Observable<Profile[]> {
+    const requestUrl =
+        `${this.API_URL}?sort=${sort},${order}&page=${page + 1}&size=${size}`;
+
+    return this.httpClient.get<Profile[]>(requestUrl);
   }
 
   create(profile: Content): Observable<Content> {

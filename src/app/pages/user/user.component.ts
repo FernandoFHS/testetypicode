@@ -1,86 +1,90 @@
-import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Component, ViewChild, AfterViewInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import { Router } from '@angular/router';
+import {merge, Observable, of as observableOf} from 'rxjs';
+import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
+import { Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
-import { Router } from '@angular/router';
 import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
-import { Profile } from '../../models/profile';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { merge, Observable } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
+/**
+ * @title Table retrieving data through HTTP
+ */
 @Component({
   selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss'],
+  styleUrls: ['user.component.scss'],
+  templateUrl: 'user.component.html',
 })
+
 export class UserComponent implements AfterViewInit {
+  dataSource: Profile[] = [];
+
   resultsLength = 0;
-  page: number;
-  pageEvent: PageEvent;
+  isLoadingResults = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
-  constructor(
-    public httpClient: HttpClient,
+  constructor(public httpClient: HttpClient,
     public dialog: MatDialog,
     private dataService: DataService,
-    private router: Router
-  ) {}
+    private router: Router) {}
+
+    // ngOnInit() {
+    //   this.dataService.refreshTable().subscribe(() => {
+    //     return this.dataService.getAllProfiles(
+    //       'idProfile', this.sort.direction, this.paginator.pageIndex, 10).subscribe(data => this.dataSource = data);
+    //   });
+
+    //   this.dataService.getAllProfiles(
+    //     'idProfile', this.sort.direction, this.paginator.pageIndex, 10).subscribe(data => this.dataSource = data);
+    // }
 
   ngAfterViewInit() {
-    this.dataService.refreshTable().subscribe(() => {
-      this.loadData();
-    });
 
-    this.loadData();
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          return this.dataService.getAllProfiles(
+            'idProfile', this.sort.direction, this.paginator.pageIndex, 15);
+        }),
+         map(data => {
+           // Flip flag to show that loading has finished.
+           this.isLoadingResults = false;
+           this.resultsLength = data['totalElements'];
+
+           console.log(data['content']);
+           return data['content'];
+           
+         }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          return observableOf([]);
+        })
+      ).subscribe(data => this.dataSource = data);
+      console.log('Uhul' + this.dataSource)
   }
+
   headers: HeaderModel[] = [
     { text: 'Código', value: 'idProfile' },
     { text: 'Empresa', value: 'nameProfile' },
     { text: 'Descrição', value: 'description' },
-    // { text: 'Ações', value: 'action' }
   ];
 
   actions: ActionModel = {
     add: true,
     edit: true,
-    delete: true,
+    delete: true
   };
-
-  dataSource: any[] = [];
-
-  dinamicAddRouter = '/profile-list/add-profile';
-
-  public loadData() {
-    //this.exampleDatabase = new DataService(this.httpClient);
-    
-       this.dataService.getAllProfiles(10, 1).then(
-         (data) => {
-           this.dataSource = data;             
-         },
-         (error) => {
-           console.log('Data not found');
-         }
-       )
-
-      // merge(5, this.paginator.page).pipe(
-      //   startWith({}),
-      //   switchMap(() => {
-      //    return this.dataService.getAllProfiles(
-      //       5, this.paginator.pageIndex);
-      //   }),
-      //   map(data => {
-
-      //     this.resultsLength = data['totalElements'];
-
-      //     return data;
-      //   })
-      // ).subscribe(data => this.dataSource = data)
-  }
-
 
   onDelete(row: any) {
     const { idProfile } = row;
