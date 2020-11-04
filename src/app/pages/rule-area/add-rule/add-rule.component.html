@@ -1,4 +1,4 @@
-<div>
+<div fxFlexFill>
 
   <core-breadcrumb [model]="breadcrumb_model"></core-breadcrumb>
 
@@ -8,92 +8,128 @@
     </label>
   </div>
 
-  <mat-expansion-panel class="m-b-25" [expanded]="true">
+  <form name="form" [formGroup]="form" novalidate *ngIf="form" class="m-b-15" autocomplete="off">
 
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Detalhes e Condições
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+    <mat-expansion-panel class="m-b-25" [expanded]="true">
 
-    <form name="form" [formGroup]="form" novalidate *ngIf="form" class="m-b-15" autocomplete="off">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Detalhes e Alertas
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>
           Descrição
         </mat-label>
-        <mat-icon matSuffix
+        <!-- <mat-icon matSuffix
           [color]="form.get('description').hasError('required') && form.get('description').touched ? 'warn' : 'primary'">
           title
-        </mat-icon>
+        </mat-icon> -->
         <input matInput formControlName="description">
         <mat-error *ngIf="form.get('description').hasError('required')">
           Obrigatório
         </mat-error>
       </mat-form-field>
 
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="m-b-25" [expanded]="true">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Condições
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
       <div formArrayName="conditions">
 
-        <div class="m-t-10 m-b-20" fxLayout="row wrap" fxLayoutAlign="center center">
-          <label class="subtitle-label" fxFlex="50%">
-            Condições
+        <div *ngIf="form.get('conditions').controls == 0" class="text-center">
+          <label>
+            Nenhuma condição cadastrada
           </label>
-          <div fxFlex="50%">
-            <button mat-flat-button color="accent" class="float-right">
-              Nova Condição
-            </button>
-          </div>
         </div>
 
-        <div *ngFor="let _ of form_conditions.controls; index as i" [formGroupName]="i" fxLayout="row wrap"
-          fxLayoutGap="2% grid">
+        <div *ngFor="let item of form.get('conditions').controls; let i = index; let last = last; let count = count"
+          [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="2% grid">
 
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%">
-            <mat-label>
-              Operador Lógico
-            </mat-label>
-            <input matInput formControlName="operador_logico">
-            <!-- <mat-error *ngIf="form.get('operador_logico').hasError('required')">
-              Obrigatório
-            </mat-error> -->
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="30%">
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="45%">
             <mat-label>
               Variável
             </mat-label>
-            <input matInput formControlName="variavel">
-            <!-- <mat-error *ngIf="form.get('operador_logico').hasError('required')">
-              Obrigatório
-            </mat-error> -->
+            <mat-select (selectionChange)="onChangeVariable($event, i)">
+              <mat-option *ngFor="let item of variable_list" [value]="item.comparison_operator_list">
+                {{item.text}}
+              </mat-option>
+            </mat-select>
+            <!-- <input matInput formControlName="variavel"> -->
           </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="25%">
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%">
             <mat-label>
               Op. Comparação
             </mat-label>
-            <input matInput formControlName="op_comparacao">
-            <!-- <mat-error *ngIf="form.get('operador_logico').hasError('required')">
-              Obrigatório
-            </mat-error> -->
+            <mat-select
+              [disabled]="!condition_comparison_operator_list[i] || condition_comparison_operator_list[i]?.length == 0">
+              <mat-option *ngFor="let item of condition_comparison_operator_list[i]" value="">
+                {{item.text}}
+              </mat-option>
+            </mat-select>
+            <!-- <input matInput formControlName="op_comparacao"> -->
           </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="25%">
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%">
             <mat-label>
               Valor
             </mat-label>
-            <input matInput formControlName="valor">
-            <!-- <mat-error *ngIf="form.get('operador_logico').hasError('required')">
-              Obrigatório
-            </mat-error> -->
+            <input matInput
+              [disabled]="!condition_comparison_operator_list[i] || condition_comparison_operator_list[i]?.length == 0">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="15%"
+            *ngIf="last == false && count > 1">
+
+            <mat-label>
+              Operador Lógico
+            </mat-label>
+            <mat-select>
+              <mat-option *ngFor="let item of logic_operator_list" [value]="item.value">
+                {{item.text}}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
 
         </div>
 
+        <button mat-flat-button color="accent" class="m-t-15 float-left" (click)="addCondition()">
+          Nova Condição
+        </button>
+
       </div>
 
-    </form>
+    </mat-expansion-panel>
 
-  </mat-expansion-panel>
+    <div fxLayout="row wrap">
+      <div fxFlex>
+        <button mat-raised-button class="m-t-15 float-left">
+          <mat-icon [inline]="true" class="m-r-5">
+            arrow_back
+          </mat-icon>
+          Voltar
+        </button>
+      </div>
+
+      <div fxFlex>
+        <button mat-raised-button color="primary" class="m-t-15 float-right" (click)="addCondition()">
+          <mat-icon [inline]="true" class="m-r-5">
+            save
+          </mat-icon>
+          Salvar
+        </button>
+
+      </div>
+    </div>
+
+  </form>
 
 </div>
