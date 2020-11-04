@@ -41,7 +41,7 @@ export class EditProfileComponent implements OnInit {
 
   updateProfile(): void {
     this.dataService.update(this.profile).subscribe(() => {
-      //this.dataService.openSnackBar('Produto atualizado com sucesso', 'X');
+      this.dataService.openSnackBar('Produto atualizado com sucesso', 'X');
       this.router.navigate(['/profile-list']);
     });
   }

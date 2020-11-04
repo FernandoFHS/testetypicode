@@ -15,6 +15,9 @@ import { AddRuleComponent } from '../pages/rule-area/add-rule/add-rule.component
 import { CompanyListComponent } from '../pages/company-list/company-list.component';
 import { AddCompanyComponent } from '../pages/add-company/add-company.component';
 import { EditCompanyComponent } from '../pages/edit-company/edit-company.component';
+import { AddPartnerComponent } from '../pages/add-partner/add-partner.component';
+import { PlansComponent } from '../pages/plans/plans.component';
+import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 
 export const routes: Routes = [
   {
@@ -22,13 +25,8 @@ export const routes: Routes = [
     component: ContainerComponent,
     children: [
       {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
-      },
-      {
         path: 'home',
-        component: HomeComponent
+        component: HomeComponent,
       },
       {
         path: 'rule-area',
@@ -52,7 +50,7 @@ export const routes: Routes = [
           {
             path: '',
             redirectTo: 'user',
-            pathMatch: 'full'
+            pathMatch: 'full',
           },
           {
             path: 'user',
@@ -75,7 +73,7 @@ export const routes: Routes = [
           {
             path: '',
             redirectTo: 'company',
-            pathMatch: 'full'
+            pathMatch: 'full',
           },
           {
             path: 'company',
@@ -89,17 +87,29 @@ export const routes: Routes = [
             path: 'edit-company',
             component: EditCompanyComponent,
           },
-        ]
+          {
+            path: 'add-partner',
+            component: AddPartnerComponent,
+          },
+          {
+            path: 'edit-partner/:index',
+            component: EditPartnerComponent,
+          },
+        ],
       },
       {
         path: 'themes',
-        component: ThemesComponent
+        component: ThemesComponent,
       },
       {
         path: 'password-transaction',
-        component: PasswordTransactionComponent
-      }
-    ]
+        component: PasswordTransactionComponent,
+      },
+      {
+        path: 'plans',
+        component: PlansComponent,
+      },
+    ],
   },
   {
     path: 'login',

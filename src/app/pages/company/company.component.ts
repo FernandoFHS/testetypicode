@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { DataService } from 'src/app/services/data.service';
+import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
 
 @Component({
   selector: 'app-company',
@@ -14,9 +16,14 @@ export class CompanyComponent implements OnInit {
 
   constructor(public httpClient: HttpClient,
     public dialog: MatDialog,
-    private dataService: DataService) { }
+    private dataService: DataService,
+    private router: Router) { }
 
   ngOnInit(): void {
+    this.dataService.refreshTable().subscribe(() => {
+      this.loadData();
+    });
+
     this.loadData();
   }
 
@@ -29,8 +36,8 @@ export class CompanyComponent implements OnInit {
     { text: 'MCC	', value: 'mcc' },
     { text: 'Parceiro', value: 'parner' },
     { text: 'Status', value: 'status' },
-    { text: 'Tab.Vendas', value: 'tabsell'},
-    { text: 'Situação', value: 'situation'},
+    { text: 'Tab.Vendas', value: 'tabsell' },
+    { text: 'Situação', value: 'situation' },
 
 
     // { text: 'Ações', value: 'action' }
@@ -49,24 +56,34 @@ export class CompanyComponent implements OnInit {
 
   dataSource: any[] = [];
 
+  dinamicAddRouter = "/company-list/add-company";
+
   public loadData() {
     //this.exampleDatabase = new DataService(this.httpClient);
 
-    this.dataService.getAllProfiles().then((data) => {
+    this.dataService.getAllProfiles(5,1).then((data) => {
 
       this.dataSource = data;
-      
+
     }, (error) => {
       // TODO
     });
-  
-  }
-  onDelete(index: number) {
-    console.log('esse é o meu index para deletar ' + index);
-   }
 
-   
+  }
+
+  onDelete(row: any) {
+    const {idProfile} = row;
+    const dialogRef = this.dialog.open(DeleteProfileComponent, {
+      data: { id: idProfile },
+    });
+  }
+
+
   onEdit(index: number) {
     console.log('esse é o meu index para editar ' + index);
-   }
+  }
+
+  onAdd(index: number) {
+    this.router.navigate(['/company-list/add-company']);
+  }
 }
