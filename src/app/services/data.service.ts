@@ -63,9 +63,15 @@ export class DataService {
   //   });
   // }
 
+  getAllItems<TResponse>(sort: string, order: string, page: number, size: number, loadFunc: any): Observable<TResponse> {
+    console.log(loadFunc); 
+    return loadFunc(sort, order, page, size);   
+  }
+
   getAllProfiles(sort: string, order: string, page: number, size: number): Observable<Profile[]> {
     const requestUrl =
         `${this.API_URL}?sort=${sort},${order}&page=${page + 1}&size=${size}`;
+        console.log('Oi')
 
     return this.httpClient.get<Profile[]>(requestUrl);
   }

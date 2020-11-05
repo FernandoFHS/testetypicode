@@ -37,7 +37,19 @@ export class DataTableComponent implements AfterViewInit {
   actions;
 
   @Input()
+  matSortActive;
+
+  @Input()
   dinamicAddRouter;
+
+  @Input()
+  sortColumns: string[] = [];
+
+  @Input()
+  loadFunc: any;
+
+  @Input()
+  idItems: any;
 
   @Output()
   deleteEvent: EventEmitter<Object> = new EventEmitter();
@@ -47,6 +59,9 @@ export class DataTableComponent implements AfterViewInit {
 
   @Output()
   addEvent: EventEmitter<Object> = new EventEmitter();
+
+  @Output()
+  loadEvent: EventEmitter<Object> = new EventEmitter();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -75,16 +90,33 @@ export class DataTableComponent implements AfterViewInit {
 
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
-    merge(this.sort.sortChange, this.paginator.page)
+    this.loadFunc(
+      'idProfile',
+      this.sort.direction,
+      this.paginator.pageIndex,
+      15
+    ).subscribe((data) => {
+      this.isLoadingResults = false;
+      this.resultsLength = data['totalElements'];
+
+      console.log(data);
+      this.dataSource = data['content'];
+    });
+
+    merge(
+      this.sort.sortChange,
+      this.paginator.page
+    )
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.dataService.getAllProfiles(
-            'idProfile',
+          return this.dataService.getAllItems(
+            this.idItems,
             this.sort.direction,
             this.paginator.pageIndex,
-            15
+            15,
+            this.loadFunc
           );
         }),
         map((data) => {
@@ -92,7 +124,7 @@ export class DataTableComponent implements AfterViewInit {
           this.isLoadingResults = false;
           this.resultsLength = data['totalElements'];
 
-          console.log(data['content']);
+          console.log(data);
           return data['content'];
         }),
         catchError(() => {

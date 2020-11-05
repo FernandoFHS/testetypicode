@@ -37,28 +37,28 @@ export class CompanyComponent implements AfterViewInit {
       // If the user changes the sort order, reset back to the first page.
       this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
   
-      merge(this.sort.sortChange, this.paginator.page)
-        .pipe(
-          startWith({}),
-          switchMap(() => {
-            this.isLoadingResults = true;
-            return this.dataService.getAllProfiles(
-              'idProfile', this.sort.direction, this.paginator.pageIndex, 10);
-          }),
-           map(data => {
-             // Flip flag to show that loading has finished.
-             this.isLoadingResults = false;
-             this.resultsLength = data['totalElements'];
+      // merge(this.sort.sortChange, this.paginator.page)
+      //   .pipe(
+      //     startWith({}),
+      //     switchMap(() => {
+      //       this.isLoadingResults = true;
+      //       return this.dataService.getAllProfiles(
+      //         'idProfile', this.sort.direction, this.paginator.pageIndex, 10);
+      //     }),
+      //      map(data => {
+      //        // Flip flag to show that loading has finished.
+      //        this.isLoadingResults = false;
+      //        this.resultsLength = data['totalElements'];
   
-             console.log(data['content']);
-             return data['content'];
+      //        console.log(data['content']);
+      //        return data['content'];
              
-           }),
-          catchError(() => {
-            this.isLoadingResults = false;
-            return observableOf([]);
-          })
-        ).subscribe(data => this.dataSource = data);
+      //      }),
+      //     catchError(() => {
+      //       this.isLoadingResults = false;
+      //       return observableOf([]);
+      //     })
+      //   ).subscribe(data => this.dataSource = data);
         console.log('Uhul' + this.dataSource)
     }
 

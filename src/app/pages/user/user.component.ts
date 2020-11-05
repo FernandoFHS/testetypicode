@@ -27,9 +27,6 @@ export class UserComponent implements AfterViewInit {
   resultsLength = 0;
   isLoadingResults = true;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
   constructor(public httpClient: HttpClient,
     public dialog: MatDialog,
     private dataService: DataService,
@@ -47,32 +44,53 @@ export class UserComponent implements AfterViewInit {
 
   ngAfterViewInit() {
 
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    
 
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-          return this.dataService.getAllProfiles(
-            'idProfile', this.sort.direction, this.paginator.pageIndex, 15);
-        }),
-         map(data => {
-           // Flip flag to show that loading has finished.
-           this.isLoadingResults = false;
-           this.resultsLength = data['totalElements'];
+    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-           console.log(data['content']);
-           return data['content'];
+    // merge(this.sort.sortChange, this.paginator.page)
+    //   .pipe(
+    //     startWith({}),
+    //     switchMap(() => {
+    //       this.isLoadingResults = true;
+    //       return this.dataService.getAllProfiles(
+    //         'idProfile', this.sort.direction, this.paginator.pageIndex, 15);
+    //     }),
+    //      map(data => {
+    //        // Flip flag to show that loading has finished.
+    //        this.isLoadingResults = false;
+    //        this.resultsLength = data['totalElements'];
+
+    //        console.log(data['content']);
+    //        return data['content'];
            
-         }),
-        catchError(() => {
-          this.isLoadingResults = false;
-          return observableOf([]);
-        })
-      ).subscribe(data => this.dataSource = data);
+    //      }),
+    //     catchError(() => {
+    //       this.isLoadingResults = false;
+    //       return observableOf([]);
+    //     })
+    //   ).subscribe(data => this.dataSource = data);
       console.log('Uhul' + this.dataSource)
   }
+
+  //const loadData(data: {sort: MatSort, paginator: MatPaginator}): Observable<any> {
+    loadData = (sort: string, order: string, page: number, size: number) => {
+      return this.dataService.getAllProfiles(sort, order, page, size);
+    }
+
+  //           return this.dataService.getAllProfiles;
+              
+          
+          //  map(data => {
+          //    // Flip flag to show that loading has finished.
+          //    this.isLoadingResults = false;
+          //    this.resultsLength = data['totalElements'];
+  
+          //    console.log(data['content']);
+          //    return data['content'];
+             
+          //  }),
+  //}
 
   headers: HeaderModel[] = [
     { text: 'Código', value: 'idProfile' },
