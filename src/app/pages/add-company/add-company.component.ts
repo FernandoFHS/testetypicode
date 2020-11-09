@@ -443,7 +443,7 @@ export class AddCompanyComponent implements OnInit {
     let a = this.mcc
     console.log(a);
     let obj = {
-      mcccode : a.mcc.id
+      mcccode : a.mcc.code
     }
     this.identificationFormGroup.patchValue(obj);
   }
