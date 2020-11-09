@@ -82,6 +82,8 @@ export class AddCompanyComponent implements OnInit {
   bankAccount$: any = [];
   phoneNumber$: any = [];
 
+  mcc: any;
+
   cnae: Array<Cnae>;
   cnae$: Observable<Array<Cnae>>;
   filteredCnaes: Observable<Cnae[]>;
@@ -458,15 +460,23 @@ export class AddCompanyComponent implements OnInit {
       this.getSecondCep(value);
     }
   }
-
-  displayFn = (item): string => {
-    console.log(item)
+  
+  displayFn = (item): string =>{
     if (item) {
-
+      this.mcc = item;
       return item.description;
     }else {
       return '';
     }
+  }
+
+  getMccByCnae(){
+    let a = this.mcc
+    console.log(a);
+    let obj = {
+      mcccode : a.mcc.code
+    }
+    this.identificationFormGroup.patchValue(obj);
   }
 
   getSecondCep(cep) {
