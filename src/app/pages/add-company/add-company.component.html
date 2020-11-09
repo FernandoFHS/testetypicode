@@ -129,7 +129,8 @@
                    aria-label="Cnae"
                    formControlName="cnae"
                    [matAutocomplete]="auto"
-                   [formControl]="cnaeForm">
+                   [formControl]="cnaeForm"               
+                   >
             <mat-autocomplete #auto="matAutocomplete" required  [displayWith]="displayFn">
               <mat-option *ngFor="let item of filteredCnaes | async" [value]="item">
                 <span>{{item.description}}</span>
@@ -139,7 +140,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>MCC</mat-label>
-            <input matInput placeholder="MCC" formControlName="cnae" required mask="0000" />
+            <input matInput placeholder="MCC" formControlName="mcccode" required mask="0000" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>assignment</mat-icon>
           </mat-form-field>
@@ -425,11 +426,11 @@
       </div>
       <mat-divider></mat-divider>
       <h3>Contato</h3>
-      <h4>Telefones Cadastrados</h4>
+      <h4>Telefones Cadastrados</h4>  
 
-      <core-data-table [headers]="headersFoneTable" [data]="phoneNumber" [actions]="actions"
-        (addEvent)="onAddPhone($event)" (deleteEvent)="onDeletePhone($event)" (editEvent)="onEditPhone($event)">
-      </core-data-table>
+      <app-simple-data-table [headers]="headersFoneTable" [data]="phoneNumber$" [actions]="actions"
+      (addEvent)="onAddPhone($event)" (editEvent)="onEditPhone($event)">
+      </app-simple-data-table>
 
       <div class="group-actions-buttons">
 
@@ -548,10 +549,14 @@
       <mat-divider></mat-divider>
       <h3>Contas Bancárias</h3>
 
-      <core-data-table [headers]="headersBankTable" [data]="bankAccount" [actions]="actions"
+      <!-- <core-data-table [headers]="headersBankTable" [data]="bankAccount" [actions]="actions"
         (addEvent)="onAddBankAccount($event)" (deleteEvent)="onDeleteBankAccount($event)"
         (editEvent)="onEditBankAccount($event)">
-      </core-data-table>
+      </core-data-table> -->
+
+      <app-simple-data-table [headers]="headersBankTable" [data]="bankAccount$" [actions]="actions"
+      (addEvent)="onAddBankAccount($event)">
+      </app-simple-data-table>
 
       <mat-divider></mat-divider>
       <br />

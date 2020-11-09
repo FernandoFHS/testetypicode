@@ -7,8 +7,10 @@ import { Router } from '@angular/router';
 import {merge, Observable, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { ActionModel } from 'src/app/@core/models/action.model';
-import { HeaderModel } from 'src/app/@core/models/header.model';
+import { HeaderModelCompany } from 'src/app/@core/models/header.model';
+import { CompanyContent } from 'src/app/models/Company';
 import { Profile } from 'src/app/models/Profile';
+import { CompanyService } from 'src/app/services/company.service';
 import { DataService } from 'src/app/services/data.service';
 import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
 
@@ -19,60 +21,35 @@ import { DeleteProfileComponent } from '../delete-profile/delete-profile.compone
 })
 export class CompanyComponent implements AfterViewInit {
 
-  dataSource: Profile[] = [];
+  dataSource: CompanyContent[] = [];
 
   resultsLength = 0;
   isLoadingResults = true;
 
   constructor(public httpClient: HttpClient,
     public dialog: MatDialog,
-    private dataService: DataService,
+    private companyService: CompanyService,
     private router: Router) { }
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
-    ngAfterViewInit() {
+    ngAfterViewInit() {}
 
-      // If the user changes the sort order, reset back to the first page.
-      this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-  
-      // merge(this.sort.sortChange, this.paginator.page)
-      //   .pipe(
-      //     startWith({}),
-      //     switchMap(() => {
-      //       this.isLoadingResults = true;
-      //       return this.dataService.getAllProfiles(
-      //         'idProfile', this.sort.direction, this.paginator.pageIndex, 10);
-      //     }),
-      //      map(data => {
-      //        // Flip flag to show that loading has finished.
-      //        this.isLoadingResults = false;
-      //        this.resultsLength = data['totalElements'];
-  
-      //        console.log(data['content']);
-      //        return data['content'];
-             
-      //      }),
-      //     catchError(() => {
-      //       this.isLoadingResults = false;
-      //       return observableOf([]);
-      //     })
-      //   ).subscribe(data => this.dataSource = data);
-        console.log('Uhul' + this.dataSource)
-    }
+    loadData = (sort: string, order: string, page: number, size: number) => {
+      return this.companyService.getAllCompanies(sort, order, page, size);
+    };
 
-  headers: HeaderModel[] = [
-    { text: 'Código', value: 'id' },
-    { text: 'CPF / CNPJ', value: 'title' },
-    { text: 'Identificação', value: 'nameProfile' },
-    { text: 'Tipo', value: 'description' },
-    { text: 'Razão Social', value: 'razsoc' },
-    { text: 'MCC	', value: 'mcc' },
-    { text: 'Parceiro', value: 'parner' },
-    { text: 'Status', value: 'status' },
-    { text: 'Tab.Vendas', value: 'tabsell' },
-    { text: 'Situação', value: 'situation' },
+  headers: HeaderModelCompany[] = [
+    { text: 'Código', value: 'idCompany', subValue: null, deepValue: null },
+    { text: 'CPF / CNPJ', value: 'documentNumberCompany', subValue: null, deepValue: null },
+    { text: 'Tipo', value: 'companyType', subValue: null, deepValue: null },
+    { text: 'Razão Social', value: 'companyName', subValue: null, deepValue: null },
+    { text: 'MCC	', value: 'cnae', subValue: 'mcc', deepValue: 'code' },
+    { text: 'Parceiro', value: 'tradingPartnerCode', subValue: null, deepValue: null },
+    { text: 'Status', value: 'companyStatus', subValue: null, deepValue: null },
+    { text: 'Tab.Vendas', value: 'salesTableNumber', subValue: null, deepValue: null },
+    { text: 'Situação', value: 'situation', subValue: null, deepValue: null },
 
 
     // { text: 'Ações', value: 'action' }
@@ -81,7 +58,7 @@ export class CompanyComponent implements AfterViewInit {
   actions: ActionModel = {
     add: true,
     edit: true,
-    delete: true
+    delete: false
   };
 
   dinamicAddRouter = "/company-list/add-company";

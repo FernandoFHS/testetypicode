@@ -1,11 +1,11 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, ViewChild, AfterViewInit} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
-import {merge, Observable, of as observableOf} from 'rxjs';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import { merge, Observable, of as observableOf } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { Profile } from 'src/app/models/Profile';
@@ -20,77 +20,24 @@ import { DeleteProfileComponent } from '../delete-profile/delete-profile.compone
   styleUrls: ['user.component.scss'],
   templateUrl: 'user.component.html',
 })
-
 export class UserComponent implements AfterViewInit {
   dataSource: Profile[] = [];
 
   resultsLength = 0;
   isLoadingResults = true;
 
-  constructor(public httpClient: HttpClient,
+  constructor(
+    public httpClient: HttpClient,
     public dialog: MatDialog,
     private dataService: DataService,
-    private router: Router) {}
+    private router: Router
+  ) {}
 
-    // ngOnInit() {
-    //   this.dataService.refreshTable().subscribe(() => {
-    //     return this.dataService.getAllProfiles(
-    //       'idProfile', this.sort.direction, this.paginator.pageIndex, 10).subscribe(data => this.dataSource = data);
-    //   });
+  ngAfterViewInit() {}
 
-    //   this.dataService.getAllProfiles(
-    //     'idProfile', this.sort.direction, this.paginator.pageIndex, 10).subscribe(data => this.dataSource = data);
-    // }
-
-  ngAfterViewInit() {
-
-    
-
-    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
-    // merge(this.sort.sortChange, this.paginator.page)
-    //   .pipe(
-    //     startWith({}),
-    //     switchMap(() => {
-    //       this.isLoadingResults = true;
-    //       return this.dataService.getAllProfiles(
-    //         'idProfile', this.sort.direction, this.paginator.pageIndex, 15);
-    //     }),
-    //      map(data => {
-    //        // Flip flag to show that loading has finished.
-    //        this.isLoadingResults = false;
-    //        this.resultsLength = data['totalElements'];
-
-    //        console.log(data['content']);
-    //        return data['content'];
-           
-    //      }),
-    //     catchError(() => {
-    //       this.isLoadingResults = false;
-    //       return observableOf([]);
-    //     })
-    //   ).subscribe(data => this.dataSource = data);
-      console.log('Uhul' + this.dataSource)
-  }
-
-  //const loadData(data: {sort: MatSort, paginator: MatPaginator}): Observable<any> {
-    loadData = (sort: string, order: string, page: number, size: number) => {
-      return this.dataService.getAllProfiles(sort, order, page, size);
-    }
-
-  //           return this.dataService.getAllProfiles;
-              
-          
-          //  map(data => {
-          //    // Flip flag to show that loading has finished.
-          //    this.isLoadingResults = false;
-          //    this.resultsLength = data['totalElements'];
-  
-          //    console.log(data['content']);
-          //    return data['content'];
-             
-          //  }),
-  //}
+  loadData = (sort: string, order: string, page: number, size: number) => {
+    return this.dataService.getAllProfiles(sort, order, page, size);
+  };
 
   headers: HeaderModel[] = [
     { text: 'Código', value: 'idProfile' },
@@ -101,7 +48,7 @@ export class UserComponent implements AfterViewInit {
   actions: ActionModel = {
     add: true,
     edit: true,
-    delete: true
+    delete: true,
   };
 
   onDelete(row: any) {

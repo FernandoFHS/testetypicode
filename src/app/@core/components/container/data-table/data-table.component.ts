@@ -76,13 +76,13 @@ export class DataTableComponent implements AfterViewInit {
   dataSource: any[] = [];
 
   ngAfterViewInit(): void {
-    if (!this.data) {
-      this.data = [];
-    }
+    // if (!this.data) {
+    //   this.data = [];
+    // }
 
-    if (!this.data.content) {
-      this.data.content = this.data;
-    }
+    // if (!this.data.content) {
+    //   this.data.content = this.data;
+    // }
 
     this.displayedColumns = this.headers.map((e) => e.value);
 
@@ -91,7 +91,7 @@ export class DataTableComponent implements AfterViewInit {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     this.loadFunc(
-      'idProfile',
+      this.idItems,
       this.sort.direction,
       this.paginator.pageIndex,
       15

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -7,8 +7,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Observable, of } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+
 
 @Component({
   selector: 'app-add-phone',
@@ -17,6 +19,9 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 })
 export class AddPhoneComponent implements OnInit {
   phoneFormGroup: FormGroup;
+  phoneNumber$: Observable<any> = of([]);
+
+  @Output() addingDataPhone = new EventEmitter<string>();
 
   constructor(
     public dataService: DataService,
@@ -55,6 +60,10 @@ this.dataService.create(this.profile).subscribe(() => {
 })
 }*/
 
+  addNewPhone(value: string) {
+    this.addingDataPhone.emit(value);
+  }
+
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -68,8 +77,9 @@ this.dataService.create(this.profile).subscribe(() => {
 
     this.localStorageService.set('phoneNumber', foneAdresstArray);
 
-    this.dialogRef.close();
-  }
 
-  dataSource: any[] = [];
+    // this.addNewPhone(form);
+
+    this.dialogRef.close(form);
+  }
 }

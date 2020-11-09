@@ -13,7 +13,7 @@ export class CompanyService {
 
   private _refreshTable = new Subject<void>();
 
-  private readonly API_URL = 'http://bffmaintenance.qa.appmobbuy.tech:8080/company';
+  private readonly API_URL = 'http://company.qa.appmobbuy.tech:8080/';
 
   constructor(private httpClient: HttpClient, public _snackBar: MatSnackBar) { }
 
@@ -21,19 +21,12 @@ export class CompanyService {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   /** CRUD METHODS */
-  getAllProfiles(): Promise<CompanyContent[]> {
-    return new Promise<CompanyContent[]>((resolve, reject) => {
-      this.httpClient.get<CompanyContent[]>(this.API_URL).subscribe(
-        (data) => {
-          resolve(data);
-          // this.dataChange.next(data);
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error.name + ' ' + error.message);
-          reject(error);
-        }
-      );
-    });
+  getAllCompanies(sort: string, order: string, page: number, size: number): Observable<CompanyContent[]> {
+    const requestUrl =
+        `${this.API_URL}company?sort=${sort},${order}&page=${page}&size=${size}`;
+        console.log('Oi')
+
+    return this.httpClient.get<CompanyContent[]>(requestUrl);
   }
 
   create(company: CompanyContent): Observable<CompanyContent> {

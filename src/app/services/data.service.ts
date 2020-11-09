@@ -21,9 +21,6 @@ export class DataService {
   private readonly API_URL =
     'http://register-profile.qa.appmobbuy.tech:8080/profiles';
 
-  // Temporarily stores data from dialogs
-  dialogData: any;
-
   constructor(private httpClient: HttpClient, public _snackBar: MatSnackBar) {}
 
   private _refreshTable = new Subject<void>();
@@ -44,34 +41,15 @@ export class DataService {
     headers: this.headers,
   };
 
-  getDialogData() {
-    return this.dialogData;
-  }
-
   /** CRUD METHODS */
-  // getAllProfiles(size: number, page: number): Promise<Profile[]> {
-  //   return new Promise<Profile[]>((resolve, reject) => {
-  //     this.httpClient.get<Profile[]>(`${this.API_URL}?size=${size}&page=${page + 1}`).subscribe(
-  //       (data) => {
-  //         resolve(data);
-  //       },
-  //       (error: HttpErrorResponse) => {
-  //         console.log(error.name + ' ' + error.message);
-  //         reject(error);
-  //       }
-  //     );
-  //   });
-  // }
 
   getAllItems<TResponse>(sort: string, order: string, page: number, size: number, loadFunc: any): Observable<TResponse> {
-    console.log(loadFunc); 
     return loadFunc(sort, order, page, size);   
   }
 
   getAllProfiles(sort: string, order: string, page: number, size: number): Observable<Profile[]> {
     const requestUrl =
         `${this.API_URL}?sort=${sort},${order}&page=${page + 1}&size=${size}`;
-        console.log('Oi')
 
     return this.httpClient.get<Profile[]>(requestUrl);
   }
@@ -95,7 +73,7 @@ export class DataService {
       tap(() => {
         this._refreshTable.next();
       })
-    );;
+    );
   }
 
   delete(id: number): Observable<Profile> {

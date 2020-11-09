@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActionModel } from 'src/app/@core/models/action.model';
-import { HeaderModel } from 'src/app/@core/models/header.model';
+import { HeaderModel, HeaderModelBank } from 'src/app/@core/models/header.model';
 import { CepService } from 'src/app/services/cep.service';
 import { DataService } from 'src/app/services/data.service';
 import {
@@ -34,8 +34,8 @@ import { AddPhoneComponent } from '../dialogs/add-phone/add-phone.component';
 import { CnaeService } from '../../services/company/cnae.service';
 import { Cnae } from '../../models/company/Cnae'
 import { Observable, of } from 'rxjs';
-import { Profile } from 'src/app/models/Profile';
 import { MatPaginator } from '@angular/material/paginator';
+import { SimpleDataTableService } from 'src/app/components/simple-data-table/simple-data-table.service';
 
 @Component({
   selector: 'app-add-company',
@@ -79,8 +79,8 @@ export class AddCompanyComponent implements OnInit {
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
   partnerSource: any = this.localStorageService.get('partnerFormGroup');
-  bankAccount: any = this.localStorageService.get('bankAccount');
-  phoneNumber: any = this.localStorageService.get('phoneNumber');
+  bankAccount$: any = [];
+  phoneNumber$: any = [];
 
   cnae: Array<Cnae>;
   cnae$: Observable<Array<Cnae>>;
@@ -95,7 +95,9 @@ export class AddCompanyComponent implements OnInit {
     private cnaeService: CnaeService,
     public dialog: MatDialog,
     private router: Router,
-    private localStorageService: LocalStorageService,) 
+    private localStorageService: LocalStorageService,
+    public phoneService: SimpleDataTableService
+    ) 
     {}
 
   private _filterCnaes(value: string): Cnae[] {
@@ -104,7 +106,6 @@ export class AddCompanyComponent implements OnInit {
       this.cnae =  cnaes.filter(cnae => cnae.description.toLowerCase().indexOf(filterValue) === 0);
     })
     return this.cnae;
-
   }
 
   formControl = new FormControl('', [
@@ -112,7 +113,20 @@ export class AddCompanyComponent implements OnInit {
   ]);
 
 
+
   ngOnInit(): void {
+
+    if (this.localStorageService.get('phoneNumber') == null) {
+      this.phoneNumber$ = []
+    } else {
+      this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+    }
+
+    if (this.localStorageService.get('bankAccount') == null) {
+      this.bankAccount$ = []
+    } else {
+      this.bankAccount$ = this.localStorageService.get('bankAccount');
+    }
 
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
@@ -182,10 +196,12 @@ export class AddCompanyComponent implements OnInit {
     });
     this.partnerFormGroup = this._formBuilder.group({});
     
-    // this.dataService.refreshTable().subscribe(() => {
-    //   this.loadData();
-    // });
-    // this.loadData();
+    this.dataService.refreshTable().subscribe(() => {
+      this.dataSource = this.phoneNumber$;
+      //this.loadData
+    });
+    //this.loadData
+    this.dataSource = this.phoneNumber$;
     this.gelAllCnaes();
 
     if (this.identification != undefined) {
@@ -259,13 +275,13 @@ export class AddCompanyComponent implements OnInit {
     // { text: 'Ações', value: 'action' }
   ];
 
-  headersBankTable: HeaderModel[] = [
-    { text: 'Banco', value: 'bank' },
-    { text: 'Agência', value: 'agency' },
-    { text: 'Dígito Agência', value: 'agencyDigit' },
-    { text: 'Conta Corrente', value: 'account' },
-    { text: 'Dígito Conta', value: 'accountDigit' },
-    { text: 'Dígito Agência/Conta', value: 'digit' },
+  headersBankTable: HeaderModelBank[] = [
+    { text: 'Banco', value: 'bank', subValue: 'name' },
+    { text: 'Agência', value: 'agency', subValue: null },
+    { text: 'Dígito Agência', value: 'agencyDigit', subValue:null },
+    { text: 'Conta Corrente', value: 'account', subValue: null },
+    { text: 'Dígito Conta', value: 'accountDigit', subValue: null },
+    { text: 'Dígito Agência/Conta', value: 'digit', subValue: null },
     // { text: 'Ações', value: 'action' }
   ];
 
@@ -297,7 +313,6 @@ export class AddCompanyComponent implements OnInit {
   };
 
   // public loadData() {
-  //   //this.exampleDatabase = new DataService(this.httpClient);
 
   //   this.dataService.getAllProfiles(5, 1).then(
   //     (data) => {
@@ -314,9 +329,24 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(AddPhoneComponent, {
       data: { id: idPhone },
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.phoneNumber = this.localStorageService.get('phoneNumber');
-      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+    dialogRef.afterClosed().subscribe((item) => {
+      // this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+      this.phoneNumber$.push(item.value);
+      this.phoneNumber$ = [...this.phoneNumber$];
+      this.phoneService.refreshDataTable();
+
+      console.log(this.phoneNumber$);
+
+      // console.log(item.value)
+
+      
+
+      // console.log(this.phoneNumber$);
+      
+      // console.log(item)
+      // this.phoneNumber$.subscribe((phone) => {
+      //   phone.push(item)
+      // })
     })
   }
 
@@ -324,9 +354,11 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(AddBankAccountComponent, {
       data: { id: idBankAccount },
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.bankAccount = this.localStorageService.get('bankAccount');
-      this.bankAccount.content = this.localStorageService.get('bankAccount');
+    dialogRef.afterClosed().subscribe((item) => {
+      this.bankAccount$.push(item.value);
+      this.bankAccount$ = [...this.bankAccount$];
+      this.phoneService.refreshDataTable();
+      console.log(this.bankAccount$);
     })
   }
 
@@ -336,24 +368,23 @@ export class AddCompanyComponent implements OnInit {
 
   //Edit Methods
   onEditPhone(row: object) {
-    const index = this.phoneNumber.content.indexOf(row)
+    const index = this.phoneNumber$.indexOf(row)
     const dialogRef = this.dialog.open(EditPhoneComponent, {
       data: index
     });
     dialogRef.afterClosed().subscribe(() => {
-      this.phoneNumber = this.localStorageService.get('phoneNumber');
-      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+      this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+      // this.phoneNumber.content = this.localStorageService.get('phoneNumber');
     })
   }
 
   onEditBankAccount(row: object) {
-    const index = this.bankAccount.content.indexOf(row)
+    const index = this.bankAccount$.indexOf(row)
     const dialogRef = this.dialog.open(EditBankAccountComponent, {
       data: index
     });
     dialogRef.afterClosed().subscribe(() => {
-      this.bankAccount = this.localStorageService.get('bankAccount');
-      this.bankAccount.content = this.localStorageService.get('bankAccount');
+      this.bankAccount$ = this.localStorageService.get('bankAccount');
     })
   }
 
@@ -364,25 +395,25 @@ export class AddCompanyComponent implements OnInit {
   }
 
   //Delete Methods
-  onDeletePhone(row: object) {
-    const deleteItem = this.phoneNumber.content.indexOf(row);
-    const dialogRef = this.dialog.open(DeletePhoneComponent, {data: deleteItem});
+  // onDeletePhone(row: object) {
+  //   // const deleteItem = this.phoneNumber$.indexOf(row);
+  //   // const dialogRef = this.dialog.open(DeletePhoneComponent, {data: deleteItem});
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.phoneNumber = this.localStorageService.get('phoneNumber');
-      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
-    })
-  }
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+  //     this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+  //   })
+  // }
 
-  onDeleteBankAccount(row: object) {
-    const deleteItem = this.bankAccount.content.indexOf(row);
-    const dialogRef = this.dialog.open(DeleteBankAccountComponent, {data: deleteItem});
+  // onDeleteBankAccount(row: object) {
+  //   const deleteItem = this.bankAccount.content.indexOf(row);
+  //   const dialogRef = this.dialog.open(DeleteBankAccountComponent, {data: deleteItem});
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.bankAccount = this.localStorageService.get('bankAccount');
-      this.bankAccount.content = this.localStorageService.get('bankAccount');
-    })
-  }
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.bankAccount = this.localStorageService.get('bankAccount');
+  //     this.bankAccount.content = this.localStorageService.get('bankAccount');
+  //   })
+  // }
 
   onDeletePartner(row: object) {
     const deleteItem = this.partnerSource.content.indexOf(row);
@@ -428,8 +459,10 @@ export class AddCompanyComponent implements OnInit {
     }
   }
 
-  displayFn = (item): string =>{
+  displayFn = (item): string => {
+    console.log(item)
     if (item) {
+
       return item.description;
     }else {
       return '';
