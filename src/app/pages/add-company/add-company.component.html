@@ -130,8 +130,9 @@
                    aria-label="Cnae"
                    formControlName="cnae"
                    [matAutocomplete]="auto"
-                   [formControl]="cnaeForm">
-            <mat-autocomplete #auto="matAutocomplete" required  [displayWith]="displayFn" (onblur)="$event">
+                   [formControl]="cnaeForm"
+                   (blur)="getMccByCnae()">
+            <mat-autocomplete #auto="matAutocomplete" required  [displayWith]="displayFn" >
               <mat-option *ngFor="let item of filteredCnaes | async" [value]="item">
                 <span>{{item.description}}</span>
               </mat-option>
@@ -140,7 +141,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>MCC</mat-label>
-            <input matInput placeholder="MCC" formControlName="cnae" required mask="0000" />
+            <input matInput placeholder="MCC" formControlName="mcccode" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>assignment</mat-icon>
           </mat-form-field>

@@ -1,6 +1,6 @@
 import { map, take, startWith, filter } from 'rxjs/operators';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -34,6 +34,8 @@ import { AddPhoneComponent } from '../dialogs/add-phone/add-phone.component';
 import { CnaeService } from '../../services/company/cnae.service';
 import { Cnae } from '../../models/company/Cnae'
 import { Observable, of } from 'rxjs';
+import { Profile } from 'src/app/models/Profile';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-add-company',
@@ -80,9 +82,13 @@ export class AddCompanyComponent implements OnInit {
   bankAccount: any = this.localStorageService.get('bankAccount');
   phoneNumber: any = this.localStorageService.get('phoneNumber');
 
+  mcc: any;
+
   cnae: Array<Cnae>;
   cnae$: Observable<Array<Cnae>>;
   filteredCnaes: Observable<Cnae[]>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -178,10 +184,10 @@ export class AddCompanyComponent implements OnInit {
     });
     this.partnerFormGroup = this._formBuilder.group({});
     
-    this.dataService.refreshTable().subscribe(() => {
-      this.loadData();
-    });
-    this.loadData();
+    // this.dataService.refreshTable().subscribe(() => {
+    //   this.loadData();
+    // });
+    // this.loadData();
     this.gelAllCnaes();
 
     if (this.identification != undefined) {
@@ -280,8 +286,6 @@ export class AddCompanyComponent implements OnInit {
     // { text: 'Ações', value: 'action' }
   ];
 
-
-
   actions: ActionModel = {
     add: true,
     edit: true,
@@ -294,18 +298,18 @@ export class AddCompanyComponent implements OnInit {
     delete: true,
   };
 
-  public loadData() {
-    //this.exampleDatabase = new DataService(this.httpClient);
+  // public loadData() {
+  //   //this.exampleDatabase = new DataService(this.httpClient);
 
-    this.dataService.getAllProfiles().then(
-      (data) => {
-        this.dataSource = data;
-      },
-      (error) => {
-        console.log('Not found data')
-      }
-    );
-  }
+  //   this.dataService.getAllProfiles(5, 1).then(
+  //     (data) => {
+  //       this.dataSource = data;
+  //     },
+  //     (error) => {
+  //       console.log('Not found data')
+  //     }
+  //   );
+  // }
 
   //Add Methods
   onAddPhone(idPhone: number) {
@@ -428,10 +432,20 @@ export class AddCompanyComponent implements OnInit {
   
   displayFn = (item): string =>{
     if (item) {
+      this.mcc = item;
       return item.description;
     }else {
       return '';
     }
+  }
+
+  getMccByCnae(){
+    let a = this.mcc
+    console.log(a);
+    let obj = {
+      mcccode : a.mcc.id
+    }
+    this.identificationFormGroup.patchValue(obj);
   }
 
   getSecondCep(cep) {

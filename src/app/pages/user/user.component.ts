@@ -1,38 +1,101 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Component, ViewChild, AfterViewInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Profile } from '../../models/profile';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import { Router } from '@angular/router';
+import {merge, Observable, of as observableOf} from 'rxjs';
+import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
+import { Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
-import { Router } from '@angular/router';
-import { DeleteBankAccountComponent } from '../dialogs/delete-bank-account/delete-bank-account.component';
 import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
 
+/**
+ * @title Table retrieving data through HTTP
+ */
 @Component({
   selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  styleUrls: ['user.component.scss'],
+  templateUrl: 'user.component.html',
 })
-export class UserComponent implements OnInit {
+
+export class UserComponent implements AfterViewInit {
+  dataSource: Profile[] = [];
+
+  resultsLength = 0;
+  isLoadingResults = true;
 
   constructor(public httpClient: HttpClient,
     public dialog: MatDialog,
     private dataService: DataService,
-    private router: Router) { }
+    private router: Router) {}
 
-  ngOnInit(): void {
-    this.dataService.refreshTable().subscribe(() => {
-      this.loadData();
-    });
+    // ngOnInit() {
+    //   this.dataService.refreshTable().subscribe(() => {
+    //     return this.dataService.getAllProfiles(
+    //       'idProfile', this.sort.direction, this.paginator.pageIndex, 10).subscribe(data => this.dataSource = data);
+    //   });
 
-    this.loadData();
+    //   this.dataService.getAllProfiles(
+    //     'idProfile', this.sort.direction, this.paginator.pageIndex, 10).subscribe(data => this.dataSource = data);
+    // }
+
+  ngAfterViewInit() {
+
+    
+
+    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    // merge(this.sort.sortChange, this.paginator.page)
+    //   .pipe(
+    //     startWith({}),
+    //     switchMap(() => {
+    //       this.isLoadingResults = true;
+    //       return this.dataService.getAllProfiles(
+    //         'idProfile', this.sort.direction, this.paginator.pageIndex, 15);
+    //     }),
+    //      map(data => {
+    //        // Flip flag to show that loading has finished.
+    //        this.isLoadingResults = false;
+    //        this.resultsLength = data['totalElements'];
+
+    //        console.log(data['content']);
+    //        return data['content'];
+           
+    //      }),
+    //     catchError(() => {
+    //       this.isLoadingResults = false;
+    //       return observableOf([]);
+    //     })
+    //   ).subscribe(data => this.dataSource = data);
+      console.log('Uhul' + this.dataSource)
   }
+
+  //const loadData(data: {sort: MatSort, paginator: MatPaginator}): Observable<any> {
+    loadData = (sort: string, order: string, page: number, size: number) => {
+      return this.dataService.getAllProfiles(sort, order, page, size);
+    }
+
+  //           return this.dataService.getAllProfiles;
+              
+          
+          //  map(data => {
+          //    // Flip flag to show that loading has finished.
+          //    this.isLoadingResults = false;
+          //    this.resultsLength = data['totalElements'];
+  
+          //    console.log(data['content']);
+          //    return data['content'];
+             
+          //  }),
+  //}
+
   headers: HeaderModel[] = [
     { text: 'Código', value: 'idProfile' },
     { text: 'Empresa', value: 'nameProfile' },
     { text: 'Descrição', value: 'description' },
-    // { text: 'Ações', value: 'action' }
   ];
 
   actions: ActionModel = {
@@ -41,34 +104,16 @@ export class UserComponent implements OnInit {
     delete: true
   };
 
-  dataSource: any[] = [];
-  
-  dinamicAddRouter = "/profile-list/add-profile";
-
-  public loadData() {
-    //this.exampleDatabase = new DataService(this.httpClient);
-
-    this.dataService.getAllProfiles().then((data) => {
-
-      this.dataSource = data;
-
-    }, (error) => {
-      // TODO
-    });
-
-  }
-
   onDelete(row: any) {
-    const {idProfile} = row
+    const { idProfile } = row;
     const dialogRef = this.dialog.open(DeleteProfileComponent, {
-      data: {id: idProfile},
+      data: { id: idProfile },
     });
   }
-
 
   onEdit(row: any) {
-    const {idProfile} = row
-    this.router.navigate([`/profile-list/edit-profile/${idProfile}`])
+    const { idProfile } = row;
+    this.router.navigate([`/profile-list/edit-profile/${idProfile}`]);
   }
 
   onAdd(index: number) {

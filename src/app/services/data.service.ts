@@ -49,18 +49,31 @@ export class DataService {
   }
 
   /** CRUD METHODS */
-  getAllProfiles(): Promise<Profile[]> {
-    return new Promise<Profile[]>((resolve, reject) => {
-      this.httpClient.get<Profile[]>(this.API_URL).subscribe(
-        (data) => {
-          resolve(data);
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error.name + ' ' + error.message);
-          reject(error);
-        }
-      );
-    });
+  // getAllProfiles(size: number, page: number): Promise<Profile[]> {
+  //   return new Promise<Profile[]>((resolve, reject) => {
+  //     this.httpClient.get<Profile[]>(`${this.API_URL}?size=${size}&page=${page + 1}`).subscribe(
+  //       (data) => {
+  //         resolve(data);
+  //       },
+  //       (error: HttpErrorResponse) => {
+  //         console.log(error.name + ' ' + error.message);
+  //         reject(error);
+  //       }
+  //     );
+  //   });
+  // }
+
+  getAllItems<TResponse>(sort: string, order: string, page: number, size: number, loadFunc: any): Observable<TResponse> {
+    console.log(loadFunc); 
+    return loadFunc(sort, order, page, size);   
+  }
+
+  getAllProfiles(sort: string, order: string, page: number, size: number): Observable<Profile[]> {
+    const requestUrl =
+        `${this.API_URL}?sort=${sort},${order}&page=${page + 1}&size=${size}`;
+        console.log('Oi')
+
+    return this.httpClient.get<Profile[]>(requestUrl);
   }
 
   create(profile: Content): Observable<Content> {
