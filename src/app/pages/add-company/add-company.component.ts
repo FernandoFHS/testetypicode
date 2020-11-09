@@ -425,7 +425,7 @@ export class AddCompanyComponent implements OnInit {
       this.getSecondCep(value);
     }
   }
-
+  
   displayFn = (item): string =>{
     if (item) {
       return item.description;
