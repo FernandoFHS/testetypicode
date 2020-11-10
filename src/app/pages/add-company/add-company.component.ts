@@ -262,9 +262,9 @@ export class AddCompanyComponent implements OnInit {
       this.partnerFormGroup.value);
       console.log(this.testecompany);
       
-      this.companyService.create(this.testecompany).subscribe((response:any)=>{
-        console.log(response);
-      })
+      // this.companyService.create(this.testecompany).subscribe((response:any)=>{
+     //  console.log(response);
+      // })
     
   }
 

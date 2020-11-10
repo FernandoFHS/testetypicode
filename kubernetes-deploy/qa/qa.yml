@@ -1,9 +1,10 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  annotations:
   name: "company-front"
   namespace: "company-front"
+  labels:
+    app: "company-front"
 spec:
   replicas: 1
   selector:
@@ -15,13 +16,9 @@ spec:
         app: "company-front"
     spec:
       containers:
-      - image: "gcr.io/mobbuy-qa-microservices/company-front:0.0.3"
-        name: "company-front"
-    ports:
-    - name: "http"
-      port: 80
-      protocol: "TCP"
-      targetPort: 80
+      - name: "company-front"
+        image: "gcr.io/mobbuy-qa-microservices/company-front:0.0.3"
+        imagePullPolicy: Always
 
 
 apiVersion: "v1"
