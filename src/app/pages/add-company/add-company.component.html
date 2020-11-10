@@ -18,7 +18,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Empresa Administradora</mat-label>
-          <input matInput placeholder="Empresa Administradora" formControlName="managingCompanyCtrl" required />
+          <input matInput placeholder="Empresa Administradora" formControlName="companyResponsibleName" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>admin_panel_settings</mat-icon>
         </mat-form-field>
@@ -49,7 +49,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Tipo</mat-label>
-            <mat-select name="type" #pessoa formControlName="companyTypeCtrl" (blur)="getCpfCnpjMask(pessoa.value)"
+            <mat-select name="type" #pessoa formControlName="companyType" (blur)="getCpfCnpjMask(pessoa.value)"
               required>
               <mat-option></mat-option>
               <mat-option value="pf"> Pessoa Física </mat-option>
@@ -98,7 +98,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Razão Social</mat-label>
-          <input matInput placeholder="Razão Social" formControlName="companyNameCtrl" required />
+          <input matInput placeholder="Razão Social" formControlName="companyName" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>assignment</mat-icon>
         </mat-form-field>
@@ -283,7 +283,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Ponto de Referência</mat-label>
-          <input matInput placeholder="Ponto de Referência" formControlName="referencePointCtrl"/>
+          <input matInput placeholder="Ponto de Referência" formControlName="referencePoint"/>
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>gps_fixed</mat-icon>
         </mat-form-field>
@@ -426,8 +426,7 @@
 
       </div>
       <mat-divider></mat-divider>
-      <h3>Contato</h3>
-      <h4>Telefones Cadastrados</h4>  
+      <h3>Cadastro de contatos</h3>
 
       <app-simple-data-table [headers]="headersFoneTable" [data]="phoneNumber$" [actions]="actions"
       (addEvent)="onAddPhone($event)" (editEvent)="onEditPhone($event)">
@@ -456,7 +455,7 @@
 
       <div class="line-form">
         
-        <div class="short-line-form">
+        <div class="short-line-2-form">
 
           <mat-form-field appearance="outline">
             <mat-label>Tabela de Vendas</mat-label>
@@ -476,7 +475,7 @@
 
         </div>
 
-        <div class="short-line-form">
+        <div class="short-line-2-form">
 
           <mat-form-field appearance="outline">
             <mat-label>Custo de Transação</mat-label>
@@ -503,7 +502,7 @@
 
       <div class="line-form">
 
-        <div class="short-line-form">
+        <div class="short-line-2-form">
 
           <mat-form-field appearance="outline">
             <mat-label>Transação Referencial</mat-label>
@@ -523,7 +522,7 @@
 
         </div>
 
-        <div class="short-line-form">
+        <div class="short-line-2-form">
 
           <mat-form-field appearance="outline">
             <mat-label>Ignora Regra de Liberação de AJ Manualmente</mat-label>
@@ -787,15 +786,8 @@
 
   <!--socio Step-->
   <mat-step #partnerStep label="Sócio" state="partner" [stepControl]="partnerFormGroup">
-    <!-- <core-data-table
-      [headers]="headersPartnerTable"
-      [data]="partnerSource"
-      [actions]="actionsPartner"
-      (addEvent)="onAddPartner($event)"
-      (deleteEvent)="onDeletePartner($event)"
-      (editEvent)="onEditPartner($event)"
-    >
-    </core-data-table> -->
+
+    <h3>Cadastro de sócios</h3>
 
     <app-simple-data-table [headers]="headersPartnerTable" [data]="partnerSource$" [actions]="actions"
     (addEvent)="onAddPartner($event)" (editEvent)="onEditPartner($event)">

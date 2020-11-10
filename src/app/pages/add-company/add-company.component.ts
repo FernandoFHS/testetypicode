@@ -138,13 +138,13 @@ export class AddCompanyComponent implements OnInit {
 
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
-      managingCompanyCtrl: ['', Validators.required],
+      companyResponsibleName: ['', Validators.required],
       establishmentCtrl: [{ value: '', disabled: true }], 
-      companyTypeCtrl: ['', Validators.required],
+      companyType: ['', Validators.required],
       companyResponsibleNameCtrl: ['', Validators.required],
       acquiringEstablishmentCtrl: ['', Validators.required],
       stateRegistrationCtrl: ['', Validators.required],
-      companyNameCtrl: ['', Validators.required],
+      companyName: ['', Validators.required],
       fancyName: ['', Validators.required],
       companyShortName: ['', Validators.required],
       mcccode: ['', Validators.required],
@@ -161,7 +161,7 @@ export class AddCompanyComponent implements OnInit {
       cityName: ['', Validators.required],
       uf: ['', Validators.required],
       responsibleNameCtrl: ['', Validators.required],
-      referencePointCtrl: [''],
+      referencePoint: [''],
       zipCode: ['', Validators.required],
       checkboxAdress: ['', Validators.required],
       subordinateZipCode: ['', Validators.required],
@@ -336,18 +336,6 @@ export class AddCompanyComponent implements OnInit {
     delete: true,
   };
 
-  // public loadData() {
-
-  //   this.dataService.getAllProfiles(5, 1).then(
-  //     (data) => {
-  //       this.dataSource = data;
-  //     },
-  //     (error) => {
-  //       console.log('Not found data')
-  //     }
-  //   );
-  // }
-
   //Add Methods
   onAddPhone(idPhone: number) {
     const dialogRef = this.dialog.open(AddPhoneComponent, {
@@ -358,8 +346,6 @@ export class AddCompanyComponent implements OnInit {
       this.phoneNumber$.push(item.value);
       this.phoneNumber$ = [...this.phoneNumber$];
       this.phoneService.refreshDataTable();
-
-      console.log(this.phoneNumber$);
     })
   }
 
@@ -371,7 +357,6 @@ export class AddCompanyComponent implements OnInit {
       this.bankAccount$.push(item.value);
       this.bankAccount$ = [...this.bankAccount$];
       this.phoneService.refreshDataTable();
-      console.log(this.bankAccount$);
     })
   }
 
@@ -387,7 +372,6 @@ export class AddCompanyComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((item) => {  
       this.phoneNumber$ = [...item];
-      console.log(this.phoneNumber$);
       this.phoneService.refreshDataTable();
     })
   }
@@ -401,8 +385,6 @@ export class AddCompanyComponent implements OnInit {
       // this.phoneNumber$.push(item.value);
       // this.phoneNumber$ = [...this.phoneNumber$];
       this.phoneService.refreshDataTable();
-
-      console.log(this.phoneNumber$);
     })
   }
 

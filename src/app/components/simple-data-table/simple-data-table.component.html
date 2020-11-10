@@ -4,6 +4,7 @@
     [dataSource]="dataSource"
     class="example-table"
     matSort
+    class="table-margin"
   >
     <ng-container [matColumnDef]="header.value" *ngFor="let header of headers">
       <mat-header-cell *matHeaderCellDef mat-sort-header>

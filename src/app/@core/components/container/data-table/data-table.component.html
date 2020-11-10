@@ -17,6 +17,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
         {{ header.subValue ? row[header.value][header.subValue] : row[header.value] }}
+        <!-- {{ header.value == true ? row[header.value] = "Credenciado" : row[header.value] = "Descredenciado"}} -->
       </mat-cell>
     </ng-container>
 
@@ -57,5 +58,5 @@
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
 
-  <mat-paginator [length]="resultsLength" [pageSize]="15"></mat-paginator>
+  <mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>
 </div>
