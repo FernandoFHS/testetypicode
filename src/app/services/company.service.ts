@@ -4,7 +4,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { CompanyComponent } from '../pages/company/company.component';
-import { CompanyContent, Mcc, RootObject } from '../models/Company';
+import { CompanyContent, Mcc} from '../models/Company';
 
 @Injectable({
   providedIn: 'root'

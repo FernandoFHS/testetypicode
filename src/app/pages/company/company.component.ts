@@ -46,7 +46,7 @@ export class CompanyComponent implements AfterViewInit {
     { text: 'Tipo', value: 'companyType', subValue: null, deepValue: null },
     { text: 'Razão Social', value: 'companyName', subValue: null, deepValue: null },
     { text: 'MCC	', value: 'cnae', subValue: 'code', deepValue: null },
-    { text: 'Parceiro', value: 'tradingPartnerCode', subValue: null, deepValue: null },
+    { text: 'Parceiro', value: 'companyPartner', subValue: 'partnerName', deepValue: null },
     { text: 'Status', value: 'companyStatus', subValue: null, deepValue: null },
     { text: 'Tab.Vendas', value: 'salesTableNumber', subValue: null, deepValue: null },
     { text: 'Situação', value: 'situation', subValue: null, deepValue: null },

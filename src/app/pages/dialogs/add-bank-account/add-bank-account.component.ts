@@ -109,10 +109,10 @@ export class AddBankAccountComponent implements OnInit {
     console.log(bankValidator);
 
     if (typeof bankValidator === 'object') {  
-      console.log(bankValidator)
 
       this.localStorageService.set('bankAccount', bankAccountArray);
 
+      this.dataService.openSnackBar('Conta adicionada com sucesso', 'X');
       this.dialogRef.close(form);
     } else {
       this.bankValidatorError = true;

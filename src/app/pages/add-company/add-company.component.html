@@ -18,7 +18,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Empresa Administradora</mat-label>
-          <input matInput placeholder="Empresa Administradora" formControlName="managingCompanyCtrl" required />
+          <input matInput placeholder="Empresa Administradora" formControlName="companyResponsibleName" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>admin_panel_settings</mat-icon>
         </mat-form-field>
@@ -49,7 +49,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Tipo</mat-label>
-            <mat-select name="type" #pessoa formControlName="companyTypeCtrl" (blur)="getCpfCnpjMask(pessoa.value)"
+            <mat-select name="type" #pessoa formControlName="companyType" (blur)="getCpfCnpjMask(pessoa.value)"
               required>
               <mat-option></mat-option>
               <mat-option value="pf"> Pessoa Física </mat-option>
@@ -98,7 +98,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Razão Social</mat-label>
-          <input matInput placeholder="Razão Social" formControlName="companyNameCtrl" required />
+          <input matInput placeholder="Razão Social" formControlName="companyName" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>assignment</mat-icon>
         </mat-form-field>
@@ -204,7 +204,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>CEP</mat-label>
-            <input matInput placeholder="Digite o seu cep" formControlName="keyZipCode" required #keyZipCode
+            <input matInput placeholder="Digite o seu cep" formControlName="zipCode" required #keyZipCode
               (blur)="getFirstCep(keyZipCode.value)" mask="00000-000" [showMaskTyped]="true" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>place</mat-icon>
@@ -218,7 +218,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Logradouro</mat-label>
-          <input matInput placeholder="Digite o seu endereço" formControlName="streetCtrl" required />
+          <input matInput placeholder="Digite o seu endereço" formControlName="streetName" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>add_road</mat-icon>
         </mat-form-field>
@@ -227,14 +227,14 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Número</mat-label>
-            <input matInput placeholder="Número" formControlName="numberCtrl" required />
+            <input matInput placeholder="Número" formControlName="number" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>looks_one</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Complemento</mat-label>
-            <input matInput placeholder="Complemento" formControlName="complementCtrl" />
+            <input matInput placeholder="Complemento" formControlName="complement" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>note_add</mat-icon>
           </mat-form-field>
@@ -247,7 +247,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Bairro</mat-label>
-          <input matInput placeholder="Bairro" formControlName="neighborhoodCtrl" required />
+          <input matInput placeholder="Bairro" formControlName="neighborhoodName" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>map</mat-icon>
         </mat-form-field>
@@ -256,14 +256,14 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Município</mat-label>
-            <input matInput placeholder="Digite o seu município" formControlName="cityCtrl" required />
+            <input matInput placeholder="Digite o seu município" formControlName="cityName" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>map</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Estado</mat-label>
-            <input matInput placeholder="Digite o seu estado" formControlName="stateCtrl" required />
+            <input matInput placeholder="Digite o seu estado" formControlName="uf" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>map</mat-icon>
           </mat-form-field>
@@ -283,7 +283,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Ponto de Referência</mat-label>
-          <input matInput placeholder="Ponto de Referência" formControlName="referencePointCtrl"/>
+          <input matInput placeholder="Ponto de Referência" formControlName="referencePoint"/>
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>gps_fixed</mat-icon>
         </mat-form-field>
@@ -426,8 +426,7 @@
 
       </div>
       <mat-divider></mat-divider>
-      <h3>Contato</h3>
-      <h4>Telefones Cadastrados</h4>  
+      <h3>Cadastro de contatos</h3>
 
       <app-simple-data-table [headers]="headersFoneTable" [data]="phoneNumber$" [actions]="actions"
       (addEvent)="onAddPhone($event)" (editEvent)="onEditPhone($event)">
@@ -456,7 +455,7 @@
 
       <div class="line-form">
         
-        <div class="short-line-form">
+        <div class="short-line-2-form">
 
           <mat-form-field appearance="outline">
             <mat-label>Tabela de Vendas</mat-label>
@@ -476,7 +475,7 @@
 
         </div>
 
-        <div class="short-line-form">
+        <div class="short-line-2-form">
 
           <mat-form-field appearance="outline">
             <mat-label>Custo de Transação</mat-label>
@@ -503,7 +502,7 @@
 
       <div class="line-form">
 
-        <div class="short-line-form">
+        <div class="short-line-2-form">
 
           <mat-form-field appearance="outline">
             <mat-label>Transação Referencial</mat-label>
@@ -523,7 +522,7 @@
 
         </div>
 
-        <div class="short-line-form">
+        <div class="short-line-2-form">
 
           <mat-form-field appearance="outline">
             <mat-label>Ignora Regra de Liberação de AJ Manualmente</mat-label>
@@ -556,7 +555,7 @@
       </core-data-table> -->
 
       <app-simple-data-table [headers]="headersBankTable" [data]="bankAccount$" [actions]="actions"
-      (addEvent)="onAddBankAccount($event)">
+      (addEvent)="onAddBankAccount($event)" (editEvent)="onEditBankAccount">
       </app-simple-data-table>
 
       <mat-divider></mat-divider>
@@ -787,15 +786,12 @@
 
   <!--socio Step-->
   <mat-step #partnerStep label="Sócio" state="partner" [stepControl]="partnerFormGroup">
-    <core-data-table
-      [headers]="headersPartnerTable"
-      [data]="partnerSource"
-      [actions]="actionsPartner"
-      (addEvent)="onAddPartner($event)"
-      (deleteEvent)="onDeletePartner($event)"
-      (editEvent)="onEditPartner($event)"
-    >
-    </core-data-table>
+
+    <h3>Cadastro de sócios</h3>
+
+    <app-simple-data-table [headers]="headersPartnerTable" [data]="partnerSource$" [actions]="actions"
+    (addEvent)="onAddPartner($event)" (editEvent)="onEditPartner($event)">
+    </app-simple-data-table>
     <div class="group-actions-buttons">
 
       <button mat-raised-button matStepperPrevious color="warn">Voltar</button>
