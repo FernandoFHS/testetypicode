@@ -78,7 +78,7 @@ export class SimpleDataTableComponent implements OnInit {
 
     this.tableService.onRefreshDataTable().subscribe(() => {
       console.log('Foi')
-      this.dataSource = new MatTableDataSource(this.data)
+      this.dataSource = new MatTableDataSource(this.data);
       this.dataSource.paginator = this.paginator
     })  
   } 

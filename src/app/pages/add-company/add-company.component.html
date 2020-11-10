@@ -204,7 +204,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>CEP</mat-label>
-            <input matInput placeholder="Digite o seu cep" formControlName="keyZipCode" required #keyZipCode
+            <input matInput placeholder="Digite o seu cep" formControlName="zipCode" required #keyZipCode
               (blur)="getFirstCep(keyZipCode.value)" mask="00000-000" [showMaskTyped]="true" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>place</mat-icon>
@@ -218,7 +218,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Logradouro</mat-label>
-          <input matInput placeholder="Digite o seu endereço" formControlName="streetCtrl" required />
+          <input matInput placeholder="Digite o seu endereço" formControlName="streetName" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>add_road</mat-icon>
         </mat-form-field>
@@ -227,14 +227,14 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Número</mat-label>
-            <input matInput placeholder="Número" formControlName="numberCtrl" required />
+            <input matInput placeholder="Número" formControlName="number" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>looks_one</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Complemento</mat-label>
-            <input matInput placeholder="Complemento" formControlName="complementCtrl" />
+            <input matInput placeholder="Complemento" formControlName="complement" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>note_add</mat-icon>
           </mat-form-field>
@@ -247,7 +247,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Bairro</mat-label>
-          <input matInput placeholder="Bairro" formControlName="neighborhoodCtrl" required />
+          <input matInput placeholder="Bairro" formControlName="neighborhoodName" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>map</mat-icon>
         </mat-form-field>
@@ -256,14 +256,14 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Município</mat-label>
-            <input matInput placeholder="Digite o seu município" formControlName="cityCtrl" required />
+            <input matInput placeholder="Digite o seu município" formControlName="cityName" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>map</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Estado</mat-label>
-            <input matInput placeholder="Digite o seu estado" formControlName="stateCtrl" required />
+            <input matInput placeholder="Digite o seu estado" formControlName="uf" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>map</mat-icon>
           </mat-form-field>
@@ -556,7 +556,7 @@
       </core-data-table> -->
 
       <app-simple-data-table [headers]="headersBankTable" [data]="bankAccount$" [actions]="actions"
-      (addEvent)="onAddBankAccount($event)">
+      (addEvent)="onAddBankAccount($event)" (editEvent)="onEditBankAccount">
       </app-simple-data-table>
 
       <mat-divider></mat-divider>
@@ -787,7 +787,7 @@
 
   <!--socio Step-->
   <mat-step #partnerStep label="Sócio" state="partner" [stepControl]="partnerFormGroup">
-    <core-data-table
+    <!-- <core-data-table
       [headers]="headersPartnerTable"
       [data]="partnerSource"
       [actions]="actionsPartner"
@@ -795,7 +795,11 @@
       (deleteEvent)="onDeletePartner($event)"
       (editEvent)="onEditPartner($event)"
     >
-    </core-data-table>
+    </core-data-table> -->
+
+    <app-simple-data-table [headers]="headersPartnerTable" [data]="partnerSource$" [actions]="actions"
+    (addEvent)="onAddPartner($event)" (editEvent)="onEditPartner($event)">
+    </app-simple-data-table>
     <div class="group-actions-buttons">
 
       <button mat-raised-button matStepperPrevious color="warn">Voltar</button>

@@ -77,9 +77,6 @@ this.dataService.create(this.profile).subscribe(() => {
 
     this.localStorageService.set('phoneNumber', foneAdresstArray);
 
-
-    // this.addNewPhone(form);
-
     this.dialogRef.close(form);
   }
 }

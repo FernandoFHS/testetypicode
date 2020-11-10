@@ -79,7 +79,7 @@ export class AddCompanyComponent implements OnInit {
   adress: any = this.localStorageService.get('adressFormGroup');
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
-  partnerSource: any = this.localStorageService.get('partnerFormGroup');
+  partnerSource$: any = [];
   bankAccount$: any = [];
   phoneNumber$: any = [];
 
@@ -116,8 +116,6 @@ export class AddCompanyComponent implements OnInit {
     Validators.required,
   ]);
 
-
-
   ngOnInit(): void {
 
     if (this.localStorageService.get('phoneNumber') == null) {
@@ -132,10 +130,16 @@ export class AddCompanyComponent implements OnInit {
       this.bankAccount$ = this.localStorageService.get('bankAccount');
     }
 
+    if (this.localStorageService.get('partnerFormGroup') == null) {
+      this.partnerSource$ = []
+    } else {
+      this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
+    }
+
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
       managingCompanyCtrl: ['', Validators.required],
-      establishmentCtrl: [{ value: '', disabled: true }],
+      establishmentCtrl: [{ value: '', disabled: true }], 
       companyTypeCtrl: ['', Validators.required],
       companyResponsibleNameCtrl: ['', Validators.required],
       acquiringEstablishmentCtrl: ['', Validators.required],
@@ -150,15 +154,15 @@ export class AddCompanyComponent implements OnInit {
       openingDate: ['', Validators.required]
     });
     this.adressFormGroup = this._formBuilder.group({
-      streetCtrl: ['', Validators.required],
-      numberCtrl: ['', Validators.required],
-      complementCtrl: ['', Validators.required],
-      neighborhoodCtrl: ['', Validators.required],
-      cityCtrl: ['', Validators.required],
-      stateCtrl: ['', Validators.required],
+      streetName: ['', Validators.required],
+      number: ['', Validators.required],
+      complement: ['', Validators.required],
+      neighborhoodName: ['', Validators.required],
+      cityName: ['', Validators.required],
+      uf: ['', Validators.required],
       responsibleNameCtrl: ['', Validators.required],
       referencePointCtrl: [''],
-      keyZipCode: ['', Validators.required],
+      zipCode: ['', Validators.required],
       checkboxAdress: ['', Validators.required],
       subordinateZipCode: ['', Validators.required],
       subordinateNeighborhoodCtrl: ['', Validators.required],
@@ -230,12 +234,12 @@ export class AddCompanyComponent implements OnInit {
     } else {
 
     }
-    if (this.partnerSource != undefined) {
-      this.partnerSource = this.localStorageService.get('partnerFormGroup');
-      this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
-    } else {
+    // if (this.partnerSource$ != undefined) {
+    //   this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
+    //   this.partnerSource$.content = this.localStorageService.get('partnerFormGroup');
+    // } else {
 
-    }
+    // }
 
     if (this.response == null) {
       this.response = this.localStorageService.get('cep');
@@ -312,7 +316,7 @@ export class AddCompanyComponent implements OnInit {
   ];
 
   headersPartnerTable: HeaderModel[] = [
-    { text: 'Número Sequência', value: 'sequenceNumber' },
+    { text: 'Número Sequência', value: 'partnerSequentialNumber' },
     { text: 'Nome', value: 'name' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
@@ -356,17 +360,6 @@ export class AddCompanyComponent implements OnInit {
       this.phoneService.refreshDataTable();
 
       console.log(this.phoneNumber$);
-
-      // console.log(item.value)
-
-      
-
-      // console.log(this.phoneNumber$);
-      
-      // console.log(item)
-      // this.phoneNumber$.subscribe((phone) => {
-      //   phone.push(item)
-      // })
     })
   }
 
@@ -392,9 +385,10 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(EditPhoneComponent, {
       data: index
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.phoneNumber$ = this.localStorageService.get('phoneNumber');
-      // this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+    dialogRef.afterClosed().subscribe((item) => {  
+      this.phoneNumber$ = [...item];
+      console.log(this.phoneNumber$);
+      this.phoneService.refreshDataTable();
     })
   }
 
@@ -403,13 +397,17 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(EditBankAccountComponent, {
       data: index
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.bankAccount$ = this.localStorageService.get('bankAccount');
+    dialogRef.afterClosed().subscribe((item) => {
+      // this.phoneNumber$.push(item.value);
+      // this.phoneNumber$ = [...this.phoneNumber$];
+      this.phoneService.refreshDataTable();
+
+      console.log(this.phoneNumber$);
     })
   }
 
   onEditPartner(row: object) {
-    const index = this.partnerSource.content.findIndex((c) => c == row);
+    const index = this.partnerSource$.findIndex((c) => c == row);
  
     this.router.navigate([`/company-list/edit-partner/${index}`]);
   }
@@ -435,15 +433,15 @@ export class AddCompanyComponent implements OnInit {
   //   })
   // }
 
-  onDeletePartner(row: object) {
-    const deleteItem = this.partnerSource.content.indexOf(row);
-    const dialogRef = this.dialog.open(DeletePartnerComponent, {data: deleteItem});
+  // onDeletePartner(row: object) {
+  //   const deleteItem = this.partnerSource.content.indexOf(row);
+  //   const dialogRef = this.dialog.open(DeletePartnerComponent, {data: deleteItem});
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.partnerSource = this.localStorageService.get('partnerFormGroup');
-      this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
-    })
-  }
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.partnerSource = this.localStorageService.get('partnerFormGroup');
+  //     this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
+  //   })
+  // }
 
   //Navigation Functions
   navigateToCompanyList() {
