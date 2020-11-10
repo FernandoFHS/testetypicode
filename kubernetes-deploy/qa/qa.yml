@@ -1,3 +1,4 @@
+---
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
@@ -17,10 +18,10 @@ spec:
     spec:
       containers:
       - name: "company-front"
-        image: "gcr.io/mobbuy-qa-microservices/company-front:0.0.3"
-        imagePullPolicy: Always
+        image: "gcr.io/mobbuy-qa-microservices/company-front:0.0.7"
 
 
+---
 apiVersion: "v1"
 kind: "Service"
 metadata:

@@ -21,3 +21,7 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 README.md
+**/dist
+**/e2e
+**/.editorconfig
+**/.karma.conf.js
