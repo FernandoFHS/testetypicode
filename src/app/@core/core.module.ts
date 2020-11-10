@@ -17,6 +17,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DataTableComponent } from './components/container/data-table/data-table.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
+
 @NgModule({
   declarations: [
     ContainerComponent,

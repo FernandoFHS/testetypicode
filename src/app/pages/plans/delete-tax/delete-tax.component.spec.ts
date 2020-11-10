@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CompanyListComponent } from './company-list.component';
+import { DeleteTaxComponent } from './delete-tax.component';
 
-describe('CompanyListComponent', () => {
-  let component: CompanyListComponent;
-  let fixture: ComponentFixture<CompanyListComponent>;
+describe('DeleteTaxComponent', () => {
+  let component: DeleteTaxComponent;
+  let fixture: ComponentFixture<DeleteTaxComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CompanyListComponent ]
+      declarations: [ DeleteTaxComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CompanyListComponent);
+    fixture = TestBed.createComponent(DeleteTaxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

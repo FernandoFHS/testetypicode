@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Content, Profile } from 'src/app/models/profile';
+import { Content, Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
@@ -41,7 +41,7 @@ export class EditProfileComponent implements OnInit {
 
   updateProfile(): void {
     this.dataService.update(this.profile).subscribe(() => {
-      //this.dataService.openSnackBar('Produto atualizado com sucesso', 'X');
+      this.dataService.openSnackBar('Produto atualizado com sucesso', 'X');
       this.router.navigate(['/profile-list']);
     });
   }

@@ -6,7 +6,7 @@ import {
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Content, Profile } from 'src/app/models/profile';
+import { Content, Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
@@ -19,8 +19,7 @@ export class AddProfileComponent implements OnInit {
   profile: Content = {
     idProfile: null,
     nameProfile: '',
-    description: ''
-    
+    description: '' 
   }
 
   constructor(
@@ -36,7 +35,7 @@ export class AddProfileComponent implements OnInit {
 
   createProfile(): void {
     this.dataService.create(this.profile).subscribe(() => {
-      //this.dataService.openSnackBar('Perfil adicionado com sucesso!', 'X')
+      this.dataService.openSnackBar('Perfil adicionado com sucesso!', 'X')
       this.router.navigate(['/profile-list'])
     })
   }

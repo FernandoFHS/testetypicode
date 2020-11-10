@@ -1,0 +1,59 @@
+*{
+  overflow: hidden!important;
+}
+
+form .line-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+form .line-form .mat-form-field {
+  width: 48%;
+}
+
+form .line-form .short-line-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 48%;
+}
+
+form .line-form .short-line-form .mat-form-field {
+  width: 45%;
+}
+
+.dialog-actions-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.dialog-actions-buttons button {
+  width: 15em;
+  height: 3em;
+}
+
+.mat-error {
+  margin-top: -25px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+  .dialog-actions-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+
+  .dialog-actions-buttons button {
+    width: 100%;
+    height: 3em;
+  }  
+
+  .dialog-actions-buttons button + button{
+    margin-top: 15px;
+    margin-left: 0;
+  }
+}
