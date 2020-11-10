@@ -113,7 +113,7 @@ export class AddBankAccountComponent implements OnInit {
 
       this.localStorageService.set('bankAccount', bankAccountArray);
 
-      this.dialogRef.close();
+      this.dialogRef.close(form);
     } else {
       this.bankValidatorError = true;
     }
