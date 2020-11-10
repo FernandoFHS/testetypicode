@@ -31,7 +31,8 @@ import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component
 import { PlansComponent } from './pages/plans/plans.component';
 import { DeleteTaxComponent } from './pages/plans/delete-tax/delete-tax.component';
 import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
-import { SimpleDataTableComponent } from './components/simple-data-table/simple-data-table.component';
+import { SimpleDataTableComponent } from 'src/app/@core/components/container/simple-data-table/simple-data-table.component';
+
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 

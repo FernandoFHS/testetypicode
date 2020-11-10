@@ -103,47 +103,20 @@
           <mat-icon matSuffix>assignment</mat-icon>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Nome Fantasia</mat-label>
-          <input matInput placeholder="Nome Fantasia" formControlName="fancyName" required />
-          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-          <mat-icon matSuffix>perm_contact_calendar</mat-icon>
-        </mat-form-field>
-
-      </div>
-
-      <div class="line-form">
-
-        <mat-form-field appearance="outline">
-          <mat-label>Nome Reduzido</mat-label>
-          <input matInput placeholder="Razão Social" formControlName="companyShortName" required />
-          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-          <mat-icon matSuffix>short_text</mat-icon>
-        </mat-form-field>
-
-        <div class="short-line-form">
+        <div class="short-line-2-form">
 
           <mat-form-field appearance="outline">
-            <mat-label>CNAE</mat-label>
-            <input matInput
-                  
-                   aria-label="Cnae"
-                   formControlName="cnae"
-                   [matAutocomplete]="auto"
-                   [formControl]="cnaeForm"
-                   (blur)="getMccByCnae()">
-            <mat-autocomplete #auto="matAutocomplete" required  [displayWith]="displayFn" >
-              <mat-option *ngFor="let item of filteredCnaes | async" [value]="item">
-                <span>{{item.description}}</span>
-              </mat-option>
-            </mat-autocomplete>
+            <mat-label>Nome Fantasia</mat-label>
+            <input matInput placeholder="Nome Fantasia" formControlName="fancyName" required />
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <mat-icon matSuffix>perm_contact_calendar</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>MCC</mat-label>
-            <input matInput placeholder="MCC" formControlName="mcccode" required />
+            <mat-label>Nome Reduzido</mat-label>
+            <input matInput placeholder="Razão Social" formControlName="companyShortName" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-            <mat-icon matSuffix>assignment</mat-icon>
+            <mat-icon matSuffix>short_text</mat-icon>
           </mat-form-field>
 
         </div>
@@ -152,7 +125,13 @@
 
       <div class="line-form">
 
-        <div class="short-line-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Atividade comercial</mat-label>
+          <textarea matInput formControlName="businessActivity"></textarea>
+          <mat-icon matSuffix>meeting_room</mat-icon>
+        </mat-form-field>
+
+        <div class="short-line-2-form">
           <mat-form-field appearance="outline">
             <mat-label>Departamento</mat-label>
             <input matInput placeholder="Departamento" formControlName="idDepartament" required />
@@ -171,17 +150,39 @@
       </div>
 
       <div class="line-form">
-        <mat-form-field appearance="outline">
-          <mat-label>Atividade comercial</mat-label>
-          <textarea matInput formControlName="businessActivity"></textarea>
-          <mat-icon matSuffix>meeting_room</mat-icon>
-        </mat-form-field>
+
+      <div class="short-line-form-threeOfFour">
+
+      <mat-form-field appearance="outline">
+        <mat-label>CNAE</mat-label>
+        <input matInput
+              
+               aria-label="Cnae"
+               formControlName="cnae"
+               [matAutocomplete]="auto"
+               [formControl]="cnaeForm"
+               (blur)="getMccByCnae()">
+        <mat-autocomplete #auto="matAutocomplete" required  [displayWith]="displayFn" >
+          <mat-option *ngFor="let item of filteredCnaes | async" [value]="item">
+            <span>{{item.description}}</span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>MCC</mat-label>
+        <input matInput placeholder="MCC" formControlName="mcccode" required />
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        <mat-icon matSuffix>assignment</mat-icon>
+      </mat-form-field>
+
+      </div>
 
       </div>
 
       <div class="group-actions-buttons">
 
-        <button mat-raised-button matStepperPrevious color="warn" (click)="navigateToCompanyList()" >Voltar</button>
+        <button mat-raised-button matStepperPrevious color="accent" (click)="navigateToCompanyList()" >Voltar</button>
 
         <button mat-raised-button matStepperNext color="primary"
           (click)="saveForm(identificationFormGroup,'identificationFormGroup');checkValueBankAdress(false)">Avançar</button>
@@ -434,7 +435,7 @@
 
       <div class="group-actions-buttons">
 
-        <button mat-raised-button matStepperPrevious color="warn"
+        <button mat-raised-button matStepperPrevious color="accent"
           (click)="saveForm(adressFormGroup,'adressFormGroup')">Voltar</button>
 
         <button mat-raised-button matStepperNext color="primary"
@@ -602,7 +603,7 @@
 
       <div class="group-actions-buttons">
 
-        <button mat-raised-button matStepperPrevious color="warn"
+        <button mat-raised-button matStepperPrevious color="accent"
           (click)="saveForm(conditionFormGroup,'conditionFormGroup')">Voltar</button>
 
         <button mat-raised-button matStepperNext color="primary"
@@ -772,7 +773,7 @@
 
       <div class="group-actions-buttons">
 
-        <button mat-raised-button matStepperPrevious color="warn"
+        <button mat-raised-button matStepperPrevious color="accent"
           (click)="saveForm(complementFormGroup,'complementFormGroup')">Voltar</button>
 
         <button mat-raised-button matStepperNext color="primary"
@@ -794,7 +795,7 @@
     </app-simple-data-table>
     <div class="group-actions-buttons">
 
-      <button mat-raised-button matStepperPrevious color="warn">Voltar</button>
+      <button mat-raised-button matStepperPrevious color="accent">Voltar</button>
 
       <button mat-raised-button matStepperNext color="primary" (click)="createCompany()">Criar </button>
 

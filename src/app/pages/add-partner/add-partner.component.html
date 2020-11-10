@@ -173,7 +173,7 @@
           <button mat-raised-button color="warn" tabindex="-1" (click)="onNoClick()">
             Cancelar
           </button>
-          <button mat-raised-button color="primary" (click)="savePartner(partnerFormGroup)">
+          <button mat-raised-button color="primary" [disabled]="!partnerFormGroup.valid" (click)="savePartner(partnerFormGroup)">
             Salvar
           </button>
         </div>

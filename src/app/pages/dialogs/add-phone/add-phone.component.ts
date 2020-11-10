@@ -53,13 +53,6 @@ export class AddPhoneComponent implements OnInit {
       : '';
   }
 
-  /*  createBankAccount(): void {
-this.dataService.create(this.profile).subscribe(() => {
-  this.dataService.openSnackBar('Perfil adicionado com sucesso!', 'X')
-  this.dialogRef.close();
-})
-}*/
-
   addNewPhone(value: string) {
     this.addingDataPhone.emit(value);
   }
@@ -68,7 +61,7 @@ this.dataService.create(this.profile).subscribe(() => {
     this.dialogRef.close();
   }
 
-  saveFone(form) {
+  savePhone(form) {
     let foneAdresstArray = this.localStorageService.get('phoneNumber');
     if (!foneAdresstArray) {
       foneAdresstArray = [];

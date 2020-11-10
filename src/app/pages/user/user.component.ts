@@ -8,6 +8,7 @@ import { merge, Observable, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
+import { SimpleDataTableService } from 'src/app/@core/components/container/simple-data-table/simple-data-table.service';
 import { Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
@@ -30,7 +31,8 @@ export class UserComponent implements AfterViewInit {
     public httpClient: HttpClient,
     public dialog: MatDialog,
     private dataService: DataService,
-    private router: Router
+    private router: Router,
+  
   ) {}
 
   ngAfterViewInit() {}
