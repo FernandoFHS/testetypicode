@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Profile, Content } from '../models/Profile';
-import { Partner } from '../models/Partner';
 import {
   HttpClient,
-  HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
 import {
@@ -18,8 +16,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class DataService {
-  private readonly API_URL =
-    'http://register-profile.qa.appmobbuy.tech:8080/profiles';
+  private readonly API_URL ='http://register-profile.qa.appmobbuy.tech:8080/profiles';
 
   constructor(private httpClient: HttpClient, public _snackBar: MatSnackBar) {}
 

@@ -36,6 +36,7 @@ import { Cnae } from '../../models/company/Cnae'
 import { Observable, of } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { SimpleDataTableService } from 'src/app/components/simple-data-table/simple-data-table.service';
+import { CompanyService } from '../../services/company.service';
 
 @Component({
   selector: 'app-add-company',
@@ -61,7 +62,7 @@ import { SimpleDataTableService } from 'src/app/components/simple-data-table/sim
 export class AddCompanyComponent implements OnInit {
 
   cnaeForm = new FormControl();
-
+  testecompany: any;
   isLinear = false;
   identificationFormGroup: FormGroup;
   adressFormGroup: FormGroup;
@@ -95,6 +96,7 @@ export class AddCompanyComponent implements OnInit {
     private CepService: CepService,
     private dataService: DataService,
     private cnaeService: CnaeService,
+    private companyService: CompanyService,
     public dialog: MatDialog,
     private router: Router,
     private localStorageService: LocalStorageService,
@@ -244,6 +246,22 @@ export class AddCompanyComponent implements OnInit {
     }
 
     this.checkValueBankAdress(true);
+  }
+
+
+  createCompany(){
+    this.testecompany = Object.assign({}, 
+      this.identificationFormGroup.value,
+      this.adressFormGroup.value,
+      this.conditionFormGroup.value,
+      this.complementFormGroup.value,
+      this.partnerFormGroup.value);
+      console.log(this.testecompany);
+      
+      this.companyService.create(this.testecompany).subscribe((response:any)=>{
+        console.log(response);
+      })
+    
   }
 
   gelAllCnaes(){

@@ -1,10 +1,9 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
+  annotations:
   name: "company-front"
   namespace: "company-front"
-  labels:
-    app: "company-front"
 spec:
   replicas: 1
   selector:
@@ -16,21 +15,31 @@ spec:
         app: "company-front"
     spec:
       containers:
-      - name: "company-front"
-        image: "gcr.io/mobbuy-qa-microservices/company-front:0.0.1"
-        imagePullPolicy: Always
-        apiVersion: "v1"
-        kind: "Service"
-        metadata:
-          name: "company-front"
-          namespace: "company-front"
-          labels:
-            app: "company-front"
-          annotations:
-            external-dns.alpha.kubernetes.io/hostname: company-front.qa.appmobbuy.tech
-        spec:
-          type: "LoadBalancer"
-          selector:
-            app: "company-front"
-          ports:
-          - port: 80
+      - image: "gcr.io/mobbuy-qa-microservices/company-front:0.0.3"
+        name: "company-front"
+    ports:
+    - name: "http"
+      port: 80
+      protocol: "TCP"
+      targetPort: 80
+
+
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  annotations:
+        external-dns.alpha.kubernetes.io/hostname: "company-front.qa.appmobbuy.tech"
+  labels:
+    app: "company-front"
+  name: "company-front"
+  namespace: "company-front"
+spec:
+  externalTrafficPolicy: "Local"
+  ports:
+  - name: "http"
+    port: 80
+    protocol: "TCP"
+    targetPort: 80
+  selector:
+   app: "company-front"
+  type: "LoadBalancer"

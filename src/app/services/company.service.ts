@@ -24,16 +24,15 @@ export class CompanyService {
   getAllCompanies(sort: string, order: string, page: number, size: number): Observable<CompanyContent[]> {
     const requestUrl =
         `${this.API_URL}company?sort=${sort},${order}&page=${page}&size=${size}`;
-        console.log('Oi')
-
+  
     return this.httpClient.get<CompanyContent[]>(requestUrl);
   }
 
   create(company: CompanyContent): Observable<CompanyContent> {
-    return this.httpClient.post<CompanyContent>(this.API_URL, company).pipe(
-      tap(() => {
-        this._refreshTable.next();
-      })
+    return this.httpClient.post<CompanyContent>(this.API_URL + 'company', company).pipe(
+      // tap(() => {
+      //   this._refreshTable.next();
+      // })
     );
   }
 
