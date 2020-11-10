@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  testedocker:
-    image: mobbuytemplate
-    build: .
-    ports:
-      - 8081:80
