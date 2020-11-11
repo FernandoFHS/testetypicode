@@ -82,7 +82,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Inscrição Estadual</mat-label>
-          <input matInput placeholder="Inscrição Estadual" formControlName="stateRegistrationCtrl" required
+          <input matInput placeholder="Inscrição Estadual" formControlName="stateRegistration" required
             mask="000000000000" />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>assignment</mat-icon>
@@ -467,9 +467,9 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Crédito Comercial</mat-label>
-            <mat-select name="type" formControlName="comercialCredit" required>
-              <mat-option value="Sim"> Sim </mat-option>
-              <mat-option value="Não"> Não </mat-option>
+            <mat-select name="type" formControlName="automaticCreditIndicator" required>
+              <mat-option value="S"> Sim </mat-option>
+              <mat-option value="N"> Não </mat-option>
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
@@ -480,14 +480,14 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Custo de Transação</mat-label>
-            <input matInput placeholder="R$ 0,00" formControlName="transactionCostCtrl" required prefix="R$" mask=" 0,00 || 00,00 || || 000,00 || 0.000,00" />
+            <input matInput placeholder="R$ 0,00" formControlName="transactionAmount" required prefix="R$" mask=" 0,00 || 00,00 || || 000,00 || 0.000,00" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>attach_money_cicle</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Custo TED/DOC</mat-label>
-            <input matInput placeholder="R$ 0,00" formControlName="tedCostCtrl" required prefix="R$" mask=" 0,00 || 00,00 || || 000,00 || 0.000,00"/>
+            <input matInput placeholder="R$ 0,00" formControlName="tedAmount" required prefix="R$" mask=" 0,00 || 00,00 || || 000,00 || 0.000,00"/>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>attach_money_cicle</mat-icon>
           </mat-form-field>
@@ -507,7 +507,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Transação Referencial</mat-label>
-            <input matInput placeholder="R$ 0,00" formControlName="referralTransacionCtrl" required prefix="R$" mask=" 0,00 || 00,00 || || 000,00 || 0.000,00"/>
+            <input matInput placeholder="R$ 0,00" formControlName="referentialTransacionAmount" required prefix="R$" mask=" 0,00 || 00,00 || || 000,00 || 0.000,00"/>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>swap_horizontal_circle</mat-icon>
           </mat-form-field>
@@ -515,7 +515,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Taxa de Antecipação</mat-label>
-            <input matInput placeholder="R$ 0,00" formControlName="anticipationFeeCtrl" required prefix="R$"
+            <input matInput placeholder="R$ 0,00" formControlName="anticipationFee" required prefix="R$"
               mask=" 0,00 || 00,00 || || 000,00 || 0.000,00" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>attach_money_cicle</mat-icon>
@@ -527,7 +527,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Ignora Regra de Liberação de AJ Manualmente</mat-label>
-            <mat-select name="type" formControlName="ignoreRuleAjCtrl" required>
+            <mat-select name="type" formControlName="ignoreLiberationAJManual" required>
               <mat-option value="Sim"> Sim </mat-option>
               <mat-option value="Não"> Não </mat-option>
             </mat-select>
@@ -536,7 +536,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Trata AJ Pelo Liquido ou Bruto</mat-label>
-            <mat-select name="type" formControlName="tratamentAjCtrl" required>
+            <mat-select name="type" formControlName="ajtype" required>
               <mat-option value="B"> Pelo Bruto </mat-option>
               <mat-option value="L"> Pelo Líquido </mat-option>
             </mat-select>
@@ -556,7 +556,7 @@
       </core-data-table> -->
 
       <app-simple-data-table [headers]="headersBankTable" [data]="bankAccount$" [actions]="actions"
-      (addEvent)="onAddBankAccount($event)" (editEvent)="onEditBankAccount">
+      (addEvent)="onAddBankAccount($event)" (editEvent)="onEditBankAccount($event)">
       </app-simple-data-table>
 
       <mat-divider></mat-divider>
@@ -575,7 +575,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Tipo do beneficiado</mat-label>
-            <mat-select name="type" #benefitedType formControlName="benefitedTypeCtrl" (blur)="getCpfCnpjMask(benefitedType.value)"required>
+            <mat-select name="type" #benefitedType formControlName="beneficiaryType" (blur)="getCpfCnpjMask(benefitedType.value)"required>
               <mat-option></mat-option>
               <mat-option value="pf"> Pessoa Física </mat-option>
               <mat-option value="pj"> Pessoa Jurídica </mat-option>
@@ -585,7 +585,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Nome do Beneficiado</mat-label>
-            <input matInput placeholder="Nome do Beneficiado" formControlName="benefitedNameCtrl" required />
+            <input matInput placeholder="Nome do Beneficiado" formControlName="beneficiaryName" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix [ngStyle]="{ color: isCheckedBankAdress ? '' : 'gray' }">account_box</mat-icon>
           </mat-form-field>
@@ -626,7 +626,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Horário de funcionamento</mat-label>
-          <mat-select name="type" required formControlName="openingHoursCtrl">
+          <mat-select name="type" required formControlName="openingHours">
             <mat-option value="Horário Comercial">Horário Comercial</mat-option>
             <mat-option value="24 horas"> 24 horas </mat-option>
             <mat-option value="Manhã"> Manhã </mat-option>
@@ -639,7 +639,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>URL Ecommerce</mat-label>
-          <input matInput placeholder="Ex: www.site.com.br" formControlName="urlEcommerceCtrl" required />
+          <input matInput placeholder="Ex: www.site.com.br" formControlName="ecommerceURL" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>link</mat-icon>
         </mat-form-field>
@@ -650,14 +650,14 @@
 
         <mat-form-field appearance="outline">
           <mat-label>URL</mat-label>
-          <input matInput placeholder="Ex: www.site.com.br" formControlName="urlCtrl" required />
+          <input matInput placeholder="Ex: www.site.com.br" formControlName="estUrl" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>link</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput placeholder="Ex: teste@email.com" formControlName="emailCtrl" required />
+          <input matInput placeholder="Ex: teste@email.com" formControlName="email" required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>mail</mat-icon>
         </mat-form-field>
@@ -670,14 +670,14 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Quantidade POS</mat-label>
-            <input matInput placeholder="Quantidade POS" formControlName="posAmountCtrl" required />
+            <input matInput placeholder="Quantidade POS" formControlName="posQuantity" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>phonelink_ring</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Número Lógico (MID)</mat-label>
-            <input matInput placeholder="Número Lógico (MID)" formControlName="logicNumberCtrl" required />
+            <input matInput placeholder="Número Lógico (MID)" formControlName="logicNumber" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>dialpad</mat-icon>
           </mat-form-field>
@@ -688,7 +688,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Id. Terminal (TID)</mat-label>
-            <input matInput placeholder="Id. Terminal (TID)" formControlName="idTerminalCtrl" required />
+            <input matInput placeholder="Id. Terminal (TID)" formControlName="idTerminal" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>more_horiz</mat-icon>
           </mat-form-field>
@@ -715,14 +715,14 @@
           <mat-form-field appearance="outline">
             <mat-label>Cadastro BF</mat-label>
             <input matInput [matDatepicker]="registrationDate" placeholder="Data Cadastro BF"
-              formControlName="registrationDateCtrl">
+              formControlName="registrationDate">
             <mat-datepicker-toggle matSuffix [for]="registrationDate"></mat-datepicker-toggle>
             <mat-datepicker #registrationDate></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Envio GP</mat-label>
-            <input matInput [matDatepicker]="sendDate" placeholder="Data Envio GP" formControlName="sendDateCtrl">
+            <input matInput [matDatepicker]="sendDate" placeholder="Data Envio GP" formControlName="gpSendDate">
             <mat-datepicker-toggle matSuffix [for]="sendDate"></mat-datepicker-toggle>
             <mat-datepicker #sendDate></mat-datepicker>
           </mat-form-field>
@@ -730,7 +730,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Credenciamento GP</mat-label>
             <input matInput [matDatepicker]="accreditationDate" placeholder="Data Credencialmento GP"
-              formControlName="accreditationDateCtrl">
+              formControlName="accreditationDate">
             <mat-datepicker-toggle matSuffix [for]="accreditationDate"></mat-datepicker-toggle>
             <mat-datepicker #accreditationDate></mat-datepicker>
           </mat-form-field>
@@ -746,7 +746,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Afiliação GP</mat-label>
             <input matInput [matDatepicker]="gpAffiliationDate" placeholder="Data Afiliação GP"
-              formControlName="gpAffiliationDateCtrl">
+              formControlName="gpAffiliationDate">
             <mat-datepicker-toggle matSuffix [for]="gpAffiliationDate"></mat-datepicker-toggle>
             <mat-datepicker #gpAffiliationDate></mat-datepicker>
           </mat-form-field>
@@ -754,7 +754,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Cadastramento SE</mat-label>
             <input matInput [matDatepicker]="seRegistrationDate" placeholder="Data Cadastramento SE"
-              formControlName="seRegistrationDateCtrl">
+              formControlName="seRegistrationDate">
             <mat-datepicker-toggle matSuffix [for]="seRegistrationDate"></mat-datepicker-toggle>
             <mat-datepicker #seRegistrationDate></mat-datepicker>
           </mat-form-field>
@@ -762,7 +762,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Descredencimento</mat-label>
             <input matInput [matDatepicker]="discreditationDate" placeholder="Data Descredencimento"
-              formControlName="discreditationDateCtrl">
+              formControlName="discreditationDate">
             <mat-datepicker-toggle matSuffix [for]="discreditationDate"></mat-datepicker-toggle>
             <mat-datepicker #discreditationDate></mat-datepicker>
           </mat-form-field>
