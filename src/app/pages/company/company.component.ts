@@ -72,8 +72,10 @@ export class CompanyComponent implements AfterViewInit {
   }
 
 
-  onEdit(index: number) {
-    console.log('esse é o meu index para editar ' + index);
+  onEdit(row: any) {
+    console.log(row)
+    const { idCompany } = row;
+    this.router.navigate([`/company-list/edit-company/${idCompany}`]);
   }
 
   onAdd(index: number) {
