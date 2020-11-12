@@ -18,6 +18,7 @@ import { EditCompanyComponent } from '../pages/edit-company/edit-company.compone
 import { AddPartnerComponent } from '../pages/add-partner/add-partner.component';
 import { PlansComponent } from '../pages/plans/plans.component';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
+import { ListRuleComponent } from '../pages/rule-area/list-rule/list-rule.component';
 
 export const routes: Routes = [
   {
@@ -34,12 +35,16 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'add-rule',
+            redirectTo: 'list-rule',
             pathMatch: 'full'
           },
           {
             path: 'add-rule',
             component: AddRuleComponent
+          },
+          {
+            path: 'list-rule',
+            component: ListRuleComponent
           }
         ]
       },

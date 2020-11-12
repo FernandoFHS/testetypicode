@@ -1,7 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
+import { MonitoringRuleService } from 'src/app/services/monitoring-rule.service';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { NotificationService } from 'src/app/services/notification.service';
+import { MonitoringRuleVariableResponseModel } from 'src/app/models/response/monitoring-rule-variable.response.model';
+import { MonitoringRuleRequestModel } from 'src/app/models/requests/monitoring-rule.request.model';
+import { MonitoringRuleConditionRequestModel } from 'src/app/models/requests/monitoring-rule-condition.request.model';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-rule',
@@ -10,190 +19,197 @@ import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 })
 export class AddRuleComponent implements OnInit {
 
-  breadcrumb_model: BreadcrumbModel = {
+  emailSeparatorKeysCodes: number[] = [ENTER, COMMA];
+
+  breadcrumbModel: BreadcrumbModel = {
     active: {
       title: 'Incluir Regra',
       route: 'rule'
     },
     items: [
       { title: 'Home', route: '' },
-      { title: 'Regras', route: 'rules' }
+      { title: 'Lista de Regras', route: 'rule-area' }
     ]
   };
 
   form: FormGroup;
 
-  logic_operator_list: any[] = [{
+  logicOperatorList: { text: string; value: string }[] = [{
     text: 'E',
-    value: 1
+    value: 'E'
   }, {
     text: 'OU',
-    value: 2
+    value: 'OU'
   }];
 
-  variable_list: any[] = [{
-    text: 'Valor Transação',
-    value: 0,
-    comparison_operator_list: [
-      { text: 'Igual' },
-      { text: 'Maior' },
-      { text: 'Menor' },
-      { text: 'Maior ou Igual' },
-      { text: 'Menor ou Igual' },
-      { text: 'Diferente' },
-    ]
-  }, {
-    text: 'Adquirente',
-    value: 1,
-    comparison_operator_list: [
-      { text: 'Entre' },
-      { text: 'Diferente' },
-      { text: 'Entre' },
-    ]
-  }, {
-    text: 'CNAE',
-    value: 2,
-    comparison_operator_list: [
-      { text: 'Entre' },
-      { text: 'Diferente' },
-      { text: 'Entre' },
-    ]
-  }, {
-    text: 'MCC',
-    value: 3,
-    comparison_operator_list: [
-      { text: 'Entre' },
-      { text: 'Diferente' },
-      { text: 'Entre' },
-    ]
-  }, {
-    text: 'Modo Entrada',
-    value: 4,
-    comparison_operator_list: [
-      { text: 'Entre' },
-      { text: 'Diferente' },
-      { text: 'Entre' },
-    ]
-  }, {
-    text: 'Tipo Venda',
-    value: 5,
-    comparison_operator_list: [
-      { text: 'Entre' },
-      { text: 'Diferente' },
-      { text: 'Entre' },
-    ]
-  }, {
-    text: 'Status Transação',
-    value: 6,
-    comparison_operator_list: [
-      { text: 'Entre' },
-      { text: 'Diferente' },
-      { text: 'Entre' },
-    ]
-  }, {
-    text: 'Código Retorno',
-    value: 7,
-    comparison_operator_list: [
-      { text: 'Entre' },
-      { text: 'Diferente' },
-      { text: 'Entre' },
-    ]
-  }, {
-    text: 'Horário Transação',
-    value: 8,
-    comparison_operator_list: [
-      { text: 'Maior' },
-      { text: 'Menor' },
-      { text: 'Maior ou Igual' },
-      { text: 'Menor ou Igual' },
-    ]
-  }, {
-    text: 'Recorrência - Mesmo Estabelecimento e Mesmo Valor Transação',
-    value: 9,
-    comparison_operator_list: [
-      { text: 'Maior' },
-      { text: 'Maior ou Igual' }
-    ]
-  }, {
-    text: 'Recorrência - Mesmo Estabelecimento, Mesmo Valor Transação e Mesmo Número Cartão',
-    value: 10,
-    comparison_operator_list: [
-      { text: 'Maior' },
-      { text: 'Maior ou Igual' }
-    ]
-  }, {
-    text: 'Recorrência - Mesmo Estabelecimento e Mesmo Número Cartão',
-    value: 11,
-    comparison_operator_list: [
-      { text: 'Maior' },
-      { text: 'Maior ou Igual' }
-    ]
-  }, {
-    text: 'Volume',
-    value: 12,
-    comparison_operator_list: [
-      { text: 'Maior' },
-      { text: 'Maior ou Igual' }
-    ]
-  }, {
-    text: 'Volume por Hora',
-    value: 13,
-    comparison_operator_list: [
-      { text: 'Maior' },
-      { text: 'Maior ou Igual' }
-    ]
-  }, {
-    text: 'Ticket Médio',
-    value: 14,
-    comparison_operator_list: [
-      { text: 'Maior' },
-      { text: 'Maior ou Igual' }
-    ]
-  }, {
-    text: 'Ticket Médio por Hora',
-    value: 15,
-    comparison_operator_list: [
-      { text: 'Maior' },
-      { text: 'Maior ou Igual' }
-    ]
-  }];
+  emails: string[] = [];
 
-  condition_comparison_operator_list: any[] = [];
+  variables: MonitoringRuleVariableResponseModel[] = [];
+
+  selectedVariables: MonitoringRuleVariableResponseModel[] = [];
 
   constructor(
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _monitoringRuleService: MonitoringRuleService,
+    private _notificationService: NotificationService,
+    private _el: ElementRef,
+    private _spinnerService: NgxSpinnerService,
+    private _router: Router
   ) { }
 
   ngOnInit(): void {
     this._loadForm();
+
+    this._monitoringRuleService.getVariables().then((variables) => {
+      this.variables = variables;
+
+      // this.variables.forEach((variable) => {
+      //   console.log(variable.data_type, variable.display_name);
+      // });
+    });
   }
 
   addCondition(): void {
     const conditions = this.form.get('conditions') as FormArray;
     conditions.push(this._createCondition());
-    this.condition_comparison_operator_list.push();
   }
 
   onChangeVariable(event: MatSelectChange, index: number): void {
-    console.log(event);
-    this.condition_comparison_operator_list[index] = event.value;
+    const conditionsForm = this.form.get('conditions') as FormArray;
 
-    console.log(this.condition_comparison_operator_list);
+    const variable = this.variables.find(v => v.variable_name == event.value);
+    const comparisonOperatorForm = conditionsForm.controls[index].get('comparison_op');
+    const valueForm = conditionsForm.controls[index].get('value');
+
+    comparisonOperatorForm.setValue('');
+    valueForm.setValue(null);
+
+    if (this.selectedVariables[index]) {
+      this.selectedVariables[index] = variable;
+    }
+    else {
+      this.selectedVariables.push(variable);
+    }
+
+    comparisonOperatorForm.enable();
+  }
+
+  onChangeComparisonOperator(event: MatSelectChange, index: number): void {
+    const conditionsForm = this.form.get('conditions') as FormArray;
+    const valueForm = conditionsForm.controls[index].get('value');
+
+    valueForm.enable();
+
+    setTimeout(() => {
+      this._el.nativeElement.querySelector(`#condition-value-${index}`).focus();
+    });
   }
 
   private _loadForm(): void {
     this.form = this._formBuilder.group({
-      description: ['', []],
-      conditions: this._formBuilder.array([])
+      description: ['', [Validators.required]],
+      conditions: this._formBuilder.array([]),
+      critical_level: ['LOW', []],
+      email_notification_mode: ['SEND_FOR_ALL', []],
+      block_merchant_transactions: [false, []],
+      email: ['', [Validators.email]]
     });
   }
 
   private _createCondition(): FormGroup {
     return this._formBuilder.group({
-      operador_logico: [{ value: '', disabled: false }, []],
-      variavel: [{ value: '', disabled: false }, []],
-      op_comparacao: [{ value: '', disabled: false }, []],
-      valor: [{ value: '', disabled: true }, []]
+      logic_op: [{ value: 'E', disabled: false }, []],
+      variable: [{ value: '', disabled: false }, [Validators.required]],
+      comparison_op: [{ value: '', disabled: true }, [Validators.required]],
+      value: [{ value: '', disabled: true }, [Validators.required]]
     });
+  }
+
+  save(): void {
+    this.form.markAllAsTouched();
+
+    this.form.get('email').setValue('');
+
+    if (this.form.valid) {
+      this._spinnerService.show();
+
+      const form = this.form.getRawValue();
+      const formConditions = (this.form.get('conditions') as FormArray);
+
+      const conditions: MonitoringRuleConditionRequestModel[] = [];
+
+      for (let index = 0; index < formConditions.controls.length; index++) {
+        const formCondition = formConditions.at(index);
+        const selectedVariable = this.selectedVariables[index];
+
+        const condition: MonitoringRuleConditionRequestModel = {
+          comparison_operator: formCondition.get('comparison_op').value,
+          comparison_sequence: index.toString(),
+          createdAt: '', // TODO
+          id: 0, // TODO
+          logical_operator: formCondition.get('logic_op').value,
+          monetary_value: selectedVariable.data_type == 'Monetary' ? formCondition.get('value').value : null,
+          numeric_without_decimal_places_value: selectedVariable.data_type == 'ListOfValue' ? formCondition.get('value').value : null,
+          updatedAt: '', // TODO
+          variable_name: formCondition.get('variable').value
+        }
+
+        conditions.push(condition);
+      }
+
+      const request: MonitoringRuleRequestModel = {
+        active: false,
+        block_merchant_transactions: form.block_merchant_transactions,
+        createdAt: '', // TODO
+        critical_level: form.critical_level,
+        description: form.description,
+        email_notification_mode: form.email_notification_mode,
+        email_notification_recipients: this.emails || [],
+        id: 0, // TODO
+        id_user_of_activation: 0, // TODO
+        monitoring_rule_condition: conditions,
+        updatedAt: '' // TODO
+      }
+
+      this._monitoringRuleService.add(request).then((response) => {
+        this._notificationService.success('Regra salva com sucesso!');
+        this._router.navigate(['rule-area/list-rule']);
+      }, (error) => {
+        this._notificationService.error('Erro ao salvar a Regra, tente novamente.');
+      }).finally(() => {
+        this._spinnerService.hide();
+      });
+    }
+    else {
+      this._notificationService.error('Formulário inválido.');
+    }
+  }
+
+  addEmail(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if (this.form.get('email').valid) {
+      if ((value || '').trim()) {
+        this.emails.push(value.trim());
+      }
+
+      if (input) {
+        input.value = '';
+      }
+
+      this.form.get('email').setValue(null);
+    }
+    else {
+      this._notificationService.error('E-mail inválido.');
+    }
+  }
+
+  removeEmail(index: number): void {
+    this.emails.splice(index, 1);
+  }
+
+  back(): void {
+    this._router.navigate(['rule-area/list-rule']);
   }
 }

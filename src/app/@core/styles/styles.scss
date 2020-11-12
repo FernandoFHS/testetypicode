@@ -469,7 +469,7 @@ html body {
     }
 
     .font-16 {
-        font-size: 16px;
+        font-size: 16px !important;
     }
 
     .font-14 {
@@ -921,4 +921,24 @@ mat-expansion-panel {
 
 .mat-option-text.mat-option-text {
     white-space: normal;
+}
+
+.input-helper {
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.loading-data {
+    // position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

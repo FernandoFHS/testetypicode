@@ -1,4 +1,15 @@
-.margin{
+.margin {
   margin: 15px;
   padding-right: 15px;
 }
+
+.mat-column-actions {
+  flex: 0 0 75px;
+}
+
+mat-row {
+  mat-cell:not(:last-child) {
+    padding-right: 15px;
+  }
+}
+
