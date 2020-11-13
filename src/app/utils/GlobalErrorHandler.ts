@@ -5,6 +5,7 @@ export class GlobalErrorHandler implements ErrorHandler {
   
   handleError(error) {
     console.error(error);
-    return error
+
+    return error;
   }
 }

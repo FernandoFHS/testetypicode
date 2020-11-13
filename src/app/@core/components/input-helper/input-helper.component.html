@@ -1,0 +1,21 @@
+<label mat-dialog-title class="title">
+  {{data.title}}
+</label>
+
+<mat-dialog-content class="messages">
+
+  <ul>
+    <li *ngFor="let message of data.messages">
+      <label>
+        {{message}}
+      </label>
+    </li>
+  </ul>
+
+</mat-dialog-content>
+
+<mat-dialog-actions class="float-right">
+  <button color="accent" mat-raised-button (click)="close()">
+    Fechar
+  </button>
+</mat-dialog-actions>

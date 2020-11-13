@@ -1,29 +1,29 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSelectChange } from '@angular/material/select';
-import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
-import { MonitoringRuleService } from 'src/app/services/monitoring-rule.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { NotificationService } from 'src/app/services/notification.service';
-import { MonitoringRuleVariableResponseModel } from 'src/app/models/response/monitoring-rule-variable.response.model';
-import { MonitoringRuleRequestModel } from 'src/app/models/requests/monitoring-rule.request.model';
-import { MonitoringRuleConditionRequestModel } from 'src/app/models/requests/monitoring-rule-condition.request.model';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { MatSelectChange } from '@angular/material/select';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
+import { MonitoringRuleConditionRequestModel } from 'src/app/models/requests/monitoring-rule-condition.request.model';
+import { MonitoringRuleRequestModel } from 'src/app/models/requests/monitoring-rule.request.model';
+import { MonitoringRuleVariableResponseModel } from 'src/app/models/response/monitoring-rule-variable.response.model';
+import { MonitoringRuleService } from 'src/app/services/monitoring-rule.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
-  selector: 'app-add-rule',
-  templateUrl: './add-rule.component.html',
-  styleUrls: ['./add-rule.component.scss']
+  selector: 'app-edit-rule',
+  templateUrl: './edit-rule.component.html',
+  styleUrls: ['./edit-rule.component.scss']
 })
-export class AddRuleComponent implements OnInit {
+export class EditRuleComponent implements OnInit {
 
   emailSeparatorKeysCodes: number[] = [ENTER, COMMA];
 
   breadcrumbModel: BreadcrumbModel = {
     active: {
-      title: 'Incluir Regra',
+      title: 'Editar Regra',
       route: 'rule'
     },
     items: [
@@ -172,10 +172,10 @@ export class AddRuleComponent implements OnInit {
       }
 
       this._monitoringRuleService.add(request).then((response) => {
-        this._notificationService.success('Regra criada com sucesso!');
+        this._notificationService.success('Regra editada com sucesso!');
         this._router.navigate(['rule-area/list-rule']);
       }, (error) => {
-        this._notificationService.error('Erro ao criar Regra, tente novamente.');
+        this._notificationService.error('Erro ao editar Regra, tente novamente.');
       }).finally(() => {
         this._spinnerService.hide();
       });
