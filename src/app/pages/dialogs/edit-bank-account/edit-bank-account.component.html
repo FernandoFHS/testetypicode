@@ -16,6 +16,7 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
+    <mat-error *ngIf="bankValidatorError">Selecione um banco da lista</mat-error>
 
     <div class="line-form">
       <mat-form-field appearance="outline">
@@ -68,7 +69,7 @@
       <button mat-raised-button color="warn" (click)="closeDialog()">
         Cancelar
       </button>
-      <button mat-raised-button color="primary" tabindex="-1" (click)="editAccount()">
+      <button mat-raised-button color="primary" tabindex="-1" (click)="editAccount(accountFormGroup)">
         Salvar
       </button>
     </div>

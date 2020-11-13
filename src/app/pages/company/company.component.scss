@@ -1,7 +1,7 @@
 .table-title {
   display: flex;
   justify-content: center;
-  margin: 40px;
+  margin: 25px 20px 10px 20px;
 }
 
 .table-title h2 {
@@ -9,4 +9,52 @@
   font-weight: 500;
   letter-spacing: 0.25px;
   text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 930px) {
+  .table-title {
+    display: flex;
+    justify-content: center;
+    margin: 30px;
+  }
+
+  .table-title h2 {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 840px) {
+  .table-title {
+    display: flex;
+    justify-content: center;
+    margin: 25px;
+  }
+
+  .table-title h2 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 530px) {
+  .table-title {
+    display: flex;
+    justify-content: center;
+    margin: 15px;
+  }
+
+  .table-title h2 {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 420px) {
+  .table-title {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+  }
+
+  .table-title h2 {
+    font-size: 16px;
+  }
 }

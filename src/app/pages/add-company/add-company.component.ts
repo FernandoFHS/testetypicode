@@ -143,7 +143,7 @@ export class AddCompanyComponent implements OnInit {
       companyType: ['', Validators.required],
       companyResponsibleNameCtrl: ['', Validators.required],
       acquiringEstablishmentCtrl: ['', Validators.required],
-      stateRegistrationCtrl: ['', Validators.required],
+      stateRegistration: ['', Validators.required],
       companyName: ['', Validators.required],
       fancyName: ['', Validators.required],
       companyShortName: ['', Validators.required],
@@ -176,31 +176,32 @@ export class AddCompanyComponent implements OnInit {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: ['', Validators.required],
-      comercialCredit: ['', Validators.required],
-      transactionCostCtrl: ['', Validators.required],
-      tedCostCtrl: ['', Validators.required],
-      referralTransacionCtrl: ['', Validators.required],
-      anticipationFeeCtrl: ['', Validators.required],
-      ignoreRuleAjCtrl: ['', Validators.required],
-      tratamentAjCtrl: ['', Validators.required],
-      benefitedTypeCtrl: ['', { value: '', disabled: true }, Validators.required,],
-      benefitedNameCtrl: ['', { value: '', disabled: true }, Validators.required],
+      automaticCreditIndicator: ['', Validators.required],
+      transactionAmount: ['', Validators.required],
+      tedAmount: ['', Validators.required],
+      referentialTransacionAmount: ['', Validators.required],
+      anticipationFee: ['', Validators.required],
+      ignoreLiberationAJManual: ['', Validators.required],
+      ajtype: ['', Validators.required],
+      beneficiaryType: ['', { value: '', disabled: true }, Validators.required,],
+      beneficiaryName: ['', { value: '', disabled: true }, Validators.required],
       cnpjCtrl: ['', { value: '', disabled: true }, Validators.required],
     });
     this.complementFormGroup = this._formBuilder.group({
-      openingHoursCtrl: [Validators.required],
-      urlEcommerceCtrl: ['', Validators.required],
-      urlCtrl: ['', Validators.required],
-      emailCtrl: ['', Validators.required],
-      posAmountCtrl: ['', Validators.required],
-      logicNumberCtrl: ['', Validators.required],
-      idTerminalCtrl: ['', Validators.required],
-      registrationDateCtrl: ['', Validators.required],
-      sendDateCtrl: ['', Validators.required],
-      accreditationDateCtrl: ['', Validators.required],
-      gpAffiliationDateCtrl: ['', Validators.required],
-      seRegistrationDateCtrl: ['', Validators.required],
-      discreditationDateCtrl: ['', Validators.required]
+      openingHours: [Validators.required],
+      ecommerceURL: ['', Validators.required],
+      estUrl: ['', Validators.required],
+      email: ['', Validators.required],
+      posQuantity: ['', Validators.required],
+      logicNumber: ['', Validators.required],
+      idTerminal: ['', Validators.required],
+      codeSoftwareCtrl: ['', Validators.required],
+      registrationDate: ['', Validators.required],
+      gpSendDate: ['', Validators.required],
+      accreditationDate: ['', Validators.required],
+      gpAffiliationDate: ['', Validators.required],
+      seRegistrationDate: ['', Validators.required],
+      discreditationDate: ['', Validators.required]
     });
     this.partnerFormGroup = this._formBuilder.group({});
     
@@ -370,8 +371,8 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(EditPhoneComponent, {
       data: index
     });
-    dialogRef.afterClosed().subscribe((item) => {  
-      this.phoneNumber$ = [...item];
+    dialogRef.afterClosed().subscribe((item) => {
+      Object.assign(this.phoneNumber$, item);   
       this.phoneService.refreshDataTable();
     })
   }
@@ -382,8 +383,7 @@ export class AddCompanyComponent implements OnInit {
       data: index
     });
     dialogRef.afterClosed().subscribe((item) => {
-      // this.phoneNumber$.push(item.value);
-      // this.phoneNumber$ = [...this.phoneNumber$];
+      Object.assign(this.bankAccount$, item);;
       this.phoneService.refreshDataTable();
     })
   }
@@ -424,6 +424,16 @@ export class AddCompanyComponent implements OnInit {
   //     this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
   //   })
   // }
+
+  //Filtro
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.bankAccount$.filter = filterValue.trim().toLowerCase();
+
+    if (this.bankAccount$.paginator) {
+      this.bankAccount$.paginator.firstPage();
+    }
+  }
 
   //Navigation Functions
   navigateToCompanyList() {

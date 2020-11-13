@@ -87,6 +87,7 @@ export const customCurrencyMaskConfig = {
     ListRuleComponent,
     EditRuleComponent,
     SimpleDataTableComponent,
+    
   ],
   imports: [
     BrowserModule,
