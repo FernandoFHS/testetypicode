@@ -16,6 +16,8 @@ import { EditProfileComponent } from './pages/edit-profile/edit-profile.componen
 import { ProfileListComponent } from './pages/profile-list/profile-list.component';
 import { FormsModule } from '@angular/forms';
 import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
+import { AddRuleComponent } from './pages/rule-area/add-rule/add-rule.component';
+import { RuleAreaComponent } from './pages/rule-area/rule-area.component';
 import { CompanyListComponent } from './pages/company-list/company-list.component';
 import { AddCompanyComponent } from './pages/add-company/add-company.component';
 import { EditCompanyComponent } from './pages/edit-company/edit-company.component';
@@ -43,6 +45,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     UserComponent,
     CompanyComponent,
     PasswordTransactionComponent,
+    RuleAreaComponent,
+    AddRuleComponent,
     AddProfileComponent,
     EditProfileComponent,
     ProfileListComponent,

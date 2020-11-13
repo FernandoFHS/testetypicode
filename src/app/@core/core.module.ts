@@ -15,6 +15,7 @@ import { AngularMaterialModule } from './modules/angular-material.module';
 import { ThemesComponent } from './components/themes/themes.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataTableComponent } from './components/container/data-table/data-table.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { DataTableComponent } from './components/container/data-table/data-table
     AccordionAnchorDirective,
 
     DataTableComponent,
+    BreadcrumbComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +52,7 @@ import { DataTableComponent } from './components/container/data-table/data-table
     ThemesComponent,
 
     DataTableComponent,
+    BreadcrumbComponent,  
 
     AccordionDirective,
     AccordionLinkDirective,

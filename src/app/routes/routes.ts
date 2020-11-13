@@ -1,4 +1,3 @@
-import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
 import { ContainerComponent } from '../@core/components/container/container.component';
 import { ThemesComponent } from '../@core/components/themes/themes.component';
@@ -7,9 +6,12 @@ import { HomeComponent } from '../pages/home/home.component';
 import { LoginComponent } from '../pages/login/login.component';
 import { UserComponent } from '../pages/user/user.component';
 import { PasswordTransactionComponent } from '../pages/password-transaction/password-transaction.component';
+import { LoginGuard } from '../pages/login/login.guard';
 import { ProfileListComponent } from '../pages/profile-list/profile-list.component';
 import { AddProfileComponent } from '../pages/add-profile/add-profile.component';
 import { EditProfileComponent } from '../pages/edit-profile/edit-profile.component';
+import { RuleAreaComponent } from '../pages/rule-area/rule-area.component';
+import { AddRuleComponent } from '../pages/rule-area/add-rule/add-rule.component';
 import { CompanyListComponent } from '../pages/company-list/company-list.component';
 import { AddCompanyComponent } from '../pages/add-company/add-company.component';
 import { EditCompanyComponent } from '../pages/edit-company/edit-company.component';
@@ -25,11 +27,26 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'home',
-        pathMatch: 'full',
+        pathMatch: 'full'
       },
       {
         path: 'home',
-        component: HomeComponent,
+        component: HomeComponent
+      },
+      {
+        path: 'rule-area',
+        component: RuleAreaComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'add-rule',
+            pathMatch: 'full'
+          },
+          {
+            path: 'add-rule',
+            component: AddRuleComponent
+          }
+        ]
       },
       {
         path: 'profile-list',
@@ -75,33 +92,35 @@ export const routes: Routes = [
             path: 'edit-company/:id',
             component: EditCompanyComponent,
           },
-          {
-            path: 'add-partner',
-            component: AddPartnerComponent,
-          },
-          {
-            path: 'edit-partner/:index',
-            component: EditPartnerComponent,
-          },
-        ],
+        ]
       },
       {
         path: 'themes',
-        component: ThemesComponent,
+        component: ThemesComponent
       },
       {
         path: 'password-transaction',
-        component: PasswordTransactionComponent,
+        component: PasswordTransactionComponent
       },
 
+      {
+        path: 'add-partner',
+        component: AddPartnerComponent,
+      },
+      {
+        path: 'edit-partner/:index',
+        component: EditPartnerComponent,
+      },
       {
         path: 'plans',
         component: PlansComponent,
       },
-    ],
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-  },
+      {
+        path: 'login',
+        component: LoginComponent,
+        canActivate: [LoginGuard]
+      },
+
+    ]
+  }
 ];
