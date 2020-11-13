@@ -1,27 +1,75 @@
-@import '~src/app/@core/styles/breakpoints';
+* {
+  margin: 0;
+  padding: 0 !important;
+}
 
-:host {
-  .card-box {
-    margin: 0 15px;
-    vertical-align: middle;
-  }
+.add-profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: #fafafa;
+  padding: 5%;
+}
 
-  .title-size {
-    font-size: 26px;
-  }
+.add-profile-container .form-box-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 90%;
+  max-width: 600px;
+  min-width: 280px;
+  height: 60%;
+  background-color: #fff;
+  border-radius: 6px;
+}
 
-  .group-buttons-actions {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-  }
-  
-  button {
-    height: 60px;
-    width: 45%;
-    font-size: 16px;
-    text-align: center;
-  }
+.add-profile-container .form-box-content h3 {
+  font-weight: 500;
+  font-size: 25px;
+}
 
+.add-profile-container .form-box-content mat-form-field {
+  width: 70%;
+  margin-top: 3%;
+}
+
+.add-profile-container .form-box-content mat-form-field + mat-form-field {
+  margin-top: 0%;
+}
+
+label {
+  font-family: Poppins;
+  font-weight: 400;
+  font-size: 18px;
+  margin-bottom: 1%;
+  text-align: start;
+}
+
+mat-radio-group {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  justify-content: flex-start;
+  font-family: Poppins;
+  margin-bottom: 2%;
+}
+
+mat-radio-button + mat-radio-button {
+  margin-top: 2%;
+}
+
+.group-buttons-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 70%;
+}
+
+button {
+  padding: 2% !important;
+  width: 45%;
+  font-size: 16px;
+  text-align: center;
 }

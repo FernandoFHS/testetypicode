@@ -82,9 +82,24 @@ form .line-form .short-line-3-form{
   width: 48%;
 }
 
-form .line-form .short-line-3-form .mat-form-field{
+form .line-form .short-line-3-form .mat-form-field {
   width: 30%;
 } 
+
+form .line-form .short-line-form-threeOfFour{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+form .line-form .short-line-form-threeOfFour .mat-form-field { 
+  width: 73.5%;
+}
+
+form .line-form .short-line-form-threeOfFour .mat-form-field + .mat-form-field{ 
+  width: 21.5%;
+}
 
 form .line-form .short-line-2-form .mat-checkbox{
   width: 50%;
@@ -200,6 +215,22 @@ h1{
   }
 
   form .line-form .short-line-3-form .mat-form-field { 
+    width: 100%;
+  }
+
+  form .line-form .short-line-form-threeOfFour{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  form .line-form .short-line-form-threeOfFour .mat-form-field { 
+    width: 100%;
+  }
+
+  form .line-form .short-line-form-threeOfFour .mat-form-field + .mat-form-field{ 
     width: 100%;
   }
 }

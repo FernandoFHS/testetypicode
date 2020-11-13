@@ -9,7 +9,7 @@
           <div class="short-line-form">
             <mat-form-field appearance="outline">
               <mat-label>Número Sequência</mat-label>
-              <input matInput placeholder="Número Sequência" formControlName="sequenceNumber" required />
+              <input matInput placeholder="Número Sequência" formControlName="partnerSequentialNumber" required />
               <mat-icon matSuffix>fast_forward</mat-icon>
               <mat-error *ngIf="formControl.invalid">{{
                 getErrorMessage()
@@ -173,7 +173,7 @@
           <button mat-raised-button color="warn" tabindex="-1" (click)="onNoClick()">
             Cancelar
           </button>
-          <button mat-raised-button color="primary" (click)="savePartner(partnerFormGroup)">
+          <button mat-raised-button color="primary" [disabled]="!partnerFormGroup.valid" (click)="savePartner(partnerFormGroup)">
             Salvar
           </button>
         </div>

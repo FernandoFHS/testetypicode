@@ -1,3 +1,7 @@
-<core-data-table [headers]="headers" [data]="dataSource" [actions]="actions" (addEvent)="onAdd($event)" (deleteEvent)="onDelete($event)"
-  (editEvent)="onEdit($event)">
+<div class="table-title">
+  <h2>Estabelecimentos Cadastrados</h2>
+</div>
+
+<core-data-table [headers]="headers" [actions]="actions" (addEvent)="onAdd($event)" (deleteEvent)="onDelete($event)"
+  (editEvent)="onEdit($event)" [loadFunc]="loadData" [idItems]="'idCompany'">
 </core-data-table>

@@ -26,6 +26,11 @@ export const routes: Routes = [
     component: ContainerComponent,
     children: [
       {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
+      {
         path: 'home',
         component: HomeComponent,
       },
@@ -92,33 +97,34 @@ export const routes: Routes = [
             path: 'edit-company',
             component: EditCompanyComponent,
           },
-          {
-            path: 'add-partner',
-            component: AddPartnerComponent,
-          },
-          {
-            path: 'edit-partner/:index',
-            component: EditPartnerComponent,
-          },
-        ],
+        ]
       },
       {
         path: 'themes',
-        component: ThemesComponent,
+        component: ThemesComponent
       },
       {
         path: 'password-transaction',
-        component: PasswordTransactionComponent,
+        component: PasswordTransactionComponent
+      },
+
+      {
+        path: 'add-partner',
+        component: AddPartnerComponent,
+      },
+      {
+        path: 'edit-partner/:index',
+        component: EditPartnerComponent,
       },
       {
         path: 'plans',
         component: PlansComponent,
       },
-    ],
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [LoginGuard]
+      {
+        path: 'login',
+        component: LoginComponent,
+        canActivate: [LoginGuard]
+      },
+    ]
   }
 ];

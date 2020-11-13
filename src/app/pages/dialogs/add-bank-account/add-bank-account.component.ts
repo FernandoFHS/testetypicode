@@ -23,6 +23,7 @@ export class AddBankAccountComponent implements OnInit {
   bank: Array<Bank>;
   bank$: Observable<Array<Bank>>;
   filteredBanks: Observable<Bank[]>;
+  bankValidatorError = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddBankAccountComponent>,
@@ -48,6 +49,7 @@ export class AddBankAccountComponent implements OnInit {
 
       this.getAllBanks();
   }
+
   getAllBanks(){
     this.bankService.getAllCnae()
     .pipe(take(1))
@@ -88,15 +90,33 @@ export class AddBankAccountComponent implements OnInit {
       : '';
   }
 
+  getAutoCompleteErrorMessage() {
+    return this.formControl.hasError('required')
+      ? 'Escolha um banco da lista'
+      : this.formControl.hasError('email')
+      ? 'Not a valid email'
+      : '';
+  }
+
   saveAccount(form){
     let bankAccountArray = this.localStorageService.get('bankAccount');
     if(!bankAccountArray){
       bankAccountArray= [];
     }
     bankAccountArray.push(form.value);
-    this.localStorageService.set('bankAccount', bankAccountArray);
 
-    this.dialogRef.close();
+    let bankValidator = form.value.bank;
+    console.log(bankValidator);
+
+    if (typeof bankValidator === 'object') {  
+
+      this.localStorageService.set('bankAccount', bankAccountArray);
+
+      this.dataService.openSnackBar('Conta adicionada com sucesso', 'X');
+      this.dialogRef.close(form);
+    } else {
+      this.bankValidatorError = true;
+    }
   }
 
   closeDialog(): void{

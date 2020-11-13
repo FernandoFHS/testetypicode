@@ -14,7 +14,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Telefone</mat-label>
-          <input matInput placeholder="(00) 00000-0000" formControlName="companyPhone"  mask="(00) 0000-0000 || (00) 0 0000-0000" />
+          <input matInput placeholder="(00) 00000-0000" formControlName="companyPhone"  mask="(00) 0000-0000 || (00) 0 0000-0000" required />
           <mat-icon matSuffix>phone</mat-icon>
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
         </mat-form-field>
@@ -23,7 +23,7 @@
           <button mat-raised-button color="warn" (click)="onNoClick();">
             Cancelar
           </button>
-          <button mat-raised-button color="primary" tabindex="-1"(click)="onNoClick();saveFone(phoneFormGroup)" >
+          <button mat-raised-button color="primary" tabindex="-1" [disabled]="!phoneFormGroup.valid" (click)="savePhone(phoneFormGroup)" >
             Salvar
           </button>
       </div>

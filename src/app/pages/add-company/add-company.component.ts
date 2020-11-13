@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActionModel } from 'src/app/@core/models/action.model';
-import { HeaderModel } from 'src/app/@core/models/header.model';
+import { HeaderModel, HeaderModelBank } from 'src/app/@core/models/header.model';
 import { CepService } from 'src/app/services/cep.service';
 import { DataService } from 'src/app/services/data.service';
 import {
@@ -34,8 +34,9 @@ import { AddPhoneComponent } from '../dialogs/add-phone/add-phone.component';
 import { CnaeService } from '../../services/company/cnae.service';
 import { Cnae } from '../../models/company/Cnae'
 import { Observable, of } from 'rxjs';
-import { Profile } from 'src/app/models/Profile';
 import { MatPaginator } from '@angular/material/paginator';
+import { SimpleDataTableService } from 'src/app/@core/components/container/simple-data-table/simple-data-table.service';
+import { CompanyService } from '../../services/company.service';
 
 @Component({
   selector: 'app-add-company',
@@ -61,7 +62,7 @@ import { MatPaginator } from '@angular/material/paginator';
 export class AddCompanyComponent implements OnInit {
 
   cnaeForm = new FormControl();
-
+  testecompany: any;
   isLinear = false;
   identificationFormGroup: FormGroup;
   adressFormGroup: FormGroup;
@@ -78,9 +79,11 @@ export class AddCompanyComponent implements OnInit {
   adress: any = this.localStorageService.get('adressFormGroup');
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
-  partnerSource: any = this.localStorageService.get('partnerFormGroup');
-  bankAccount: any = this.localStorageService.get('bankAccount');
-  phoneNumber: any = this.localStorageService.get('phoneNumber');
+  partnerSource$: any = [];
+  bankAccount$: any = [];
+  phoneNumber$: any = [];
+
+  mcc: any;
 
   cnae: Array<Cnae>;
   cnae$: Observable<Array<Cnae>>;
@@ -93,9 +96,12 @@ export class AddCompanyComponent implements OnInit {
     private CepService: CepService,
     private dataService: DataService,
     private cnaeService: CnaeService,
+    private companyService: CompanyService,
     public dialog: MatDialog,
     private router: Router,
-    private localStorageService: LocalStorageService,) 
+    private localStorageService: LocalStorageService,
+    public phoneService: SimpleDataTableService
+    ) 
     {}
 
   private _filterCnaes(value: string): Cnae[] {
@@ -104,25 +110,41 @@ export class AddCompanyComponent implements OnInit {
       this.cnae =  cnaes.filter(cnae => cnae.description.toLowerCase().indexOf(filterValue) === 0);
     })
     return this.cnae;
-
   }
 
   formControl = new FormControl('', [
     Validators.required,
   ]);
 
-
   ngOnInit(): void {
+
+    if (this.localStorageService.get('phoneNumber') == null) {
+      this.phoneNumber$ = []
+    } else {
+      this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+    }
+
+    if (this.localStorageService.get('bankAccount') == null) {
+      this.bankAccount$ = []
+    } else {
+      this.bankAccount$ = this.localStorageService.get('bankAccount');
+    }
+
+    if (this.localStorageService.get('partnerFormGroup') == null) {
+      this.partnerSource$ = []
+    } else {
+      this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
+    }
 
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
-      managingCompanyCtrl: ['', Validators.required],
-      establishmentCtrl: [{ value: '', disabled: true }],
-      companyTypeCtrl: ['', Validators.required],
+      companyResponsibleName: ['', Validators.required],
+      establishmentCtrl: [{ value: '', disabled: true }], 
+      companyType: ['', Validators.required],
       companyResponsibleNameCtrl: ['', Validators.required],
       acquiringEstablishmentCtrl: ['', Validators.required],
       stateRegistrationCtrl: ['', Validators.required],
-      companyNameCtrl: ['', Validators.required],
+      companyName: ['', Validators.required],
       fancyName: ['', Validators.required],
       companyShortName: ['', Validators.required],
       mcccode: ['', Validators.required],
@@ -132,15 +154,15 @@ export class AddCompanyComponent implements OnInit {
       openingDate: ['', Validators.required]
     });
     this.adressFormGroup = this._formBuilder.group({
-      streetCtrl: ['', Validators.required],
-      numberCtrl: ['', Validators.required],
-      complementCtrl: ['', Validators.required],
-      neighborhoodCtrl: ['', Validators.required],
-      cityCtrl: ['', Validators.required],
-      stateCtrl: ['', Validators.required],
+      streetName: ['', Validators.required],
+      number: ['', Validators.required],
+      complement: ['', Validators.required],
+      neighborhoodName: ['', Validators.required],
+      cityName: ['', Validators.required],
+      uf: ['', Validators.required],
       responsibleNameCtrl: ['', Validators.required],
-      referencePointCtrl: [''],
-      keyZipCode: ['', Validators.required],
+      referencePoint: [''],
+      zipCode: ['', Validators.required],
       checkboxAdress: ['', Validators.required],
       subordinateZipCode: ['', Validators.required],
       subordinateNeighborhoodCtrl: ['', Validators.required],
@@ -183,9 +205,11 @@ export class AddCompanyComponent implements OnInit {
     this.partnerFormGroup = this._formBuilder.group({});
     
     this.dataService.refreshTable().subscribe(() => {
-      this.loadData();
+      this.dataSource = this.phoneNumber$;
+      //this.loadData
     });
-    this.loadData();
+    //this.loadData
+    this.dataSource = this.phoneNumber$;
     this.gelAllCnaes();
 
     if (this.identification != undefined) {
@@ -210,12 +234,12 @@ export class AddCompanyComponent implements OnInit {
     } else {
 
     }
-    if (this.partnerSource != undefined) {
-      this.partnerSource = this.localStorageService.get('partnerFormGroup');
-      this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
-    } else {
+    // if (this.partnerSource$ != undefined) {
+    //   this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
+    //   this.partnerSource$.content = this.localStorageService.get('partnerFormGroup');
+    // } else {
 
-    }
+    // }
 
     if (this.response == null) {
       this.response = this.localStorageService.get('cep');
@@ -226,6 +250,22 @@ export class AddCompanyComponent implements OnInit {
     }
 
     this.checkValueBankAdress(true);
+  }
+
+
+  createCompany(){
+    this.testecompany = Object.assign({}, 
+      this.identificationFormGroup.value,
+      this.adressFormGroup.value,
+      this.conditionFormGroup.value,
+      this.complementFormGroup.value,
+      this.partnerFormGroup.value);
+      console.log(this.testecompany);
+      
+      // this.companyService.create(this.testecompany).subscribe((response:any)=>{
+     //  console.log(response);
+      // })
+    
   }
 
   gelAllCnaes(){
@@ -259,13 +299,13 @@ export class AddCompanyComponent implements OnInit {
     // { text: 'Ações', value: 'action' }
   ];
 
-  headersBankTable: HeaderModel[] = [
-    { text: 'Banco', value: 'bank' },
-    { text: 'Agência', value: 'agency' },
-    { text: 'Dígito Agência', value: 'agencyDigit' },
-    { text: 'Conta Corrente', value: 'account' },
-    { text: 'Dígito Conta', value: 'accountDigit' },
-    { text: 'Dígito Agência/Conta', value: 'digit' },
+  headersBankTable: HeaderModelBank[] = [
+    { text: 'Banco', value: 'bank', subValue: 'name' },
+    { text: 'Agência', value: 'agency', subValue: null },
+    { text: 'Dígito Agência', value: 'agencyDigit', subValue:null },
+    { text: 'Conta Corrente', value: 'account', subValue: null },
+    { text: 'Dígito Conta', value: 'accountDigit', subValue: null },
+    { text: 'Dígito Agência/Conta', value: 'digit', subValue: null },
     // { text: 'Ações', value: 'action' }
   ];
 
@@ -276,7 +316,7 @@ export class AddCompanyComponent implements OnInit {
   ];
 
   headersPartnerTable: HeaderModel[] = [
-    { text: 'Número Sequência', value: 'sequenceNumber' },
+    { text: 'Número Sequência', value: 'partnerSequentialNumber' },
     { text: 'Nome', value: 'name' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
@@ -296,27 +336,16 @@ export class AddCompanyComponent implements OnInit {
     delete: true,
   };
 
-  public loadData() {
-    //this.exampleDatabase = new DataService(this.httpClient);
-
-    this.dataService.getAllProfiles(5, this.paginator.pageIndex).then(
-      (data) => {
-        this.dataSource = data;
-      },
-      (error) => {
-        console.log('Not found data')
-      }
-    );
-  }
-
   //Add Methods
   onAddPhone(idPhone: number) {
     const dialogRef = this.dialog.open(AddPhoneComponent, {
       data: { id: idPhone },
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.phoneNumber = this.localStorageService.get('phoneNumber');
-      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+    dialogRef.afterClosed().subscribe((item) => {
+      // this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+      this.phoneNumber$.push(item.value);
+      this.phoneNumber$ = [...this.phoneNumber$];
+      this.phoneService.refreshDataTable();
     })
   }
 
@@ -324,9 +353,10 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(AddBankAccountComponent, {
       data: { id: idBankAccount },
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.bankAccount = this.localStorageService.get('bankAccount');
-      this.bankAccount.content = this.localStorageService.get('bankAccount');
+    dialogRef.afterClosed().subscribe((item) => {
+      this.bankAccount$.push(item.value);
+      this.bankAccount$ = [...this.bankAccount$];
+      this.phoneService.refreshDataTable();
     })
   }
 
@@ -336,63 +366,64 @@ export class AddCompanyComponent implements OnInit {
 
   //Edit Methods
   onEditPhone(row: object) {
-    const index = this.phoneNumber.content.indexOf(row)
+    const index = this.phoneNumber$.indexOf(row)
     const dialogRef = this.dialog.open(EditPhoneComponent, {
       data: index
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.phoneNumber = this.localStorageService.get('phoneNumber');
-      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+    dialogRef.afterClosed().subscribe((item) => {  
+      this.phoneNumber$ = [...item];
+      this.phoneService.refreshDataTable();
     })
   }
 
   onEditBankAccount(row: object) {
-    const index = this.bankAccount.content.indexOf(row)
+    const index = this.bankAccount$.indexOf(row)
     const dialogRef = this.dialog.open(EditBankAccountComponent, {
       data: index
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.bankAccount = this.localStorageService.get('bankAccount');
-      this.bankAccount.content = this.localStorageService.get('bankAccount');
+    dialogRef.afterClosed().subscribe((item) => {
+      // this.phoneNumber$.push(item.value);
+      // this.phoneNumber$ = [...this.phoneNumber$];
+      this.phoneService.refreshDataTable();
     })
   }
 
   onEditPartner(row: object) {
-    const index = this.partnerSource.content.findIndex((c) => c == row);
+    const index = this.partnerSource$.findIndex((c) => c == row);
  
     this.router.navigate([`/company-list/edit-partner/${index}`]);
   }
 
   //Delete Methods
-  onDeletePhone(row: object) {
-    const deleteItem = this.phoneNumber.content.indexOf(row);
-    const dialogRef = this.dialog.open(DeletePhoneComponent, {data: deleteItem});
+  // onDeletePhone(row: object) {
+  //   // const deleteItem = this.phoneNumber$.indexOf(row);
+  //   // const dialogRef = this.dialog.open(DeletePhoneComponent, {data: deleteItem});
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.phoneNumber = this.localStorageService.get('phoneNumber');
-      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
-    })
-  }
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+  //     this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+  //   })
+  // }
 
-  onDeleteBankAccount(row: object) {
-    const deleteItem = this.bankAccount.content.indexOf(row);
-    const dialogRef = this.dialog.open(DeleteBankAccountComponent, {data: deleteItem});
+  // onDeleteBankAccount(row: object) {
+  //   const deleteItem = this.bankAccount.content.indexOf(row);
+  //   const dialogRef = this.dialog.open(DeleteBankAccountComponent, {data: deleteItem});
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.bankAccount = this.localStorageService.get('bankAccount');
-      this.bankAccount.content = this.localStorageService.get('bankAccount');
-    })
-  }
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.bankAccount = this.localStorageService.get('bankAccount');
+  //     this.bankAccount.content = this.localStorageService.get('bankAccount');
+  //   })
+  // }
 
-  onDeletePartner(row: object) {
-    const deleteItem = this.partnerSource.content.indexOf(row);
-    const dialogRef = this.dialog.open(DeletePartnerComponent, {data: deleteItem});
+  // onDeletePartner(row: object) {
+  //   const deleteItem = this.partnerSource.content.indexOf(row);
+  //   const dialogRef = this.dialog.open(DeletePartnerComponent, {data: deleteItem});
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.partnerSource = this.localStorageService.get('partnerFormGroup');
-      this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
-    })
-  }
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.partnerSource = this.localStorageService.get('partnerFormGroup');
+  //     this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
+  //   })
+  // }
 
   //Navigation Functions
   navigateToCompanyList() {
@@ -427,13 +458,23 @@ export class AddCompanyComponent implements OnInit {
       this.getSecondCep(value);
     }
   }
-
+  
   displayFn = (item): string =>{
     if (item) {
+      this.mcc = item;
       return item.description;
     }else {
       return '';
     }
+  }
+
+  getMccByCnae(){
+    let a = this.mcc
+    console.log(a);
+    let obj = {
+      mcccode : a.mcc.code
+    }
+    this.identificationFormGroup.patchValue(obj);
   }
 
   getSecondCep(cep) {

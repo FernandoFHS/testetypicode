@@ -55,10 +55,10 @@ export class EditPhoneComponent implements OnInit {
     if (index > -1) {
       Object.assign(this.phoneNumber[index], editableItem);
       localStorage.setItem('phoneNumber', JSON.stringify(this.phoneNumber));
+      this.dialogRef.close(this.phoneNumber);
     } else {
       console.log(editableItem);
     }
-    this.dialogRef.close();
   }
 
   getLocalStorage(item) {

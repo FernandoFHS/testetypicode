@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { SimpleDataTableService } from 'src/app/@core/components/container/simple-data-table/simple-data-table.service';
 import { Content } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 
@@ -18,7 +19,8 @@ export class DeleteProfileComponent implements OnInit {
     public dialogRef: MatDialogRef<DeleteProfileComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dataService: DataService,
-    public httpClient: HttpClient
+    public httpClient: HttpClient,
+    private refreshTableService: SimpleDataTableService
   ) {}
 
   ngOnInit(): void {
@@ -31,8 +33,9 @@ export class DeleteProfileComponent implements OnInit {
 
   confirmDelete(): void {
     this.dataService.delete(this.profile.idProfile).subscribe(() => {
-      this.dataService.openSnackBar('Produto deletado com sucesso', 'X');
+      this.dataService.openSnackBar('Usuário deletado com sucesso', 'X');
       this.dialogRef.close();
+      this.refreshTableService.refreshDataTable();
     });
   }
 

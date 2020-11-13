@@ -34,6 +34,11 @@ form .line-form .short-line-form .mat-form-field {
   height: 3em;
 }
 
+.mat-error {
+  margin-top: -25px;
+  margin-bottom: 10px;
+}
+
 @media (max-width: 600px) {
   .dialog-actions-buttons {
     display: flex;
