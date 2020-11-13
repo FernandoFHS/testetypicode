@@ -19,11 +19,13 @@ import { AddPartnerComponent } from '../pages/add-partner/add-partner.component'
 import { PlansComponent } from '../pages/plans/plans.component';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 import { ListRuleComponent } from '../pages/rule-area/list-rule/list-rule.component';
+import { ContainerGuard } from '../@core/components/container/container.guard';
 
 export const routes: Routes = [
   {
     path: '',
     component: ContainerComponent,
+    // canActivateChild: [ContainerGuard],
     children: [
       {
         path: '',
@@ -119,12 +121,12 @@ export const routes: Routes = [
       {
         path: 'plans',
         component: PlansComponent,
-      },
-      {
-        path: 'login',
-        component: LoginComponent,
-        canActivate: [LoginGuard]
-      },
-    ]
+      }
+    ],
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [LoginGuard]
   }
 ];
