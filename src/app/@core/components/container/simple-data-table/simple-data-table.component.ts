@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -10,10 +17,9 @@ import { SimpleDataTableService } from './simple-data-table.service';
 @Component({
   selector: 'app-simple-data-table',
   templateUrl: './simple-data-table.component.html',
-  styleUrls: ['./simple-data-table.component.scss']
+  styleUrls: ['./simple-data-table.component.scss'],
 })
 export class SimpleDataTableComponent implements OnInit {
-
   public displayedColumns: string[] = [];
   dataSource = new MatTableDataSource();
 
@@ -50,7 +56,7 @@ export class SimpleDataTableComponent implements OnInit {
   @Output()
   loadEvent: EventEmitter<Object> = new EventEmitter();
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   // @ViewChild('filter',  {static: true}) filter: ElementRef;
 
@@ -61,7 +67,7 @@ export class SimpleDataTableComponent implements OnInit {
     public tableService: SimpleDataTableService
   ) {}
 
-  ngOnInit():void {
+  ngOnInit(): void {
     // if (!this.data) {
     //   this.dataSource = [];
     // }
@@ -70,19 +76,30 @@ export class SimpleDataTableComponent implements OnInit {
     //   this.dataSource = this.data;
     // }
 
-    this.displayedColumns = this.headers.map((e) => e.value)
+    this.displayedColumns = this.headers.map((e) => e.value);
     this.displayedColumns.push('actions');
 
-    this.dataSource = new MatTableDataSource(this.data)
+    this.dataSource = new MatTableDataSource(this.data);
 
     this.tableService.onRefreshDataTable().subscribe(() => {
       this.dataSource = new MatTableDataSource(this.data);
-      this.dataSource.paginator = this.paginator
-    })  
-  } 
+      this.dataSource.paginator = this.paginator;
+    });
+  }
 
   ngAfterViewInit() {
-     this.dataSource.paginator = this.paginator
+    this.dataSource.paginator = this.paginator;
+  }
+
+  applyFilter(event: Event) {
+    this.dataSource = new MatTableDataSource(this.data);
+    this.dataSource.paginator = this.paginator;
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   addItem(row: object) {
@@ -97,6 +114,3 @@ export class SimpleDataTableComponent implements OnInit {
     this.editEvent.emit(row);
   }
 }
-
-
-

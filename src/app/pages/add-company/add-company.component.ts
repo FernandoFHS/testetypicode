@@ -425,6 +425,16 @@ export class AddCompanyComponent implements OnInit {
   //   })
   // }
 
+  //Filtro
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.bankAccount$.filter = filterValue.trim().toLowerCase();
+
+    if (this.bankAccount$.paginator) {
+      this.bankAccount$.paginator.firstPage();
+    }
+  }
+
   //Navigation Functions
   navigateToCompanyList() {
     this.router.navigate(['/company-list/company'])

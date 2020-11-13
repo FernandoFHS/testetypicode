@@ -12,12 +12,25 @@
     matSortDirection="desc"
   >
     <ng-container [matColumnDef]="header.value" *ngFor="let header of headers">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ header.text }}
-      </mat-header-cell>
+        <div *ngIf="header.text === 'Código'">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ header.text }}
+          </mat-header-cell>
+        </div> 
+
+        <div *ngIf="header.text !== 'Código'">
+          <mat-header-cell *matHeaderCellDef>
+            {{ header.text }}
+          </mat-header-cell>
+        </div> 
       <mat-cell *matCellDef="let row">
-        {{ header.subValue ? row[header.value][header.subValue] : row[header.value] }}
-        <!-- {{ header.value == true ? row[header.value] = "Credenciado" : row[header.value] = "Descredenciado"}} -->
+        <div *ngIf="header.value === 'situation'">
+          {{row[header.value]  ? row[header.value] = "Ativo" : row[header.value] = "Inativo"}}
+        </div>
+
+        <div *ngIf="header.value !== 'situation'">
+          {{ header.subValue ? row[header.value][header.subValue] : row[header.value] }}
+        </div>
       </mat-cell>
     </ng-container>
 
@@ -29,7 +42,7 @@
           (click)="addItem()"
           *ngIf="actions.add"
         >
-          <mat-icon aria-label="Add icon">add</mat-icon>
+          <mat-icon aria-label="Add icon" matTooltip="Cadastrar" >add</mat-icon>
         </button>
       </mat-header-cell>
 
@@ -40,7 +53,7 @@
           (click)="editItem(row)"
           *ngIf="actions.edit"
         >
-          <mat-icon aria-label="Edit icon">edit</mat-icon>
+          <mat-icon aria-label="Edit icon" matTooltip="Editar">edit</mat-icon>
         </button>
 
         <button
@@ -49,7 +62,7 @@
           (click)="deleteItem(row)"
           *ngIf="actions.delete"
         >
-          <mat-icon aria-label="Delete icon">delete</mat-icon>
+          <mat-icon aria-label="Delete icon" matTooltip="Deletar">delete</mat-icon>
         </button>
       </mat-cell>
     </ng-container>

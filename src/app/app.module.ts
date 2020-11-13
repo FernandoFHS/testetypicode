@@ -33,7 +33,6 @@ import { DeleteTaxComponent } from './pages/plans/delete-tax/delete-tax.componen
 import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
 import { SimpleDataTableComponent } from 'src/app/@core/components/container/simple-data-table/simple-data-table.component';
 
-
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 @NgModule({
@@ -63,6 +62,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     DeleteTaxComponent,
     EditPartnerComponent,
     SimpleDataTableComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -71,7 +71,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     BrowserAnimationsModule,
     FlexLayoutModule,
     FormsModule,
-    NgxMaskModule.forRoot(),    
+    NgxMaskModule.forRoot(),  
     
     CoreModule
   ],
