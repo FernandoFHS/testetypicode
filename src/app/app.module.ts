@@ -36,6 +36,7 @@ import { EditPartnerComponent } from './pages/edit-partner/edit-partner.componen
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ListRuleComponent } from './pages/rule-area/list-rule/list-rule.component';
+import { EditRuleComponent } from './pages/rule-area/edit-rule/edit-rule.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -83,6 +84,7 @@ export const customCurrencyMaskConfig = {
     DeleteTaxComponent,
     EditPartnerComponent,
     ListRuleComponent,
+    EditRuleComponent,
   ],
   imports: [
     BrowserModule,

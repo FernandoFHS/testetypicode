@@ -5,6 +5,7 @@ import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { MonitoringRuleResponseModel } from 'src/app/models/response/monitoring-rule.response.model';
 import { MonitoringRuleService } from 'src/app/services/monitoring-rule.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-list-rule',
@@ -20,7 +21,6 @@ export class ListRuleComponent implements OnInit {
     },
     items: [
       { title: 'Home', route: '' },
-      { title: 'Lista de Regras', route: 'rules' }
     ]
   };
 
@@ -42,7 +42,8 @@ export class ListRuleComponent implements OnInit {
 
   constructor(
     private _monitoringRuleService: MonitoringRuleService,
-    private _router: Router
+    private _router: Router,
+    private _notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -50,6 +51,9 @@ export class ListRuleComponent implements OnInit {
 
     this._monitoringRuleService.getRules(0, 999).then((data) => {
       this._loadData(data);
+    }, (error) => {
+      this._router.navigate(['/home']);
+      this._notificationService.error('Erro ao carregar a lista de Regras, tente novamente.');
     }).finally(() => {
       this.isLoading = false;
     });
