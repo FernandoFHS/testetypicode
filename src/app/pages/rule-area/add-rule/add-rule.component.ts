@@ -24,7 +24,7 @@ export class AddRuleComponent implements OnInit {
   breadcrumbModel: BreadcrumbModel = {
     active: {
       title: 'Incluir Regra',
-      route: 'rule'
+      route: 'rule-area/add-rule'
     },
     items: [
       { title: 'Home', route: '' },

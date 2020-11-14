@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
 
 @Component({
@@ -11,6 +12,16 @@ export class PasswordTransactionComponent implements OnInit {
   passwordForm: FormGroup;
   hide1 = true;
   hide2 = true;
+
+  breadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Senha Transação',
+      route: ''
+    },
+    items: [
+      { title: 'Home', route: '' },
+    ]
+  };
 
   constructor(
     private _formBuilder: FormBuilder

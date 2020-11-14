@@ -37,6 +37,7 @@ import { Observable, of } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { SimpleDataTableService } from 'src/app/@core/components/container/simple-data-table/simple-data-table.service';
 import { CompanyService } from '../../services/company.service';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 
 @Component({
   selector: 'app-add-company',
@@ -89,6 +90,17 @@ export class AddCompanyComponent implements OnInit {
   cnae$: Observable<Array<Cnae>>;
   filteredCnaes: Observable<Cnae[]>;
 
+  breadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Incluir Estabelecimento',
+      route: 'add-company'
+    },
+    items: [
+      { title: 'Home', route: '' },
+      { title: 'Lista de Estabelecimentos', route: 'company-list' }
+    ]
+  };
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
@@ -101,13 +113,12 @@ export class AddCompanyComponent implements OnInit {
     private router: Router,
     private localStorageService: LocalStorageService,
     public phoneService: SimpleDataTableService
-    ) 
-    {}
+  ) { }
 
   private _filterCnaes(value: string): Cnae[] {
     const filterValue = value.toLowerCase();
     this.cnae$.subscribe(cnaes => {
-      this.cnae =  cnaes.filter(cnae => cnae.description.toLowerCase().indexOf(filterValue) === 0);
+      this.cnae = cnaes.filter(cnae => cnae.description.toLowerCase().indexOf(filterValue) === 0);
     })
     return this.cnae;
   }
@@ -139,7 +150,7 @@ export class AddCompanyComponent implements OnInit {
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
       companyResponsibleName: ['', Validators.required],
-      establishmentCtrl: [{ value: '', disabled: true }], 
+      establishmentCtrl: [{ value: '', disabled: true }],
       companyType: ['', Validators.required],
       companyResponsibleNameCtrl: ['', Validators.required],
       acquiringEstablishmentCtrl: ['', Validators.required],
@@ -204,7 +215,7 @@ export class AddCompanyComponent implements OnInit {
       discreditationDate: ['', Validators.required]
     });
     this.partnerFormGroup = this._formBuilder.group({});
-    
+
     this.dataService.refreshTable().subscribe(() => {
       this.dataSource = this.phoneNumber$;
       //this.loadData
@@ -254,35 +265,35 @@ export class AddCompanyComponent implements OnInit {
   }
 
 
-  createCompany(){
-    this.testecompany = Object.assign({}, 
+  createCompany() {
+    this.testecompany = Object.assign({},
       this.identificationFormGroup.value,
       this.adressFormGroup.value,
       this.conditionFormGroup.value,
       this.complementFormGroup.value,
       this.partnerFormGroup.value);
-      console.log(this.testecompany);
-      
-      // this.companyService.create(this.testecompany).subscribe((response:any)=>{
-     //  console.log(response);
-      // })
-    
+    console.log(this.testecompany);
+
+    // this.companyService.create(this.testecompany).subscribe((response:any)=>{
+    //  console.log(response);
+    // })
+
   }
 
-  gelAllCnaes(){
+  gelAllCnaes() {
     this.cnaeService.getAllCnae()
-    // .pipe(take(1))
-    .subscribe((data) => {
-      //console.log(data.content);
-      this.cnae$ = of(data.content);
+      // .pipe(take(1))
+      .subscribe((data) => {
+        //console.log(data.content);
+        this.cnae$ = of(data.content);
 
-      this.filteredCnaes = this.cnaeForm.valueChanges
-      .pipe(
-        startWith(''),
-        map(cnae => this._filterCnaes(cnae))
-        //map(cnae => cnae ? this._filterCnaes(cnae) : this.cnae$.subscribe(cnaes => {return cnaes.slice()}))
-      );
-    });
+        this.filteredCnaes = this.cnaeForm.valueChanges
+          .pipe(
+            startWith(''),
+            map(cnae => this._filterCnaes(cnae))
+            //map(cnae => cnae ? this._filterCnaes(cnae) : this.cnae$.subscribe(cnaes => {return cnaes.slice()}))
+          );
+      });
   }
 
   headers: HeaderModel[] = [
@@ -303,7 +314,7 @@ export class AddCompanyComponent implements OnInit {
   headersBankTable: HeaderModelBank[] = [
     { text: 'Banco', value: 'bank', subValue: 'name' },
     { text: 'Agência', value: 'agency', subValue: null },
-    { text: 'Dígito Agência', value: 'agencyDigit', subValue:null },
+    { text: 'Dígito Agência', value: 'agencyDigit', subValue: null },
     { text: 'Conta Corrente', value: 'account', subValue: null },
     { text: 'Dígito Conta', value: 'accountDigit', subValue: null },
     { text: 'Dígito Agência/Conta', value: 'digit', subValue: null },
@@ -362,7 +373,7 @@ export class AddCompanyComponent implements OnInit {
   }
 
   onAddPartner(index: number) {
-    this.router.navigate(['/company-list/add-partner']);
+    this.router.navigate(['/add-partner']);
   }
 
   //Edit Methods
@@ -372,7 +383,7 @@ export class AddCompanyComponent implements OnInit {
       data: index
     });
     dialogRef.afterClosed().subscribe((item) => {
-      Object.assign(this.phoneNumber$, item);   
+      Object.assign(this.phoneNumber$, item);
       this.phoneService.refreshDataTable();
     })
   }
@@ -390,8 +401,8 @@ export class AddCompanyComponent implements OnInit {
 
   onEditPartner(row: object) {
     const index = this.partnerSource$.findIndex((c) => c == row);
- 
-    this.router.navigate([`/company-list/edit-partner/${index}`]);
+
+    this.router.navigate([`/edit-partner/${index}`]);
   }
 
   //Delete Methods
@@ -468,21 +479,21 @@ export class AddCompanyComponent implements OnInit {
       this.getSecondCep(value);
     }
   }
-  
-  displayFn = (item): string =>{
+
+  displayFn = (item): string => {
     if (item) {
       this.mcc = item;
       return item.description;
-    }else {
+    } else {
       return '';
     }
   }
 
-  getMccByCnae(){
+  getMccByCnae() {
     let a = this.mcc
     console.log(a);
     let obj = {
-      mcccode : a.mcc.code
+      mcccode: a.mcc.code
     }
     this.identificationFormGroup.patchValue(obj);
   }
@@ -563,7 +574,7 @@ export class AddCompanyComponent implements OnInit {
       };
       this.conditionFormGroup.patchValue(obj);
     }
-    if(value == false){
+    if (value == false) {
       this.isCheckedBankAdress = false;
       let obj = {
         cnpjCtrl: this.identificationFormGroup.get('companyResponsibleNameCtrl').value,
@@ -574,108 +585,108 @@ export class AddCompanyComponent implements OnInit {
     }
   }
 
-getCpfCnpjMask(a) {
-  if (a === 'pf') {
-    this.mask = '000.000.000-00';
-  } if (a === 'pj') {
-    this.mask = '00.000.000/0000-00';
-  }
-}
-
-saveForm(form, text) {
-  this.localStorageService.set(text, form.value);
-  this.localStorageService.set('cep', this.response);
-}
-
-getLocalStorage(item) {
-
-  if (item == 'identification') {
-
-    let localStorageIdentification = {
-      registerTarget: this.identification.registerTarget,
-      managingCompanyCtrl: this.identification.managingCompanyCtrl,
-      establishmentCtrl: this.identification.establishmentCtrl,
-      companyTypeCtrl: this.identification.companyTypeCtrl,
-      companyResponsibleNameCtrl: this.identification.companyResponsibleNameCtrl,
-      acquiringEstablishmentCtrl: this.identification.acquiringEstablishmentCtrl,
-      stateRegistrationCtrl: this.identification.stateRegistrationCtrl,
-      companyNameCtrl: this.identification.companyNameCtrl,
-      fancyName: this.identification.fancyName,
-      companyShortName: this.identification.companyShortName,
-      mcccode: this.identification.mcccode,
-      idDepartament: this.identification.idDepartament,
-      cnae: this.identification.cnae,
-      businessActivity: this.identification.businessActivity,
-      openingDate: this.identification.openingDate,
-    };
-    this.identificationFormGroup.patchValue(localStorageIdentification);
-  }
-
-  if (item == 'adress') {
-    let localStorageAdress = {
-      streetCtrl: this.adress.streetCtrl,
-      numberCtrl: this.adress.numberCtrl,
-      complementCtrl: this.adress.complementCtrl,
-      neighborhoodCtrl: this.adress.neighborhoodCtrl,
-      cityCtrl: this.adress.cityCtrl,
-      stateCtrl: this.adress.stateCtrl,
-      responsibleNameCtrl: this.adress.responsibleNameCtrl,
-      referencePointCtrl: this.adress.referencePointCtrl,
-      keyZipCode: this.adress.keyZipCode,
-      subordinateZipCode: this.adress.subordinateZipCode,
-      subordinateNeighborhoodCtrl: this.adress.subordinateNeighborhoodCtrl,
-      subordinateCityCtrl: this.adress.subordinateCityCtrl,
-      subordinateStreetCtrl: this.adress.subordinateStreetCtrl,
-      subordinateNumberCtrl: this.adress.subordinateNumberCtrl,
-      subordinateComplementCtrl: this.adress.subordinateComplementCtrl,
-      subordinateStateCtrl: this.adress.subordinateStateCtrl,
-      subordinateResponsibleNameCtrl: this.adress.subordinateResponsibleNameCtrl,
-      subordinateReferencePointCtrl: this.adress.subordinateReferencePointCtrl,
-    };
-    this.isChecked = this.adress.checkboxAdress;
-    this.adressFormGroup.patchValue(localStorageAdress);
-  }
-
-  if (item == 'condition') {
-    let localStorageCondition = {
-      agencyCtrl: this.condition.agencyCtrl,
-      agencyDigitCtrl: this.condition.agencyDigitCtrl,
-      anticipationFeeCtrl: this.condition.anticipationFeeCtrl,
-      comercialCredit: this.condition.comercialCredit,
-      currentAccountAgencyCtrl: this.condition.currentAccountAgencyCtrl,
-      currentAccountCtrl: this.condition.currentAccountCtrl,
-      currentAccountDigitCtrl: this.condition.currentAccountDigitCtrl,
-      ignoreRuleAjCtrl: this.condition.ignoreRuleAjCtrl,
-      referralTransacionCtrl: this.condition.referralTransacionCtrl,
-      tableSaleCtrl: this.condition.tableSaleCtrl,
-      tedCostCtrl: this.condition.tedCostCtrl,
-      transactionCostCtrl: this.condition.transactionCostCtrl,
-      tratamentAjCtrl: this.condition.tratamentAjCtrl,
+  getCpfCnpjMask(a) {
+    if (a === 'pf') {
+      this.mask = '000.000.000-00';
+    } if (a === 'pj') {
+      this.mask = '00.000.000/0000-00';
     }
-    this.conditionFormGroup.patchValue(localStorageCondition);
   }
 
-  if (item == 'complement') {
-    let localStorageComplement = {
-      openingHoursCtrl: this.complement.openingHoursCtrl,
-      urlEcommerceCtrl: this.complement.urlEcommerceCtrl,
-      urlCtrl: this.complement.urlCtrl,
-      emailCtrl: this.complement.emailCtrl,
-      posAmountCtrl: this.complement.posAmountCtrl,
-      logicNumberCtrl: this.complement.logicNumberCtrl,
-      idTerminalCtrl: this.complement.idTerminalCtrl,
-      registrationDateCtrl: this.complement.registrationDateCtrl,
-      sendDateCtrl: this.complement.sendDateCtrl,
-      accreditationDateCtrl: this.complement.accreditationDateCtrl,
-      gpAffiliationDateCtrl: this.complement.gpAffiliationDateCtrl,
-      seRegistrationDateCtrl: this.complement.seRegistrationDateCtrl,
-      discreditationDateCtrl: this.complement.discreditationDateCtrl,
+  saveForm(form, text) {
+    this.localStorageService.set(text, form.value);
+    this.localStorageService.set('cep', this.response);
+  }
+
+  getLocalStorage(item) {
+
+    if (item == 'identification') {
+
+      let localStorageIdentification = {
+        registerTarget: this.identification.registerTarget,
+        managingCompanyCtrl: this.identification.managingCompanyCtrl,
+        establishmentCtrl: this.identification.establishmentCtrl,
+        companyTypeCtrl: this.identification.companyTypeCtrl,
+        companyResponsibleNameCtrl: this.identification.companyResponsibleNameCtrl,
+        acquiringEstablishmentCtrl: this.identification.acquiringEstablishmentCtrl,
+        stateRegistrationCtrl: this.identification.stateRegistrationCtrl,
+        companyNameCtrl: this.identification.companyNameCtrl,
+        fancyName: this.identification.fancyName,
+        companyShortName: this.identification.companyShortName,
+        mcccode: this.identification.mcccode,
+        idDepartament: this.identification.idDepartament,
+        cnae: this.identification.cnae,
+        businessActivity: this.identification.businessActivity,
+        openingDate: this.identification.openingDate,
+      };
+      this.identificationFormGroup.patchValue(localStorageIdentification);
     }
-    this.complementFormGroup.patchValue(localStorageComplement);
-  }
 
-  if (item == 'partner') {
+    if (item == 'adress') {
+      let localStorageAdress = {
+        streetCtrl: this.adress.streetCtrl,
+        numberCtrl: this.adress.numberCtrl,
+        complementCtrl: this.adress.complementCtrl,
+        neighborhoodCtrl: this.adress.neighborhoodCtrl,
+        cityCtrl: this.adress.cityCtrl,
+        stateCtrl: this.adress.stateCtrl,
+        responsibleNameCtrl: this.adress.responsibleNameCtrl,
+        referencePointCtrl: this.adress.referencePointCtrl,
+        keyZipCode: this.adress.keyZipCode,
+        subordinateZipCode: this.adress.subordinateZipCode,
+        subordinateNeighborhoodCtrl: this.adress.subordinateNeighborhoodCtrl,
+        subordinateCityCtrl: this.adress.subordinateCityCtrl,
+        subordinateStreetCtrl: this.adress.subordinateStreetCtrl,
+        subordinateNumberCtrl: this.adress.subordinateNumberCtrl,
+        subordinateComplementCtrl: this.adress.subordinateComplementCtrl,
+        subordinateStateCtrl: this.adress.subordinateStateCtrl,
+        subordinateResponsibleNameCtrl: this.adress.subordinateResponsibleNameCtrl,
+        subordinateReferencePointCtrl: this.adress.subordinateReferencePointCtrl,
+      };
+      this.isChecked = this.adress.checkboxAdress;
+      this.adressFormGroup.patchValue(localStorageAdress);
+    }
 
+    if (item == 'condition') {
+      let localStorageCondition = {
+        agencyCtrl: this.condition.agencyCtrl,
+        agencyDigitCtrl: this.condition.agencyDigitCtrl,
+        anticipationFeeCtrl: this.condition.anticipationFeeCtrl,
+        comercialCredit: this.condition.comercialCredit,
+        currentAccountAgencyCtrl: this.condition.currentAccountAgencyCtrl,
+        currentAccountCtrl: this.condition.currentAccountCtrl,
+        currentAccountDigitCtrl: this.condition.currentAccountDigitCtrl,
+        ignoreRuleAjCtrl: this.condition.ignoreRuleAjCtrl,
+        referralTransacionCtrl: this.condition.referralTransacionCtrl,
+        tableSaleCtrl: this.condition.tableSaleCtrl,
+        tedCostCtrl: this.condition.tedCostCtrl,
+        transactionCostCtrl: this.condition.transactionCostCtrl,
+        tratamentAjCtrl: this.condition.tratamentAjCtrl,
+      }
+      this.conditionFormGroup.patchValue(localStorageCondition);
+    }
+
+    if (item == 'complement') {
+      let localStorageComplement = {
+        openingHoursCtrl: this.complement.openingHoursCtrl,
+        urlEcommerceCtrl: this.complement.urlEcommerceCtrl,
+        urlCtrl: this.complement.urlCtrl,
+        emailCtrl: this.complement.emailCtrl,
+        posAmountCtrl: this.complement.posAmountCtrl,
+        logicNumberCtrl: this.complement.logicNumberCtrl,
+        idTerminalCtrl: this.complement.idTerminalCtrl,
+        registrationDateCtrl: this.complement.registrationDateCtrl,
+        sendDateCtrl: this.complement.sendDateCtrl,
+        accreditationDateCtrl: this.complement.accreditationDateCtrl,
+        gpAffiliationDateCtrl: this.complement.gpAffiliationDateCtrl,
+        seRegistrationDateCtrl: this.complement.seRegistrationDateCtrl,
+        discreditationDateCtrl: this.complement.discreditationDateCtrl,
+      }
+      this.complementFormGroup.patchValue(localStorageComplement);
+    }
+
+    if (item == 'partner') {
+
+    }
   }
-}
 }

@@ -6,6 +6,7 @@ import {
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { Content, Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 
@@ -21,6 +22,17 @@ export class AddProfileComponent implements OnInit {
     nameProfile: '',
     description: '' 
   }
+
+  breadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Incluir Usuário',
+      route: 'profile-partner'
+    },
+    items: [
+      { title: 'Home', route: '' },
+      { title: 'Lista de Usuários', route: 'profile-list' },
+    ]
+  };
 
   constructor(
     public dataService: DataService,
