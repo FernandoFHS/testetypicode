@@ -6,15 +6,6 @@
     <form [formGroup]="agreementFormGroup">
       <div class="line-form">
         <div class="max-short-line-form">
-          <mat-form-field appearance="outline">
-            <mat-label>Adquirente</mat-label>
-            <mat-select formControlName="idAcquirer" required>
-              <mat-option></mat-option>
-              <mat-option value="Vero"> Vero </mat-option>
-              <mat-option value="Rede"> Rede </mat-option>
-            </mat-select>
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-          </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Início Validade</mat-label>
@@ -47,10 +38,18 @@
 
       <mat-divider></mat-divider>
       <br />
-      <h3>Serviços</h3>
+      <h3>Planos</h3>
 
-      <div class="line-form">
-        <div class="short-line-form">
+      <div class="line-form" style="gap:55px;">
+        <!-- <div class="short-line-form"> -->
+          <mat-form-field appearance="outline">
+            <mat-label>Adquirente</mat-label>
+            <mat-select formControlName="idAcquirer" required *ngIf="acquirer$ | async as acquirer;">
+              <mat-option>Selecione um Adquirente</mat-option>
+              <mat-option *ngFor="let item of acquirer" [value]="item.id">{{item.description}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Código de Serviço</mat-label>
             <mat-select formControlName="idServiceEntity" required *ngIf="serviceEntity$ | async as serviceEntity;">
@@ -67,9 +66,6 @@
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
-        </div>
-
-        <div class="short-line-form">
           <mat-form-field appearance="outline">
             <mat-label>Tipo de Remuneração</mat-label>
             <mat-select formControlName="idRemunerationType" required  *ngIf="remunerationType$ | async as remunetationType;">
@@ -78,7 +74,6 @@
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
-
           <mat-form-field appearance="outline">
             <mat-label>Valor da Remuneração</mat-label>
             <input matInput placeholder="Valor da Remuneração" formControlName="value" required
@@ -86,7 +81,11 @@
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>attach_money</mat-icon>
           </mat-form-field>
-        </div>
+        <!-- </div> -->
+
+        <!-- <div class="short-line-form">
+        </div> -->
+
       </div>
       <core-data-table [headers]="headers" [data]="dataSource" [actions]="actions" (addEvent)="onAdd($event)" (deleteEvent)="onDelete($event)"
         (editEvent)="onEdit($event)">

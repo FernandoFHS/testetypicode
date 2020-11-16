@@ -1,0 +1,239 @@
+<div fxFlexFill>
+
+  <core-breadcrumb [model]="breadcrumbModel"></core-breadcrumb>
+
+  <div class="m-b-25">
+    <label class="mat-display-1 page-title">
+      Editar Regra
+    </label>
+  </div>
+
+  <form name="form" [formGroup]="form" novalidate *ngIf="form" class="m-b-15" autocomplete="off">
+
+    <mat-expansion-panel class="m-b-25" [expanded]="true">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Detalhes e Alertas
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div fxLayout="row wrap" fxLayoutGap="1% grid">
+        <mat-form-field appearance="outline" floatLabel="always" fxFlex="100%">
+          <mat-label>
+            Descrição
+          </mat-label>
+
+          <input matInput formControlName="description">
+
+          <mat-error *ngIf="form.get('description').hasError('required')">
+            Obrigatório
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" fxFlex="25%">
+          <mat-label>
+            Criticidade
+          </mat-label>
+
+          <mat-select formControlName="critical_level">
+            <mat-option [value]="'LOW'">
+              Baixa
+            </mat-option>
+            <mat-option [value]="'MEDIUM'">
+              Normal
+            </mat-option>
+            <mat-option [value]="'AVERAGE'">
+              Alta
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" fxFlex="25%">
+          <mat-label>
+            Bloqueio Operacional?
+          </mat-label>
+
+          <mat-select formControlName="block_merchant_transactions">
+            <mat-option [value]="false">
+              Não
+            </mat-option>
+            <mat-option [value]="true">
+              Sim
+            </mat-option>
+          </mat-select>
+
+          <mat-hint input-helper [input-helper-text]="'O que é Bloqueio Operacional?'" [input-helper-messages]="[
+            'Quando alguma transação for compatível com as condições cadastradas, se a Regra estiver marcada com Bloqueio Operacional SIM, o estabelecimento será bloqueado para futuras transações até que a situação seja normalizada.'
+            ]">
+            O que é?
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" fxFlex="50%">
+          <mat-label>
+            Tipo de Alerta
+          </mat-label>
+          <mat-select formControlName="email_notification_mode">
+            <mat-option [value]="'SEND_FOR_ALL'">
+              Enviar um e-mail para cada alerta gerado
+            </mat-option>
+            <mat-option [value]="'SEND_BY_HOUR'">
+              Enviar um e-mail á cada hora com todos os alertas gerados desde o último envio
+            </mat-option>
+            <mat-option [value]="'NOT_SEND'">
+              Não enviar alertas por e-mail
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="100%" floatLabel="always">
+          <mat-label>
+            E-mails notificados
+          </mat-label>
+
+          <mat-chip-list #emailList>
+            <mat-chip *ngFor="let email of emails; let i = index" (removed)="removeEmail(i)"
+              [color]="i % 2 == 0 ? 'primary' : 'accent'" selected>
+              {{email}}
+              <mat-icon matChipRemove>
+                cancel
+              </mat-icon>
+            </mat-chip>
+
+            <input formControlName="email" [matChipInputFor]="emailList"
+              [matChipInputSeparatorKeyCodes]="emailSeparatorKeysCodes" (matChipInputTokenEnd)="addEmail($event)">
+          </mat-chip-list>
+
+          <mat-hint input-helper [input-helper-text]="'Como cadastrar os e-mails?'" [input-helper-messages]="[
+          'Todos os e-mails listados receberão os alertas (dependendo do Tipo de Alerta selecionado).',
+          'Caso o Tipo de Alerta selecionado seja \'Não enviar alertas por e-mail\', os alertas não serão disparados, porém os mesmos ficarão salvos na Regra.',
+          'Para associar um e-mail aos alertas, é necessário incluir o mesmo no campo, e após isso apertar enter (↵) ou vírgula (,).',
+          'Caso seja um e-mail inválido, será exibida uma mensagem de erro e ele não será associado.',
+          'Para remover um e-mail associado basta clicar no ícone de \'X\' ao lado do mesmo.'
+          ]">
+            Como cadastrar?
+          </mat-hint>
+        </mat-form-field>
+
+      </div>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="m-b-25" [expanded]="true">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Condições
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div formArrayName="conditions">
+
+        <div *ngIf="form.get('conditions').controls == 0" class="text-center">
+          <label>
+            Nenhuma condição cadastrada
+          </label>
+        </div>
+
+        <div *ngFor="let item of form.get('conditions').controls; let i = index; let last = last; let count = count"
+          [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="2% grid">
+
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="45%">
+            <mat-label>
+              Variável
+            </mat-label>
+
+            <mat-select formControlName="variable" (selectionChange)="onChangeVariable($event, i)">
+              <mat-option *ngFor="let variable of variables" [value]="variable.variable_name">
+                {{variable.display_name}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="form.get('conditions').controls[i].get('variable').hasError('required')">
+              Obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%">
+            <mat-label>
+              Op. Comparação
+            </mat-label>
+
+            <mat-select formControlName="comparison_op" (selectionChange)="onChangeComparisonOperator($event, i)">
+              <mat-option [value]="comparison_operator.operator_name"
+                *ngFor="let comparison_operator of selectedVariables[i]?.comparison_operators">
+                {{comparison_operator.display_name}}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="form.get('conditions').controls[i].get('comparison_op').hasError('required')">
+              Obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%">
+            <mat-label>
+              Valor
+            </mat-label>
+
+            <input matInput currencyMask id="condition-value-{{i}}"
+              *ngIf="selectedVariables[i]?.data_type == 'Monetary'" formControlName="value" />
+
+            <input matInput id="condition-value-{{i}}" *ngIf="!selectedVariables[i]" formControlName="value" />
+
+            <input matInput type="number" id="condition-value-{{i}}"
+              *ngIf="selectedVariables[i]?.data_type == 'ListOfValue'" formControlName="value" />
+
+            <mat-error *ngIf="form.get('conditions').controls[i].get('value').hasError('required')">
+              Obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="15%"
+            *ngIf="last == false && count > 1">
+            <mat-label>
+              Operador Lógico
+            </mat-label>
+
+            <mat-select formControlName="logic_op">
+              <mat-option *ngFor="let item of logicOperatorList" [value]="item.value">
+                {{item.text}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
+        <button mat-flat-button color="accent" class="m-t-15 float-left" (click)="addCondition()">
+          Nova Condição
+        </button>
+
+      </div>
+
+    </mat-expansion-panel>
+
+    <div fxLayout="row wrap">
+      <div fxFlex>
+        <button mat-raised-button class="m-t-15 float-left" (click)="back()">
+          <mat-icon [inline]="true" class="m-r-5">
+            arrow_back
+          </mat-icon>
+          Voltar
+        </button>
+      </div>
+
+      <div fxFlex>
+        <button mat-raised-button color="primary" class="m-t-15 float-right" (click)="save()">
+          <mat-icon [inline]="true" class="m-r-5">
+            save
+          </mat-icon>
+          Salvar
+        </button>
+
+      </div>
+    </div>
+
+  </form>
+
+</div>

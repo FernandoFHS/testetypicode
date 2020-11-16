@@ -1,55 +1,50 @@
-<div class="mat-cell mat-elevation-z8">
-  <div class="example-loading-shade" *ngIf="isLoadingResults">
-    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+<div class="mat-cell mat-elevation-z1">
+
+  <div class="h-200 loading-data p-t-20" *ngIf="isLoadingResults">
+    <mat-spinner [diameter]="50" *ngIf="isLoadingResults"></mat-spinner>
   </div>
-  <mat-table
-    #table
-    [dataSource]="dataSource"
-    class="example-table"
-    matSort
-    [matSortActive]="sortColumns"
-    matSortDisableClear
-    matSortDirection="desc"
-  >
+
+  <mat-table #table [dataSource]="dataSource" class="example-table" matSort [matSortActive]="sortColumns"
+    matSortDisableClear matSortDirection="desc" [hidden]="isLoadingResults">
     <ng-container [matColumnDef]="header.value" *ngFor="let header of headers">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ header.text }}
-      </mat-header-cell>
+      <div *ngIf="header.text === 'Código'">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ header.text }}
+        </mat-header-cell>
+      </div>
+
+      <div *ngIf="header.text !== 'Código'">
+        <mat-header-cell *matHeaderCellDef>
+          {{ header.text }}
+        </mat-header-cell>
+      </div>
       <mat-cell *matCellDef="let row">
-        {{ header.deepValue ? row[header.value][header.subValue][header.deepValue] : row[header.value] }}
+        <!-- {{ header.deepValue ? row[header.value][header.subValue][header.deepValue] : row[header.value] }} -->
         <!-- {{ header.value == true ? row[header.value] = "Credenciado" : row[header.value] = "Descredenciado"}} -->
+        <div *ngIf="header.value === 'situation'">
+          {{row[header.value]  ? row[header.value] = "Ativo" : row[header.value] = "Inativo"}}
+        </div>
+
+        <div *ngIf="header.value !== 'situation'">
+          {{ header.deepValue ? row[header.value][header.subValue][header.deepValue] : row[header.value] }}
+        </div>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>
-        <button
-          mat-icon-button
-          color="primary"
-          (click)="addItem()"
-          *ngIf="actions.add"
-        >
-          <mat-icon aria-label="Add icon">add</mat-icon>
+        <button mat-icon-button color="primary" (click)="addItem()" *ngIf="actions.add">
+          <mat-icon aria-label="Add icon" matTooltip="Cadastrar">add</mat-icon>
         </button>
       </mat-header-cell>
 
       <mat-cell *matCellDef="let row; let i = index">
-        <button
-          mat-icon-button
-          color="primary"
-          (click)="editItem(row)"
-          *ngIf="actions.edit"
-        >
-          <mat-icon aria-label="Edit icon">edit</mat-icon>
+        <button mat-icon-button color="primary" (click)="editItem(row)" *ngIf="actions.edit">
+          <mat-icon aria-label="Edit icon" matTooltip="Editar">edit</mat-icon>
         </button>
 
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="deleteItem(row)"
-          *ngIf="actions.delete"
-        >
-          <mat-icon aria-label="Delete icon">delete</mat-icon>
+        <button mat-icon-button color="warn" (click)="deleteItem(row)" *ngIf="actions.delete">
+          <mat-icon aria-label="Delete icon" matTooltip="Deletar">delete</mat-icon>
         </button>
       </mat-cell>
     </ng-container>
@@ -58,5 +53,5 @@
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
 
-  <mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>
+  <mat-paginator [length]="resultsLength" [pageSize]="10" [hidden]="isLoadingResults"></mat-paginator>
 </div>

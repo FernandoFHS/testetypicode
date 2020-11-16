@@ -38,6 +38,7 @@ import { Observable, of } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { SimpleDataTableService } from 'src/app/@core/components/container/simple-data-table/simple-data-table.service';
 import { CompanyService } from '../../services/company.service';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 
 @Component({
   selector: 'app-add-company',
@@ -95,6 +96,17 @@ export class AddCompanyComponent implements OnInit {
   cnae: Array<Cnae>;
   cnae$: Observable<Array<Cnae>>;
   filteredCnaes: Observable<Cnae[]>;
+
+  breadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Incluir Estabelecimento',
+      route: 'add-company'
+    },
+    items: [
+      { title: 'Home', route: '' },
+      { title: 'Lista de Estabelecimentos', route: 'company-list' }
+    ]
+  };
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -401,7 +413,7 @@ export class AddCompanyComponent implements OnInit {
   }
 
   onAddPartner(index: number) {
-    this.router.navigate(['/company-list/add-partner']);
+    this.router.navigate(['/add-partner']);
   }
 
   //Edit Methods
@@ -430,7 +442,7 @@ export class AddCompanyComponent implements OnInit {
   onEditPartner(row: object) {
     const index = this.partnerSource$.findIndex((c) => c == row);
 
-    this.router.navigate([`/company-list/edit-partner/${index}`]);
+    this.router.navigate([`/edit-partner/${index}`]);
   }
 
   //Delete Methods
@@ -463,6 +475,16 @@ export class AddCompanyComponent implements OnInit {
   //     this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
   //   })
   // }
+
+  //Filtro
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.bankAccount$.filter = filterValue.trim().toLowerCase();
+
+    if (this.bankAccount$.paginator) {
+      this.bankAccount$.paginator.firstPage();
+    }
+  }
 
   //Navigation Functions
   navigateToCompanyList() {
@@ -665,5 +687,8 @@ export class AddCompanyComponent implements OnInit {
       this.conditionFormGroup.patchValue(localStorageCondition);
     }
 
+    if (item == 'partner') {
+
+    }
   }
 }

@@ -1,0 +1,19 @@
+<div class="breadcrumb m-t-5 m-b-15" fxLayout="row" fxLayoutAlign="start center">
+
+  <div *ngFor="let item of model?.items" fxLayout="row" fxLayoutAlign="start center">
+
+    <span routerLink="/{{item.route}}" class="fake-link-hover">
+      {{item.title}}
+    </span>
+
+    <mat-icon class="s-20">
+      chevron_right
+    </mat-icon>
+
+  </div>
+
+  <label color="primary">
+    {{model?.active?.title}}
+  </label>
+
+</div>

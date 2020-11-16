@@ -1,7 +1,59 @@
-<div class="table-title">
-  <h2>Estabelecimentos Cadastrados</h2>
-</div>
+<div fxFlexFill>
 
-<core-data-table [headers]="headers" [actions]="actions" (addEvent)="onAdd($event)" (deleteEvent)="onDelete($event)"
-  (editEvent)="onEdit($event)" [loadFunc]="loadData" [idItems]="'idCompany'">
-</core-data-table>
+  <core-breadcrumb [model]="breadcrumbModel"></core-breadcrumb>
+
+  <div class="m-b-25">
+    <label class="mat-display-1 page-title">
+      Lista de Estabelecimentos
+    </label>
+  </div>
+
+  <!-- <div class="table-title">
+    <h2>Estabelecimentos Cadastrados</h2>
+  </div> -->
+
+  <form *ngIf="companyFormGroup" name="companyFormGroup" [formGroup]="companyFormGroup" novalidate>
+    <mat-form-field>
+      <mat-label>Filtro</mat-label>
+      <input matInput formControlName="filter" placeholder="Procure por uma razão social" />
+    </mat-form-field>
+
+    <mat-expansion-panel (opened)="cardFilterOpened = true" (closed)="cardFilterOpened = false" class="mb-16"
+      [expanded]="false">
+      <mat-expansion-panel-header>
+        <mat-panel-title> + Filtros </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div fxLayout="row wrap" fxLayoutGap="2% grid">
+        <mat-form-field appearance="outline" fxFlex.gt-sm="15%" fxFlex.sm="40%" fxFlex.xs="100%">
+          <mat-label> ID </mat-label>
+          <input matInput formControlName="id" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex.gt-sm="0 0 calc(100% / 3)" fxFlex.sm="50%" fxFlex.xs="100%">
+          <mat-label> CPF/CNPJ </mat-label>
+          <input matInput formControlName="documentNumberCompany" mask="CPF_CNPJ" [validation]="false" />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" class="mt-16 mb-16">
+        <button mat-flat-button color="primary" class="m-r-10" fxFlex.gt-sm="15%" fxFlex.xs="50%" fxFlex.sm="30%"
+          (click)="loadModel()">
+          FILTRAR
+        </button>
+        <button mat-raised-button class="submit-button" fxFlex.gt-sm="10%" fxFlex.xs="35%" fxFlex.sm="20%"
+          (click)="clearFilter()">
+          LIMPAR
+        </button>
+      </div>
+    </mat-expansion-panel>
+  </form>
+
+  <br />
+
+  <core-data-table [headers]="headers" [actions]="actions" (addEvent)="onAdd($event)" (deleteEvent)="onDelete($event)"
+    (editEvent)="onEdit($event)" [loadFunc]="loadData" [idItems]="'idCompany'" [filterFunc]="loadDataByFilter"
+    [clearFilterFunc]="clearFilter">
+  </core-data-table>
+
+</div>

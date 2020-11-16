@@ -15,6 +15,9 @@ import { AngularMaterialModule } from './modules/angular-material.module';
 import { ThemesComponent } from './components/themes/themes.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataTableComponent } from './components/container/data-table/data-table.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { InputHelperComponent } from './components/input-helper/input-helper.component';
+import { InputHelperDirective } from './directives/input-helper.directive';
 
 
 @NgModule({
@@ -29,8 +32,11 @@ import { DataTableComponent } from './components/container/data-table/data-table
     AccordionDirective,
     AccordionLinkDirective,
     AccordionAnchorDirective,
+    InputHelperDirective,
 
     DataTableComponent,
+    BreadcrumbComponent,
+    InputHelperComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,15 +56,21 @@ import { DataTableComponent } from './components/container/data-table/data-table
     ThemesComponent,
 
     DataTableComponent,
+    BreadcrumbComponent,
+    InputHelperComponent,
 
     AccordionDirective,
     AccordionLinkDirective,
     AccordionAnchorDirective,
+    InputHelperDirective,
 
     AngularMaterialModule,
     ReactiveFormsModule,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    InputHelperComponent
+  ]
 
 })
 export class CoreModule {

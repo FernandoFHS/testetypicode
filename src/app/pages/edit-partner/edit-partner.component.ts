@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { CepService } from 'src/app/services/cep.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
@@ -17,12 +18,23 @@ export class EditPartnerComponent implements OnInit {
   cep: number;
   response;
   partnerArray: any;
-  partner:any;
+  partner: any;
   index: any;
- 
+
+  breadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Editar Sócio',
+      route: 'add-partner'
+    },
+    items: [
+      { title: 'Home', route: '' },
+      { title: 'Lista de Estabelecimentos', route: 'company-list' },
+      { title: 'Incluir Estabelecimento', route: 'company-list/add-company' },
+    ]
+  };
 
   constructor(
-    
+
     private _formBuilder: FormBuilder,
     private CepService: CepService,
     private router: Router,
@@ -30,8 +42,8 @@ export class EditPartnerComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) { }
 
-   ngOnInit(): void{ 
-    this.loadParams().then(()=>{
+  ngOnInit(): void {
+    this.loadParams().then(() => {
       this.partnerFormGroup = this._formBuilder.group({
         sequenceNumber: [{ value: '', disabled: true }, Validators.required],
         name: [this.partner?.name || '', Validators.required],
@@ -46,8 +58,8 @@ export class EditPartnerComponent implements OnInit {
         state: [this.partner?.state || '', Validators.required],
         contact: [this.partner?.contact || '', Validators.required]
       });
-    });  
-  
+    });
+
   }
 
   formControl = new FormControl('', [
@@ -56,35 +68,35 @@ export class EditPartnerComponent implements OnInit {
   ]);
 
   getErrorMessage(controlName: string) {
-    const control  = this.partnerFormGroup.get(controlName);
+    const control = this.partnerFormGroup.get(controlName);
     return control.hasError('required')
       ? 'Campo Obrigatório'
       : control.hasError('email')
-      ? 'Not a valid email'
-      : '';
+        ? 'Not a valid email'
+        : '';
   }
 
   loadParams(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       try {
-        this.activatedRoute.params.subscribe((params)=>{
+        this.activatedRoute.params.subscribe((params) => {
           const index = params['index'];
 
-        if (typeof (index) == 'string') {
+          if (typeof (index) == 'string') {
 
-          const partnerArray = this.localStorageService.get('partnerFormGroup');
+            const partnerArray = this.localStorageService.get('partnerFormGroup');
 
-          if (partnerArray && partnerArray.length > 0) {
-            const partner = partnerArray[index];
-            this.partner = partner;
-            this.index = index;
+            if (partnerArray && partnerArray.length > 0) {
+              const partner = partnerArray[index];
+              this.partner = partner;
+              this.index = index;
 
-            resolve();
-          } else {
-            // TODO - Redireiconar usuario para ? informando que o Sócio não foi encontrado
-            reject();
+              resolve();
+            } else {
+              // TODO - Redireiconar usuario para ? informando que o Sócio não foi encontrado
+              reject();
+            }
           }
-        }
         });
       }
       catch (error) {
@@ -147,6 +159,6 @@ export class EditPartnerComponent implements OnInit {
     });
   }
 
- 
+
 
 }

@@ -1,0 +1,13 @@
+.breadcrumb {
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.fake-link-hover {
+  cursor: pointer;
+
+  &:hover {
+    color: #0073bb;
+    text-decoration: underline;
+  }
+}

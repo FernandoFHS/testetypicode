@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined');
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined");
 
 * {
     outline: none;
@@ -407,6 +407,10 @@ html body {
         margin-bottom: 20px;
     }
 
+    .m-b-25 {
+        margin-bottom: 25px;
+    }
+
     .m-b-30 {
         margin-bottom: 30px;
     }
@@ -465,7 +469,7 @@ html body {
     }
 
     .font-16 {
-        font-size: 16px;
+        font-size: 16px !important;
     }
 
     .font-14 {
@@ -796,6 +800,7 @@ list inline
 }
 
 html .page-wrapper {
+    // height: calc(100vh - 100px);
     height: calc(100vh - 64px);
 
     .page-content {
@@ -875,4 +880,65 @@ Snacks
             width: 100%;
         }
     }
+}
+
+.page-title {
+    font-size: 30px !important;
+}
+
+mat-expansion-panel {
+    .mat-expansion-panel-header {
+        padding: 0 15px !important;
+        height: 50px !important;
+        font-weight: 500;
+    }
+
+    .mat-expansion-panel-body {
+        padding: 0 15px 15px !important;
+        font-weight: 400 !important;
+    }
+}
+
+.subtitle-label {
+    font-weight: 400;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+
+.mat-select-panel mat-option.mat-option {
+    margin: 1rem 0;
+    overflow: visible;
+    line-height: initial;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.mat-option-text.mat-option-text {
+    white-space: normal;
+}
+
+.input-helper {
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.loading-data {
+    // position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

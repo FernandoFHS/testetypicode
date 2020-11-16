@@ -7,19 +7,23 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { merge, Observable, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data.service';
+import { DataTableService } from './data-table.service';
 
 @Component({
   selector: 'core-data-table',
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DataTableComponent implements AfterViewInit {
   public displayedColumns: string[] = [];
@@ -51,6 +55,12 @@ export class DataTableComponent implements AfterViewInit {
   @Input()
   idItems: any;
 
+  @Input()
+  filterFunc: any;
+
+  @Input()
+  clearFilterFunc: any;
+
   @Output()
   deleteEvent: EventEmitter<Object> = new EventEmitter();
 
@@ -65,30 +75,42 @@ export class DataTableComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  // @ViewChild('filter',  {static: true}) filter: ElementRef;
+  @ViewChild('filter',  {static: true}) filter: ElementRef;
 
   constructor(
     public dialog: MatDialog,
     private router: Router,
-    public dataService: DataService
+    public dataService: DataService,
+    public dataTableService: DataTableService
   ) {}
 
-  dataSource: any[] = [];
+  // dataSource: any[] = [];
+  dataSource = new MatTableDataSource();
 
   ngAfterViewInit(): void {
-    // if (!this.data) {
-    //   this.data = [];
-    // }
-
-    // if (!this.data.content) {
-    //   this.data.content = this.data;
-    // }
 
     this.displayedColumns = this.headers.map((e) => e.value);
 
     this.displayedColumns.push('actions');
 
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+
+    this.dataTableService.onRefreshDataTable().subscribe(() => {
+      this.filterFunc(      
+        this.idItems,
+        this.sort.direction,
+        this.paginator.pageIndex,
+        10
+        ).subscribe((data) => {
+          this.isLoadingResults = false;
+          this.resultsLength = data['totalElements'];
+    
+          console.log(data);
+          this.dataSource = new MatTableDataSource(data['content']);
+          
+          console.log(this.dataSource );
+        });
+    })
 
     this.loadFunc(
       this.idItems,
@@ -129,9 +151,25 @@ export class DataTableComponent implements AfterViewInit {
           return observableOf([]);
         })
       )
-      .subscribe((data) => (this.dataSource = data));
-
+      .subscribe((data) => {
+        this.dataSource = new MatTableDataSource(data)
+      });
+   
   }
+
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    // this.resultsLength = 
+      
+    console.log(this.dataSource)
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   addItem(row: object) {
     this.addEvent.emit(row);
   }
