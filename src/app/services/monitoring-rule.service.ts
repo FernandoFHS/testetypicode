@@ -17,13 +17,18 @@ export class MonitoringRuleService {
   getRules(page: number, size: number): Promise<MonitoringRuleResponseModel> {
     return new Promise<MonitoringRuleResponseModel>((resolve, reject) => {
       try {
-        this._http.get(`${environment.api.url}/monitoring-rule?page=${page}&size=${size}`).subscribe((response: MonitoringRuleResponseModel) => {
-          resolve(response);
-        }, (error) => {
-          console.log('-- Erro  na chamada monitoring-rule.service.ts função getRules');
-          console.log(error);
-          reject(error);
-        });
+        if (environment.api.mock) {
+          resolve(MonitoringRuleResponseModel.mock());
+        }
+        else {
+          this._http.get(`${environment.api.url}/monitoring-rule?page=${page}&size=${size}`).subscribe((response: MonitoringRuleResponseModel) => {
+            resolve(response);
+          }, (error) => {
+            console.log('-- Erro  na chamada monitoring-rule.service.ts função getRules');
+            console.log(error);
+            reject(error);
+          });
+        }
       }
       catch (error) {
         console.log(error);
@@ -35,6 +40,10 @@ export class MonitoringRuleService {
   getVariables(): Promise<MonitoringRuleVariableResponseModel[]> {
     return new Promise<MonitoringRuleVariableResponseModel[]>((resolve, reject) => {
       try {
+        if (environment.api.mock) {
+          resolve(MonitoringRuleVariableResponseModel.mock());
+        }
+        else {
         this._http.get(`${environment.api.url}/monitoring-rule/variables`).subscribe((response: MonitoringRuleVariableResponseModel[]) => {
           resolve(response);
         }, (error) => {
@@ -42,6 +51,7 @@ export class MonitoringRuleService {
           console.log(error);
           reject(error);
         });
+      }
       }
       catch (error) {
         console.log(error);

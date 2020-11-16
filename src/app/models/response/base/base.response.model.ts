@@ -12,7 +12,7 @@ export class BaseResponseModel {
     unpaged: boolean;
   };
   totalElements: number;
-  lsat: boolean;
+  last: boolean;
   totalPages: number;
   number: number;
   size: number;
