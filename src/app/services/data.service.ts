@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Profile, Content } from '../models/Profile';
-import { Partner } from '../models/Partner';
 import {
   HttpClient,
-  HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
 import {
@@ -18,11 +16,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class DataService {
-  private readonly API_URL =
-    'http://register-profile.qa.appmobbuy.tech:8080/profiles/';
-
-  // Temporarily stores data from dialogs
-  dialogData: any;
+  private readonly API_URL ='http://register-profile.qa.appmobbuy.tech:8080/profiles';
 
   constructor(private httpClient: HttpClient, public _snackBar: MatSnackBar) {}
 
@@ -44,23 +38,17 @@ export class DataService {
     headers: this.headers,
   };
 
-  getDialogData() {
-    return this.dialogData;
+  /** CRUD METHODS */
+
+  getAllItems<TResponse>(sort: string, order: string, page: number, size: number, loadFunc: any): Observable<TResponse> {
+    return loadFunc(sort, order, page, size);   
   }
 
-  /** CRUD METHODS */
-  getAllProfiles(size: number, page: number): Promise<Profile[]> {
-    return new Promise<Profile[]>((resolve, reject) => {
-      this.httpClient.get<Profile[]>(`${this.API_URL}?size=${size}&page=${page}`).subscribe(
-        (data) => {
-          resolve(data);
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error.name + ' ' + error.message);
-          reject(error);
-        }
-      );
-    });
+  getAllProfiles(sort: string, order: string, page: number, size: number): Observable<Profile[]> {
+    const requestUrl =
+        `${this.API_URL}?sort=${sort},${order}&page=${page + 1}&size=${size}`;
+
+    return this.httpClient.get<Profile[]>(requestUrl);
   }
 
   create(profile: Content): Observable<Content> {
@@ -82,7 +70,7 @@ export class DataService {
       tap(() => {
         this._refreshTable.next();
       })
-    );;
+    );
   }
 
   delete(id: number): Observable<Profile> {

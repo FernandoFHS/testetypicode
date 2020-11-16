@@ -4,7 +4,7 @@
 }
 
 .mat-column-actions {
-  flex: 0 0 75px;
+  flex: 0 0 100px;
 }
 
 mat-row {
@@ -13,3 +13,10 @@ mat-row {
   }
 }
 
+mat-table {
+  width: 100%;
+}
+
+.example-tooltip-green {
+  background: #b71c1c;
+}

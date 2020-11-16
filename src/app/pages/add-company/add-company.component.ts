@@ -2,13 +2,14 @@ import { map, take, startWith, filter } from 'rxjs/operators';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { ActionModel } from 'src/app/@core/models/action.model';
-import { HeaderModel } from 'src/app/@core/models/header.model';
+import { HeaderModel, HeaderModelBank } from 'src/app/@core/models/header.model';
 import { CepService } from 'src/app/services/cep.service';
 import { DataService } from 'src/app/services/data.service';
 import {
@@ -34,8 +35,10 @@ import { AddPhoneComponent } from '../dialogs/add-phone/add-phone.component';
 import { CnaeService } from '../../services/company/cnae.service';
 import { Cnae } from '../../models/company/Cnae'
 import { Observable, of } from 'rxjs';
-import { Profile } from 'src/app/models/Profile';
 import { MatPaginator } from '@angular/material/paginator';
+import { SimpleDataTableService } from 'src/app/@core/components/container/simple-data-table/simple-data-table.service';
+import { CompanyService } from '../../services/company.service';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 
 @Component({
   selector: 'app-add-company',
@@ -61,15 +64,20 @@ import { MatPaginator } from '@angular/material/paginator';
 export class AddCompanyComponent implements OnInit {
 
   cnaeForm = new FormControl();
-
   isLinear = false;
   identificationFormGroup: FormGroup;
   adressFormGroup: FormGroup;
   conditionFormGroup: FormGroup;
   complementFormGroup: FormGroup;
   partnerFormGroup: FormGroup;
+
+  contactFormGroup: FormGroup;
+  bankingFormGroup: FormGroup;
+
+  testeform: FormArray;
   isChecked = false;
   isCheckedBankAdress = true;
+  isCheckedSituation = false;
   mask: any;
   response: any;
   dataSource: any[] = [];
@@ -78,13 +86,27 @@ export class AddCompanyComponent implements OnInit {
   adress: any = this.localStorageService.get('adressFormGroup');
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
-  partnerSource: any = this.localStorageService.get('partnerFormGroup');
-  bankAccount: any = this.localStorageService.get('bankAccount');
-  phoneNumber: any = this.localStorageService.get('phoneNumber');
+  partner: any = this.localStorageService.get('partnerFormGroup');
+  partnerSource$: any = [];
+  bankAccount$: any = [];
+  phoneNumber$: any = [];
+
+  mcc: any;
 
   cnae: Array<Cnae>;
   cnae$: Observable<Array<Cnae>>;
   filteredCnaes: Observable<Cnae[]>;
+
+  breadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Incluir Estabelecimento',
+      route: 'add-company'
+    },
+    items: [
+      { title: 'Home', route: '' },
+      { title: 'Lista de Estabelecimentos', route: 'company-list' }
+    ]
+  };
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -93,55 +115,75 @@ export class AddCompanyComponent implements OnInit {
     private CepService: CepService,
     private dataService: DataService,
     private cnaeService: CnaeService,
+    private companyService: CompanyService,
     public dialog: MatDialog,
     private router: Router,
-    private localStorageService: LocalStorageService,) 
-    {}
+    private localStorageService: LocalStorageService,
+    public phoneService: SimpleDataTableService
+  ) { }
 
   private _filterCnaes(value: string): Cnae[] {
     const filterValue = value.toLowerCase();
     this.cnae$.subscribe(cnaes => {
-      this.cnae =  cnaes.filter(cnae => cnae.description.toLowerCase().indexOf(filterValue) === 0);
+      this.cnae = cnaes.filter(cnae => cnae.description.toLowerCase().indexOf(filterValue) === 0);
     })
     return this.cnae;
-
   }
 
   formControl = new FormControl('', [
     Validators.required,
   ]);
 
-
   ngOnInit(): void {
+
+    if (this.localStorageService.get('phoneNumber') == null) {
+      this.phoneNumber$ = []
+    } else {
+      this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+    }
+
+    if (this.localStorageService.get('bankAccount') == null) {
+      this.bankAccount$ = []
+    } else {
+      this.bankAccount$ = this.localStorageService.get('bankAccount');
+    }
+
+    if (this.localStorageService.get('partnerFormGroup') == null) {
+      this.partnerSource$ = []
+    } else {
+      this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
+    }
+
 
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
-      managingCompanyCtrl: ['', Validators.required],
-      establishmentCtrl: [{ value: '', disabled: true }],
-      companyTypeCtrl: ['', Validators.required],
-      companyResponsibleNameCtrl: ['', Validators.required],
-      acquiringEstablishmentCtrl: ['', Validators.required],
-      stateRegistrationCtrl: ['', Validators.required],
-      companyNameCtrl: ['', Validators.required],
-      fancyName: ['', Validators.required],
-      companyShortName: ['', Validators.required],
-      mcccode: ['', Validators.required],
-      idDepartament: ['', Validators.required],
-      cnae: ['', Validators.required],
-      businessActivity: ['', Validators.required],
-      openingDate: ['', Validators.required]
+      companyResponsibleName: [this.identification?.companyResponsibleName || ''],
+      companyType: [this.identification?.companyType || '', Validators.required],
+      situation: [this.identification?.situation || '', Validators.required],
+      documentNumberCompany: [this.identification?.documentNumberCompany || '', Validators.required],
+      gpEstablishmentNumber: [this.identification?.gpEstablishmentNumber || '', Validators.required],
+      stateRegistration: [this.identification?.stateRegistration || '', Validators.required],
+      companyName: [this.identification?.companyName || '', Validators.required],
+      fancyName: [this.identification?.fancyName || '', Validators.required],
+      companyShortName: [this.identification?.companyShortName || '', Validators.required],
+      mcccode: [this.identification?.mcccode || '', Validators.required],
+      idDepartament: [this.identification?.idDepartament || '', Validators.required],
+      cnae: [this.identification?.cnae || '', Validators.required],
+      idCnae: [this.identification?.idCnae || ''],
+      businessActivity: [this.identification?.businessActivity || '', Validators.required],
+      openingDate: [this.identification?.openingDate || '', Validators.required]
     });
     this.adressFormGroup = this._formBuilder.group({
-      streetCtrl: ['', Validators.required],
-      numberCtrl: ['', Validators.required],
-      complementCtrl: ['', Validators.required],
-      neighborhoodCtrl: ['', Validators.required],
-      cityCtrl: ['', Validators.required],
-      stateCtrl: ['', Validators.required],
-      responsibleNameCtrl: ['', Validators.required],
-      referencePointCtrl: [''],
-      keyZipCode: ['', Validators.required],
-      checkboxAdress: ['', Validators.required],
+      streetName: [this.adress?.streetName || '', Validators.required],
+      number: [this.adress?.number || '', Validators.required],
+      complement: [this.adress?.complement || '', Validators.required],
+      neighborhoodName: [this.adress?.neighborhoodName || '', Validators.required],
+      cityName: [this.adress?.cityName || '', Validators.required],
+      uf: [this.adress?.uf || '', Validators.required],
+      responsibleNameCtrl: [this.adress?.responsibleNameCtrl || '', Validators.required],
+      referencePoint: [this.adress?.referencePoint || ''],
+      zipCode: [this.adress?.zipCode || '', Validators.required],
+      checkboxAdress: [this.adress?.checkboxAdress || '', Validators.required],
       subordinateZipCode: ['', Validators.required],
       subordinateNeighborhoodCtrl: ['', Validators.required],
       subordinateCityCtrl: ['', Validators.required],
@@ -152,40 +194,67 @@ export class AddCompanyComponent implements OnInit {
       subordinateResponsibleNameCtrl: ['', Validators.required],
       subordinateReferencePointCtrl: [''],
     });
+
+
+
+
     this.conditionFormGroup = this._formBuilder.group({
-      tableSaleCtrl: ['', Validators.required],
-      comercialCredit: ['', Validators.required],
-      transactionCostCtrl: ['', Validators.required],
-      tedCostCtrl: ['', Validators.required],
-      referralTransacionCtrl: ['', Validators.required],
-      anticipationFeeCtrl: ['', Validators.required],
-      ignoreRuleAjCtrl: ['', Validators.required],
-      tratamentAjCtrl: ['', Validators.required],
-      benefitedTypeCtrl: ['', { value: '', disabled: true }, Validators.required,],
-      benefitedNameCtrl: ['', { value: '', disabled: true }, Validators.required],
-      cnpjCtrl: ['', { value: '', disabled: true }, Validators.required],
+      tableSaleCtrl: [this.condition?.tableSaleCtrl || '', Validators.required],
+      automaticCreditIndicator: [this.condition?.automaticCreditIndicator || '', Validators.required],
+      transactionAmount: [this.condition?.transactionAmount || '', Validators.required],
+      tedAmount: [this.condition?.tedAmount || '', Validators.required],
+      referentialTransacionAmount: [this.condition?.referentialTransacionAmount || '', Validators.required],
+      anticipationFee: [this.condition?.anticipationFee || '', Validators.required],
+      ignoreLiberationAJManual: [this.condition?.ignoreLiberationAJManual || '', Validators.required],
+      ajtype: [this.condition?.ajtype || '', Validators.required],
+      beneficiaryType: [this.condition?.beneficiaryType || '', Validators.required,],
+      beneficiaryName: [this.condition?.beneficiaryName || '', Validators.required],
+      beneficiaryDocumentNumber: [this.condition?.beneficiaryDocumentNumber || '', Validators.required],
     });
     this.complementFormGroup = this._formBuilder.group({
-      openingHoursCtrl: [Validators.required],
-      urlEcommerceCtrl: ['', Validators.required],
-      urlCtrl: ['', Validators.required],
-      emailCtrl: ['', Validators.required],
-      posAmountCtrl: ['', Validators.required],
-      logicNumberCtrl: ['', Validators.required],
-      idTerminalCtrl: ['', Validators.required],
-      registrationDateCtrl: ['', Validators.required],
-      sendDateCtrl: ['', Validators.required],
-      accreditationDateCtrl: ['', Validators.required],
-      gpAffiliationDateCtrl: ['', Validators.required],
-      seRegistrationDateCtrl: ['', Validators.required],
-      discreditationDateCtrl: ['', Validators.required]
+      openingHours: [this.complement?.openingHours || '', Validators.required],
+      ecommerceURL: [this.complement?.ecommerceURL || '', Validators.required],
+      estUrl: [this.complement?.estUrl || '', Validators.required],
+      email: [this.complement?.email || '', Validators.required],
+      posQuantity: [this.complement?.posQuantity || '', Validators.required],
+      logicalNumber: [this.complement?.logicalNumber || '', Validators.required],
+      idTerminal: [this.complement?.idTerminal || '', Validators.required],
+      registerCode: [this.complement?.registerCode || '', Validators.required],
+      registrationDate: [this.complement?.registrationDate || ''],
+      gpSendDate: [this.complement?.gpSendDate || ''],
+      accreditationDate: [this.complement?.accreditationDate || ''],
+      gpAffiliationDate: [this.complement?.gpAffiliationDate || ''],
+      seRegistrationDate: [this.complement?.seRegistrationDate || ''],
+      discreditationDate: [this.complement?.discreditationDate || '']
     });
-    this.partnerFormGroup = this._formBuilder.group({});
-    
+    this.partnerFormGroup = this._formBuilder.group({
+      partnerSequentialNumber: [{ value: '', disabled: true }, Validators.required],
+      name: ['', Validators.required],
+      cpf: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      cep: ['', Validators.required],
+      street: ['', Validators.required],
+      number: ['', Validators.required],
+      complement: [''],
+      neighborhood: ['', Validators.required],
+      county: ['', Validators.required],
+      state: ['', Validators.required],
+      contact: ['', Validators.required]
+    });
+
+    this.contactFormGroup = this._formBuilder.group({
+      companyContact: this._formBuilder.array(this.phoneNumber$),
+    });
+
+
+
+
     this.dataService.refreshTable().subscribe(() => {
-      this.loadData();
+      this.dataSource = this.phoneNumber$;
+      //this.loadData
     });
-    this.loadData();
+    //this.loadData
+    this.dataSource = this.phoneNumber$;
     this.gelAllCnaes();
 
     if (this.identification != undefined) {
@@ -210,38 +279,61 @@ export class AddCompanyComponent implements OnInit {
     } else {
 
     }
-    if (this.partnerSource != undefined) {
-      this.partnerSource = this.localStorageService.get('partnerFormGroup');
-      this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
+    if (this.partner != undefined) {
+      this.getLocalStorage('partner');
     } else {
 
     }
+    // if (this.partnerSource$ != undefined) {
+    //   this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
+    //   this.partnerSource$.content = this.localStorageService.get('partnerFormGroup');
+    // } else {
+
+    // }
 
     if (this.response == null) {
       this.response = this.localStorageService.get('cep');
     }
 
     if (this.mask == undefined) {
-      this.getCpfCnpjMask(this.identificationFormGroup.get('companyTypeCtrl').value);
+      this.getCpfCnpjMask(this.identificationFormGroup.get('companyType').value);
     }
 
     this.checkValueBankAdress(true);
   }
 
-  gelAllCnaes(){
-    this.cnaeService.getAllCnae()
-    // .pipe(take(1))
-    .subscribe((data) => {
-      //console.log(data.content);
-      this.cnae$ = of(data.content);
 
-      this.filteredCnaes = this.cnaeForm.valueChanges
-      .pipe(
-        startWith(''),
-        map(cnae => this._filterCnaes(cnae))
-        //map(cnae => cnae ? this._filterCnaes(cnae) : this.cnae$.subscribe(cnaes => {return cnaes.slice()}))
-      );
+  createCompany() {
+    let formcompleto = Object.assign({},
+      this.identificationFormGroup.value,
+      this.adressFormGroup.value,
+      this.conditionFormGroup.value,
+      this.complementFormGroup.value,
+      this.contactFormGroup.value);
+    console.log(formcompleto);
+
+    this.companyService.create(formcompleto).subscribe((response: any) => {
+      console.log(response);
+      this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
+      this.router.navigate(['/company-list/company']);
     });
+
+  }
+
+  gelAllCnaes() {
+    this.cnaeService.getAllCnae()
+      // .pipe(take(1))
+      .subscribe((data) => {
+        //console.log(data.content);
+        this.cnae$ = of(data.content);
+
+        this.filteredCnaes = this.cnaeForm.valueChanges
+          .pipe(
+            startWith(''),
+            map(cnae => this._filterCnaes(cnae))
+            //map(cnae => cnae ? this._filterCnaes(cnae) : this.cnae$.subscribe(cnaes => {return cnaes.slice()}))
+          );
+      });
   }
 
   headers: HeaderModel[] = [
@@ -259,13 +351,13 @@ export class AddCompanyComponent implements OnInit {
     // { text: 'Ações', value: 'action' }
   ];
 
-  headersBankTable: HeaderModel[] = [
-    { text: 'Banco', value: 'bank' },
-    { text: 'Agência', value: 'agency' },
-    { text: 'Dígito Agência', value: 'agencyDigit' },
-    { text: 'Conta Corrente', value: 'account' },
-    { text: 'Dígito Conta', value: 'accountDigit' },
-    { text: 'Dígito Agência/Conta', value: 'digit' },
+  headersBankTable: HeaderModelBank[] = [
+    { text: 'Banco', value: 'bank', subValue: 'name' },
+    { text: 'Agência', value: 'agency', subValue: null },
+    { text: 'Dígito Agência', value: 'agencyDigit', subValue: null },
+    { text: 'Conta Corrente', value: 'account', subValue: null },
+    { text: 'Dígito Conta', value: 'accountDigit', subValue: null },
+    { text: 'Dígito Agência/Conta', value: 'digit', subValue: null },
     // { text: 'Ações', value: 'action' }
   ];
 
@@ -276,7 +368,7 @@ export class AddCompanyComponent implements OnInit {
   ];
 
   headersPartnerTable: HeaderModel[] = [
-    { text: 'Número Sequência', value: 'sequenceNumber' },
+    { text: 'Número Sequência', value: 'partnerSequentialNumber' },
     { text: 'Nome', value: 'name' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
@@ -296,27 +388,16 @@ export class AddCompanyComponent implements OnInit {
     delete: true,
   };
 
-  public loadData() {
-    //this.exampleDatabase = new DataService(this.httpClient);
-
-    this.dataService.getAllProfiles(5, this.paginator.pageIndex).then(
-      (data) => {
-        this.dataSource = data;
-      },
-      (error) => {
-        console.log('Not found data')
-      }
-    );
-  }
-
   //Add Methods
   onAddPhone(idPhone: number) {
     const dialogRef = this.dialog.open(AddPhoneComponent, {
       data: { id: idPhone },
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.phoneNumber = this.localStorageService.get('phoneNumber');
-      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+    dialogRef.afterClosed().subscribe((item) => {
+      // this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+      this.phoneNumber$.push(item.value);
+      this.phoneNumber$ = [...this.phoneNumber$];
+      this.phoneService.refreshDataTable();
     })
   }
 
@@ -324,74 +405,85 @@ export class AddCompanyComponent implements OnInit {
     const dialogRef = this.dialog.open(AddBankAccountComponent, {
       data: { id: idBankAccount },
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.bankAccount = this.localStorageService.get('bankAccount');
-      this.bankAccount.content = this.localStorageService.get('bankAccount');
+    dialogRef.afterClosed().subscribe((item) => {
+      this.bankAccount$.push(item.value);
+      this.bankAccount$ = [...this.bankAccount$];
+      this.phoneService.refreshDataTable();
     })
   }
 
   onAddPartner(index: number) {
-    this.router.navigate(['/company-list/add-partner']);
+    this.router.navigate(['/add-partner']);
   }
 
   //Edit Methods
   onEditPhone(row: object) {
-    const index = this.phoneNumber.content.indexOf(row)
+    const index = this.phoneNumber$.indexOf(row)
     const dialogRef = this.dialog.open(EditPhoneComponent, {
       data: index
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.phoneNumber = this.localStorageService.get('phoneNumber');
-      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+    dialogRef.afterClosed().subscribe((item) => {
+      Object.assign(this.phoneNumber$, item);
+      this.phoneService.refreshDataTable();
     })
   }
 
   onEditBankAccount(row: object) {
-    const index = this.bankAccount.content.indexOf(row)
+    const index = this.bankAccount$.indexOf(row)
     const dialogRef = this.dialog.open(EditBankAccountComponent, {
       data: index
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.bankAccount = this.localStorageService.get('bankAccount');
-      this.bankAccount.content = this.localStorageService.get('bankAccount');
+    dialogRef.afterClosed().subscribe((item) => {
+      Object.assign(this.bankAccount$, item);;
+      this.phoneService.refreshDataTable();
     })
   }
 
   onEditPartner(row: object) {
-    const index = this.partnerSource.content.findIndex((c) => c == row);
- 
-    this.router.navigate([`/company-list/edit-partner/${index}`]);
+    const index = this.partnerSource$.findIndex((c) => c == row);
+
+    this.router.navigate([`/edit-partner/${index}`]);
   }
 
   //Delete Methods
-  onDeletePhone(row: object) {
-    const deleteItem = this.phoneNumber.content.indexOf(row);
-    const dialogRef = this.dialog.open(DeletePhoneComponent, {data: deleteItem});
+  // onDeletePhone(row: object) {
+  //   // const deleteItem = this.phoneNumber$.indexOf(row);
+  //   // const dialogRef = this.dialog.open(DeletePhoneComponent, {data: deleteItem});
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.phoneNumber = this.localStorageService.get('phoneNumber');
-      this.phoneNumber.content = this.localStorageService.get('phoneNumber');
-    })
-  }
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+  //     this.phoneNumber.content = this.localStorageService.get('phoneNumber');
+  //   })
+  // }
 
-  onDeleteBankAccount(row: object) {
-    const deleteItem = this.bankAccount.content.indexOf(row);
-    const dialogRef = this.dialog.open(DeleteBankAccountComponent, {data: deleteItem});
+  // onDeleteBankAccount(row: object) {
+  //   const deleteItem = this.bankAccount.content.indexOf(row);
+  //   const dialogRef = this.dialog.open(DeleteBankAccountComponent, {data: deleteItem});
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.bankAccount = this.localStorageService.get('bankAccount');
-      this.bankAccount.content = this.localStorageService.get('bankAccount');
-    })
-  }
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.bankAccount = this.localStorageService.get('bankAccount');
+  //     this.bankAccount.content = this.localStorageService.get('bankAccount');
+  //   })
+  // }
 
-  onDeletePartner(row: object) {
-    const deleteItem = this.partnerSource.content.indexOf(row);
-    const dialogRef = this.dialog.open(DeletePartnerComponent, {data: deleteItem});
+  // onDeletePartner(row: object) {
+  //   const deleteItem = this.partnerSource.content.indexOf(row);
+  //   const dialogRef = this.dialog.open(DeletePartnerComponent, {data: deleteItem});
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.partnerSource = this.localStorageService.get('partnerFormGroup');
-      this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
-    })
+  //   dialogRef.afterClosed().subscribe(() => {
+  //     this.partnerSource = this.localStorageService.get('partnerFormGroup');
+  //     this.partnerSource.content = this.localStorageService.get('partnerFormGroup');
+  //   })
+  // }
+
+  //Filtro
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.bankAccount$.filter = filterValue.trim().toLowerCase();
+
+    if (this.bankAccount$.paginator) {
+      this.bankAccount$.paginator.firstPage();
+    }
   }
 
   //Navigation Functions
@@ -415,10 +507,10 @@ export class AddCompanyComponent implements OnInit {
   getFirstCep(value) {
     this.CepService.getCep(value).subscribe((response: any) => {
       let cep1 = {
-        cityCtrl: response.localidade,
-        streetCtrl: response.logradouro,
-        neighborhoodCtrl: response.bairro,
-        stateCtrl: response.uf,
+        cityName: response.localidade,
+        streetName: response.logradouro,
+        neighborhoodName: response.bairro,
+        uf: response.uf,
       };
       this.response = response;
       this.adressFormGroup.patchValue(cep1);
@@ -428,12 +520,24 @@ export class AddCompanyComponent implements OnInit {
     }
   }
 
-  displayFn = (item): string =>{
+  displayFn = (item): string => {
     if (item) {
+      this.mcc = item;
       return item.description;
-    }else {
+    } else {
       return '';
     }
+  }
+
+  getMccByCnae() {
+    let a = this.mcc
+    console.log(a);
+    let obj = {
+      mcccode: a.mcc.code,
+      idCnae: a.idCnae
+    }
+    this.identificationFormGroup.patchValue(obj);
+    console.log(obj);
   }
 
   getSecondCep(cep) {
@@ -459,10 +563,10 @@ export class AddCompanyComponent implements OnInit {
         subordinateCityCtrl: this.response.localidade,
         subordinateStreetCtrl: this.response.logradouro,
         subordinateStateCtrl: this.response.uf,
-        subordinateNumberCtrl: this.adressFormGroup.get('numberCtrl').value,
-        subordinateComplementCtrl: this.adressFormGroup.get('complementCtrl').value,
+        subordinateNumberCtrl: this.adressFormGroup.get('number').value,
+        subordinateComplementCtrl: this.adressFormGroup.get('complement').value,
         subordinateResponsibleNameCtrl: this.adressFormGroup.get('responsibleNameCtrl').value,
-        subordinateReferencePointCtrl: this.adressFormGroup.get('referencePointCtrl').value,
+        subordinateReferencePointCtrl: this.adressFormGroup.get('referencePoint').value,
       };
       this.adressFormGroup.patchValue(obj);
     }
@@ -497,134 +601,94 @@ export class AddCompanyComponent implements OnInit {
     if (a == false) {
       this.isCheckedBankAdress = false;
       let obj = {
-        cnpjCtrl: this.identificationFormGroup.get('companyResponsibleNameCtrl').value,
-        benefitedNameCtrl: this.identificationFormGroup.get('fancyName').value,
-        benefitedTypeCtrl: this.identificationFormGroup.get('companyTypeCtrl').value,
+        beneficiaryDocumentNumber: this.identificationFormGroup.get('documentNumberCompany').value,
+        beneficiaryName: this.identificationFormGroup.get('fancyName').value,
+        beneficiaryType: this.identificationFormGroup.get('companyType').value,
       };
       this.conditionFormGroup.patchValue(obj);
     }
     if (a == true) {
       this.isCheckedBankAdress = true;
       let obj = {
-        cnpjCtrl: '',
-        benefitedNameCtrl: '',
-        benefitedTypeCtrl: '',
+        beneficiaryDocumentNumber: '',
+        beneficiaryName: '',
+        beneficiaryType: '',
       };
       this.conditionFormGroup.patchValue(obj);
     }
-    if(value == false){
+    if (value == false) {
       this.isCheckedBankAdress = false;
       let obj = {
-        cnpjCtrl: this.identificationFormGroup.get('companyResponsibleNameCtrl').value,
-        benefitedNameCtrl: this.identificationFormGroup.get('fancyName').value,
-        benefitedTypeCtrl: this.identificationFormGroup.get('companyTypeCtrl').value,
+        beneficiaryDocumentNumber: this.identificationFormGroup.get('documentNumberCompany').value,
+        beneficiaryName: this.identificationFormGroup.get('fancyName').value,
+        beneficiaryType: this.identificationFormGroup.get('companyType').value,
       };
       this.conditionFormGroup.patchValue(obj);
     }
   }
 
-getCpfCnpjMask(a) {
-  if (a === 'pf') {
-    this.mask = '000.000.000-00';
-  } if (a === 'pj') {
-    this.mask = '00.000.000/0000-00';
-  }
-}
-
-saveForm(form, text) {
-  this.localStorageService.set(text, form.value);
-  this.localStorageService.set('cep', this.response);
-}
-
-getLocalStorage(item) {
-
-  if (item == 'identification') {
-
-    let localStorageIdentification = {
-      registerTarget: this.identification.registerTarget,
-      managingCompanyCtrl: this.identification.managingCompanyCtrl,
-      establishmentCtrl: this.identification.establishmentCtrl,
-      companyTypeCtrl: this.identification.companyTypeCtrl,
-      companyResponsibleNameCtrl: this.identification.companyResponsibleNameCtrl,
-      acquiringEstablishmentCtrl: this.identification.acquiringEstablishmentCtrl,
-      stateRegistrationCtrl: this.identification.stateRegistrationCtrl,
-      companyNameCtrl: this.identification.companyNameCtrl,
-      fancyName: this.identification.fancyName,
-      companyShortName: this.identification.companyShortName,
-      mcccode: this.identification.mcccode,
-      idDepartament: this.identification.idDepartament,
-      cnae: this.identification.cnae,
-      businessActivity: this.identification.businessActivity,
-      openingDate: this.identification.openingDate,
-    };
-    this.identificationFormGroup.patchValue(localStorageIdentification);
-  }
-
-  if (item == 'adress') {
-    let localStorageAdress = {
-      streetCtrl: this.adress.streetCtrl,
-      numberCtrl: this.adress.numberCtrl,
-      complementCtrl: this.adress.complementCtrl,
-      neighborhoodCtrl: this.adress.neighborhoodCtrl,
-      cityCtrl: this.adress.cityCtrl,
-      stateCtrl: this.adress.stateCtrl,
-      responsibleNameCtrl: this.adress.responsibleNameCtrl,
-      referencePointCtrl: this.adress.referencePointCtrl,
-      keyZipCode: this.adress.keyZipCode,
-      subordinateZipCode: this.adress.subordinateZipCode,
-      subordinateNeighborhoodCtrl: this.adress.subordinateNeighborhoodCtrl,
-      subordinateCityCtrl: this.adress.subordinateCityCtrl,
-      subordinateStreetCtrl: this.adress.subordinateStreetCtrl,
-      subordinateNumberCtrl: this.adress.subordinateNumberCtrl,
-      subordinateComplementCtrl: this.adress.subordinateComplementCtrl,
-      subordinateStateCtrl: this.adress.subordinateStateCtrl,
-      subordinateResponsibleNameCtrl: this.adress.subordinateResponsibleNameCtrl,
-      subordinateReferencePointCtrl: this.adress.subordinateReferencePointCtrl,
-    };
-    this.isChecked = this.adress.checkboxAdress;
-    this.adressFormGroup.patchValue(localStorageAdress);
-  }
-
-  if (item == 'condition') {
-    let localStorageCondition = {
-      agencyCtrl: this.condition.agencyCtrl,
-      agencyDigitCtrl: this.condition.agencyDigitCtrl,
-      anticipationFeeCtrl: this.condition.anticipationFeeCtrl,
-      comercialCredit: this.condition.comercialCredit,
-      currentAccountAgencyCtrl: this.condition.currentAccountAgencyCtrl,
-      currentAccountCtrl: this.condition.currentAccountCtrl,
-      currentAccountDigitCtrl: this.condition.currentAccountDigitCtrl,
-      ignoreRuleAjCtrl: this.condition.ignoreRuleAjCtrl,
-      referralTransacionCtrl: this.condition.referralTransacionCtrl,
-      tableSaleCtrl: this.condition.tableSaleCtrl,
-      tedCostCtrl: this.condition.tedCostCtrl,
-      transactionCostCtrl: this.condition.transactionCostCtrl,
-      tratamentAjCtrl: this.condition.tratamentAjCtrl,
+  getCpfCnpjMask(a) {
+    if (a === 'PF') {
+      this.mask = '000.000.000-00';
+    } if (a === 'PJ') {
+      this.mask = '00.000.000/0000-00';
     }
-    this.conditionFormGroup.patchValue(localStorageCondition);
   }
 
-  if (item == 'complement') {
-    let localStorageComplement = {
-      openingHoursCtrl: this.complement.openingHoursCtrl,
-      urlEcommerceCtrl: this.complement.urlEcommerceCtrl,
-      urlCtrl: this.complement.urlCtrl,
-      emailCtrl: this.complement.emailCtrl,
-      posAmountCtrl: this.complement.posAmountCtrl,
-      logicNumberCtrl: this.complement.logicNumberCtrl,
-      idTerminalCtrl: this.complement.idTerminalCtrl,
-      registrationDateCtrl: this.complement.registrationDateCtrl,
-      sendDateCtrl: this.complement.sendDateCtrl,
-      accreditationDateCtrl: this.complement.accreditationDateCtrl,
-      gpAffiliationDateCtrl: this.complement.gpAffiliationDateCtrl,
-      seRegistrationDateCtrl: this.complement.seRegistrationDateCtrl,
-      discreditationDateCtrl: this.complement.discreditationDateCtrl,
+  saveForm(form, text) {
+    this.localStorageService.set(text, form.value);
+    this.localStorageService.set('cep', this.response);
+  }
+
+  getLocalStorage(item) {
+
+
+    if (item == 'adress') {
+      let localStorageAdress = {
+        streetCtrl: this.adress.streetCtrl,
+        numberCtrl: this.adress.numberCtrl,
+        complementCtrl: this.adress.complementCtrl,
+        neighborhoodCtrl: this.adress.neighborhoodCtrl,
+        cityCtrl: this.adress.cityCtrl,
+        stateCtrl: this.adress.stateCtrl,
+        responsibleNameCtrl: this.adress.responsibleNameCtrl,
+        referencePointCtrl: this.adress.referencePointCtrl,
+        keyZipCode: this.adress.keyZipCode,
+        subordinateZipCode: this.adress.subordinateZipCode,
+        subordinateNeighborhoodCtrl: this.adress.subordinateNeighborhoodCtrl,
+        subordinateCityCtrl: this.adress.subordinateCityCtrl,
+        subordinateStreetCtrl: this.adress.subordinateStreetCtrl,
+        subordinateNumberCtrl: this.adress.subordinateNumberCtrl,
+        subordinateComplementCtrl: this.adress.subordinateComplementCtrl,
+        subordinateStateCtrl: this.adress.subordinateStateCtrl,
+        subordinateResponsibleNameCtrl: this.adress.subordinateResponsibleNameCtrl,
+        subordinateReferencePointCtrl: this.adress.subordinateReferencePointCtrl,
+      };
+      this.isChecked = this.adress.checkboxAdress;
+      this.adressFormGroup.patchValue(localStorageAdress);
     }
-    this.complementFormGroup.patchValue(localStorageComplement);
-  }
 
-  if (item == 'partner') {
+    if (item == 'condition') {
+      let localStorageCondition = {
+        agencyCtrl: this.condition.agencyCtrl,
+        agencyDigitCtrl: this.condition.agencyDigitCtrl,
+        anticipationFee: this.condition.anticipationFee,
+        comercialCredit: this.condition.comercialCredit,
+        currentAccountAgencyCtrl: this.condition.currentAccountAgencyCtrl,
+        currentAccountCtrl: this.condition.currentAccountCtrl,
+        currentAccountDigitCtrl: this.condition.currentAccountDigitCtrl,
+        ignoreRuleAjCtrl: this.condition.ignoreRuleAjCtrl,
+        referralTransacionCtrl: this.condition.referralTransacionCtrl,
+        tableSaleCtrl: this.condition.tableSaleCtrl,
+        tedCostCtrl: this.condition.tedCostCtrl,
+        transactionCostCtrl: this.condition.transactionCostCtrl,
+        tratamentAjCtrl: this.condition.tratamentAjCtrl,
+      }
+      this.conditionFormGroup.patchValue(localStorageCondition);
+    }
 
+    if (item == 'partner') {
+
+    }
   }
-}
 }

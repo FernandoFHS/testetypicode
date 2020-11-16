@@ -1,57 +1,57 @@
-<div fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
-  <div class="card-box">
-    <mat-card class="mat-elevation-z2">
-      <mat-card-content>
-        <div class="text-center m-b-20 font-light-bold title-size">
-          <label>
-            Editar Perfil
-          </label>
-        </div>
-        <mat-form-field appearance="outline">
-          <mat-label>Empresa</mat-label>
-          <input
-            matInput
-            placeholder="Empresa"
-            [(ngModel)]="profile.nameProfile"
-            name="name"
-            required
-          />
-          <mat-icon matSuffix>business_center</mat-icon>
-          <mat-error *ngIf="formControl.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
-        </mat-form-field>
+<div fxFlexFill>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Descrição</mat-label>
-          <input
-            matInput
-            placeholder="Descrição"
-            [(ngModel)]="profile.description"
-            name="description"
-            required
-          />
-          <mat-icon matSuffix>subject</mat-icon>
-          <mat-error *ngIf="formControl.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
-        </mat-form-field>
+  <core-breadcrumb [model]="breadcrumbModel"></core-breadcrumb>
 
-        <div mat-dialog-actions class="group-buttons-actions">
-          <button mat-raised-button color="primary" (click)="updateProfile()">
-            Salvar
-          </button>
-          <button
-            mat-raised-button
-            color="warn"
-            tabindex="-1"
-            (click)="onNoClick()"
-          >
-            Cancelar
-          </button>
-        </div>
-      </mat-card-content>
-    </mat-card>
+  <div class="m-b-25">
+    <label class="mat-display-1 page-title">
+      Editar Usuário
+    </label>
   </div>
-</div>
 
+  <mat-expansion-panel class="m-b-25" [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Detalhes
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-form-field appearance="outline" *ngIf="profile">
+      <mat-label>Empresa</mat-label>
+      <input matInput placeholder="Empresa" [(ngModel)]="profile.nameProfile" name="name" required />
+      <mat-icon matSuffix>business_center</mat-icon>
+      <mat-error *ngIf="formControl.invalid">{{
+        getErrorMessage()
+      }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="profile">
+      <mat-label>Descrição</mat-label>
+      <input matInput placeholder="Descrição" [(ngModel)]="profile.description" name="description" required />
+      <mat-icon matSuffix>subject</mat-icon>
+      <mat-error *ngIf="formControl.invalid">{{
+        getErrorMessage()
+      }}</mat-error>
+    </mat-form-field>
+  </mat-expansion-panel>
+
+  <div fxLayout="row wrap">
+    <div fxFlex>
+      <button mat-raised-button class="m-t-15 float-left" (click)="onNoClick()">
+        <mat-icon [inline]="true" class="m-r-5">
+          arrow_back
+        </mat-icon>
+        Cancelar
+      </button>
+    </div>
+
+    <div fxFlex>
+      <button mat-raised-button color="primary" class="m-t-15 float-right" (click)="updateProfile()">
+        <mat-icon [inline]="true" class="m-r-5">
+          save
+        </mat-icon>
+        Salvar
+      </button>
+
+    </div>
+  </div>
+
+</div>

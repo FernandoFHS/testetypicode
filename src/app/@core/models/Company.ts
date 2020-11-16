@@ -1,5 +1,6 @@
 export class Mcc {
   id: number;
+  code: string;
   description: string;
 }
 

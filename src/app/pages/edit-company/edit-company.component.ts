@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CompanyService } from 'src/app/services/company.service';
 
 @Component({
   selector: 'app-edit-company',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditCompanyComponent implements OnInit {
 
-  constructor() { }
+  constructor( 
+    private companyService: CompanyService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    const id = +this.route.snapshot.paramMap.get('idCompany');
+    this.companyService.readById(id).subscribe((response) =>{
+      console.log(response);
+    });
   }
 
 }

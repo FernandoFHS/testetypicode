@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Content, Profile } from 'src/app/models/profile';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
+import { Content, Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
@@ -12,6 +13,17 @@ import { DataService } from 'src/app/services/data.service';
 })
 export class EditProfileComponent implements OnInit {
   profile: Content;
+
+  breadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Editar Usuário',
+      route: 'edit-profile'
+    },
+    items: [
+      { title: 'Home', route: '' },
+      { title: 'Lista de Usuários', route: 'profile-list' },
+    ]
+  };
 
   constructor(
     private dataService: DataService,

@@ -19,12 +19,19 @@ import { AddPartnerComponent } from '../pages/add-partner/add-partner.component'
 import { PlansComponent } from '../pages/plans/plans.component';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 import { ListRuleComponent } from '../pages/rule-area/list-rule/list-rule.component';
+import { ContainerGuard } from '../@core/components/container/container.guard';
 
 export const routes: Routes = [
   {
     path: '',
     component: ContainerComponent,
+    // canActivateChild: [ContainerGuard],
     children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+      },
       {
         path: 'home',
         component: HomeComponent,
@@ -89,31 +96,32 @@ export const routes: Routes = [
             component: AddCompanyComponent,
           },
           {
-            path: 'edit-company',
+            path: 'edit-company/:idCompany',
             component: EditCompanyComponent,
           },
-          {
-            path: 'add-partner',
-            component: AddPartnerComponent,
-          },
-          {
-            path: 'edit-partner/:index',
-            component: EditPartnerComponent,
-          },
-        ],
+        ]
       },
       {
         path: 'themes',
-        component: ThemesComponent,
+        component: ThemesComponent
       },
       {
         path: 'password-transaction',
-        component: PasswordTransactionComponent,
+        component: PasswordTransactionComponent
+      },
+
+      {
+        path: 'add-partner',
+        component: AddPartnerComponent,
+      },
+      {
+        path: 'edit-partner/:index',
+        component: EditPartnerComponent,
       },
       {
         path: 'plans',
         component: PlansComponent,
-      },
+      }
     ],
   },
   {

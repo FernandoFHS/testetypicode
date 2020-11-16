@@ -1,47 +1,61 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { Router } from '@angular/router';
+import { merge, Observable, of as observableOf } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
+import { SimpleDataTableService } from 'src/app/@core/components/container/simple-data-table/simple-data-table.service';
+import { Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
-import { Router } from '@angular/router';
 import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
-import { Profile } from '../../models/profile';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { merge, Observable } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 
+/**
+ * @title Table retrieving data through HTTP
+ */
 @Component({
   selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss'],
+  styleUrls: ['user.component.scss'],
+  templateUrl: 'user.component.html',
 })
 export class UserComponent implements AfterViewInit {
-  resultsLength = 0;
-  page: number;
-  pageEvent: PageEvent;
+  dataSource: Profile[] = [];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  resultsLength = 0;
+  isLoadingResults = true;
+
+  breadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Lista de Usuários',
+      route: ''
+    },
+    items: [
+      { title: 'Home', route: '' }
+    ]
+  };
 
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
     private dataService: DataService,
-    private router: Router
-  ) {}
+    private router: Router,
 
-  ngAfterViewInit() {
-    this.dataService.refreshTable().subscribe(() => {
-      this.loadData();
-    });
+  ) { }
 
-    this.loadData();
-  }
+  ngAfterViewInit() { }
+
+  loadData = (sort: string, order: string, page: number, size: number) => {
+    return this.dataService.getAllProfiles(sort, order, page, size);
+  };
+
   headers: HeaderModel[] = [
     { text: 'Código', value: 'idProfile' },
     { text: 'Empresa', value: 'nameProfile' },
     { text: 'Descrição', value: 'description' },
-    // { text: 'Ações', value: 'action' }
   ];
 
   actions: ActionModel = {
@@ -49,38 +63,6 @@ export class UserComponent implements AfterViewInit {
     edit: true,
     delete: true,
   };
-
-  dataSource: any[] = [];
-
-  dinamicAddRouter = '/profile-list/add-profile';
-
-  public loadData() {
-    //this.exampleDatabase = new DataService(this.httpClient);
-    
-       this.dataService.getAllProfiles(10, 1).then(
-         (data) => {
-           this.dataSource = data;             
-         },
-         (error) => {
-           console.log('Data not found');
-         }
-       )
-
-      // merge(5, this.paginator.page).pipe(
-      //   startWith({}),
-      //   switchMap(() => {
-      //    return this.dataService.getAllProfiles(
-      //       5, this.paginator.pageIndex);
-      //   }),
-      //   map(data => {
-
-      //     this.resultsLength = data['totalElements'];
-
-      //     return data;
-      //   })
-      // ).subscribe(data => this.dataSource = data)
-  }
-
 
   onDelete(row: any) {
     const { idProfile } = row;

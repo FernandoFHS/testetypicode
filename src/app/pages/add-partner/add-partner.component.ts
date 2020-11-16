@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { DataService } from 'src/app/services/data.service';
 import { CepService } from 'src/app/services/cep.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 
 @Component({
   selector: 'app-add-partner',
@@ -19,6 +20,18 @@ export class AddPartnerComponent implements OnInit {
 
   partnerFormGroup: FormGroup;
 
+  breadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Incluir Sócio',
+      route: 'add-partner'
+    },
+    items: [
+      { title: 'Home', route: '' },
+      { title: 'Lista de Estabelecimentos', route: 'company-list' },
+      { title: 'Incluir Estabelecimento', route: 'company-list/add-company' },
+    ]
+  };
+
   constructor(
     private _formBuilder: FormBuilder,
     public dataService: DataService,
@@ -30,7 +43,7 @@ export class AddPartnerComponent implements OnInit {
 
   ngOnInit(): void {
     this.partnerFormGroup = this._formBuilder.group({
-      sequenceNumber: [{ value: '', disabled: true }, Validators.required],
+      partnerSequentialNumber: [{ value: '', disabled: true }, Validators.required],
       name: ['', Validators.required],
       cpf: ['', Validators.required],
       dateOfBirth: ['', Validators.required],

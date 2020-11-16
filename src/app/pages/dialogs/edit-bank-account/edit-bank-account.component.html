@@ -5,17 +5,14 @@
   <form [formGroup]="accountFormGroup">
     <mat-form-field appearance="outline">
       <mat-label>Banco</mat-label>
-      <input matInput
-             aria-label="Banco"
-             formControlName="bank"
-             [matAutocomplete]="auto"
-             [formControl]="bankForm">
+      <input matInput aria-label="Banco" formControlName="bank" [matAutocomplete]="auto" [formControl]="bankForm">
       <mat-autocomplete #auto="matAutocomplete" required [displayWith]="displayFn">
         <mat-option *ngFor="let item of filteredBanks | async" [value]="item">
           <span>{{item.name}}</span>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
+    <mat-error *ngIf="bankValidatorError">Selecione um banco da lista</mat-error>
 
     <div class="line-form">
       <mat-form-field appearance="outline">
@@ -65,10 +62,10 @@
     </div>
 
     <div mat-dialog-actions class="dialog-actions-buttons">
-      <button mat-raised-button color="warn" (click)="closeDialog()">
+      <button mat-raised-button color="accent" (click)="closeDialog()">
         Cancelar
       </button>
-      <button mat-raised-button color="primary" tabindex="-1" (click)="editAccount()">
+      <button mat-raised-button color="primary" tabindex="-1" (click)="editAccount(accountFormGroup)">
         Salvar
       </button>
     </div>

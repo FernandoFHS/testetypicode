@@ -1,3 +1,4 @@
+import { AcquirerRequest } from './../../models/plans/Acquirer';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DeleteTaxComponent } from './delete-tax/delete-tax.component';
@@ -10,6 +11,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { ServiceEntityService } from '../../services/service-entity.service';
 import { CreditCardFlagService } from '../../services/credit-card-flag.service';
 import { RemunerationTypeService } from '../../services/remuneration-type.service';
+import { AcquirerService } from '../../services/acquirer.service';
 import { ServiceEntityRequest } from '../../models/ServiceEntity';
 import { CreditCardFlagRequest } from '../../models/CreditCardFlag';
 import { RemunerationTypeRequest } from '../../models/RemunerationType';
@@ -38,6 +40,8 @@ export class PlansComponent implements OnInit {
   serviceEntity$: Observable<Array<ServiceEntityRequest>>;
   creditCardFlag$: Observable<Array<CreditCardFlagRequest>>;
   remunerationType$: Observable<Array<RemunerationTypeRequest>>;
+  acquirer$: Observable<Array<AcquirerRequest>>;
+
 
   headers: HeaderModel[] = [
     { text: 'Código', value: 'id' },
@@ -60,6 +64,7 @@ export class PlansComponent implements OnInit {
     private creditCardFlagService: CreditCardFlagService,
     private remunerationTypeService: RemunerationTypeService,
     private serviceEntityService: ServiceEntityService,
+    private acquirerService: AcquirerService,
     public dialog: MatDialog,
     private router: Router
     ) { }
@@ -79,6 +84,7 @@ export class PlansComponent implements OnInit {
     this.getAllServices();
     this.getAllRemunetarionType();
     this.getAllCreditCardFlag();
+    this.getAllAcquirer();
   }
 
   formControl = new FormControl('', [
@@ -108,12 +114,19 @@ export class PlansComponent implements OnInit {
         this.creditCardFlag$ = of(data.content)
       });
   }
+  getAllAcquirer(){
+    this.acquirerService.getAll()
+      .pipe(take(1))
+      .subscribe((data) => {
+        this.acquirer$ = of(data.content);
+        console.log(data.content);
+      });
+  }
   getAllRemunetarionType(){
     this.remunerationTypeService.getAll()
       .pipe(take(1))
       .subscribe((data) => {
         this.remunerationType$ = of(data.content);
-        //this.remunerationType = data.content
       });
   }
   onDelete(idProfile: number) {
