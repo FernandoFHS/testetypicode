@@ -37,7 +37,7 @@ export class CompanyService {
   }
 
   readById(idCompany: number): Observable<CompanyContent> {
-    const url = `${this.API_URL}/${idCompany}`;
+    const url = `${this.API_URL}company/byid?idCompany=${idCompany}`;
     return this.httpClient.get<CompanyContent>(url);
   }
 

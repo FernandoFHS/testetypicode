@@ -98,8 +98,6 @@ export class DataTableComponent implements AfterViewInit {
     ).subscribe((data) => {
       this.isLoadingResults = false;
       this.resultsLength = data['totalElements'];
-
-      console.log(data);
       this.dataSource = data['content'];
     });
 
@@ -124,7 +122,6 @@ export class DataTableComponent implements AfterViewInit {
           this.isLoadingResults = false;
           this.resultsLength = data['totalElements'];
 
-          console.log(data);
           return data['content'];
         }),
         catchError(() => {
@@ -133,7 +130,7 @@ export class DataTableComponent implements AfterViewInit {
         })
       )
       .subscribe((data) => (this.dataSource = data));
-    console.log('Uhul' + this.dataSource);
+
   }
   addItem(row: object) {
     this.addEvent.emit(row);

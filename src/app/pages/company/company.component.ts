@@ -45,8 +45,8 @@ export class CompanyComponent implements AfterViewInit {
     { text: 'CPF / CNPJ', value: 'documentNumberCompany', subValue: null, deepValue: null },
     { text: 'Tipo', value: 'companyType', subValue: null, deepValue: null },
     { text: 'Razão Social', value: 'companyName', subValue: null, deepValue: null },
-    { text: 'MCC	', value: 'cnae', subValue: 'code', deepValue: null },
-    { text: 'Parceiro', value: 'companyPartner', subValue: 'partnerName', deepValue: null },
+    { text: 'MCC', value: 'cnae', subValue: 'mcc', deepValue: 'code' },
+    { text: 'Parceiro', value: 'userChangeCode', subValue: null, deepValue: null },
     { text: 'Status', value: 'companyStatus', subValue: null, deepValue: null },
     { text: 'Tab.Vendas', value: 'salesTableNumber', subValue: null, deepValue: null },
     { text: 'Situação', value: 'situation', subValue: null, deepValue: null },
@@ -73,7 +73,6 @@ export class CompanyComponent implements AfterViewInit {
 
 
   onEdit(row: any) {
-    console.log(row)
     const { idCompany } = row;
     this.router.navigate([`/company-list/edit-company/${idCompany}`]);
   }

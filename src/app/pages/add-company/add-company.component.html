@@ -18,7 +18,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Empresa Administradora</mat-label>
-          <input matInput placeholder="Empresa Administradora" formControlName="companyResponsibleName" required />
+          <input matInput placeholder="Empresa Administradora" formControlName="companyResponsibleName" />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>admin_panel_settings</mat-icon>
         </mat-form-field>
@@ -31,7 +31,7 @@
       <div class="initial-data">
         <div class="status-container">
           <h2><span>Status: </span>Credenciado</h2>
-          <mat-checkbox class="example-margin">Ativo</mat-checkbox>
+          <mat-checkbox class="example-margin" formControlName="situation">Ativo</mat-checkbox>
 
         </div>
 
@@ -42,18 +42,12 @@
         <div class="short-line-form">
 
           <mat-form-field appearance="outline">
-            <mat-label>Estabelecimento</mat-label>
-            <input matInput placeholder="" formControlName="establishmentCtrl" />
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
             <mat-label>Tipo</mat-label>
             <mat-select name="type" #pessoa formControlName="companyType" (blur)="getCpfCnpjMask(pessoa.value)"
               required>
               <mat-option></mat-option>
-              <mat-option value="pf"> Pessoa Física </mat-option>
-              <mat-option value="pj"> Pessoa Jurídica </mat-option>
+              <mat-option value="PF"> Pessoa Física </mat-option>
+              <mat-option value="PJ"> Pessoa Jurídica </mat-option>
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
@@ -62,7 +56,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>CPF/CNPJ</mat-label>
-          <input matInput placeholder="{{mask}}" formControlName="companyResponsibleNameCtrl" required mask="{{mask}}"
+          <input matInput placeholder="{{mask}}" formControlName="documentNumberCompany" required mask="{{mask}}"
             [showMaskTyped]="true" />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>assignment_ind</mat-icon>
@@ -74,7 +68,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Estabelecimento Adquirente</mat-label>
-          <input matInput placeholder="Estabelecimento Adquirente" formControlName="acquiringEstablishmentCtrl"
+          <input matInput placeholder="Estabelecimento Adquirente" formControlName="gpEstablishmentNumber"
             required />
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>home_work</mat-icon>
@@ -127,7 +121,8 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Atividade comercial</mat-label>
-          <textarea matInput formControlName="businessActivity"></textarea>
+          <input matInput formControlName="businessActivity" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           <mat-icon matSuffix>meeting_room</mat-icon>
         </mat-form-field>
 
@@ -466,7 +461,7 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Crédito Comercial</mat-label>
+            <mat-label>Crédito Automático</mat-label>
             <mat-select name="type" formControlName="automaticCreditIndicator" required>
               <mat-option value="S"> Sim </mat-option>
               <mat-option value="N"> Não </mat-option>
@@ -480,14 +475,14 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Custo de Transação</mat-label>
-            <input matInput placeholder="R$ 0,00" formControlName="transactionAmount" required prefix="R$" mask=" 0,00 || 00,00 || || 000,00 || 0.000,00" />
+            <input matInput placeholder="R$ 0,00" formControlName="transactionAmount" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>attach_money_cicle</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Custo TED/DOC</mat-label>
-            <input matInput placeholder="R$ 0,00" formControlName="tedAmount" required prefix="R$" mask=" 0,00 || 00,00 || || 000,00 || 0.000,00"/>
+            <input matInput placeholder="R$ 0,00" formControlName="tedAmount" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>attach_money_cicle</mat-icon>
           </mat-form-field>
@@ -507,7 +502,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Transação Referencial</mat-label>
-            <input matInput placeholder="R$ 0,00" formControlName="referentialTransacionAmount" required prefix="R$" mask=" 0,00 || 00,00 || || 000,00 || 0.000,00"/>
+            <input matInput placeholder="R$ 0,00" formControlName="referentialTransacionAmount" required/>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>swap_horizontal_circle</mat-icon>
           </mat-form-field>
@@ -515,8 +510,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Taxa de Antecipação</mat-label>
-            <input matInput placeholder="R$ 0,00" formControlName="anticipationFee" required prefix="R$"
-              mask=" 0,00 || 00,00 || || 000,00 || 0.000,00" />
+            <input matInput placeholder="R$ 0,00" formControlName="anticipationFee" required 
+            />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>attach_money_cicle</mat-icon>
           </mat-form-field>
@@ -528,8 +523,8 @@
           <mat-form-field appearance="outline">
             <mat-label>Ignora Regra de Liberação de AJ Manualmente</mat-label>
             <mat-select name="type" formControlName="ignoreLiberationAJManual" required>
-              <mat-option value="Sim"> Sim </mat-option>
-              <mat-option value="Não"> Não </mat-option>
+              <mat-option value="true"> Sim </mat-option>
+              <mat-option value="false"> Não </mat-option>
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
@@ -577,8 +572,8 @@
             <mat-label>Tipo do beneficiado</mat-label>
             <mat-select name="type" #benefitedType formControlName="beneficiaryType" (blur)="getCpfCnpjMask(benefitedType.value)"required>
               <mat-option></mat-option>
-              <mat-option value="pf"> Pessoa Física </mat-option>
-              <mat-option value="pj"> Pessoa Jurídica </mat-option>
+              <mat-option value="PF"> Pessoa Física </mat-option>
+              <mat-option value="PJ"> Pessoa Jurídica </mat-option>
             </mat-select>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
@@ -592,7 +587,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>CPF/CNPJ</mat-label>
-            <input matInput placeholder="{{mask}}" formControlName="cnpjCtrl" required mask="{{mask}}"/>
+            <input matInput placeholder="{{mask}}" formControlName="beneficiaryDocumentNumber" required mask="{{mask}}"/>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix [ngStyle]="{ color: isCheckedBankAdress ? '' : 'gray' }">assignment_ind</mat-icon>
           </mat-form-field>
@@ -627,12 +622,12 @@
         <mat-form-field appearance="outline">
           <mat-label>Horário de funcionamento</mat-label>
           <mat-select name="type" required formControlName="openingHours">
-            <mat-option value="Horário Comercial">Horário Comercial</mat-option>
-            <mat-option value="24 horas"> 24 horas </mat-option>
-            <mat-option value="Manhã"> Manhã </mat-option>
-            <mat-option value="Tarde"> Tarde </mat-option>
-            <mat-option value="Noite"> Noite </mat-option>
-            <mat-option value="Outros"> Outros </mat-option>
+            <mat-option value="1">Horário Comercial</mat-option>
+            <mat-option value="2"> 24 horas </mat-option>
+            <mat-option value="3"> Manhã </mat-option>
+            <mat-option value="4"> Tarde </mat-option>
+            <mat-option value="5"> Noite </mat-option>
+            <mat-option value="6"> Outros </mat-option>
           </mat-select>
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
         </mat-form-field>
@@ -677,7 +672,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Número Lógico (MID)</mat-label>
-            <input matInput placeholder="Número Lógico (MID)" formControlName="logicNumber" required />
+            <input matInput placeholder="Número Lógico (MID)" formControlName="logicalNumber" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>dialpad</mat-icon>
           </mat-form-field>
@@ -695,7 +690,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Cód. Software Express</mat-label>
-            <input matInput placeholder="Cód. Software Express" formControlName="codeSoftwareCtrl" required />
+            <input matInput placeholder="Cód. Software Express" formControlName="registerCode" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>more_horiz</mat-icon>
           </mat-form-field>

@@ -72,7 +72,7 @@ export const routes: Routes = [
             component: AddCompanyComponent,
           },
           {
-            path: 'edit-company/:id',
+            path: 'edit-company/:idCompany',
             component: EditCompanyComponent,
           },
           {

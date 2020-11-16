@@ -16,7 +16,7 @@
         {{ header.text }}
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        {{ header.subValue ? row[header.value][header.subValue] : row[header.value] }}
+        {{ header.deepValue ? row[header.value][header.subValue][header.deepValue] : row[header.value] }}
         <!-- {{ header.value == true ? row[header.value] = "Credenciado" : row[header.value] = "Descredenciado"}} -->
       </mat-cell>
     </ng-container>
