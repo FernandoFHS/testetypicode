@@ -12,4 +12,5 @@ export class MonitoringRuleRequestModel {
   id_user_of_activation: number;
   monitoring_rule_condition: MonitoringRuleConditionRequestModel[];
   updatedAt: string;
+  rule_type: number;
 }

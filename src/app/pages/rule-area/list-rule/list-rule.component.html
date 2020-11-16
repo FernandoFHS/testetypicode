@@ -8,8 +8,8 @@
     </label>
   </div>
 
-  <core-data-table *ngIf="!isLoading" [headers]="headers" [data]="dataSource" [actions]="actions" (addEvent)="onAdd($event)"
-    (deleteEvent)="onDelete($event)" (editEvent)="onEdit($event)">
+  <core-data-table *ngIf="!isLoading" [headers]="headers" [data]="data" [actions]="actions" (addEvent)="onAdd($event)"
+    (deleteEvent)="onDelete($event)" (editEvent)="onEdit($event)" [async]="false">
   </core-data-table>
 
   <div class="h-200 loading-data p-t-20" *ngIf="isLoading">

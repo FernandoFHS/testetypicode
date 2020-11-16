@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
@@ -36,7 +36,7 @@ export class ListRuleComponent implements OnInit {
     delete: false
   };
 
-  dataSource: MonitoringRuleResponseModel;
+  data: MonitoringRuleResponseModel;
 
   isLoading: boolean;
 
@@ -54,8 +54,6 @@ export class ListRuleComponent implements OnInit {
     }, (error) => {
       this._router.navigate(['/home']);
       this._notificationService.error('Erro ao carregar a lista de Regras, tente novamente.');
-    }).finally(() => {
-      this.isLoading = false;
     });
   }
 
@@ -83,7 +81,9 @@ export class ListRuleComponent implements OnInit {
       }
     });
 
-    this.dataSource = data;
+    this.data = data;
+
+    this.isLoading = false;
   }
 
   onDelete(item: any): void { }

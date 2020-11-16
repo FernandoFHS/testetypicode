@@ -1,11 +1,12 @@
-<div class="mat-cell mat-elevation-z1">
+<div class="h-200 loading-data p-t-20" *ngIf="isLoadingResults">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
 
-  <div class="h-200 loading-data p-t-20" *ngIf="isLoadingResults">
-    <mat-spinner [diameter]="50" *ngIf="isLoadingResults"></mat-spinner>
-  </div>
+<div class="mat-cell mat-elevation-z1" [hidden]="isLoadingResults">
 
-  <mat-table #table [dataSource]="dataSource" class="example-table" matSort [matSortActive]="sortColumns"
-    matSortDisableClear matSortDirection="desc" [hidden]="isLoadingResults">
+  <mat-table #table [dataSource]="dataSource" matSort [matSortActive]="sortColumns" matSortDisableClear
+    matSortDirection="desc">
+
     <ng-container [matColumnDef]="header.value" *ngFor="let header of headers">
       <div *ngIf="header.text === 'Código'">
         <mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -18,15 +19,18 @@
           {{ header.text }}
         </mat-header-cell>
       </div>
+
       <mat-cell *matCellDef="let row">
-        <!-- {{ header.deepValue ? row[header.value][header.subValue][header.deepValue] : row[header.value] }} -->
-        <!-- {{ header.value == true ? row[header.value] = "Credenciado" : row[header.value] = "Descredenciado"}} -->
-        <div *ngIf="header.value === 'situation'">
-          {{row[header.value]  ? row[header.value] = "Ativo" : row[header.value] = "Inativo"}}
+        <div *ngIf="!header.subValue && !header.deepValue">
+          {{row[header.value]}}
         </div>
 
-        <div *ngIf="header.value !== 'situation'">
-          {{ header.deepValue ? row[header.value][header.subValue][header.deepValue] : row[header.value] }}
+        <div *ngIf="header.subValue && !header.deepValue">
+          {{row[header.value][header.subValue]}}
+        </div>
+
+        <div *ngIf="header.subValue && header.deepValue">
+          {{row[header.value][header.subValue][header.deepValue]}}
         </div>
       </mat-cell>
     </ng-container>
@@ -50,8 +54,10 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
   </mat-table>
 
-  <mat-paginator [length]="resultsLength" [pageSize]="10" [hidden]="isLoadingResults"></mat-paginator>
+  <mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>
 </div>

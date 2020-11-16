@@ -214,24 +214,8 @@
     </mat-expansion-panel>
 
     <div fxLayout="row wrap">
-      <div fxFlex>
-        <button mat-raised-button class="m-t-15 float-left" (click)="back()">
-          <mat-icon [inline]="true" class="m-r-5">
-            arrow_back
-          </mat-icon>
-          Voltar
-        </button>
-      </div>
-
-      <div fxFlex>
-        <button mat-raised-button color="primary" class="m-t-15 float-right" (click)="save()">
-          <mat-icon [inline]="true" class="m-r-5">
-            save
-          </mat-icon>
-          Salvar
-        </button>
-
-      </div>
+      <core-back-button (clickEvent)="back()" fxFlex></core-back-button>
+      <core-save-button (clickEvent)="save()" fxFlex></core-save-button>
     </div>
 
   </form>

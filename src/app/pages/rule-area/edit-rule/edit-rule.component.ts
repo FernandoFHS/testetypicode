@@ -168,7 +168,8 @@ export class EditRuleComponent implements OnInit {
         id: 0, // TODO
         id_user_of_activation: 0, // TODO
         monitoring_rule_condition: conditions,
-        updatedAt: '' // TODO
+        updatedAt: '', // TODO
+        rule_type: 0 // TODO
       }
 
       this._monitoringRuleService.add(request).then((response) => {

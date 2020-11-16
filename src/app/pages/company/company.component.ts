@@ -1,20 +1,17 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
-import { merge, Observable, of as observableOf } from 'rxjs';
-import { catchError, debounceTime, filter, map, startWith, switchMap } from 'rxjs/operators';
-import { DataTableService } from 'src/app/@core/components/container/data-table/data-table.service';
+import { debounceTime } from 'rxjs/operators';
+import { DataTableService } from 'src/app/@core/components/data-table/data-table.service';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { HeaderModelCompany } from 'src/app/@core/models/header.model';
 import { CompanyContent } from 'src/app/models/Company';
-import { Profile } from 'src/app/models/Profile';
 import { CompanyService } from 'src/app/services/company.service';
-import { DataService } from 'src/app/services/data.service';
 import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
 
 @Component({

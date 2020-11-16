@@ -36,7 +36,7 @@ import { CnaeService } from '../../services/company/cnae.service';
 import { Cnae } from '../../models/company/Cnae'
 import { Observable, of } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
-import { SimpleDataTableService } from 'src/app/@core/components/container/simple-data-table/simple-data-table.service';
+import { SimpleDataTableService } from 'src/app/@core/components/simple-data-table/simple-data-table.service';
 import { CompanyService } from '../../services/company.service';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 
@@ -153,7 +153,6 @@ export class AddCompanyComponent implements OnInit {
     } else {
       this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
     }
-
 
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
