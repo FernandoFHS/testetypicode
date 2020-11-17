@@ -43,8 +43,27 @@ import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-
 import {MatSelectModule} from '@angular/material/select';
 
 
+import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { ListRuleComponent } from './pages/rule-area/list-rule/list-rule.component';
+import { EditRuleComponent } from './pages/rule-area/edit-rule/edit-rule.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
+
+export const customCurrencyMaskConfig = {
+  align: 'left',
+  allowNegative: false,
+  allowZero: true,
+  decimal: ',',
+  precision: 2,
+  prefix: '',
+  suffix: '',
+  thousands: '.',
+  nullable: true,
+  min: null,
+  max: null,
+  inputMode: CurrencyMaskInputMode.FINANCIAL
+};
 
 @NgModule({
   declarations: [
@@ -81,6 +100,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     PlansComponent,
     DeleteTaxComponent
 
+    ListRuleComponent,
+    EditRuleComponent,    
   ],
   imports: [
     BrowserModule,
@@ -89,9 +110,13 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     BrowserAnimationsModule,
     FlexLayoutModule,
     FormsModule,
-    NgxMaskModule.forRoot(),    
-    MatSelectModule,
+    NgxMaskModule.forRoot(),
+
     CoreModule,
+
+    NgxSpinnerModule,
+
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
   ],
   providers: [],
   bootstrap: [AppComponent]

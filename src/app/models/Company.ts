@@ -262,7 +262,7 @@ export interface CompanyContent {
   posPercentageRateValue: number;
   anticipationFee: number;
   orderType: number;
-  situation: boolean;
+  situation: boolean | string;
   searchNickname: string;
   ignoreLiberationAJManual: boolean;
   userChangeCode?: any;

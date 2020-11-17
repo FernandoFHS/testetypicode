@@ -41,10 +41,10 @@ export class AddBankAccountComponent implements OnInit {
       this.accountFormGroup = this._formBuilder.group({
         bank: ['', Validators.required],
         agency: ['', Validators.required],
-        agencyDigit: ['', Validators.required],
+        agencyDigit: [''],
         account: ['', Validators.required],
-        digit: ['', Validators.required],
-        accountDigit: ['', Validators.required]
+        digit: [''],
+        accountDigit: ['']
       })
 
       this.getAllBanks();

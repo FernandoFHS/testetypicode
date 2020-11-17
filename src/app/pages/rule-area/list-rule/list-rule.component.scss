@@ -1,0 +1,23 @@
+@import "~src/app/@core/styles/breakpoints";
+
+::ng-deep .mat-column-description {
+  flex: 0 0 60%;
+}
+
+@include media-breakpoint("xs") {
+  ::ng-deep .mat-column-description {
+    flex: 0 0 85%;
+  }
+
+  ::ng-deep .mat-column-critical_level {
+    display: none;
+  }
+
+  ::ng-deep .mat-column-active {
+    display: none;
+  }
+
+  ::ng-deep .mat-column-actions {
+    flex: 0 0 15% !important;
+  }
+}

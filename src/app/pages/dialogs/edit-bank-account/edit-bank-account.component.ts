@@ -3,43 +3,47 @@ import { take, startWith, map } from 'rxjs/operators';
 import { Bank } from './../../../models/company/Bank';
 import { Observable, of } from 'rxjs';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-edit-bank-account',
   templateUrl: './edit-bank-account.component.html',
-  styleUrls: ['./edit-bank-account.component.scss']
+  styleUrls: ['./edit-bank-account.component.scss'],
 })
 export class EditBankAccountComponent implements OnInit {
-
   accountFormGroup: FormGroup;
-  bankAccount: any = this.localStorageService.get('bankAccount'); 
+  bankAccount: any = this.localStorageService.get('bankAccount');
   bankForm = new FormControl();
   bank: Array<Bank>;
   bank$: Observable<Array<Bank>>;
   filteredBanks: Observable<Bank[]>;
+  bankValidatorError = false;
 
   constructor(
     public dialogRef: MatDialogRef<EditBankAccountComponent>,
-    @Inject(MAT_DIALOG_DATA) 
-    public data: any, 
+    @Inject(MAT_DIALOG_DATA)
+    public data: any,
     private bankService: BankService,
     private _formBuilder: FormBuilder,
-    private localStorageService: LocalStorageService) { }
- 
+    private localStorageService: LocalStorageService
+  ) {}
 
   ngOnInit(): void {
-   
     this.accountFormGroup = this._formBuilder.group({
       bank: ['', Validators.required],
       agency: ['', Validators.required],
-      agencyDigit: ['', Validators.required],
+      agencyDigit: [''],
       account: ['', Validators.required],
-      digit: ['', Validators.required],
-      accountDigit: ['', Validators.required]
-    })
+      digit: [''],
+      accountDigit: [''],
+    });
 
     if (this.bankAccount != undefined) {
       this.getLocalStorage('bankAccount');
@@ -50,31 +54,33 @@ export class EditBankAccountComponent implements OnInit {
 
   private _filterBanks(value: string): Bank[] {
     const filterValue = value.toLowerCase();
-    this.bank$.subscribe(banks => {
-      this.bank = banks.filter(bank => bank.name.toLowerCase().indexOf(filterValue) === 0);
-    })
-    return this.bank;
-  }
-  getAllBanks(){
-    this.bankService.getAllCnae()
-    .pipe(take(1))
-    .subscribe((data) => {
-      this.bank$ = of(data.content);
-      this.filteredBanks = this.bankForm.valueChanges
-      .pipe(
-        startWith(''),
-        map(bank => this._filterBanks(bank))
+    this.bank$.subscribe((banks) => {
+      this.bank = banks.filter(
+        (bank) => bank.name.toLowerCase().indexOf(filterValue) === 0
       );
     });
+    return this.bank;
+  }
+  getAllBanks() {
+    this.bankService
+      .getAllCnae()
+      .pipe(take(1))
+      .subscribe((data) => {
+        this.bank$ = of(data.content);
+        this.filteredBanks = this.bankForm.valueChanges.pipe(
+          startWith(''),
+          map((bank) => this._filterBanks(bank))
+        );
+      });
   }
 
-  displayFn = (item): string =>{
+  displayFn = (item): string => {
     if (item) {
       return item.name;
-    }else {
+    } else {
       return '';
     }
-  }
+  };
 
   formControl = new FormControl('', [
     Validators.required,
@@ -85,11 +91,11 @@ export class EditBankAccountComponent implements OnInit {
     return this.formControl.hasError('required')
       ? 'Campo Obrigatório'
       : this.formControl.hasError('email')
-        ? 'Not a valid email'
-        : '';
+      ? 'Not a valid email'
+      : '';
   }
 
-  editAccount() {
+  editAccount(form) {
     let index = this.data;
 
     let editableItem = {
@@ -99,17 +105,24 @@ export class EditBankAccountComponent implements OnInit {
       account: this.accountFormGroup.get('account').value,
       digit: this.accountFormGroup.get('digit').value,
       accountDigit: this.accountFormGroup.get('accountDigit').value,
-    }
+    };
 
-    if (index > -1) {
-      Object.assign(this.bankAccount[index], editableItem);
-      localStorage.setItem('bankAccount', JSON.stringify(this.bankAccount));
+    let bankValidator = form.value.bank;
+    console.log(bankValidator);
+
+    if (typeof bankValidator === 'object') {
+      if (index > -1) {
+        Object.assign(this.bankAccount[index], editableItem);
+        localStorage.setItem('bankAccount', JSON.stringify(this.bankAccount));
+        this.dialogRef.close(this.bankAccount);
+      } else {
+        console.log(editableItem);
+      }
     } else {
-      console.log(editableItem);
+      this.bankValidatorError = true;
     }
-    this.dialogRef.close();
   }
- 
+
   getLocalStorage(item) {
     if (item == 'bankAccount') {
       let localStorage = {
@@ -118,15 +131,13 @@ export class EditBankAccountComponent implements OnInit {
         agencyDigit: this.bankAccount[this.data].agencyDigit,
         account: this.bankAccount[this.data].account,
         digit: this.bankAccount[this.data].digit,
-        accountDigit:this.bankAccount[this.data].accountDigit
-      }
+        accountDigit: this.bankAccount[this.data].accountDigit,
+      };
       this.accountFormGroup.patchValue(localStorage);
     }
   }
 
-  closeDialog(): void{
+  closeDialog(): void {
     this.dialogRef.close();
   }
-
 }
-

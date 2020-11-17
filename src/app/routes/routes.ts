@@ -22,11 +22,14 @@ import { EditCompanyComponent } from '../pages/edit-company/edit-company.compone
 import { AddPartnerComponent } from '../pages/add-partner/add-partner.component';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 import { AgreementListComponent } from '../pages/agreement-area/agreement-list/agreement-list.component';
+import { ListRuleComponent } from '../pages/rule-area/list-rule/list-rule.component';
+import { ContainerGuard } from '../@core/components/container/container.guard';
 
 export const routes: Routes = [
   {
     path: '',
     component: ContainerComponent,
+    // canActivateChild: [ContainerGuard],
     children: [
       {
         path: '',
@@ -35,7 +38,7 @@ export const routes: Routes = [
       },
       {
         path: 'home',
-        component: HomeComponent
+        component: HomeComponent,
       },
       {
         path: 'rule-area',
@@ -43,12 +46,16 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'add-rule',
+            redirectTo: 'list-rule',
             pathMatch: 'full'
           },
           {
             path: 'add-rule',
             component: AddRuleComponent
+          },
+          {
+            path: 'list-rule',
+            component: ListRuleComponent
           }
         ]
       },
@@ -93,7 +100,7 @@ export const routes: Routes = [
             component: AddCompanyComponent,
           },
           {
-            path: 'edit-company',
+            path: 'edit-company/:idCompany',
             component: EditCompanyComponent,
           },
         ]
@@ -141,14 +148,12 @@ export const routes: Routes = [
       {
         path: 'plans',
         component: PlansComponent,
-      },
-      
-      {
-        path: 'login',
-        component: LoginComponent,
-        canActivate: [LoginGuard]
-      },
-
-    ]
+      }
+    ],
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [LoginGuard]
   }
 ];

@@ -1,17 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
-import { merge, Observable, of as observableOf } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
-import { SimpleDataTableService } from 'src/app/@core/components/container/simple-data-table/simple-data-table.service';
 import { Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 
 /**
  * @title Table retrieving data through HTTP
@@ -27,15 +23,25 @@ export class UserComponent implements AfterViewInit {
   resultsLength = 0;
   isLoadingResults = true;
 
+  breadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Lista de Usuários',
+      route: ''
+    },
+    items: [
+      { title: 'Home', route: '' }
+    ]
+  };
+
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
     private dataService: DataService,
     private router: Router,
-  
-  ) {}
 
-  ngAfterViewInit() {}
+  ) { }
+
+  ngAfterViewInit() { }
 
   loadData = (sort: string, order: string, page: number, size: number) => {
     return this.dataService.getAllProfiles(sort, order, page, size);

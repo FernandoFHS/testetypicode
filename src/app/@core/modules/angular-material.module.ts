@@ -34,7 +34,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatRippleModule } from '@angular/material/core';
-import { getPortuguesPaginatorIntl } from '../components/container/data-table/paginator.translate';
+import { getPortuguesPaginatorIntl } from '../components/data-table/paginator.translate';
 
 @NgModule({
     imports: [

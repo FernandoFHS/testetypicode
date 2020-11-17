@@ -1,11 +1,10 @@
-<div class="mat-cell mat-elevation-z8">
-  <mat-table
-    #table
-    [dataSource]="dataSource"
-    class="example-table"
-    matSort
-    class="table-margin"
-  >
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="O que você quer filtrar?" #input>
+</mat-form-field>
+
+<div class="mat-cell mat-elevation-z1">
+  <mat-table #table [dataSource]="dataSource" matSort class="table-margin">
     <ng-container [matColumnDef]="header.value" *ngFor="let header of headers">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         {{ header.text }}
@@ -17,32 +16,17 @@
 
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>
-        <button
-          mat-icon-button
-          color="primary"
-          (click)="addItem()"
-          *ngIf="actions.add"
-        >
+        <button mat-icon-button color="primary" (click)="addItem()" *ngIf="actions.add">
           <mat-icon aria-label="Add icon">add</mat-icon>
         </button>
       </mat-header-cell>
 
       <mat-cell *matCellDef="let row; let i = index">
-        <button
-          mat-icon-button
-          color="primary"
-          (click)="editItem(row)"
-          *ngIf="actions.edit"
-        >
+        <button mat-icon-button color="primary" (click)="editItem(row)" *ngIf="actions.edit">
           <mat-icon aria-label="Edit icon">edit</mat-icon>
         </button>
 
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="deleteItem(row)"
-          *ngIf="actions.delete"
-        >
+        <button mat-icon-button color="warn" (click)="deleteItem(row)" *ngIf="actions.delete">
           <mat-icon aria-label="Delete icon">delete</mat-icon>
         </button>
       </mat-cell>
@@ -54,4 +38,3 @@
 
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 </div>
-
