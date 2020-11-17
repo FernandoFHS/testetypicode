@@ -7,5 +7,5 @@ export const menuItems: Menu[] = [
   { route: 'password-transaction', name: 'Senha Transação', type: 'link', icon: 'vpn_key' },
   { route: 'login', name: 'Login', type: 'link', icon: 'lock' },
   { route: 'rule-area', name: 'Regras', type: 'link', icon: 'rule'},
-  { route: 'plans', name: 'Planos', type: 'link', icon: 'sticky_note_2' }
+  { route: 'agreements', name: 'Contratos', type: 'link', icon: 'sticky_note_2' }
 ]

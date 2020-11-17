@@ -1,3 +1,4 @@
+import { RootObject } from './../@core/models/Company';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
@@ -26,6 +27,9 @@ export class CompanyService {
         `${this.API_URL}company?sort=${sort},${order}&page=${page}&size=${size}`;
   
     return this.httpClient.get<CompanyContent[]>(requestUrl);
+  }
+  getAll(): Observable<RootObject> {  
+    return this.httpClient.get<RootObject>(`${this.API_URL}company`);
   }
 
   create(company: CompanyContent): Observable<CompanyContent> {

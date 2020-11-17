@@ -1,6 +1,8 @@
 export class HeaderModel {
   text: string;
   value: string;
+  subValue?: string = null;
+  deepValue?: string = null;
 }
 
 export class HeaderModelBank {

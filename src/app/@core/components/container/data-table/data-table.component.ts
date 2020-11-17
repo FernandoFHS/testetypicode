@@ -99,7 +99,7 @@ export class DataTableComponent implements AfterViewInit {
       this.isLoadingResults = false;
       this.resultsLength = data['totalElements'];
 
-      console.log(data);
+      console.log('Data-Table',data);
       this.dataSource = data['content'];
     });
 

@@ -1,0 +1,20 @@
+<div>
+  <core-breadcrumb [model]="breadcrumb_model"></core-breadcrumb>
+  <div class="m-b-25">
+    <label class="mat-display-1 page-title">
+      Contratos
+    </label>
+  </div>
+
+  <core-data-table 
+    [headers]="headers" 
+    [actions]="actions" 
+    (addEvent)="onAdd($event)" 
+    (deleteEvent)="onDelete($event)"
+    (editEvent)="onEdit($event)" 
+    [loadFunc]="loadData" 
+    [idItems]="'id'"
+    >
+  </core-data-table>
+
+</div>

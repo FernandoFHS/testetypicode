@@ -1,3 +1,4 @@
+import { PlansComponent } from './pages/plans/plans.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -30,10 +31,17 @@ import { DeletePhoneComponent } from './pages/dialogs/delete-phone/delete-phone.
 import { DeletePartnerComponent } from './pages/dialogs/delete-partner/delete-partner.component';
 import { EditPhoneComponent } from './pages/dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component';
-import { PlansComponent } from './pages/plans/plans.component';
-import { DeleteTaxComponent } from './pages/plans/delete-tax/delete-tax.component';
 import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
 import { SimpleDataTableComponent } from 'src/app/@core/components/container/simple-data-table/simple-data-table.component';
+
+import { DeleteTaxComponent } from './pages/agreement-area/delete-tax/delete-tax.component';
+import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
+import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
+import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
+import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
+
+import {MatSelectModule} from '@angular/material/select';
+
 
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -63,10 +71,16 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     DeletePartnerComponent,
     EditPhoneComponent,
     AddPhoneComponent,
-    PlansComponent,
+    AgreementAreaComponent,
     DeleteTaxComponent,
     EditPartnerComponent,
     SimpleDataTableComponent,
+    AgreementListComponent,
+    EditAgreementComponent,
+    AddAgreementComponent,
+    PlansComponent,
+    DeleteTaxComponent
+
   ],
   imports: [
     BrowserModule,
@@ -76,8 +90,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     FlexLayoutModule,
     FormsModule,
     NgxMaskModule.forRoot(),    
-    
-    CoreModule
+    MatSelectModule,
+    CoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
