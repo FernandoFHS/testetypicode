@@ -21,6 +21,7 @@ import { InputHelperDirective } from './directives/input-helper.directive';
 import { SimpleDataTableComponent } from './components/simple-data-table/simple-data-table.component';
 import { SaveButtonComponent } from './components/save-button/save-button.component';
 import { BackButtonComponent } from './components/back-button/back-button.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { BackButtonComponent } from './components/back-button/back-button.compon
     SimpleDataTableComponent,
     SaveButtonComponent,
     BackButtonComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,7 +80,8 @@ import { BackButtonComponent } from './components/back-button/back-button.compon
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    InputHelperComponent
+    InputHelperComponent,
+    ConfirmDialogComponent
   ]
 
 })

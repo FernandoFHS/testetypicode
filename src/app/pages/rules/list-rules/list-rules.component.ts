@@ -1,18 +1,19 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { HeaderModel } from 'src/app/@core/models/header.model';
+import { MonitoringRuleModel } from 'src/app/models/monitoring-rule.model';
 import { MonitoringRuleResponseModel } from 'src/app/models/response/monitoring-rule.response.model';
 import { MonitoringRuleService } from 'src/app/services/monitoring-rule.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
-  selector: 'app-list-rule',
-  templateUrl: './list-rule.component.html',
-  styleUrls: ['./list-rule.component.scss']
+  selector: 'app-list-rules',
+  templateUrl: './list-rules.component.html',
+  styleUrls: ['./list-rules.component.scss']
 })
-export class ListRuleComponent implements OnInit {
+export class ListRulesComponent implements OnInit {
 
   breadcrumbModel: BreadcrumbModel = {
     active: {
@@ -32,7 +33,7 @@ export class ListRuleComponent implements OnInit {
 
   actions: ActionModel = {
     add: true,
-    edit: false,
+    edit: true,
     delete: false
   };
 
@@ -49,7 +50,7 @@ export class ListRuleComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
 
-    this._monitoringRuleService.getRules(0, 999).then((data) => {
+    this._monitoringRuleService.getRules(0, 99999).then((data) => {
       this._loadData(data);
     }, (error) => {
       this._router.navigate(['/home']);
@@ -89,9 +90,12 @@ export class ListRuleComponent implements OnInit {
   onDelete(item: any): void { }
 
   onAdd(item: any): void {
-    this._router.navigate(['rule-area/add-rule']);
+    this._router.navigate(['rules/add']);
   }
 
-  onEdit(item: any): void { }
+  onEdit(item: MonitoringRuleModel): void {
+    this._monitoringRuleService.setRuleToEdit(item);
+    this._router.navigate([`rules/edit/${item.id}`]);
+   }
 
 }

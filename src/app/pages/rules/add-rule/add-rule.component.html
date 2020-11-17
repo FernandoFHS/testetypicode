@@ -4,7 +4,7 @@
 
   <div class="m-b-25">
     <label class="mat-display-1 page-title">
-      Editar Regra
+      Incluir Regra
     </label>
   </div>
 
@@ -64,7 +64,9 @@
           </mat-select>
 
           <mat-hint input-helper [input-helper-text]="'O que é Bloqueio Operacional?'" [input-helper-messages]="[
-            'Quando alguma transação for compatível com as condições cadastradas, se a Regra estiver marcada com Bloqueio Operacional SIM, o estabelecimento será bloqueado para futuras transações até que a situação seja normalizada.'
+              'O bloqueio operacional ocorre quando uma determinada transação atende regra que está configurada para bloquear a empresa automaticamente.',
+              'Neste caso, além do alerta gerado, é feito o bloqueio operacional da empresa que impedirá a aprovação de novas transações até que a mesma seja desbloqueada.',
+              'O desbloqueio deve ser feito manualmente pelo Dashboard de Monitoramento.'
             ]">
             O que é?
           </mat-hint>
@@ -72,17 +74,17 @@
 
         <mat-form-field appearance="outline" floatLabel="always" fxFlex="50%">
           <mat-label>
-            Tipo de Alerta
+            Notificação Alerta por E-mail
           </mat-label>
           <mat-select formControlName="email_notification_mode">
             <mat-option [value]="'SEND_FOR_ALL'">
-              Enviar um e-mail para cada alerta gerado
+              Enviar um e-mail por alerta gerado
             </mat-option>
             <mat-option [value]="'SEND_BY_HOUR'">
-              Enviar um e-mail á cada hora com todos os alertas gerados desde o último envio
+              Enviar um e-mail de hora em hora com os novos alertas
             </mat-option>
             <mat-option [value]="'NOT_SEND'">
-              Não enviar alertas por e-mail
+              Não enviar alertas
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -106,8 +108,7 @@
           </mat-chip-list>
 
           <mat-hint input-helper [input-helper-text]="'Como cadastrar os e-mails?'" [input-helper-messages]="[
-          'Todos os e-mails listados receberão os alertas (dependendo do Tipo de Alerta selecionado).',
-          'Caso o Tipo de Alerta selecionado seja \'Não enviar alertas por e-mail\', os alertas não serão disparados, porém os mesmos ficarão salvos na Regra.',
+          'Todos os e-mails listados receberão os alertas.',
           'Para associar um e-mail aos alertas, é necessário incluir o mesmo no campo, e após isso apertar enter (↵) ou vírgula (,).',
           'Caso seja um e-mail inválido, será exibida uma mensagem de erro e ele não será associado.',
           'Para remover um e-mail associado basta clicar no ícone de \'X\' ao lado do mesmo.'
@@ -161,7 +162,7 @@
             </mat-label>
 
             <mat-select formControlName="comparison_op" (selectionChange)="onChangeComparisonOperator($event, i)">
-              <mat-option [value]="comparison_operator.operator_name"
+              <mat-option [value]="comparison_operator.display_name"
                 *ngFor="let comparison_operator of selectedVariables[i]?.comparison_operators">
                 {{comparison_operator.display_name}}
               </mat-option>

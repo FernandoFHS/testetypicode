@@ -16,8 +16,6 @@ import { EditProfileComponent } from './pages/edit-profile/edit-profile.componen
 import { ProfileListComponent } from './pages/profile-list/profile-list.component';
 import { FormsModule } from '@angular/forms';
 import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
-import { AddRuleComponent } from './pages/rule-area/add-rule/add-rule.component';
-import { RuleAreaComponent } from './pages/rule-area/rule-area.component';
 import { CompanyListComponent } from './pages/company-list/company-list.component';
 import { AddCompanyComponent } from './pages/add-company/add-company.component';
 import { EditCompanyComponent } from './pages/edit-company/edit-company.component';
@@ -35,8 +33,10 @@ import { DeleteTaxComponent } from './pages/plans/delete-tax/delete-tax.componen
 import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { ListRuleComponent } from './pages/rule-area/list-rule/list-rule.component';
-import { EditRuleComponent } from './pages/rule-area/edit-rule/edit-rule.component';
+import { RulesComponent } from './pages/rules/rules.component';
+import { AddRuleComponent } from './pages/rules/add-rule/add-rule.component';
+import { EditRuleComponent } from './pages/rules/edit-rule/edit-rule.component';
+import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -63,7 +63,7 @@ export const customCurrencyMaskConfig = {
     UserComponent,
     CompanyComponent,
     PasswordTransactionComponent,
-    RuleAreaComponent,
+    RulesComponent,
     AddRuleComponent,
     AddProfileComponent,
     EditProfileComponent,
@@ -83,7 +83,7 @@ export const customCurrencyMaskConfig = {
     PlansComponent,
     DeleteTaxComponent,
     EditPartnerComponent,
-    ListRuleComponent,
+    ListRulesComponent,
     EditRuleComponent,    
   ],
   imports: [

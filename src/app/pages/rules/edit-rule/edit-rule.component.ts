@@ -3,12 +3,17 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSelectChange } from '@angular/material/select';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
+import { RuleTypeEnum } from 'src/app/enums/rule-type.enum';
+import { VariableDataTypeEnum } from 'src/app/enums/variable-data-type.enum';
+import { MonitoringRuleModel } from 'src/app/models/monitoring-rule.model';
 import { MonitoringRuleConditionRequestModel } from 'src/app/models/requests/monitoring-rule-condition.request.model';
 import { MonitoringRuleRequestModel } from 'src/app/models/requests/monitoring-rule.request.model';
+import { MonitoringRuleConditionResponseModel } from 'src/app/models/response/monitoring-rule-condition.response.model';
 import { MonitoringRuleVariableResponseModel } from 'src/app/models/response/monitoring-rule-variable.response.model';
+import { GeneralService } from 'src/app/services/general.service';
 import { MonitoringRuleService } from 'src/app/services/monitoring-rule.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
@@ -19,7 +24,6 @@ import { NotificationService } from 'src/app/services/notification.service';
 })
 export class EditRuleComponent implements OnInit {
 
-  emailSeparatorKeysCodes: number[] = [ENTER, COMMA];
 
   breadcrumbModel: BreadcrumbModel = {
     active: {
@@ -28,25 +32,27 @@ export class EditRuleComponent implements OnInit {
     },
     items: [
       { title: 'Home', route: '' },
-      { title: 'Lista de Regras', route: 'rule-area' }
+      { title: 'Lista de Regras', route: 'rules' }
     ]
   };
 
-  form: FormGroup;
-
   logicOperatorList: { text: string; value: string }[] = [{
     text: 'E',
-    value: 'E'
+    value: '&&'
   }, {
     text: 'OU',
-    value: 'OU'
+    value: '||'
   }];
 
+  emailSeparatorKeysCodes: number[] = [ENTER, COMMA];
+
+  form: FormGroup;
   emails: string[] = [];
-
   variables: MonitoringRuleVariableResponseModel[] = [];
-
   selectedVariables: MonitoringRuleVariableResponseModel[] = [];
+  model: MonitoringRuleModel;
+  isLoading: boolean;
+  id: number;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -54,18 +60,72 @@ export class EditRuleComponent implements OnInit {
     private _notificationService: NotificationService,
     private _el: ElementRef,
     private _spinnerService: NgxSpinnerService,
-    private _router: Router
+    private _router: Router,
+    private _generalService: GeneralService,
+    private _activatedRoute: ActivatedRoute
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.isLoading = true;
+
+    await this._loadParams();
+    await this._loadVariables();
+    await this._loadModel();
+
     this._loadForm();
 
-    this._monitoringRuleService.getVariables().then((variables) => {
-      this.variables = variables;
+    this.isLoading = false;
+  }
 
-      // this.variables.forEach((variable) => {
-      //   console.log(variable.data_type, variable.display_name);
-      // });
+  private _loadParams(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this._activatedRoute.params.subscribe((params) => {
+        this.id = params['id'];
+
+        if (this.id || this.id == 0) {
+          resolve();
+        }
+        else {
+          this._backWithError();
+          reject();
+        }
+      });
+    });
+  }
+
+  private _backWithError(): void {
+    this.back();
+    this._notificationService.error('Ops, houve um erro ao carregar Regra, tente novamente.');
+  }
+
+  private _loadVariables(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this._monitoringRuleService.getVariables().then((variables) => {
+        this.variables = variables;
+        resolve();
+      }, (error) => {
+        reject();
+      });
+    });
+  }
+
+  private _loadModel(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this._monitoringRuleService.getRuleById(this.id).then((model) => {
+        this.model = model;
+
+        if (this.model) {
+          this.emails = this.model.email_notification_recipients;
+          resolve();
+        }
+        else {
+          this._backWithError();
+          reject();
+        }
+      }, (error) => {
+        this._backWithError();
+        reject();
+      });
     });
   }
 
@@ -107,28 +167,45 @@ export class EditRuleComponent implements OnInit {
 
   private _loadForm(): void {
     this.form = this._formBuilder.group({
-      description: ['', [Validators.required]],
-      conditions: this._formBuilder.array([]),
-      critical_level: ['LOW', []],
-      email_notification_mode: ['SEND_FOR_ALL', []],
-      block_merchant_transactions: [false, []],
-      email: ['', [Validators.email]]
+      description: [this.model.description, [Validators.required]],
+      conditions: this._formBuilder.array(this.model.monitoring_rule_condition.map((condition) => {
+        const variable = this.variables.find(v => v.variable_name == condition.variable_name);
+        this.selectedVariables.push(variable);
+        return this._createCondition(condition);
+      })),
+      critical_level: [{ value: this.model.critical_level, disabled: true }, []],
+      email_notification_mode: [this.model.email_notification_mode, []],
+      block_merchant_transactions: [{ value: this.model.block_merchant_transactions, disabled: true }, []],
+      email: [{ value: '', disabled: true }, [Validators.email]]
     });
   }
 
-  private _createCondition(): FormGroup {
+  private _createCondition(condition: MonitoringRuleConditionResponseModel = null): FormGroup {
     return this._formBuilder.group({
-      logic_op: [{ value: 'E', disabled: false }, []],
-      variable: [{ value: '', disabled: false }, [Validators.required]],
-      comparison_op: [{ value: '', disabled: true }, [Validators.required]],
-      value: [{ value: '', disabled: true }, [Validators.required]]
+      logic_op: [{ value: condition ? condition.logical_operator : '&&', disabled: true }, []],
+      variable: [{ value: condition ? condition.variable_name : '', disabled: true }, [Validators.required]],
+      comparison_op: [{ value: condition ? condition.comparison_operator : '', disabled: true }, [Validators.required]],
+      value: [{ value: condition ? this._getValue(condition) : '', disabled: true }, [Validators.required]]
     });
+  }
+
+  private _getValue(condition: MonitoringRuleConditionResponseModel): string {
+    const variable = this.variables.find(v => v.variable_name == condition.variable_name);
+
+    if (variable.data_type == VariableDataTypeEnum.MONETARY) {
+      return condition.monetary_value.toString();
+    }
+    else if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
+      return condition.numeric_without_decimal_places_value.toString();
+    }
   }
 
   save(): void {
     this.form.markAllAsTouched();
 
     this.form.get('email').setValue('');
+
+    console.log(this.form);
 
     if (this.form.valid) {
       this._spinnerService.show();
@@ -147,7 +224,7 @@ export class EditRuleComponent implements OnInit {
           comparison_sequence: index.toString(),
           createdAt: '', // TODO
           id: 0, // TODO
-          logical_operator: formCondition.get('logic_op').value,
+          logical_operator: (index == formConditions.controls.length || formConditions.controls.length == 1) ? '' : formCondition.get('logic_op').value,
           monetary_value: selectedVariable.data_type == 'Monetary' ? formCondition.get('value').value : null,
           numeric_without_decimal_places_value: selectedVariable.data_type == 'ListOfValue' ? formCondition.get('value').value : null,
           updatedAt: '', // TODO
@@ -169,12 +246,12 @@ export class EditRuleComponent implements OnInit {
         id_user_of_activation: 0, // TODO
         monitoring_rule_condition: conditions,
         updatedAt: '', // TODO
-        rule_type: 0 // TODO
+        rule_type: RuleTypeEnum.NORMAL // TODO
       }
 
       this._monitoringRuleService.add(request).then((response) => {
         this._notificationService.success('Regra editada com sucesso!');
-        this._router.navigate(['rule-area/list-rule']);
+        this._router.navigate(['rules/list']);
       }, (error) => {
         this._notificationService.error('Erro ao editar Regra, tente novamente.');
       }).finally(() => {
@@ -211,6 +288,19 @@ export class EditRuleComponent implements OnInit {
   }
 
   back(): void {
-    this._router.navigate(['rule-area/list-rule']);
+    this._router.navigate(['rules/list']);
+  }
+
+  active(): void {
+    const message = 'Após a ativação da regra não será possível alterar as informações de geração de alertas como a criticidade, variáveis e bloqueio operacional. Tem certeza que deseja continuar?';
+
+    this._generalService.openConfirmDialog(message, () => {
+      console.log('Ativar');
+    }, () => {
+    }, 'Ativar Regra');
+  }
+
+  inactive(): void {
+
   }
 }

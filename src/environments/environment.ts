@@ -4,6 +4,6 @@ export const environment = {
   production: false,
   api: {
     url: 'https://mobbuy-monitoring.azurewebsites.net',
-    mock: true
+    mock: false
   }
 };

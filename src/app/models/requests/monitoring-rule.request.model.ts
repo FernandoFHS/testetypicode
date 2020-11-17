@@ -1,3 +1,4 @@
+import { RuleTypeEnum } from 'src/app/enums/rule-type.enum';
 import { MonitoringRuleConditionRequestModel } from './monitoring-rule-condition.request.model';
 
 export class MonitoringRuleRequestModel {
@@ -12,5 +13,5 @@ export class MonitoringRuleRequestModel {
   id_user_of_activation: number;
   monitoring_rule_condition: MonitoringRuleConditionRequestModel[];
   updatedAt: string;
-  rule_type: number;
+  rule_type: RuleTypeEnum;
 }

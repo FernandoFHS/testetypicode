@@ -11,6 +11,9 @@ import { MonitoringRuleRequestModel } from 'src/app/models/requests/monitoring-r
 import { MonitoringRuleConditionRequestModel } from 'src/app/models/requests/monitoring-rule-condition.request.model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
+import { RuleTypeEnum } from 'src/app/enums/rule-type.enum';
+import { RuleEmailNotificationModeEnum } from 'src/app/enums/rule-email-notification-mode.enum';
+import { VariableDataTypeEnum } from 'src/app/enums/variable-data-type.enum';
 
 @Component({
   selector: 'app-add-rule',
@@ -24,11 +27,11 @@ export class AddRuleComponent implements OnInit {
   breadcrumbModel: BreadcrumbModel = {
     active: {
       title: 'Incluir Regra',
-      route: 'rule-area/add-rule'
+      route: ''
     },
     items: [
       { title: 'Home', route: '' },
-      { title: 'Lista de Regras', route: 'rule-area' }
+      { title: 'Lista de Regras', route: 'rules' }
     ]
   };
 
@@ -36,10 +39,10 @@ export class AddRuleComponent implements OnInit {
 
   logicOperatorList: { text: string; value: string }[] = [{
     text: 'E',
-    value: 'E'
+    value: '&&'
   }, {
     text: 'OU',
-    value: 'OU'
+    value: '||'
   }];
 
   emails: string[] = [];
@@ -109,8 +112,8 @@ export class AddRuleComponent implements OnInit {
     this.form = this._formBuilder.group({
       description: ['', [Validators.required]],
       conditions: this._formBuilder.array([]),
-      critical_level: ['LOW', []],
-      email_notification_mode: ['SEND_FOR_ALL', []],
+      critical_level: [RuleTypeEnum.LOW, []],
+      email_notification_mode: [RuleEmailNotificationModeEnum.SEND_FOR_ALL, []],
       block_merchant_transactions: [false, []],
       email: ['', [Validators.email]]
     });
@@ -147,9 +150,9 @@ export class AddRuleComponent implements OnInit {
           comparison_sequence: index.toString(),
           createdAt: '', // TODO
           id: 0, // TODO
-          logical_operator: formCondition.get('logic_op').value,
-          monetary_value: selectedVariable.data_type == 'Monetary' ? formCondition.get('value').value : null,
-          numeric_without_decimal_places_value: selectedVariable.data_type == 'ListOfValue' ? formCondition.get('value').value : null,
+          logical_operator: (index == formConditions.controls.length || formConditions.controls.length == 1) ? '' : formCondition.get('logic_op').value,
+          monetary_value: selectedVariable.data_type == VariableDataTypeEnum.MONETARY ? formCondition.get('value').value : null,
+          numeric_without_decimal_places_value: selectedVariable.data_type == VariableDataTypeEnum.LIST_OF_VALUE ? formCondition.get('value').value : null,
           updatedAt: '', // TODO
           variable_name: formCondition.get('variable').value
         }
@@ -169,12 +172,12 @@ export class AddRuleComponent implements OnInit {
         id_user_of_activation: 0, // TODO
         monitoring_rule_condition: conditions,
         updatedAt: '', // TODO
-        rule_type: 0 // TODO
+        rule_type: RuleTypeEnum.NORMAL // TODO
       }
 
       this._monitoringRuleService.add(request).then((response) => {
         this._notificationService.success('Regra criada com sucesso!');
-        this._router.navigate(['rule-area/list-rule']);
+        this._router.navigate(['rules/list']);
       }, (error) => {
         this._notificationService.error('Erro ao criar Regra, tente novamente.');
       }).finally(() => {
@@ -211,6 +214,6 @@ export class AddRuleComponent implements OnInit {
   }
 
   back(): void {
-    this._router.navigate(['rule-area/list-rule']);
+    this._router.navigate(['rules/list']);
   }
 }

@@ -13,7 +13,7 @@ export const MonitoringRuleResponseMock: MonitoringRuleResponseModel = {
       critical_level: "AVERAGE",
       id_user_of_activation: 44444,
       rule_type: "NORMAL",
-      email_notification_recipients: [],
+      email_notification_recipients: ['teste@teste.com'],
       monitoring_rule_condition: [
         {
           id: 1,

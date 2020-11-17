@@ -10,16 +10,16 @@ import { LoginGuard } from '../pages/login/login.guard';
 import { ProfileListComponent } from '../pages/profile-list/profile-list.component';
 import { AddProfileComponent } from '../pages/add-profile/add-profile.component';
 import { EditProfileComponent } from '../pages/edit-profile/edit-profile.component';
-import { RuleAreaComponent } from '../pages/rule-area/rule-area.component';
-import { AddRuleComponent } from '../pages/rule-area/add-rule/add-rule.component';
 import { CompanyListComponent } from '../pages/company-list/company-list.component';
 import { AddCompanyComponent } from '../pages/add-company/add-company.component';
 import { EditCompanyComponent } from '../pages/edit-company/edit-company.component';
 import { AddPartnerComponent } from '../pages/add-partner/add-partner.component';
 import { PlansComponent } from '../pages/plans/plans.component';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
-import { ListRuleComponent } from '../pages/rule-area/list-rule/list-rule.component';
-import { ContainerGuard } from '../@core/components/container/container.guard';
+import { RulesComponent } from '../pages/rules/rules.component';
+import { ListRulesComponent } from '../pages/rules/list-rules/list-rules.component';
+import { AddRuleComponent } from '../pages/rules/add-rule/add-rule.component';
+import { EditRuleComponent } from '../pages/rules/edit-rule/edit-rule.component';
 
 export const routes: Routes = [
   {
@@ -37,21 +37,25 @@ export const routes: Routes = [
         component: HomeComponent,
       },
       {
-        path: 'rule-area',
-        component: RuleAreaComponent,
+        path: 'rules',
+        component: RulesComponent,
         children: [
           {
             path: '',
-            redirectTo: 'list-rule',
+            redirectTo: 'list',
             pathMatch: 'full'
           },
           {
-            path: 'add-rule',
+            path: 'list',
+            component: ListRulesComponent,
+          },
+          {
+            path: 'add',
             component: AddRuleComponent
           },
           {
-            path: 'list-rule',
-            component: ListRuleComponent
+            path: 'edit/:id',
+            component: EditRuleComponent
           }
         ]
       },

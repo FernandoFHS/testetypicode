@@ -1,0 +1,5 @@
+export enum RuleTypeEnum {
+  LOW = 'LOW',
+  NORMAL = 'NORMAL',
+  TRANSACTION_HOUR_RANGE = 'TRANSACTION_HOUR_RANGE'
+}
