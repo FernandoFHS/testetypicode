@@ -1,3 +1,7 @@
+import { PlansComponent } from './../pages/plans/plans.component';
+import { EditAgreementComponent } from './../pages/agreement-area/edit-agreement/edit-agreement.component';
+import { AddAgreementComponent } from './../pages/agreement-area/add-agreement/add-agreement.component';
+import { AgreementAreaComponent } from './../pages/agreement-area/agreement-area.component';
 import { Routes } from '@angular/router';
 import { ContainerComponent } from '../@core/components/container/container.component';
 import { ThemesComponent } from '../@core/components/themes/themes.component';
@@ -14,12 +18,13 @@ import { CompanyListComponent } from '../pages/company-list/company-list.compone
 import { AddCompanyComponent } from '../pages/add-company/add-company.component';
 import { EditCompanyComponent } from '../pages/edit-company/edit-company.component';
 import { AddPartnerComponent } from '../pages/add-partner/add-partner.component';
-import { PlansComponent } from '../pages/plans/plans.component';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 import { RulesComponent } from '../pages/rules/rules.component';
 import { ListRulesComponent } from '../pages/rules/list-rules/list-rules.component';
 import { AddRuleComponent } from '../pages/rules/add-rule/add-rule.component';
 import { EditRuleComponent } from '../pages/rules/edit-rule/edit-rule.component';
+import { AgreementListComponent } from '../pages/agreement-area/agreement-list/agreement-list.component';
+import { ContainerGuard } from '../@core/components/container/container.guard';
 
 export const routes: Routes = [
   {
@@ -121,6 +126,29 @@ export const routes: Routes = [
       {
         path: 'edit-partner/:index',
         component: EditPartnerComponent,
+      },
+      {
+        path: 'agreements',
+        component: AgreementAreaComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'list',
+            pathMatch: 'full'
+          },
+          {
+            path: 'list',
+            component: AgreementListComponent
+          },
+          {
+            path: 'add',
+            component: AddAgreementComponent
+          },
+          {
+            path: 'edit/:index',
+            component: EditAgreementComponent
+          }
+        ]
       },
       {
         path: 'plans',

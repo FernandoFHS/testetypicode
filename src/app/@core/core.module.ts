@@ -18,7 +18,7 @@ import { DataTableComponent } from './components/data-table/data-table.component
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { InputHelperComponent } from './components/input-helper/input-helper.component';
 import { InputHelperDirective } from './directives/input-helper.directive';
-import { SimpleDataTableComponent } from './components/simple-data-table/simple-data-table.component';
+// import { SimpleDataTableComponent } from './components/simple-data-table/simple-data-table.component';
 import { SaveButtonComponent } from './components/save-button/save-button.component';
 import { BackButtonComponent } from './components/back-button/back-button.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
@@ -41,7 +41,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     DataTableComponent,
     BreadcrumbComponent,
     InputHelperComponent,
-    SimpleDataTableComponent,
+    // SimpleDataTableComponent,
     SaveButtonComponent,
     BackButtonComponent,
     ConfirmDialogComponent,
@@ -66,7 +66,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     DataTableComponent,
     BreadcrumbComponent,
     InputHelperComponent,
-    SimpleDataTableComponent,
+    // SimpleDataTableComponent,
     SaveButtonComponent,
     BackButtonComponent,
 

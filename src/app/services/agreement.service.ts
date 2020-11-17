@@ -7,7 +7,8 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AgreementService {
-  private readonly url = `${environment.baseUrl}agreement`;
+  //private readonly url = `${environment.baseUrl}agreement`;
+  private readonly url = `${environment.baseUrlPlans}agreement`;
 
   constructor(private http: HttpClient) { }
 

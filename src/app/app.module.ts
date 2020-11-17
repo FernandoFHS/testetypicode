@@ -1,3 +1,4 @@
+import { PlansComponent } from './pages/plans/plans.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -28,9 +29,12 @@ import { DeletePhoneComponent } from './pages/dialogs/delete-phone/delete-phone.
 import { DeletePartnerComponent } from './pages/dialogs/delete-partner/delete-partner.component';
 import { EditPhoneComponent } from './pages/dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component';
-import { PlansComponent } from './pages/plans/plans.component';
-import { DeleteTaxComponent } from './pages/plans/delete-tax/delete-tax.component';
 import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
+import { DeleteTaxComponent } from './pages/agreement-area/delete-tax/delete-tax.component';
+import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
+import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
+import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
+import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { RulesComponent } from './pages/rules/rules.component';
@@ -80,11 +84,16 @@ export const customCurrencyMaskConfig = {
     DeletePartnerComponent,
     EditPhoneComponent,
     AddPhoneComponent,
-    PlansComponent,
+    AgreementAreaComponent,
     DeleteTaxComponent,
     EditPartnerComponent,
     ListRulesComponent,
-    EditRuleComponent,    
+    AgreementListComponent,
+    EditAgreementComponent,
+    AddAgreementComponent,
+    PlansComponent,
+    DeleteTaxComponent,
+    EditRuleComponent,
   ],
   imports: [
     BrowserModule,
@@ -94,11 +103,8 @@ export const customCurrencyMaskConfig = {
     FlexLayoutModule,
     FormsModule,
     NgxMaskModule.forRoot(),
-
     CoreModule,
-
     NgxSpinnerModule,
-
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
   ],
   providers: [],

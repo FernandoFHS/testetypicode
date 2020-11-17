@@ -1,4 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { RootObject } from './../@core/models/Company';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { Observable, Subject } from 'rxjs';
@@ -34,6 +35,9 @@ export class CompanyService {
       `${this.API_URL}company/filters?companyName=${name}&page=${page}&size=${size}`;
 
     return this.httpClient.get<CompanyContent[]>(requestUrl);
+  }
+  getAll(): Observable<RootObject> {  
+    return this.httpClient.get<RootObject>(`${this.API_URL}company`);
   }
 
   getAllCompaniesByFilter(filter: { idCompany: number, documentNumberCompany: number, companyName: string }, sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {

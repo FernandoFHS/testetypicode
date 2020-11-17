@@ -1,0 +1,36 @@
+<core-data-table 
+  [headers]="headers" 
+  [actions]="actions" 
+  (addEvent)="onAdd($event)" 
+  (deleteEvent)="onDelete($event)"
+  (editEvent)="onEdit($event)" 
+  [loadFunc]="loadData" 
+  [idItems]="'id'"
+  >
+</core-data-table>
+<!-- <div class="actions-plans">
+  <button mat-flat-button color="accent">
+    Adicionar plano
+  </button>  
+</div>
+
+<mat-expansion-panel class="m-b-25" [expanded]="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Plano 1
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>
+      Descrição
+    </mat-label>
+    <mat-icon matSuffix
+      [color]="form.get('description').hasError('required') && form.get('description').touched ? 'warn' : 'primary'">
+      title
+    </mat-icon>
+    <input matInput formControlName="description">
+    <mat-error *ngIf="form.get('description').hasError('required')">
+      Obrigatório
+    </mat-error>
+  </mat-form-field>
+</mat-expansion-panel> -->

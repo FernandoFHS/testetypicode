@@ -1,0 +1,45 @@
+<div>
+  <core-breadcrumb [model]="breadcrumb_model"></core-breadcrumb>
+  <div class="m-b-25">
+    <label class="mat-display-1 page-title">
+      Inserir acordo 
+    </label>
+  </div>
+  <mat-expansion-panel class="m-b-25" [expanded]="true">
+
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Detalhes e Condições
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <form name="form" [formGroup]="form" novalidate *ngIf="form" class="m-b-15" autocomplete="off">
+
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>
+          Descrição
+        </mat-label>
+        <mat-icon matSuffix
+          [color]="form.get('description').hasError('required') && form.get('description').touched ? 'warn' : 'primary'">
+          title
+        </mat-icon>
+        <input matInput formControlName="description">
+        <mat-error *ngIf="form.get('description').hasError('required')">
+          Obrigatório
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Empresa</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let company of companys" [value]="company.idCompany">
+            Cod. {{company.idCompany}} - {{company.companyName}} 
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <app-plan-list></app-plan-list>
+
+
+    </form>
+  </mat-expansion-panel>
+</div>
