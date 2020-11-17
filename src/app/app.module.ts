@@ -32,21 +32,18 @@ import { DeletePartnerComponent } from './pages/dialogs/delete-partner/delete-pa
 import { EditPhoneComponent } from './pages/dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component';
 import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
-import { SimpleDataTableComponent } from 'src/app/@core/components/container/simple-data-table/simple-data-table.component';
 
 import { DeleteTaxComponent } from './pages/agreement-area/delete-tax/delete-tax.component';
 import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
 import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
 import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
 import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
-
 import {MatSelectModule} from '@angular/material/select';
-
-
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ListRuleComponent } from './pages/rule-area/list-rule/list-rule.component';
 import { EditRuleComponent } from './pages/rule-area/edit-rule/edit-rule.component';
+import { SimpleDataTableComponent } from './@core/components/simple-data-table/simple-data-table.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -98,8 +95,7 @@ export const customCurrencyMaskConfig = {
     EditAgreementComponent,
     AddAgreementComponent,
     PlansComponent,
-    DeleteTaxComponent
-
+    DeleteTaxComponent,
     ListRuleComponent,
     EditRuleComponent,    
   ],
@@ -111,11 +107,8 @@ export const customCurrencyMaskConfig = {
     FlexLayoutModule,
     FormsModule,
     NgxMaskModule.forRoot(),
-
     CoreModule,
-
     NgxSpinnerModule,
-
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
   ],
   providers: [],
