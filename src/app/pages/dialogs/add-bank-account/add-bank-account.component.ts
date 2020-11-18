@@ -44,7 +44,9 @@ export class AddBankAccountComponent implements OnInit {
         agencyDigit: [''],
         account: ['', Validators.required],
         digit: [''],
-        accountDigit: ['']
+        accountDigit: [''],
+        idBank:[''],
+        masterAccount: false,
       })
 
       this.getAllBanks();
@@ -99,6 +101,11 @@ export class AddBankAccountComponent implements OnInit {
   }
 
   saveAccount(form){
+    let idBank = {
+    idBank : form.value.bank.idBank,
+    };
+    this.accountFormGroup.patchValue(idBank);
+    
     let bankAccountArray = this.localStorageService.get('bankAccount');
     if(!bankAccountArray){
       bankAccountArray= [];

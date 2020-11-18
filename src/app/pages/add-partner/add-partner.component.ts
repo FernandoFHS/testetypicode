@@ -14,11 +14,12 @@ import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 })
 export class AddPartnerComponent implements OnInit {
 
-  cep: number;
   teste;
   partnerArray: any[];
 
   partnerFormGroup: FormGroup;
+
+  street: FormGroup;
 
   breadcrumbModel: BreadcrumbModel = {
     active: {
@@ -44,18 +45,39 @@ export class AddPartnerComponent implements OnInit {
   ngOnInit(): void {
     this.partnerFormGroup = this._formBuilder.group({
       partnerSequentialNumber: [{ value: '', disabled: true }, Validators.required],
-      name: ['', Validators.required],
+      partnerName: ['', Validators.required],
       cpf: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
-      cep: ['', Validators.required],
-      street: ['', Validators.required],
-      number: ['', Validators.required],
-      complement: [''],
-      neighborhood: ['', Validators.required],
-      county: ['', Validators.required],
-      state: ['', Validators.required],
-      contact: ['', Validators.required]
+      // cep: ['', Validators.required],
+      // street: ['', Validators.required],
+      // number: ['', Validators.required],
+      // complement: [''],
+      // neighborhood: ['', Validators.required],
+      // county: ['', Validators.required],
+      // state: ['', Validators.required],
+
+      partnerAddress: this._formBuilder.array([
+          this._formBuilder.group({
+            number:[''],
+            complement: [''],
+
+            // this._formBuilder.group({
+            //   streetName:[''],
+            //   zipCode:[''],
+            // })
+      
+
+
+          }),   
+      ]),
+
+      partnerContact: this._formBuilder.array([
+        this._formBuilder.group({
+          phone:[''],
+        })
+      ]),
     });
+    
   }
 
   formControl = new FormControl('', [
@@ -76,9 +98,7 @@ export class AddPartnerComponent implements OnInit {
   }
 
   getAdressByCep(value) {
-    this.cep = value;
-    console.log(this.cep);
-    this.CepService.getCep(this.cep).subscribe((response: any) => {
+    this.CepService.getCep(value).subscribe((response: any) => {
       console.log(response);
 
       let obj = {

@@ -69,10 +69,11 @@ export class AddCompanyComponent implements OnInit {
   adressFormGroup: FormGroup;
   conditionFormGroup: FormGroup;
   complementFormGroup: FormGroup;
-  partnerFormGroup: FormGroup;
 
+  partnerFormGroup: FormGroup;
   contactFormGroup: FormGroup;
   bankingFormGroup: FormGroup;
+  companyPartnerFormGroup: FormGroup;
 
   testeform: FormArray;
   isChecked = false;
@@ -227,26 +228,35 @@ export class AddCompanyComponent implements OnInit {
       seRegistrationDate: [this.complement?.seRegistrationDate || ''],
       discreditationDate: [this.complement?.discreditationDate || '']
     });
-    this.partnerFormGroup = this._formBuilder.group({
-      partnerSequentialNumber: [{ value: '', disabled: true }, Validators.required],
-      name: ['', Validators.required],
-      cpf: ['', Validators.required],
-      dateOfBirth: ['', Validators.required],
-      cep: ['', Validators.required],
-      street: ['', Validators.required],
-      number: ['', Validators.required],
-      complement: [''],
-      neighborhood: ['', Validators.required],
-      county: ['', Validators.required],
-      state: ['', Validators.required],
-      contact: ['', Validators.required]
+
+    this.companyPartnerFormGroup = this._formBuilder.group({
+
+      companyPartner: this._formBuilder.array(this.partnerSource$),
+
+      // this.partnerFormGroup = this._formBuilder.array({
+
+      //   name: ['', Validators.required],
+      //   cpf: ['', Validators.required],
+      //   dateOfBirth: ['', Validators.required],
+      //   cep: ['', Validators.required],
+      //   street: ['', Validators.required],
+      //   number: ['', Validators.required],
+      //   complement: [''],
+      //   neighborhood: ['', Validators.required],
+      //   county: ['', Validators.required],
+      //   state: ['', Validators.required],
+      //   contact: ['', Validators.required]
+      // })
+
     });
 
     this.contactFormGroup = this._formBuilder.group({
       companyContact: this._formBuilder.array(this.phoneNumber$),
     });
 
-
+    this.bankingFormGroup = this._formBuilder.group({
+      externalBankAccount: this._formBuilder.array(this.bankAccount$),
+    });
 
 
     this.dataService.refreshTable().subscribe(() => {
@@ -309,7 +319,9 @@ export class AddCompanyComponent implements OnInit {
       this.adressFormGroup.value,
       this.conditionFormGroup.value,
       this.complementFormGroup.value,
-      this.contactFormGroup.value);
+      this.companyPartnerFormGroup.value,
+      this.contactFormGroup.value,
+      this.bankingFormGroup.value);
     console.log(formcompleto);
 
     this.companyService.create(formcompleto).subscribe((response: any) => {
@@ -369,7 +381,7 @@ export class AddCompanyComponent implements OnInit {
 
   headersPartnerTable: HeaderModel[] = [
     { text: 'Número Sequência', value: 'partnerSequentialNumber' },
-    { text: 'Nome', value: 'name' },
+    { text: 'Nome', value: 'partnerName' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
     { text: 'Telefone', value: 'contact' },
