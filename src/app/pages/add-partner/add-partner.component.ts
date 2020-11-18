@@ -48,28 +48,28 @@ export class AddPartnerComponent implements OnInit {
       partnerName: ['', Validators.required],
       cpf: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
-      // cep: ['', Validators.required],
-      // street: ['', Validators.required],
-      // number: ['', Validators.required],
-      // complement: [''],
-      // neighborhood: ['', Validators.required],
-      // county: ['', Validators.required],
-      // state: ['', Validators.required],
+      cep: ['', Validators.required],
+      street: ['', Validators.required],
+      number: ['', Validators.required],
+      complement: [''],
+      neighborhood: ['', Validators.required],
+      county: ['', Validators.required],
+      state: ['', Validators.required],
 
-      partnerAddress: this._formBuilder.array([
-          this._formBuilder.group({
-            number:[''],
-            complement: [''],
+      // partnerAddress: this._formBuilder.array([
+      //     this._formBuilder.group({
+      //       number:[''],
+      //       complement: [''],
 
-            // this._formBuilder.group({
-            //   streetName:[''],
-            //   zipCode:[''],
-            // })
+      //       // this._formBuilder.group({
+      //       //   streetName:[''],
+      //       //   zipCode:[''],
+      //       // })
       
 
 
-          }),   
-      ]),
+      //     }),   
+      // ]),
 
       partnerContact: this._formBuilder.array([
         this._formBuilder.group({

@@ -84,16 +84,12 @@
           <mat-divider></mat-divider>
           <h3>Endereço</h3>
 
-
-          <div formArrayName="partnerAddress">
-            <div formGroupName="street">
-
           <div class="line-form">
             <div class="short-line-form">
               <mat-form-field appearance="outline">
                 <mat-label>CEP</mat-label>
-                <input matInput placeholder="CEP"  #cep (blur)="getAdressByCep(cep.value)"
-                  mask="00000-000" required [showMaskTyped]="true" />
+                <input matInput placeholder="CEP" formControlName="cep" #cep (blur)="getAdressByCep(cep.value)" mask="00000-000" required
+                  [showMaskTyped]="true" />
                 <mat-icon matSuffix>place</mat-icon>
                 <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               </mat-form-field>
@@ -104,31 +100,30 @@
           <div class="line-form">
             <mat-form-field appearance="outline">
               <mat-label>Logradouro</mat-label>
-              <input matInput placeholder="Logradouro"  required />
+              <input matInput placeholder="Logradouro"formControlName="street" required />
               <mat-icon matSuffix>add_road</mat-icon>
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             </mat-form-field>
 
           </div>
 
-          
-            <div class="short-line-form">
-              <mat-form-field appearance="outline">
-                <mat-label>Número</mat-label>
-                <input matInput placeholder="Número" formControlName="number" required />
-                <mat-icon matSuffix>looks_one</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-              </mat-form-field>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Complemento</mat-label>
-                <input matInput placeholder="Complemento" formControlName="complement" />
-                <mat-icon matSuffix>note_add</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-              </mat-form-field>
-            </div>
+          <div class="short-line-form">
+            <mat-form-field appearance="outline">
+              <mat-label>Número</mat-label>
+              <input matInput placeholder="Número" formControlName="number" required />
+              <mat-icon matSuffix>looks_one</mat-icon>
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
 
+            <mat-form-field appearance="outline">
+              <mat-label>Complemento</mat-label>
+              <input matInput placeholder="Complemento" formControlName="complement" />
+              <mat-icon matSuffix>note_add</mat-icon>
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
           </div>
+
 
           <div class="line-form">
             <mat-form-field appearance="outline">
@@ -155,8 +150,6 @@
             </div>
           </div>
 
-
-
           <mat-divider></mat-divider>
           <h3>Contato</h3>
 
@@ -173,10 +166,7 @@
                 </mat-form-field>
               </div>
             </div>
-
           </div>
-
-
         </form>
       </mat-card-content>
     </mat-card>
