@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MonitoringRuleModel } from '../models/monitoring-rule.model';
+import { MonitoringRuleChangeStatusRequestModel } from '../models/requests/monitoring-rule-change-status.request.model';
+import { MonitoringRuleUpdateRequestModel } from '../models/requests/monitoring-rule-update.request.model';
 import { MonitoringRuleRequestModel } from '../models/requests/monitoring-rule.request.model';
 import { MonitoringRuleVariableResponseModel } from '../models/response/monitoring-rule-variable.response.model';
 import { MonitoringRuleResponseModel } from '../models/response/monitoring-rule.response.model';
@@ -116,6 +118,42 @@ export class MonitoringRuleService {
           resolve(response);
         }, (error) => {
           console.log('-- Erro  na chamada monitoring-rule.service.ts função add');
+          console.log(error);
+          reject(error);
+        });
+      }
+      catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  }
+
+  changeStatus(request: MonitoringRuleChangeStatusRequestModel): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        this._http.put(`${environment.api.url}/monitoring-rule/status`, request).subscribe((response) => {
+          resolve();
+        }, (error) => {
+          console.log('-- Erro  na chamada monitoring-rule.service.ts função changeStatus');
+          console.log(error);
+          reject(error);
+        });
+      }
+      catch (error) {
+        console.log(error);
+        reject(error);
+      }
+    });
+  }
+
+  update(request: MonitoringRuleUpdateRequestModel): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        this._http.put(`${environment.api.url}/monitoring-rule`, request).subscribe((response) => {
+          resolve();
+        }, (error) => {
+          console.log('-- Erro  na chamada monitoring-rule.service.ts função update');
           console.log(error);
           reject(error);
         });
