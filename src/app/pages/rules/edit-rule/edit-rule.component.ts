@@ -70,10 +70,6 @@ export class EditRuleComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
 
-    this._generalService.openOkDialog('Teste tsestestetsteste', () => {
-      console.log('clicou em OK');
-    }, 'XD');
-
     await this._loadParams();
     await this._loadVariables();
     await this._loadModel();
