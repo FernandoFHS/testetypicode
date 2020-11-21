@@ -96,7 +96,7 @@
 
           <mat-chip-list #emailList>
             <mat-chip *ngFor="let email of emails; let i = index" (removed)="removeEmail(i)"
-              [color]="i % 2 == 0 ? 'primary' : 'accent'" selected>
+              [color]="i % 2 == 0 ? 'primary' : 'primary'" selected>
               {{email}}
               <mat-icon matChipRemove>
                 cancel
@@ -140,7 +140,7 @@
         <div *ngFor="let item of form.get('conditions').controls; let i = index; let last = last; let count = count"
           [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="2% grid">
 
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="45%">
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="25%" fxFlex.sm="75%" fxFlex.xs="50%">
             <mat-label>
               Variável
             </mat-label>
@@ -156,7 +156,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%">
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%" fxFlex.sm="25%" fxFlex.xs="50%">
             <mat-label>
               Op. Comparação
             </mat-label>
@@ -173,25 +173,50 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%">
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="40%" fxFlex.sm="75%" fxFlex.xs="100%">
             <mat-label>
               Valor
             </mat-label>
 
+            <input matInput id="condition-value-{{i}}" *ngIf="!selectedVariables[i]" formControlName="value" />
+
             <input matInput currencyMask id="condition-value-{{i}}"
               *ngIf="selectedVariables[i]?.data_type == 'Monetary'" formControlName="value" />
 
-            <input matInput id="condition-value-{{i}}" *ngIf="!selectedVariables[i]" formControlName="value" />
+            <mat-chip-list #valueList *ngIf="selectedVariables[i]?.data_type == 'ListOfValue'" [disabled]="disableValueInput(i)">
+              <mat-chip
+                *ngFor="let selected_option of selectedVariables[i].selected_options_condition_type_list; let i2 = index"
+                (removed)="removeOptionConditionTypeList(i, i2)" color="primary" selected>
+                {{selected_option.description}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
 
-            <input matInput type="number" id="condition-value-{{i}}"
-              *ngIf="selectedVariables[i]?.data_type == 'ListOfValue'" formControlName="value" />
+              <input formControlName="value" [matAutocomplete]="auto" [matChipInputFor]="valueList"
+                [matChipInputSeparatorKeyCodes]="[]" (matChipInputTokenEnd)="addValue($event)"
+                id="condition-value-{{i}}" (keyup)="onKeyupValue($event, i)">
+            </mat-chip-list>
 
-            <mat-error *ngIf="form.get('conditions').controls[i].get('value').hasError('required')">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectConditionTypeList($event, i)">
+              <mat-option *ngIf="selectedVariables[i]?.is_loading_data" [disabled]="true">
+                Carregando opções...
+              </mat-option>
+              <mat-option
+                *ngIf="!selectedVariables[i]?.is_loading_data && selectedVariables[i]?.filtered_options_condition_type_list?.length == 0"
+                [disabled]="true">
+                Nenhuma opção encontrada
+              </mat-option>
+              <mat-option *ngFor="let option of selectedVariables[i]?.filtered_options_condition_type_list"
+                [value]="option">
+                {{option.description}}
+              </mat-option>
+            </mat-autocomplete>
+
+            <!-- <mat-error *ngIf="form.get('conditions').controls[i].get('value').hasError('required')">
               Obrigatório
-            </mat-error>
+            </mat-error> -->
           </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="15%"
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="15%" fxFlex.sm="25%" fxFlex.xs="50%"
             *ngIf="last == false && count > 1">
             <mat-label>
               Operador Lógico
@@ -203,6 +228,10 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+
+          <div fxFlex="100%" *ngIf="last == false && count > 1">
+            <mat-divider class="m-b-25"></mat-divider>
+          </div>
 
         </div>
 

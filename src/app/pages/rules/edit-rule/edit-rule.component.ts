@@ -9,7 +9,9 @@ import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { RuleTypeEnum } from 'src/app/enums/rule-type.enum';
 import { VariableDataTypeEnum } from 'src/app/enums/variable-data-type.enum';
 import { MonitoringRuleModel } from 'src/app/models/monitoring-rule.model';
+import { MonitoringRuleChangeStatusRequestModel } from 'src/app/models/requests/monitoring-rule-change-status.request.model';
 import { MonitoringRuleConditionRequestModel } from 'src/app/models/requests/monitoring-rule-condition.request.model';
+import { MonitoringRuleUpdateRequestModel } from 'src/app/models/requests/monitoring-rule-update.request.model';
 import { MonitoringRuleRequestModel } from 'src/app/models/requests/monitoring-rule.request.model';
 import { MonitoringRuleConditionResponseModel } from 'src/app/models/response/monitoring-rule-condition.response.model';
 import { MonitoringRuleVariableResponseModel } from 'src/app/models/response/monitoring-rule-variable.response.model';
@@ -200,12 +202,38 @@ export class EditRuleComponent implements OnInit {
     }
   }
 
+  update(): void {
+    this.form.markAllAsTouched();
+
+    if (this.form.valid) {
+      this._spinnerService.show();
+
+      const form = this.form.getRawValue();
+
+      const request: MonitoringRuleUpdateRequestModel = {
+        description: form.description,
+        email_notification_mode: form.email_notification_mode,
+        id: this.id
+      };
+
+      this._monitoringRuleService.update(request).then(() => {
+        this.back();
+        this._notificationService.success('Regra atualizada com sucesso.')
+      }, (error) => {
+        this._notificationService.error('Erro ao atualizar regra, tente novamente.');
+      }).finally(() => {
+        this._spinnerService.hide();
+      });
+    }
+    else {
+      this._notificationService.error('Formulário inválido.');
+    }
+  }
+
   save(): void {
     this.form.markAllAsTouched();
 
     this.form.get('email').setValue('');
-
-    console.log(this.form);
 
     if (this.form.valid) {
       this._spinnerService.show();
@@ -250,7 +278,7 @@ export class EditRuleComponent implements OnInit {
       }
 
       this._monitoringRuleService.add(request).then((response) => {
-        this._notificationService.success('Regra editada com sucesso!');
+        this._notificationService.success('Regra editada com sucesso.');
         this._router.navigate(['rules/list']);
       }, (error) => {
         this._notificationService.error('Erro ao editar Regra, tente novamente.');
@@ -295,12 +323,47 @@ export class EditRuleComponent implements OnInit {
     const message = 'Após a ativação da regra não será possível alterar as informações de geração de alertas como a criticidade, variáveis e bloqueio operacional. Tem certeza que deseja continuar?';
 
     this._generalService.openConfirmDialog(message, () => {
-      console.log('Ativar');
+      this._spinnerService.show();
+
+      const request: MonitoringRuleChangeStatusRequestModel = {
+        active: true,
+        id: this.id
+      };
+
+      this._monitoringRuleService.changeStatus(request).then(() => {
+        this._router.navigate(['rules']);
+        this._notificationService.success('Regra ativada com sucesso.');
+      }, (error) => {
+        this.back();
+        this._notificationService.error('Erro ao ativar regra, tente novamente.');
+      }).finally(() => {
+        this._spinnerService.hide();
+      });
     }, () => {
     }, 'Ativar Regra');
   }
 
   inactive(): void {
+    const message = 'Tem certeza que deseja continuar?';
 
+    this._generalService.openConfirmDialog(message, () => {
+      this._spinnerService.show();
+
+      const request: MonitoringRuleChangeStatusRequestModel = {
+        active: false,
+        id: this.id
+      };
+
+      this._monitoringRuleService.changeStatus(request).then(() => {
+        this._router.navigate(['rules']);
+        this._notificationService.success('Regra inativada com sucesso.');
+      }, (error) => {
+        this.back();
+        this._notificationService.error('Erro ao inativar regra, tente novamente.');
+      }).finally(() => {
+        this._spinnerService.hide();
+      });
+    }, () => {
+    }, 'Inativar Regra');
   }
 }

@@ -4,7 +4,11 @@ export const environment = {
   baseUrlPlans: 'http://register-plans.qa.appmobbuy.tech:8080/',
   production: false,
   api: {
-    url: 'https://mobbuy-monitoring.azurewebsites.net',
-    mock: false
+    url: 'http://localhost:8080',
+    mock: true
+  },
+  bff: {
+    url: 'http://company.qa.appmobbuy.tech:8080',
+    url_2: 'http://register-plans.qa.appmobbuy.tech:8080'
   }
 };

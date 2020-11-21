@@ -31,4 +31,20 @@ export class GeneralService {
       }
     });
   }
+
+  openOkDialog(message: string, okCallback: Function, title: string = null): void {
+    const confirmDialog = this._matDialog.open(ConfirmDialogComponent, {
+      disableClose: true
+    });
+
+    confirmDialog.componentInstance.title = title;
+    confirmDialog.componentInstance.confirmMessage = message;
+    confirmDialog.componentInstance.disableClose = true;
+
+    confirmDialog.componentInstance.btnMessage = 'OK';
+
+    confirmDialog.afterClosed().subscribe(result => {
+      okCallback();
+    });
+  }
 }
