@@ -27,12 +27,9 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    margin-right: 7%;
 }
 
-button {
-    padding: 5px;
-    width: 45%;
-}
 
 @media (max-width: 360px){
     .container{

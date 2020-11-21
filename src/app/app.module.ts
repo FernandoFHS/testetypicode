@@ -27,20 +27,20 @@ import { EditBankAccountComponent } from './pages/dialogs/edit-bank-account/edit
 import { DeleteBankAccountComponent } from './pages/dialogs/delete-bank-account/delete-bank-account.component';
 import { DeletePhoneComponent } from './pages/dialogs/delete-phone/delete-phone.component';
 import { DeletePartnerComponent } from './pages/dialogs/delete-partner/delete-partner.component';
-import { EditPhoneComponent } from './pages/dialogs/edit-phone/edit-phone.component';
-import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component';
-import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
-import { DeleteTaxComponent } from './pages/agreement-area/delete-tax/delete-tax.component';
-import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
-import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
-import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
-import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { RulesComponent } from './pages/rules/rules.component';
 import { AddRuleComponent } from './pages/rules/add-rule/add-rule.component';
 import { EditRuleComponent } from './pages/rules/edit-rule/edit-rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
+import { EditPhoneComponent } from './pages/dialogs/edit-phone/edit-phone.component';
+import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component';
+import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
+import { DeleteTaxComponent } from './pages/plans/delete-tax/delete-tax.component';
+import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
+import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
+import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
+import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 

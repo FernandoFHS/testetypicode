@@ -54,6 +54,9 @@ export class AddProfileComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  back(): void {
+    this.router.navigate(['/profile-list/user']);
+  }
 
   getErrorMessage() {
     return this.formControl.hasError('required')

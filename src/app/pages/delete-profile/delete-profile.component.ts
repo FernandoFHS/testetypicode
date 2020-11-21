@@ -31,7 +31,7 @@ export class DeleteProfileComponent implements OnInit {
     });
   }
 
-  confirmDelete(): void {
+  deleteProfile(): void {
     this.dataService.delete(this.profile.idProfile).subscribe(() => {
       this.dataService.openSnackBar('Usuário deletado com sucesso', 'X');
       this.dialogRef.close();
