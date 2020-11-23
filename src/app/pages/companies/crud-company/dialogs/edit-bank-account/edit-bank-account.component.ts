@@ -1,6 +1,6 @@
-import { BankService } from './../../../services/company/bank.service';
+import { BankService } from './../../../../../services/company/bank.service';
 import { take, startWith, map } from 'rxjs/operators';
-import { Bank } from './../../../models/company/Bank';
+import { Bank } from './../../../../../models/company/Bank';
 import { Observable, of } from 'rxjs';
 import { Component, Inject, OnInit } from '@angular/core';
 import {

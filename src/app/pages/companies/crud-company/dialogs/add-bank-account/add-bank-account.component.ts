@@ -1,13 +1,13 @@
 import { startWith, map, take } from 'rxjs/operators';
-import { BankService } from './../../../services/company/bank.service';
+import { BankService } from './../../../../../services/company/bank.service';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DataService } from 'src/app/services/data.service';
-import { LocalStorageService } from './../../../services/local-storage.service';
-import { Bank } from '../../../models/company/Bank';
+import { LocalStorageService } from './../../../../../services/local-storage.service';
+import { Bank } from '../../../../../models/company/Bank';
 
 @Component({
   selector: 'app-add-bank-account',

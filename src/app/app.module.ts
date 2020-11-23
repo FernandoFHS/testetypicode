@@ -10,37 +10,37 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { CoreModule } from './@core/core.module';
 import { UserComponent } from './pages/user/user.component';
-import { CompanyComponent } from './pages/company/company.component';
+import { CompanyComponent } from './pages/companies/company.component';
 import { PasswordTransactionComponent } from './pages/password-transaction/password-transaction.component';
 import { AddProfileComponent } from './pages/add-profile/add-profile.component';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
 import { ProfileListComponent } from './pages/profile-list/profile-list.component';
 import { FormsModule } from '@angular/forms';
 import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
-import { CompanyListComponent } from './pages/company-list/company-list.component';
-import { AddCompanyComponent } from './pages/add-company/add-company.component';
-import { EditCompanyComponent } from './pages/edit-company/edit-company.component';
-import { AddPartnerComponent } from './pages/add-partner/add-partner.component';
+import { CompanyListComponent } from './pages/companies/list/list-company.component';
+import { AddCompanyComponent } from './pages/companies/crud-company/add-company.component';
+import { AddPartnerComponent } from './pages/companies/partners/add/add-partner.component';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
-import { AddBankAccountComponent } from './pages/dialogs/add-bank-account/add-bank-account.component';
-import { EditBankAccountComponent } from './pages/dialogs/edit-bank-account/edit-bank-account.component';
-import { DeleteBankAccountComponent } from './pages/dialogs/delete-bank-account/delete-bank-account.component';
-import { DeletePhoneComponent } from './pages/dialogs/delete-phone/delete-phone.component';
-import { DeletePartnerComponent } from './pages/dialogs/delete-partner/delete-partner.component';
+import { AddBankAccountComponent } from './pages/companies/crud-company/dialogs/add-bank-account/add-bank-account.component';
+import { EditBankAccountComponent } from './pages/companies/crud-company/dialogs/edit-bank-account/edit-bank-account.component';
+import { DeleteBankAccountComponent } from './pages/companies/crud-company/dialogs/delete-bank-account/delete-bank-account.component';
+import { DeletePhoneComponent } from './pages/companies/crud-company/dialogs/delete-phone/delete-phone.component';
+import { DeletePartnerComponent } from './pages/companies/crud-company/dialogs/delete-partner/delete-partner.component';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { RulesComponent } from './pages/rules/rules.component';
 import { AddRuleComponent } from './pages/rules/add-rule/add-rule.component';
 import { EditRuleComponent } from './pages/rules/edit-rule/edit-rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
-import { EditPhoneComponent } from './pages/dialogs/edit-phone/edit-phone.component';
-import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component';
+import { EditPhoneComponent } from './pages/companies/crud-company/dialogs/edit-phone/edit-phone.component';
+import { AddPhoneComponent } from './pages/companies/crud-company/dialogs/add-phone/add-phone.component';
 import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
 import { DeleteTaxComponent } from './pages/plans/delete-tax/delete-tax.component';
 import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
 import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
 import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
 import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
+import { CdkStepper } from '@angular/cdk/stepper';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -75,7 +75,6 @@ export const customCurrencyMaskConfig = {
     DeleteProfileComponent,
     CompanyListComponent,
     AddCompanyComponent,
-    EditCompanyComponent,
     AddPartnerComponent,
     AddBankAccountComponent,
     EditBankAccountComponent,
@@ -107,7 +106,7 @@ export const customCurrencyMaskConfig = {
     NgxSpinnerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
   ],
-  providers: [],
+  providers: [CdkStepper],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

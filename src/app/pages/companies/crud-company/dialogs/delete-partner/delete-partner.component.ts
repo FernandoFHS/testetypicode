@@ -1,7 +1,7 @@
 import { Component, OnInit,Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormControl, Validators} from '@angular/forms';
-import { LocalStorageService } from './../../../services/local-storage.service';
+import { LocalStorageService } from './../../../../../services/local-storage.service';
 
 @Component({
   selector: 'app-delete-partner',

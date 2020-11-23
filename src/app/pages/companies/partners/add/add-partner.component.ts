@@ -1,45 +1,63 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
+import { DataService } from 'src/app/services/data.service';
 import { CepService } from 'src/app/services/cep.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 
 @Component({
-  selector: 'app-edit-partner',
-  templateUrl: './edit-partner.component.html',
-  styleUrls: ['./edit-partner.component.scss']
+  selector: 'app-add-partner',
+  templateUrl: './add-partner.component.html',
+  styleUrls: ['./add-partner.component.scss'],
 })
-export class EditPartnerComponent implements OnInit {
+export class AddPartnerComponent implements OnInit {
+
+  cep: number;
+  teste;
+  partnerArray: any[];
+
+  partnerSource: any = this.localStorageService.get('partnerFormGroup');
+  response;
+  partner: any;
+  index: any;
+  addPage: boolean;
 
   partnerFormGroup: FormGroup;
 
-  partnerSource: any = this.localStorageService.get('partnerFormGroup');
-  cep: number;
-  response;
-  partnerArray: any;
-  partner: any;
-  index: any;
-
-  breadcrumbModel: BreadcrumbModel = {
+  addBreadcrumbModel: BreadcrumbModel = {
     active: {
-      title: 'Editar Sócio',
-      route: 'add-partner'
+      title: 'Incluir Sócio',
+      route: 'add'
     },
     items: [
       { title: 'Home', route: '' },
       { title: 'Lista de Estabelecimentos', route: 'company-list' },
-      { title: 'Incluir Estabelecimento', route: 'company-list/add-company' },
+      { title: 'Incluir Estabelecimento', route: 'companies/add' },
+    ]
+  };
+
+  editBreadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Editar Sócio',
+      route: 'edit'
+    },
+    items: [
+      { title: 'Home', route: '' },
+      { title: 'Lista de Estabelecimentos', route: 'list' },
+      { title: 'Incluir Estabelecimento', route: 'companies/add' },
     ]
   };
 
   constructor(
-
     private _formBuilder: FormBuilder,
+    public dataService: DataService,
     private CepService: CepService,
     private router: Router,
+    public _snackBar: MatSnackBar,
     private localStorageService: LocalStorageService,
-    private activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -59,7 +77,28 @@ export class EditPartnerComponent implements OnInit {
         contact: [this.partner?.contact || '', Validators.required]
       });
     });
-    console.log(this.index);
+
+    if (!this.index) {
+      this.addPage = true;
+
+      this.partnerFormGroup = this._formBuilder.group({
+        sequenceNumber: [{ value: '', disabled: true }, Validators.required],
+        name: ['', Validators.required],
+        cpf: ['', Validators.required],
+        dateOfBirth: ['', Validators.required],
+        cep: ['', Validators.required],
+        street: ['', Validators.required],
+        number: ['', Validators.required],
+        complement: [''],
+        neighborhood: ['', Validators.required],
+        county: ['', Validators.required],
+        state: ['', Validators.required],
+        contact: ['', Validators.required]
+      });
+    } else {
+      this.addPage = false;
+    }
+    
   }
 
   formControl = new FormControl('', [
@@ -67,13 +106,16 @@ export class EditPartnerComponent implements OnInit {
     // Validators.email,
   ]);
 
-  getErrorMessage(controlName: string) {
-    const control = this.partnerFormGroup.get(controlName);
-    return control.hasError('required')
+  getErrorMessage() {
+    return this.formControl.hasError('required')
       ? 'Campo Obrigatório'
-      : control.hasError('email')
+      : this.formControl.hasError('email')
         ? 'Not a valid email'
         : '';
+  }
+
+  onNoClick(): void {
+    this.router.navigate(['/companies/add']);
   }
 
   loadParams(): Promise<void> {
@@ -107,41 +149,6 @@ export class EditPartnerComponent implements OnInit {
     });
   }
 
-
-  editPartner() {
-    let index = this.index;
-    console.log(index);
-
-    let editableItem = {
-      sequenceNumber: this.partnerFormGroup.get('sequenceNumber').value,
-      name: this.partnerFormGroup.get('name').value,
-      cpf: this.partnerFormGroup.get('cpf').value,
-      dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
-      cep: this.partnerFormGroup.get('cep').value,
-      street: this.partnerFormGroup.get('street').value,
-      number: this.partnerFormGroup.get('number').value,
-      complement: this.partnerFormGroup.get('complement').value,
-      neighborhood: this.partnerFormGroup.get('neighborhood').value,
-      county: this.partnerFormGroup.get('county').value,
-      state: this.partnerFormGroup.get('state').value,
-      contact: this.partnerFormGroup.get('contact').value,
-    }
-
-    if (index > -1) {
-      Object.assign(this.partnerSource[index], editableItem);
-      localStorage.setItem('partnerFormGroup', JSON.stringify(this.partnerSource));
-      console.log(this.partnerFormGroup);
-    } else {
-      console.log(editableItem);
-    }
-    this.router.navigate(['/company-list/add-company']);
-  }
-
-
-  onNoClick(): void {
-    this.router.navigate(['/company-list/add-company']);
-  }
-
   getAdressByCep(value) {
     this.cep = value;
     console.log(this.cep);
@@ -154,11 +161,20 @@ export class EditPartnerComponent implements OnInit {
         neighborhood: response.bairro,
         state: response.uf,
       };
-      this.response = response;
+      this.teste = response;
       this.partnerFormGroup.patchValue(obj);
+      console.log(this.partnerFormGroup);
     });
   }
 
-
+  savePartner(form) {
+    let partnerArray = this.localStorageService.get('partnerFormGroup');
+    if (!partnerArray) {
+      partnerArray = [];
+    }
+    partnerArray.push(form.value);
+    this.localStorageService.set('partnerFormGroup', partnerArray);
+    this.router.navigate(['/companies/add']);
+  }
 
 }

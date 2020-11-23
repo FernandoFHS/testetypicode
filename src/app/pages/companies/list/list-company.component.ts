@@ -12,14 +12,14 @@ import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { HeaderModelCompany } from 'src/app/@core/models/header.model';
 import { CompanyContent } from 'src/app/models/Company';
 import { CompanyService } from 'src/app/services/company.service';
-import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
+import { DeleteProfileComponent } from '../../delete-profile/delete-profile.component';
 
 @Component({
   selector: 'app-company',
-  templateUrl: './company.component.html',
-  styleUrls: ['./company.component.scss']
+  templateUrl: './list-company.component.html',
+  styleUrls: ['./list-company.component.scss']
 })
-export class CompanyComponent implements OnInit {
+export class CompanyListComponent implements OnInit {
 
   // dataSource = new MatTableDataSource<CompanyContent>();
   dataSource: CompanyContent[] = [];
@@ -146,10 +146,10 @@ export class CompanyComponent implements OnInit {
 
   onEdit(row: any) {
     const { idCompany } = row;
-    this.router.navigate([`/company-list/edit-company/${idCompany}`]);
+    this.router.navigate([`/companies/edit/${idCompany}`]);
   }
 
   onAdd(index: number) {
-    this.router.navigate(['/company-list/add-company']);
+    this.router.navigate(['/companies/add']);
   }
 }

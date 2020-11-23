@@ -24,20 +24,20 @@ import {
 } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AddBankAccountComponent } from '../dialogs/add-bank-account/add-bank-account.component';
-import { EditBankAccountComponent } from '../dialogs/edit-bank-account/edit-bank-account.component';
-import { DeleteBankAccountComponent } from '../dialogs/delete-bank-account/delete-bank-account.component';
-import { LocalStorageService } from './../../services/local-storage.service';
-import { DeletePhoneComponent } from '../dialogs/delete-phone/delete-phone.component';
-import { DeletePartnerComponent } from '../dialogs/delete-partner/delete-partner.component';
-import { EditPhoneComponent } from '../dialogs/edit-phone/edit-phone.component';
-import { AddPhoneComponent } from '../dialogs/add-phone/add-phone.component';
-import { CnaeService } from '../../services/company/cnae.service';
-import { Cnae } from '../../models/company/Cnae'
+import { AddBankAccountComponent } from './dialogs/add-bank-account/add-bank-account.component';
+import { EditBankAccountComponent } from './dialogs/edit-bank-account/edit-bank-account.component';
+import { DeleteBankAccountComponent } from './dialogs/delete-bank-account/delete-bank-account.component';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { DeletePhoneComponent } from './dialogs/delete-phone/delete-phone.component';
+import { DeletePartnerComponent } from './dialogs/delete-partner/delete-partner.component';
+import { EditPhoneComponent } from './dialogs/edit-phone/edit-phone.component';
+import { AddPhoneComponent } from './dialogs/add-phone/add-phone.component';
+import { CnaeService } from '../../../services/company/cnae.service';
+import { Cnae } from '../../../models/company/Cnae'
 import { Observable, of } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { SimpleDataTableService } from 'src/app/@core/components/simple-data-table/simple-data-table.service';
-import { CompanyService } from '../../services/company.service';
+import { CompanyService } from '../../../services/company.service';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { CompanyContent } from 'src/app/models/Company';
 
@@ -82,7 +82,7 @@ export class AddCompanyComponent implements OnInit {
   mask: any;
   response: any;
   dataSource: any[] = [];
-  dinamicAddRouter = "/company-list/add-partner";
+  dinamicAddRouter = "/companies/partners/add";
   identification: any = this.localStorageService.get('identificationFormGroup');
   adress: any = this.localStorageService.get('adressFormGroup');
   condition: any = this.localStorageService.get('conditionFormGroup');
@@ -722,7 +722,7 @@ export class AddCompanyComponent implements OnInit {
   }
 
   onAddPartner(index: number) {
-    this.router.navigate(['/add-partner']);
+    this.router.navigate(['/companies/partners/add']);
   }
 
   //Edit Methods
@@ -751,7 +751,7 @@ export class AddCompanyComponent implements OnInit {
   onEditPartner(row: object) {
     const index = this.partnerSource$.findIndex((c) => c == row);
 
-    this.router.navigate([`/edit-partner/${index}`]);
+    this.router.navigate([`/companies/partners/edit/${index}`]);
   }
 
   //Delete Methods
@@ -797,7 +797,7 @@ export class AddCompanyComponent implements OnInit {
 
   //Navigation Functions
   navigateToCompanyList() {
-    this.router.navigate(['/company-list/company'])
+    this.router.navigate(['/companies/list'])
   }
 
   //submit form

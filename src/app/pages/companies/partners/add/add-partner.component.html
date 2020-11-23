@@ -1,11 +1,28 @@
 <div fxFlexFill>
 
-  <core-breadcrumb [model]="breadcrumbModel"></core-breadcrumb>
+  <div *ngIf="addPage">
+    <core-breadcrumb [model]="addBreadcrumbModel"></core-breadcrumb>
+  </div>
 
-  <div class="m-b-25">
-    <label class="mat-display-1 page-title">
-      Incluir Sócio
-    </label>
+  <div *ngIf="!addPage">
+    <core-breadcrumb [model]="editBreadcrumbModel"></core-breadcrumb>
+  </div>
+
+
+  <div *ngIf="addPage">
+    <div class="m-b-25">
+      <label class="mat-display-1 page-title">
+        Incluir Sócio
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="!addPage">
+    <div class="m-b-25">
+      <label class="mat-display-1 page-title">
+        Editar Sócio
+      </label>
+    </div>
   </div>
 
   <div class="card-box">
@@ -19,7 +36,7 @@
             <div class="short-line-form">
               <mat-form-field appearance="outline">
                 <mat-label>Número Sequência</mat-label>
-                <input matInput placeholder="Número Sequência" formControlName="partnerSequentialNumber" required />
+                <input matInput placeholder="Número Sequência" formControlName="sequenceNumber" required />
                 <mat-icon matSuffix>fast_forward</mat-icon>
                 <mat-error *ngIf="formControl.invalid">{{
                 getErrorMessage()
@@ -186,13 +203,8 @@
   </div>
 
   <div class="group-buttons-actions">
-    <button mat-raised-button color="accent" tabindex="-1" (click)="onNoClick()">
-      Cancelar
-    </button>
-    <button mat-raised-button color="primary" [disabled]="!partnerFormGroup.valid"
-      (click)="savePartner(partnerFormGroup)">
-      Salvar
-    </button>
+    <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
+    <core-save-button (click)="savePartner(partnerFormGroup)">Salvar </core-save-button>
   </div>
 
 </div>
