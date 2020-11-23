@@ -36,9 +36,9 @@
           </mat-icon>
           Ativar Regra
         </button>
-        <button mat-flat-button color="primary" class="m-t-15 m-b-25 float-left color-success" (click)="inactive()" *ngIf="model.active">
+        <button mat-flat-button color="warn" class="m-t-15 m-b-25 float-left" (click)="inactive()" *ngIf="model.active">
           <mat-icon [inline]="true" class="m-r-5">
-            done
+            close
           </mat-icon>
           Inativar Regra
         </button>
@@ -260,7 +260,7 @@
 
       <div fxLayout="row wrap">
         <core-back-button (clickEvent)="back()" fxFlex></core-back-button>
-        <core-save-button (clickEvent)="save()" fxFlex></core-save-button>
+        <core-save-button (clickEvent)="update()" fxFlex></core-save-button>
       </div>
 
     </form>

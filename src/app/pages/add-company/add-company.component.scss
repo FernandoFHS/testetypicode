@@ -258,6 +258,20 @@ form .line-form .line-3-form .filled-or-empty-form-field mat-error {
     width: 100%;
   }
 
+  form .line-form .line-3-form .filled-or-empty-form-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  form .line-form .filled-or-empty-form-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
   form .line-form .short-line-form-threeOfFour{
     display: flex;
     justify-content: space-between;

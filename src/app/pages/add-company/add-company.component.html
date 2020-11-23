@@ -312,6 +312,10 @@
           <br>
         </div>
 
+        <div *ngIf="!adressFormGroup.get('referencePoint').value">
+          <br>
+        </div>
+
         <mat-divider></mat-divider>
 
         <h3>Correspondência</h3>
@@ -756,6 +760,10 @@
               <mat-error *ngIf="!complementFormGroup.get('registrationDate').value">Esse campo não foi cadastrado</mat-error>
             </div>
 
+            <div *ngIf="complementFormGroup.get('registrationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('registrationDate').value">
+              <br />
+            </div>
+
             <div class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Envio GP</mat-label>
@@ -764,6 +772,10 @@
                 <mat-datepicker #gpSendDate></mat-datepicker>
               </mat-form-field>
               <mat-error *ngIf="complementFormGroup.get('gpSendDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('gpSendDate').value">Esse campo não foi cadastrado</mat-error>
+            </div>
+
+            <div *ngIf="complementFormGroup.get('gpSendDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('gpSendDate').value">
+              <br />
             </div>
 
             <div class="filled-or-empty-form-field">
@@ -799,6 +811,10 @@
               <mat-error *ngIf="complementFormGroup.get('gpAffiliationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('gpAffiliationDate').value">Esse campo não foi cadastrado</mat-error>
             </div>
 
+            <div *ngIf="complementFormGroup.get('gpAffiliationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('gpAffiliationDate').value">
+              <br />
+            </div>
+
             <div class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Cadastramento SE</mat-label>
@@ -808,6 +824,10 @@
                 <mat-datepicker #seRegistrationDate></mat-datepicker>
               </mat-form-field>
               <mat-error *ngIf="complementFormGroup.get('seRegistrationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('seRegistrationDate').value">Esse campo não foi cadastrado</mat-error>
+            </div>
+
+            <div *ngIf="complementFormGroup.get('seRegistrationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('seRegistrationDate').value">
+              <br />
             </div>
 
             <div class="filled-or-empty-form-field">
@@ -846,9 +866,18 @@
 
       <h3>Cadastro de sócios</h3>
 
-      <app-simple-data-table [headers]="headersPartnerTable" [data]="partnerSource$" [actions]="actions"
-        (addEvent)="onAddPartner($event)" (editEvent)="onEditPartner($event)">
-      </app-simple-data-table>
+      <div *ngIf="addPage"> 
+        <app-simple-data-table [headers]="headersPartnerTable" [data]="partnerSource$" [actions]="actions"
+          (addEvent)="onAddPartner($event)" (editEvent)="onEditPartner($event)">
+        </app-simple-data-table>
+      </div>
+
+      <div *ngIf="!addPage"> 
+        <app-simple-data-table [headers]="headersPartnerTable" [data]="apiPartnerSource$" [actions]="actions"
+          (addEvent)="onAddPartner($event)" (editEvent)="onEditPartner($event)">
+        </app-simple-data-table>
+      </div>
+
       <div class="group-actions-buttons">
 
         <core-back-button color="accent" fxFlex>Voltar </core-back-button>

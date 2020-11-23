@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 import { RuleTypeEnum } from 'src/app/enums/rule-type.enum';
 import { RuleEmailNotificationModeEnum } from 'src/app/enums/rule-email-notification-mode.enum';
 import { VariableDataTypeEnum } from 'src/app/enums/variable-data-type.enum';
+import { ConditionTypeListModel } from 'src/app/models/rules/condition-type-list.model';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-add-rule',
@@ -51,13 +53,16 @@ export class AddRuleComponent implements OnInit {
 
   selectedVariables: MonitoringRuleVariableResponseModel[] = [];
 
+  @ViewChildren(MatAutocompleteTrigger) autoComplete: QueryList<MatAutocompleteTrigger>;
+
   constructor(
     private _formBuilder: FormBuilder,
     private _monitoringRuleService: MonitoringRuleService,
     private _notificationService: NotificationService,
     private _el: ElementRef,
     private _spinnerService: NgxSpinnerService,
-    private _router: Router
+    private _router: Router,
+    private _changeDetectorRef: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -85,7 +90,9 @@ export class AddRuleComponent implements OnInit {
     const valueForm = conditionsForm.controls[index].get('value');
 
     comparisonOperatorForm.setValue('');
-    valueForm.setValue(null);
+
+    valueForm.disable();
+    comparisonOperatorForm.enable();
 
     if (this.selectedVariables[index]) {
       this.selectedVariables[index] = variable;
@@ -94,7 +101,23 @@ export class AddRuleComponent implements OnInit {
       this.selectedVariables.push(variable);
     }
 
-    comparisonOperatorForm.enable();
+    if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
+      // this._spinnerService.show();
+      this.selectedVariables[index].is_loading_data = true;
+
+      this._monitoringRuleService.getRuleConditionListByEnum(variable.variable_name).then((data) => {
+        if (data && data.length > 0) {
+          variable.options_condition_type_list = data;
+          variable.filtered_options_condition_type_list = data;
+        }
+        else {
+          variable.options_condition_type_list = [];
+          variable.filtered_options_condition_type_list = [];
+        }
+      }).finally(() => {
+        variable.is_loading_data = false;
+      });
+    }
   }
 
   onChangeComparisonOperator(event: MatSelectChange, index: number): void {
@@ -106,6 +129,8 @@ export class AddRuleComponent implements OnInit {
     setTimeout(() => {
       this._el.nativeElement.querySelector(`#condition-value-${index}`).focus();
     });
+
+    this.clearValue(index);
   }
 
   private _loadForm(): void {
@@ -121,7 +146,7 @@ export class AddRuleComponent implements OnInit {
 
   private _createCondition(): FormGroup {
     return this._formBuilder.group({
-      logic_op: [{ value: 'E', disabled: false }, []],
+      logic_op: [{ value: '&&', disabled: false }, []],
       variable: [{ value: '', disabled: false }, [Validators.required]],
       comparison_op: [{ value: '', disabled: true }, [Validators.required]],
       value: [{ value: '', disabled: true }, [Validators.required]]
@@ -215,5 +240,105 @@ export class AddRuleComponent implements OnInit {
 
   back(): void {
     this._router.navigate(['rules/list']);
+  }
+
+  add(event) {
+    console.log('add');
+  }
+
+  onSelectConditionTypeList(event: { option: { value: ConditionTypeListModel } }, index: number) {
+    const conditionsForm = this.form.get('conditions') as FormArray;
+    const comparisonOpForm = conditionsForm.controls[index].get('comparison_op');
+
+    const selectedVariables = this.selectedVariables[index];
+
+    if (!selectedVariables.selected_options_condition_type_list) {
+      selectedVariables.selected_options_condition_type_list = [];
+    }
+
+    if (comparisonOpForm.value != 'Entre' && selectedVariables.selected_options_condition_type_list.length >= 1) {
+      this._notificationService.error('Para incluir mais de um valor utilize o Operador de Comparação "Entre".');
+    }
+    else if (comparisonOpForm.value != 'Entre' && selectedVariables.selected_options_condition_type_list.length == 0) {
+      if (selectedVariables.selected_options_condition_type_list.find(f => f.id == event.option.value.id)) {
+        this._notificationService.error('Não é possível selecionar um item que já exista na lista.');
+      }
+      else {
+        selectedVariables.selected_options_condition_type_list.push(event.option.value);
+        this.clearValue(index, false);
+      }
+    }
+    else if (comparisonOpForm.value == 'Entre') {
+      if (selectedVariables.selected_options_condition_type_list.find(f => f.id == event.option.value.id)) {
+        this._notificationService.error('Não é possível selecionar um item que já exista na lista.');
+      }
+      else {
+        selectedVariables.selected_options_condition_type_list.push(event.option.value);
+        this.clearValue(index, false);
+      }
+    }
+
+    setTimeout(() => {
+      // this.autoComplete['_results'][index]._onChange('');
+      // this.autoComplete['_results'][index].openPanel();
+    });
+  }
+
+  clearValue(index: number, resetArray: boolean = true): void {
+    const conditionsForm = this.form.get('conditions') as FormArray;
+    const valueForm = conditionsForm.controls[index].get('value');
+
+    this._el.nativeElement.querySelector(`#condition-value-${index}`).value = '';
+    valueForm.setValue('');
+
+    const selectedVariable = this.selectedVariables[index];
+
+    selectedVariable.filtered_options_condition_type_list = selectedVariable.options_condition_type_list;
+
+    if (resetArray) {
+      this.selectedVariables[index].selected_options_condition_type_list = [];
+    }
+
+    setTimeout(() => {
+      this._el.nativeElement.querySelector(`#condition-value-${index}`).focus();
+    }, 100);
+  }
+
+  removeOptionConditionTypeList(indexCondition: number, indexOption: number): void {
+    this.selectedVariables[indexCondition].selected_options_condition_type_list.splice(indexOption, 1);
+  }
+
+  onKeyupValue(event, index: number): void {
+    const selectedVariable = this.selectedVariables[index];
+
+    selectedVariable.filtered_options_condition_type_list =
+      selectedVariable.options_condition_type_list.filter(f => f.description.toLowerCase().includes(event.target.value));
+  }
+
+  disableValueInput(index: number): boolean {
+    const variable = this.selectedVariables[index];
+
+    const conditionsForm = this.form.get('conditions') as FormArray;
+    const comparisonOpForm = conditionsForm.controls[index].get('comparison_op');
+    const valueForm = conditionsForm.controls[index].get('value');
+
+    if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
+      if (!comparisonOpForm.value) {
+        valueForm.disable();
+        return true;
+      }
+      if (comparisonOpForm.value != 'Entre' && variable.selected_options_condition_type_list && variable.selected_options_condition_type_list.length >= 1) {
+        valueForm.disable();
+        return false;
+      }
+      else {
+        valueForm.enable();
+        return false;
+      }
+    }
+    else {
+      valueForm.enable();
+      return false;
+    }
   }
 }

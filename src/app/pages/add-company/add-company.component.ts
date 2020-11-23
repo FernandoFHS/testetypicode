@@ -89,6 +89,7 @@ export class AddCompanyComponent implements OnInit {
   complement: any = this.localStorageService.get('complementFormGroup');
   partner: any = this.localStorageService.get('partnerFormGroup');
   partnerSource$: any = [];
+  apiPartnerSource$: any = [];
   bankAccount$: any = [];
   apiBankAccount$: any = [];
   phoneNumber$: any = [];
@@ -323,12 +324,11 @@ export class AddCompanyComponent implements OnInit {
   private loadEditModel(id) {
     this.addPage = false;
 
-      // this.loadForm();
-
       this.companyService.readById(id).subscribe((company) => {
         this.apiPhoneNumber$ = company.companyContact;
         this.apiBankAccount$ = company.externalBankAccount;
-        console.log(this.apiPhoneNumber$);
+        this.apiPartnerSource$ = company.companyPartner;
+        console.log(this.apiPartnerSource$);
         this.changeDetectorRefs.detectChanges();       
         
         this.loadForm();
@@ -679,7 +679,7 @@ export class AddCompanyComponent implements OnInit {
 
   headersPartnerTable: HeaderModel[] = [
     { text: 'Número Sequência', value: 'partnerSequentialNumber' },
-    { text: 'Nome', value: 'name' },
+    { text: 'Nome', value: 'partnerName' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
     { text: 'Telefone', value: 'contact' }
