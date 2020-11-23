@@ -38,8 +38,7 @@ import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { RulesComponent } from './pages/rules/rules.component';
-import { AddRuleComponent } from './pages/rules/add-rule/add-rule.component';
-import { EditRuleComponent } from './pages/rules/edit-rule/edit-rule.component';
+import { RuleComponent } from './pages/rules/rule/rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -68,7 +67,7 @@ export const customCurrencyMaskConfig = {
     CompanyComponent,
     PasswordTransactionComponent,
     RulesComponent,
-    AddRuleComponent,
+    RuleComponent,
     AddProfileComponent,
     EditProfileComponent,
     ProfileListComponent,
@@ -93,7 +92,6 @@ export const customCurrencyMaskConfig = {
     AddAgreementComponent,
     PlansComponent,
     DeleteTaxComponent,
-    EditRuleComponent,
   ],
   imports: [
     BrowserModule,

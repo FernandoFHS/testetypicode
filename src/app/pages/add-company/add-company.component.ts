@@ -379,12 +379,14 @@ export class AddCompanyComponent implements OnInit {
     add: true,
     edit: true,
     delete: false,
+    view: false
   };
 
   actionsPartner: ActionModel = {
     add: true,
     edit: true,
     delete: true,
+    view: false
   };
 
   //Add Methods

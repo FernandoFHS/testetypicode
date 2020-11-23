@@ -37,6 +37,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
   @Output() editEvent: EventEmitter<Object> = new EventEmitter();
   @Output() addEvent: EventEmitter<Object> = new EventEmitter();
   @Output() loadEvent: EventEmitter<Object> = new EventEmitter();
+  @Output() viewEvent: EventEmitter<Object> = new EventEmitter();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -74,6 +75,10 @@ export class DataTableComponent implements AfterViewInit, OnInit {
 
   editItem(row) {
     this.editEvent.emit(row);
+  }
+
+  viewItem(row) {
+    this.viewEvent.emit(row);
   }
 
   private _loadAsyncDataTable() {

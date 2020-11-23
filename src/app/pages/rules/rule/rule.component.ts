@@ -10,31 +10,55 @@ import { MonitoringRuleVariableResponseModel } from 'src/app/models/response/mon
 import { MonitoringRuleRequestModel } from 'src/app/models/requests/monitoring-rule.request.model';
 import { MonitoringRuleConditionRequestModel } from 'src/app/models/requests/monitoring-rule-condition.request.model';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RuleTypeEnum } from 'src/app/enums/rule-type.enum';
 import { RuleEmailNotificationModeEnum } from 'src/app/enums/rule-email-notification-mode.enum';
 import { VariableDataTypeEnum } from 'src/app/enums/variable-data-type.enum';
 import { ConditionTypeListModel } from 'src/app/models/rules/condition-type-list.model';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { PageTypeEnum } from 'src/app/enums/page-type.enum';
+import { MonitoringRuleModel } from 'src/app/models/monitoring-rule.model';
+import { MonitoringRuleConditionResponseModel } from 'src/app/models/response/monitoring-rule-condition.response.model';
+import { MonitoringRuleUpdateRequestModel } from 'src/app/models/requests/monitoring-rule-update.request.model';
+import { GeneralService } from 'src/app/services/general.service';
+import { MonitoringRuleChangeStatusRequestModel } from 'src/app/models/requests/monitoring-rule-change-status.request.model';
 
 @Component({
-  selector: 'app-add-rule',
-  templateUrl: './add-rule.component.html',
-  styleUrls: ['./add-rule.component.scss']
+  selector: 'app-rule',
+  templateUrl: './rule.component.html',
+  styleUrls: ['./rule.component.scss']
 })
-export class AddRuleComponent implements OnInit {
+export class RuleComponent implements OnInit {
+
+  private _breadcrumbItems = [
+    { title: 'Home', route: '' },
+    { title: 'Lista de Regras', route: 'rules' }
+  ];
 
   emailSeparatorKeysCodes: number[] = [ENTER, COMMA];
 
-  breadcrumbModel: BreadcrumbModel = {
+  addBreadcrumbModel: BreadcrumbModel = {
     active: {
       title: 'Incluir Regra',
       route: ''
     },
-    items: [
-      { title: 'Home', route: '' },
-      { title: 'Lista de Regras', route: 'rules' }
-    ]
+    items: this._breadcrumbItems
+  };
+
+  editBreadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Editar Regra',
+      route: ''
+    },
+    items: this._breadcrumbItems
+  };
+
+  viewBreadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Visualizar Regra',
+      route: ''
+    },
+    items: this._breadcrumbItems
   };
 
   form: FormGroup;
@@ -55,6 +79,11 @@ export class AddRuleComponent implements OnInit {
 
   @ViewChildren(MatAutocompleteTrigger) autoComplete: QueryList<MatAutocompleteTrigger>;
 
+  pageType: PageTypeEnum;
+  isLoading: boolean;
+  id: number;
+  model: MonitoringRuleModel;
+
   constructor(
     private _formBuilder: FormBuilder,
     private _monitoringRuleService: MonitoringRuleService,
@@ -62,18 +91,82 @@ export class AddRuleComponent implements OnInit {
     private _el: ElementRef,
     private _spinnerService: NgxSpinnerService,
     private _router: Router,
-    private _changeDetectorRef: ChangeDetectorRef
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _activatedRoute: ActivatedRoute,
+    private _generalService: GeneralService
   ) { }
 
-  ngOnInit(): void {
-    this._loadForm();
+  async ngOnInit(): Promise<void> {
+    this.isLoading = true;
 
-    this._monitoringRuleService.getVariables().then((variables) => {
-      this.variables = variables;
+    await this._loadParams();
+    await this._loadVariables();
 
-      // this.variables.forEach((variable) => {
-      //   console.log(variable.data_type, variable.display_name);
-      // });
+    if (this.isPageEdit()) {
+      await this._loadModel();
+      await this._loadFormEdit();
+    }
+    else if (this.isPageView()) {
+      await this._loadModel();
+      await this._loadFormView();
+    }
+    else {
+      this._loadFormAdd();
+    }
+
+    this.isLoading = false;
+  }
+
+  private _loadVariables(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this._monitoringRuleService.getVariables().then((variables) => {
+        this.variables = variables;
+        resolve();
+      }, (error) => {
+        reject();
+      });
+    });
+  }
+
+  private _loadParams(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this._activatedRoute.params.subscribe((params) => {
+        this.id = params['id'];
+
+        if (this.id || this.id == 0) {
+          this.pageType = this._router.url.includes('view') ? PageTypeEnum.VIEW : PageTypeEnum.EDIT;
+          resolve();
+        }
+        else {
+          this.pageType = PageTypeEnum.ADD;
+          resolve();
+        }
+      });
+    });
+  }
+
+  private _backWithError(): void {
+    this.back();
+    this._notificationService.error('Ops, houve um erro ao carregar Regra, tente novamente.');
+  }
+
+  private _loadModel(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this._monitoringRuleService.getRuleById(this.id).then((model) => {
+        this.model = model;
+
+        if (this.model) {
+          this.emails = this.model.email_notification_recipients;
+          resolve();
+        }
+        else {
+          this._backWithError();
+          reject();
+        }
+      }, (error) => {
+        this._backWithError();
+        reject();
+      });
     });
   }
 
@@ -102,7 +195,6 @@ export class AddRuleComponent implements OnInit {
     }
 
     if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
-      // this._spinnerService.show();
       this.selectedVariables[index].is_loading_data = true;
 
       this._monitoringRuleService.getRuleConditionListByEnum(variable.variable_name).then((data) => {
@@ -133,7 +225,7 @@ export class AddRuleComponent implements OnInit {
     this.clearValue(index);
   }
 
-  private _loadForm(): void {
+  private _loadFormAdd(): void {
     this.form = this._formBuilder.group({
       description: ['', [Validators.required]],
       conditions: this._formBuilder.array([]),
@@ -144,13 +236,54 @@ export class AddRuleComponent implements OnInit {
     });
   }
 
-  private _createCondition(): FormGroup {
-    return this._formBuilder.group({
-      logic_op: [{ value: '&&', disabled: false }, []],
-      variable: [{ value: '', disabled: false }, [Validators.required]],
-      comparison_op: [{ value: '', disabled: true }, [Validators.required]],
-      value: [{ value: '', disabled: true }, [Validators.required]]
+  private _loadFormEdit(): void {
+    this.form = this._formBuilder.group({
+      description: [this.model.description, [Validators.required]],
+      conditions: this._formBuilder.array(this.model.monitoring_rule_condition.map((condition) => {
+        const variable = this.variables.find(v => v.variable_name == condition.variable_name);
+        this.selectedVariables.push(variable);
+        return this._createCondition(condition);
+      })),
+      critical_level: [{ value: this.model.critical_level, disabled: true }, []],
+      email_notification_mode: [this.model.email_notification_mode, []],
+      block_merchant_transactions: [{ value: this.model.block_merchant_transactions, disabled: true }, []],
+      email: [{ value: '', disabled: true }, [Validators.email]]
     });
+  }
+
+  private _loadFormView(): void {
+    this.form = this._formBuilder.group({
+      description: [{ value: this.model.description, disabled: true }, []],
+      conditions: this._formBuilder.array(this.model.monitoring_rule_condition.map((condition) => {
+        const variable = this.variables.find(v => v.variable_name == condition.variable_name);
+        this.selectedVariables.push(variable);
+        return this._createCondition(condition);
+      })),
+      critical_level: [{ value: this.model.critical_level, disabled: true }, []],
+      email_notification_mode: [{ value: this.model.email_notification_mode, disabled: true }, []],
+      block_merchant_transactions: [{ value: this.model.block_merchant_transactions, disabled: true }, []],
+      email: [{ value: '', disabled: true }, []]
+    });
+  }
+
+  private _createCondition(condition: MonitoringRuleConditionResponseModel = null): FormGroup {
+    return this._formBuilder.group({
+      logic_op: [{ value: condition ? condition.logical_operator : '&&', disabled: condition ? true : false }, []],
+      variable: [{ value: condition ? condition.variable_name : '', disabled: condition ? true : false }, [Validators.required]],
+      comparison_op: [{ value: condition ? condition.comparison_operator : '', disabled: true }, [Validators.required]],
+      value: [{ value: condition ? this._getValue(condition) : '', disabled: true }, []]
+    });
+  }
+
+  private _getValue(condition: MonitoringRuleConditionResponseModel): string {
+    const variable = this.variables.find(v => v.variable_name == condition.variable_name);
+
+    if (variable.data_type == VariableDataTypeEnum.MONETARY) {
+      return condition.monetary_value.toString();
+    }
+    else if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
+      return condition.numeric_without_decimal_places_value.toString();
+    }
   }
 
   save(): void {
@@ -205,6 +338,34 @@ export class AddRuleComponent implements OnInit {
         this._router.navigate(['rules/list']);
       }, (error) => {
         this._notificationService.error('Erro ao criar Regra, tente novamente.');
+      }).finally(() => {
+        this._spinnerService.hide();
+      });
+    }
+    else {
+      this._notificationService.error('Formulário inválido.');
+    }
+  }
+
+  update(): void {
+    this.form.markAllAsTouched();
+
+    if (this.form.valid) {
+      this._spinnerService.show();
+
+      const form = this.form.getRawValue();
+
+      const request: MonitoringRuleUpdateRequestModel = {
+        description: form.description,
+        email_notification_mode: form.email_notification_mode,
+        id: this.id
+      };
+
+      this._monitoringRuleService.update(request).then(() => {
+        this.back();
+        this._notificationService.success('Regra atualizada com sucesso.')
+      }, (error) => {
+        this._notificationService.error('Erro ao atualizar regra, tente novamente.');
       }).finally(() => {
         this._spinnerService.hide();
       });
@@ -322,23 +483,89 @@ export class AddRuleComponent implements OnInit {
     const comparisonOpForm = conditionsForm.controls[index].get('comparison_op');
     const valueForm = conditionsForm.controls[index].get('value');
 
-    if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
-      if (!comparisonOpForm.value) {
-        valueForm.disable();
-        return true;
-      }
-      if (comparisonOpForm.value != 'Entre' && variable.selected_options_condition_type_list && variable.selected_options_condition_type_list.length >= 1) {
-        valueForm.disable();
-        return false;
+    if (this.isPageEdit() || this.isPageView()) {
+      valueForm.disable();
+      return true;
+    }
+    else {
+      if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
+        if (!comparisonOpForm.value) {
+          valueForm.disable();
+          return true;
+        }
+        if (comparisonOpForm.value != 'Entre' && variable.selected_options_condition_type_list && variable.selected_options_condition_type_list.length >= 1) {
+          valueForm.disable();
+          return false;
+        }
+        else {
+          valueForm.enable();
+          return false;
+        }
       }
       else {
         valueForm.enable();
         return false;
       }
     }
-    else {
-      valueForm.enable();
-      return false;
-    }
+  }
+
+  isPageEdit(): boolean {
+    return this.pageType == PageTypeEnum.EDIT;
+  }
+
+  isPageAdd(): boolean {
+    return this.pageType == PageTypeEnum.ADD;
+  }
+
+  isPageView(): boolean {
+    return this.pageType == PageTypeEnum.VIEW;
+  }
+
+  active(): void {
+    const message = 'Após a ativação da regra não será possível alterar as informações de geração de alertas como a criticidade, variáveis e bloqueio operacional. Tem certeza que deseja continuar?';
+
+    this._generalService.openConfirmDialog(message, () => {
+      this._spinnerService.show();
+
+      const request: MonitoringRuleChangeStatusRequestModel = {
+        active: true,
+        id: this.id
+      };
+
+      this._monitoringRuleService.changeStatus(request).then(() => {
+        this._router.navigate(['rules']);
+        this._notificationService.success('Regra ativada com sucesso.');
+      }, (error) => {
+        this.back();
+        this._notificationService.error('Erro ao ativar regra, tente novamente.');
+      }).finally(() => {
+        this._spinnerService.hide();
+      });
+    }, () => {
+    }, 'Ativar Regra');
+  }
+
+  inactive(): void {
+    const message = 'Tem certeza que deseja continuar?';
+
+    this._generalService.openConfirmDialog(message, () => {
+      this._spinnerService.show();
+
+      const request: MonitoringRuleChangeStatusRequestModel = {
+        active: false,
+        id: this.id
+      };
+
+      this._monitoringRuleService.changeStatus(request).then(() => {
+        this._router.navigate(['rules']);
+        this._notificationService.success('Regra inativada com sucesso.');
+      }, (error) => {
+        this.back();
+        this._notificationService.error('Erro ao inativar regra, tente novamente.');
+      }).finally(() => {
+        this._spinnerService.hide();
+      });
+    }, () => {
+    }, 'Inativar Regra');
   }
 }

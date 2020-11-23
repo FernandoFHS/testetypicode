@@ -1,20 +1,24 @@
 <div fxFlexFill>
 
-  <core-breadcrumb [model]="breadcrumbModel"></core-breadcrumb>
-
-  <div class="m-b-25">
-    <label class="mat-display-1 page-title">
-      Editar Regra
-    </label>
-  </div>
-
   <div class="h-200 loading-data p-t-20" *ngIf="isLoading">
     <mat-spinner [diameter]="50"></mat-spinner>
   </div>
 
   <div *ngIf="!isLoading">
 
-    <div fxLayout="row wrap">
+    <core-breadcrumb [model]="addBreadcrumbModel" *ngIf="isPageAdd()"></core-breadcrumb>
+    <core-breadcrumb [model]="editBreadcrumbModel" *ngIf="isPageEdit()"></core-breadcrumb>
+    <core-breadcrumb [model]="viewBreadcrumbModel" *ngIf="isPageView()"></core-breadcrumb>
+
+    <div class="m-b-25">
+      <label class="mat-display-1 page-title">
+        {{isPageAdd() ? 'Incluir Regra' : ''}}
+        {{isPageEdit() ? 'Editar Regra' : ''}}
+        {{isPageView() ? 'Visualizar Regra' : ''}}
+      </label>
+    </div>
+
+    <div fxLayout="row wrap" *ngIf="isPageEdit()">
       <div fxFlex="100%">
         <label>
           <strong>
@@ -30,7 +34,8 @@
       </div>
 
       <div fxFlex="100%">
-        <button mat-flat-button color="primary" class="m-t-15 m-b-25 float-left color-success" (click)="active()" *ngIf="!model.active">
+        <button mat-flat-button color="primary" class="m-t-15 m-b-25 float-left color-success" (click)="active()"
+          *ngIf="!model.active">
           <mat-icon [inline]="true" class="m-r-5">
             done
           </mat-icon>
@@ -69,7 +74,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="25%" fxFlex.sm="50%" fxFlex.xs="50%">
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex="25%">
             <mat-label>
               Criticidade
             </mat-label>
@@ -87,7 +92,7 @@
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="25%" fxFlex.sm="50%" fxFlex.xs="50%">
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex="25%">
             <mat-label>
               Bloqueio Operacional?
             </mat-label>
@@ -104,13 +109,13 @@
             <mat-hint input-helper [input-helper-text]="'O que é Bloqueio Operacional?'" [input-helper-messages]="[
               'O bloqueio operacional ocorre quando uma determinada transação atende regra que está configurada para bloquear a empresa automaticamente.',
               'Neste caso, além do alerta gerado, é feito o bloqueio operacional da empresa que impedirá a aprovação de novas transações até que a mesma seja desbloqueada.',
-              'O desbloqueio deve ser feito manualmente pelo Dashboard de Monitoramento.'        
+              'O desbloqueio deve ser feito manualmente pelo Dashboard de Monitoramento.'
             ]">
               O que é?
             </mat-hint>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="50%" fxFlex.sm="100%" fxFlex.xs="100%">
+          <mat-form-field appearance="outline" floatLabel="always" fxFlex="50%">
             <mat-label>
               Notificação Alerta por E-mail
             </mat-label>
@@ -132,27 +137,25 @@
               E-mails notificados
             </mat-label>
 
-            <mat-chip-list #emailList [disabled]="true">
+            <mat-chip-list #emailList [disabled]="!isPageAdd()">
               <mat-chip *ngFor="let email of emails; let i = index" (removed)="removeEmail(i)"
-                [color]="i % 2 == 0 ? 'primary' : 'accent'" selected>
+                [color]="i % 2 == 0 ? 'primary' : 'primary'" selected>
                 {{email}}
-                <mat-icon matChipRemove *ngIf="false">
+                <mat-icon matChipRemove>
                   cancel
                 </mat-icon>
               </mat-chip>
 
               <input formControlName="email" [matChipInputFor]="emailList"
-                [matChipInputSeparatorKeyCodes]="emailSeparatorKeysCodes" (matChipInputTokenEnd)="addEmail($event)"
-                autocomplete="new-email"
-                [placeholder]="!emails || emails.length == 0 ? 'Nenhum e-mail cadastrado' : ''">
+                [matChipInputSeparatorKeyCodes]="emailSeparatorKeysCodes" (matChipInputTokenEnd)="addEmail($event)">
             </mat-chip-list>
 
             <mat-hint input-helper [input-helper-text]="'Como cadastrar os e-mails?'" [input-helper-messages]="[
-              'Todos os e-mails listados receberão os alertas.',
-              'Para associar um e-mail aos alertas, é necessário incluir o mesmo no campo, e após isso apertar enter (↵) ou vírgula (,).',
-              'Caso seja um e-mail inválido, será exibida uma mensagem de erro e ele não será associado.',
-              'Para remover um e-mail associado basta clicar no ícone de \'X\' ao lado do mesmo.'
-            ]">
+          'Todos os e-mails listados receberão os alertas.',
+          'Para associar um e-mail aos alertas, é necessário incluir o mesmo no campo, e após isso apertar enter (↵) ou vírgula (,).',
+          'Caso seja um e-mail inválido, será exibida uma mensagem de erro e ele não será associado.',
+          'Para remover um e-mail associado basta clicar no ícone de \'X\' ao lado do mesmo.'
+          ]">
               Como cadastrar?
             </mat-hint>
           </mat-form-field>
@@ -178,9 +181,9 @@
           </div>
 
           <div *ngFor="let item of form.get('conditions').controls; let i = index; let last = last; let count = count"
-            [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="1% 0% grid">
+            [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="2% grid">
 
-            <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="45%" fxFlex.xs="100%">
+            <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="25%" fxFlex.sm="75%" fxFlex.xs="50%">
               <mat-label>
                 Variável
               </mat-label>
@@ -196,7 +199,7 @@
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%" fxFlex.xs="50%">
+            <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%" fxFlex.sm="25%" fxFlex.xs="50%">
               <mat-label>
                 Op. Comparação
               </mat-label>
@@ -213,25 +216,52 @@
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="20%" fxFlex.xs="50%">
+            <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="40%" fxFlex.sm="75%"
+              fxFlex.xs="100%">
               <mat-label>
                 Valor
               </mat-label>
 
+              <input matInput id="condition-value-{{i}}" *ngIf="!selectedVariables[i]" formControlName="value" />
+
               <input matInput currencyMask id="condition-value-{{i}}"
                 *ngIf="selectedVariables[i]?.data_type == 'Monetary'" formControlName="value" />
 
-              <input matInput id="condition-value-{{i}}" *ngIf="!selectedVariables[i]" formControlName="value" />
+              <mat-chip-list #valueList *ngIf="selectedVariables[i]?.data_type == 'ListOfValue'"
+                [disabled]="disableValueInput(i)">
+                <mat-chip
+                  *ngFor="let selected_option of selectedVariables[i].selected_options_condition_type_list; let i2 = index"
+                  (removed)="removeOptionConditionTypeList(i, i2)" color="primary" selected>
+                  {{selected_option.description}}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
 
-              <input matInput type="number" id="condition-value-{{i}}"
-                *ngIf="selectedVariables[i]?.data_type == 'ListOfValue'" formControlName="value" />
+                <input formControlName="value" [matAutocomplete]="auto" [matChipInputFor]="valueList"
+                  [matChipInputSeparatorKeyCodes]="[]" (matChipInputTokenEnd)="addValue($event)"
+                  id="condition-value-{{i}}" (keyup)="onKeyupValue($event, i)">
+              </mat-chip-list>
 
-              <mat-error *ngIf="form.get('conditions').controls[i].get('value').hasError('required')">
-                Obrigatório
-              </mat-error>
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectConditionTypeList($event, i)">
+                <mat-option *ngIf="selectedVariables[i]?.is_loading_data" [disabled]="true">
+                  Carregando opções...
+                </mat-option>
+                <mat-option
+                  *ngIf="!selectedVariables[i]?.is_loading_data && selectedVariables[i]?.filtered_options_condition_type_list?.length == 0"
+                  [disabled]="true">
+                  Nenhuma opção encontrada
+                </mat-option>
+                <mat-option *ngFor="let option of selectedVariables[i]?.filtered_options_condition_type_list"
+                  [value]="option">
+                  {{option.description}}
+                </mat-option>
+              </mat-autocomplete>
+
+              <!-- <mat-error *ngIf="form.get('conditions').controls[i].get('value').hasError('required')">
+              Obrigatório
+            </mat-error> -->
             </mat-form-field>
 
-            <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="15%"
+            <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="15%" fxFlex.sm="25%" fxFlex.xs="50%"
               *ngIf="last == false && count > 1">
               <mat-label>
                 Operador Lógico
@@ -244,13 +274,13 @@
               </mat-select>
             </mat-form-field>
 
-            <div fxFlex="100%" *ngIf="!last && count > 1" class="m-r-20 m-l-20">
-              <mat-divider class="m-b-20"></mat-divider>
+            <div fxFlex="100%" *ngIf="last == false && count > 1">
+              <mat-divider class="m-b-25"></mat-divider>
             </div>
 
           </div>
 
-          <button mat-flat-button color="accent" class="m-t-15 float-left" (click)="addCondition()" *ngIf="false">
+          <button mat-flat-button color="accent" class="m-t-15 float-left" (click)="addCondition()" *ngIf="isPageAdd()">
             Nova Condição
           </button>
 
@@ -258,9 +288,10 @@
 
       </mat-expansion-panel>
 
-      <div fxLayout="row wrap">
+      <div fxLayout="row wrap" class="m-b-25">
         <core-back-button (clickEvent)="back()" fxFlex></core-back-button>
-        <core-save-button (clickEvent)="update()" fxFlex></core-save-button>
+        <core-save-button (clickEvent)="isPageAdd() ? save() : update()" fxFlex *ngIf="!isPageView()">
+        </core-save-button>
       </div>
 
     </form>

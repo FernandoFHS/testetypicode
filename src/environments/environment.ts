@@ -5,7 +5,7 @@ export const environment = {
   production: false,
   api: {
     url: 'http://localhost:8080',
-    mock: true
+    mock: false
   },
   bff: {
     url: 'http://company.qa.appmobbuy.tech:8080',

@@ -29,7 +29,8 @@ export class PlanListComponent implements OnInit {
   actions: ActionModel = {
     add: true,
     edit: true,
-    delete: false
+    delete: false,
+    view: false
   };
 
   onDelete(row: any) {
