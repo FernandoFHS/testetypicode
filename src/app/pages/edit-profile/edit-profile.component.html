@@ -35,22 +35,11 @@
 
   <div fxLayout="row wrap">
     <div fxFlex>
-      <button mat-raised-button class="m-t-15 float-left" (click)="onNoClick()">
-        <mat-icon [inline]="true" class="m-r-5">
-          arrow_back
-        </mat-icon>
-        Cancelar
-      </button>
+      <core-back-button (click)="back()" fxFlex>Voltar </core-back-button>
     </div>
 
     <div fxFlex>
-      <button mat-raised-button color="primary" class="m-t-15 float-right" (click)="updateProfile()">
-        <mat-icon [inline]="true" class="m-r-5">
-          save
-        </mat-icon>
-        Salvar
-      </button>
-
+      <core-save-button (click)="updateProfile()" fxFlex>Criar </core-save-button> 
     </div>
   </div>
 

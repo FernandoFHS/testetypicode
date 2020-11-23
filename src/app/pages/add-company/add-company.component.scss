@@ -53,6 +53,16 @@ form .line-form .line-3-form .mat-form-field{
   width: 30%;
 }
 
+form .line-form .line-3-form .filled-or-empty-form-field{
+  display: flex;
+  align-items: center;
+  width: 30%;
+}
+
+form .line-form .line-3-form .filled-or-empty-form-field .mat-form-field{
+  width: 100%;
+}
+
 form .line-form .short-line-form{
   display: flex;
   justify-content: space-between;
@@ -146,8 +156,38 @@ h1{
   font-size: 14px;
 }
 
-.mat-error {
-  height: 14px;
+form .line-form .filled-or-empty-form-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 48%;
+}
+
+form .line-form .filled-or-empty-form-field .mat-form-field{
+  width: 100%;
+}
+
+
+form .line-form .filled-or-empty-form-field mat-error {
+  width: 100%;
+  margin-top: -20px;
+  font-size: 14px;
+}
+
+mat-error {
+  height: 14px!important;
+}
+
+form .line-form .line-3-form .filled-or-empty-form-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+form .line-form .line-3-form .filled-or-empty-form-field mat-error {
+  width: 100%;
+  margin-top: -20px;
+  font-size: 14px;
 }
 
 @media (max-width: 1800px) {

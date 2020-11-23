@@ -38,6 +38,10 @@ export class EditProfileComponent implements OnInit {
     });
   }
 
+  back(): void {
+    this.router.navigate(['/profile-list/user']);
+  }
+
   formControl = new FormControl('', [
     Validators.required,
     // Validators.email,

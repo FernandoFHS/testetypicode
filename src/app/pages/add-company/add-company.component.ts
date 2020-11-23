@@ -1,6 +1,6 @@
 import { map, take, startWith, filter } from 'rxjs/operators';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -23,7 +23,7 @@ import {
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AddBankAccountComponent } from '../dialogs/add-bank-account/add-bank-account.component';
 import { EditBankAccountComponent } from '../dialogs/edit-bank-account/edit-bank-account.component';
 import { DeleteBankAccountComponent } from '../dialogs/delete-bank-account/delete-bank-account.component';
@@ -39,6 +39,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SimpleDataTableService } from 'src/app/@core/components/simple-data-table/simple-data-table.service';
 import { CompanyService } from '../../services/company.service';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
+import { CompanyContent } from 'src/app/models/Company';
 
 @Component({
   selector: 'app-add-company',
@@ -89,7 +90,19 @@ export class AddCompanyComponent implements OnInit {
   partner: any = this.localStorageService.get('partnerFormGroup');
   partnerSource$: any = [];
   bankAccount$: any = [];
+  apiBankAccount$: any = [];
   phoneNumber$: any = [];
+  apiPhoneNumber$: any = []
+
+  addPage: boolean;
+
+  referencePointNullValue: boolean;
+  accreditationDateNullValue: boolean;
+  gpSendDateNullValue: boolean;
+  registrationDateNullValue: boolean;
+  gpAffiliationDateNullValue: boolean;
+  seRegistrationDateNullValue: boolean; 
+  discreditationDateNullValue: boolean;
 
   mcc: any;
 
@@ -97,7 +110,7 @@ export class AddCompanyComponent implements OnInit {
   cnae$: Observable<Array<Cnae>>;
   filteredCnaes: Observable<Cnae[]>;
 
-  breadcrumbModel: BreadcrumbModel = {
+  addPageBreadcrumbModel: BreadcrumbModel = {
     active: {
       title: 'Incluir Estabelecimento',
       route: 'add-company'
@@ -107,7 +120,17 @@ export class AddCompanyComponent implements OnInit {
       { title: 'Lista de Estabelecimentos', route: 'company-list' }
     ]
   };
-
+  
+  editPageBreadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Editar Estabelecimento',
+      route: 'add-company'
+    },
+    items: [
+      { title: 'Home', route: '' },
+      { title: 'Lista de Estabelecimentos', route: 'company-list' }
+    ]
+  };
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
@@ -118,8 +141,10 @@ export class AddCompanyComponent implements OnInit {
     private companyService: CompanyService,
     public dialog: MatDialog,
     private router: Router,
+    private route: ActivatedRoute,
     private localStorageService: LocalStorageService,
-    public phoneService: SimpleDataTableService
+    public phoneService: SimpleDataTableService,
+    public changeDetectorRefs: ChangeDetectorRef
   ) { }
 
   private _filterCnaes(value: string): Cnae[] {
@@ -136,10 +161,17 @@ export class AddCompanyComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.localStorageService.get('phoneNumber') == null) {
-      this.phoneNumber$ = []
+    const id = +this.route.snapshot.paramMap.get('idCompany');
+
+    // this.companyService.readById(id).subscribe((company) => {
+    //   console.log(company);
+    //   this.editValues(company);
+    // });
+
+    if (!id) {
+      this.loadAddModel();
     } else {
-      this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+      this.loadEditModel(id);
     }
 
     if (this.localStorageService.get('bankAccount') == null) {
@@ -152,6 +184,25 @@ export class AddCompanyComponent implements OnInit {
       this.partnerSource$ = []
     } else {
       this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
+    }
+
+    this.contactFormGroup = this._formBuilder.group({
+      companyContact: this._formBuilder.array(this.phoneNumber$),
+    });
+    
+    this.gelAllCnaes();
+
+  }
+
+  private loadAddModel() {
+
+    this.addPage = true;
+
+    if (this.localStorageService.get('phoneNumber') == null) {
+      this.phoneNumber$ = []
+    } else {
+      this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+      console.log(this.phoneNumber$);
     }
 
     this.identificationFormGroup = this._formBuilder.group({
@@ -193,10 +244,6 @@ export class AddCompanyComponent implements OnInit {
       subordinateResponsibleNameCtrl: ['', Validators.required],
       subordinateReferencePointCtrl: [''],
     });
-
-
-
-
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [this.condition?.tableSaleCtrl || '', Validators.required],
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || '', Validators.required],
@@ -206,6 +253,7 @@ export class AddCompanyComponent implements OnInit {
       anticipationFee: [this.condition?.anticipationFee || '', Validators.required],
       ignoreLiberationAJManual: [this.condition?.ignoreLiberationAJManual || '', Validators.required],
       ajtype: [this.condition?.ajtype || '', Validators.required],
+      isCheckedBankAdress: [],
       beneficiaryType: [this.condition?.beneficiaryType || '', Validators.required,],
       beneficiaryName: [this.condition?.beneficiaryName || '', Validators.required],
       beneficiaryDocumentNumber: [this.condition?.beneficiaryDocumentNumber || '', Validators.required],
@@ -240,55 +288,26 @@ export class AddCompanyComponent implements OnInit {
       state: ['', Validators.required],
       contact: ['', Validators.required]
     });
-
-    this.contactFormGroup = this._formBuilder.group({
-      companyContact: this._formBuilder.array(this.phoneNumber$),
-    });
-
-
-
-
-    this.dataService.refreshTable().subscribe(() => {
-      this.dataSource = this.phoneNumber$;
-      //this.loadData
-    });
-    //this.loadData
-    this.dataSource = this.phoneNumber$;
-    this.gelAllCnaes();
-
+  
     if (this.identification != undefined) {
       this.getLocalStorage('identification');
-    } else {
-
     }
 
     if (this.adress != undefined) {
       this.getLocalStorage('adress');
-    } else {
-
     }
 
     if (this.condition != undefined) {
       this.getLocalStorage('condition');
-    } else {
+    } 
 
-    }
     if (this.complement != undefined) {
       this.getLocalStorage('complement');
-    } else {
+    } 
 
-    }
     if (this.partner != undefined) {
       this.getLocalStorage('partner');
-    } else {
-
-    }
-    // if (this.partnerSource$ != undefined) {
-    //   this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
-    //   this.partnerSource$.content = this.localStorageService.get('partnerFormGroup');
-    // } else {
-
-    // }
+    } 
 
     if (this.response == null) {
       this.response = this.localStorageService.get('cep');
@@ -301,6 +320,283 @@ export class AddCompanyComponent implements OnInit {
     this.checkValueBankAdress(true);
   }
 
+  private loadEditModel(id) {
+    this.addPage = false;
+
+      // this.loadForm();
+
+      this.companyService.readById(id).subscribe((company) => {
+        this.apiPhoneNumber$ = company.companyContact;
+        this.apiBankAccount$ = company.externalBankAccount;
+        console.log(this.apiPhoneNumber$);
+        this.changeDetectorRefs.detectChanges();       
+        
+        this.loadForm();
+        this.editValues(company);
+      });
+  }
+
+  private loadForm() {
+    this.identificationFormGroup = this._formBuilder.group({
+      registerTarget: [{ value: 'Estabelecimento', disabled: true }],
+      companyResponsibleName: [this.identification?.companyResponsibleName || ''],
+      companyType: [this.identification?.companyType || ''],
+      situation: [this.identification?.situation || ''],
+      documentNumberCompany: [this.identification?.documentNumberCompany || ''],
+      gpEstablishmentNumber: [this.identification?.gpEstablishmentNumber || ''],
+      stateRegistration: [this.identification?.stateRegistration || ''],
+      companyName: [this.identification?.companyName || ''],
+      fancyName: [this.identification?.fancyName || ''],
+      companyShortName: [this.identification?.companyShortName || ''],
+      mcccode: [this.identification?.mcccode || ''],
+      idDepartament: [this.identification?.idDepartament || ''],
+      cnae: [this.identification?.cnae || ''],
+      idCnae: [this.identification?.idCnae || ''],
+      businessActivity: [this.identification?.businessActivity || ''],
+      openingDate: [this.identification?.openingDate || '']
+    });
+    this.adressFormGroup = this._formBuilder.group({
+      streetName: [this.adress?.streetName || ''],
+      number: [this.adress?.number || ''],
+      complement: [this.adress?.complement || ''],
+      neighborhoodName: [this.adress?.neighborhoodName || ''],
+      cityName: [this.adress?.cityName || ''],
+      uf: [this.adress?.uf || ''],
+      responsibleNameCtrl: [this.adress?.responsibleNameCtrl || ''],
+      referencePoint: [this.adress?.referencePoint || ''],
+      zipCode: [this.adress?.zipCode || ''],
+      checkboxAdress: [this.adress?.checkboxAdress || ''],
+      subordinateZipCode: [''],
+      subordinateNeighborhoodCtrl: [''],
+      subordinateCityCtrl: [''],
+      subordinateStreetCtrl: [''],
+      subordinateNumberCtrl: [''],
+      subordinateComplementCtrl: [''],
+      subordinateStateCtrl: [''],
+      subordinateResponsibleNameCtrl: [''],
+      subordinateReferencePointCtrl: [''],
+    });
+    this.conditionFormGroup = this._formBuilder.group({
+      tableSaleCtrl: [this.condition?.tableSaleCtrl || ''],
+      automaticCreditIndicator: [this.condition?.automaticCreditIndicator || ''],
+      transactionAmount: [this.condition?.transactionAmount || ''],
+      tedAmount: [this.condition?.tedAmount || ''],
+      referentialTransacionAmount: [this.condition?.referentialTransacionAmount || ''],
+      anticipationFee: [this.condition?.anticipationFee || ''],
+      ignoreLiberationAJManual: [this.condition?.ignoreLiberationAJManual || ''],
+      ajtype: [this.condition?.ajtype || ''],
+      beneficiaryType: [this.condition?.beneficiaryType || '',],
+      beneficiaryName: [this.condition?.beneficiaryName || ''],
+      beneficiaryDocumentNumber: [this.condition?.beneficiaryDocumentNumber || ''],
+    });
+    this.complementFormGroup = this._formBuilder.group({
+      openingHours: [this.complement?.openingHours || ''],
+      ecommerceURL: [this.complement?.ecommerceURL || ''],
+      estUrl: [this.complement?.estUrl || ''],
+      email: [this.complement?.email || ''],
+      posQuantity: [this.complement?.posQuantity || ''],
+      logicalNumber: [this.complement?.logicalNumber || ''],
+      idTerminal: [this.complement?.idTerminal || ''],
+      registerCode: [this.complement?.registerCode || ''],
+      registrationDate: [this.complement?.registrationDate || ''],
+      gpSendDate: [this.complement?.gpSendDate || ''],
+      accreditationDate: [this.complement?.accreditationDate || ''],
+      gpAffiliationDate: [this.complement?.gpAffiliationDate || ''],
+      seRegistrationDate: [this.complement?.seRegistrationDate || ''],
+      discreditationDate: [this.complement?.discreditationDate || '']
+    });
+    this.partnerFormGroup = this._formBuilder.group({
+      partnerSequentialNumber: [{ value: '', disabled: true }],
+      name: [''],
+      cpf: [''],
+      dateOfBirth: [''],
+      cep: [''],
+      street: [''],
+      number: [''],
+      complement: [''],
+      neighborhood: [''],
+      county: [''],
+      state: [''],
+      contact: ['']
+    });
+  }
+
+  editValues(company: CompanyContent) {
+    this.identificationFormGroup.patchValue({
+      companyResponsibleName: company.companyResponsibleName,
+      companyType: company.companyType,
+      situation: company.situation,
+      documentNumberCompany: company.documentNumberCompany,
+      gpEstablishmentNumber: company.gpEstablishmentNumber,
+      stateRegistration: company.stateRegistration,
+      companyName: company.companyName,
+      fancyName: company.fancyName,
+      companyShortName: company.companyShortName,
+      mcccode: company.cnae.mcc.code,
+      idDepartament: company.idDepartament,
+      cnae: company.cnae,
+      idCnae: company.cnae.idCnae,
+      businessActivity: company.businessActivity,
+      openingDate: company.openingDate
+    });
+    if (company.companyAddress[0] == undefined) {
+      company.companyAddress[0] = {
+        idCompanyAddress: 0,
+        street: {
+          city: {
+            cityName: "",
+            idCity: 0
+          },
+          idStreet: 0,
+          neighborhood: {
+            idNeighborhood: 0,
+            neighborhoodName: ""
+          },
+          state: {
+            idState: 10,
+            stateName: "",
+            uf: ""
+          },
+          streetName: "",
+          zipCode: ""
+        },
+        type: "",
+        number: "",
+        maxDistanceDelivery: "",
+        complement: ""
+      }
+
+      company.companyAddress[1] = {
+        idCompanyAddress: 0,
+        street: {
+          city: {
+            cityName: "",
+            idCity: 0
+          },
+          idStreet: 0,
+          neighborhood: {
+            idNeighborhood: 0,
+            neighborhoodName: ""
+          },
+          state: {
+            idState: 10,
+            stateName: "",
+            uf: ""
+          },
+          streetName: "",
+          zipCode: ""
+        },
+        type: "",
+        number: "",
+        maxDistanceDelivery: "",
+        complement: ""
+      }
+
+      this.adressFormGroup.patchValue({
+        streetName: company.companyAddress[0].street.streetName,
+        number: company.companyAddress[0].number,
+        complement: company.companyAddress[0].complement,
+        neighborhoodName: company.companyAddress[0].street.neighborhood.neighborhoodName,
+        cityName: company.companyAddress[0].street.city.cityName,
+        uf: company.companyAddress[0].street.state.uf,
+        referencePoint: company.referencePoint,
+        zipCode: company.companyAddress[0].street.zipCode,
+        subordinateZipCode: company.companyAddress[1].street.zipCode,
+        subordinateNeighborhoodCtrl: company.companyAddress[1].street.streetName,
+        subordinateCityCtrl: company.companyAddress[1].street.city.cityName,
+        subordinateStreetCtrl: company.companyAddress[1].street.streetName,
+        subordinateNumberCtrl: company.companyAddress[1].number,
+        subordinateComplementCtrl: company.companyAddress[1].complement,
+        subordinateStateCtrl: company.companyAddress[1].street.state.uf,
+        subordinateReferencePointCtrl: company.referencePoint
+      }); 
+
+    } else {
+      this.adressFormGroup.patchValue({
+        streetName: company.companyAddress[0].street.streetName,
+        number: company.companyAddress[0].number,
+        complement: company.companyAddress[0].complement,
+        neighborhoodName: company.companyAddress[0].street.neighborhood.neighborhoodName,
+        cityName: company.companyAddress[0].street.city.cityName,
+        uf: company.companyAddress[0].street.state.uf,
+        referencePoint: company.referencePoint,
+        zipCode: company.companyAddress[0].street.zipCode,
+        subordinateZipCode: company.companyAddress[1].street.zipCode,
+        subordinateNeighborhoodCtrl: company.companyAddress[1].street.streetName,
+        subordinateCityCtrl: company.companyAddress[1].street.city.cityName,
+        subordinateStreetCtrl: company.companyAddress[1].street.streetName,
+        subordinateNumberCtrl: company.companyAddress[1].number,
+        subordinateComplementCtrl: company.companyAddress[1].complement,
+        subordinateStateCtrl: company.companyAddress[1].street.state.uf,
+        subordinateReferencePointCtrl: company.referencePoint
+      }); 
+      console.log(company.companyAddress[0])
+    }
+    this.conditionFormGroup.patchValue({
+      automaticCreditIndicator: company.automaticAnticipationIndicator,
+      transactionAmount: company.transactionAmount,
+      tedAmount: company.tedAmount,
+      referentialTransacionAmount: company.referentialTransactionAmount,
+      anticipationFee: company.anticipationFee,
+      ignoreLiberationAJManual: company.ignoreLiberationAJManual,
+      ajtype: company.ajtype,
+      beneficiaryType: company.beneficiaryType,
+      beneficiaryName: company.beneficiaryName,
+      beneficiaryDocumentNumber: company.beneficiaryDocumentNumber
+    });
+
+    this.complementFormGroup.patchValue({
+      openingHours: company.openingHours,
+      ecommerceURL: company.ecommerceURL,
+      estUrl: company.estUrl,
+      email: company.email,
+      posQuantity: company.posQuantity,
+      logicalNumber: company.logicalNumber,
+      idTerminal: company.idTerminal,
+      registerCode: company.registerCode,
+      registrationDate: company.registrationDate,
+      gpSendDate: company.gpSendDate,
+      accreditationDate: company.accreditationDate,
+      gpAffiliationDate: company.gpAffiliationDate,
+      seRegistrationDate: company.seRegistrationDate,
+      discreditationDate: company.discreditationDate
+    });
+
+    // console.log(company.externalBankAccount);
+    // this.phoneNumber$ = company.companyContact;
+    // console.log(this.phoneNumber$);
+
+    if (company.referencePoint == "") {
+      this.referencePointNullValue = true;
+      console.log(this.referencePointNullValue)
+    } 
+
+    if (company.accreditationDate == '0000-00-00T00:00:00') {
+      this.accreditationDateNullValue = true;
+    } 
+
+    if (company.gpSendDate == '0000-00-00T00:00:00') {
+      this.gpSendDateNullValue = true;
+    } 
+
+    if (!company.registrationDate) {
+      this.registrationDateNullValue = true;
+    }
+
+    if (company.gpAffiliationDate == '0000-00-00T00:00:00') {
+      this.gpAffiliationDateNullValue = true;
+    } 
+
+    if (!company.seRegistrationDate) {
+      this.seRegistrationDateNullValue = true;
+    } 
+
+    if (company.discreditationDate == '0000-00-00T00:00:00') {
+      this.discreditationDateNullValue = true;
+    } 
+
+
+  }
 
   createCompany() {
     let formcompleto = Object.assign({},
@@ -314,6 +610,23 @@ export class AddCompanyComponent implements OnInit {
     this.companyService.create(formcompleto).subscribe((response: any) => {
       console.log(response);
       this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
+      this.router.navigate(['/company-list/company']);
+    });
+
+  }
+
+  updateCompany() {
+    let editCompleteForm = Object.assign({},
+      this.identificationFormGroup.value,
+      this.adressFormGroup.value,
+      this.conditionFormGroup.value,
+      this.complementFormGroup.value,
+      this.contactFormGroup.value);
+    console.log(editCompleteForm);
+
+    this.companyService.update(editCompleteForm).subscribe((response: any) => {
+      console.log(response);
+      this.dataService.openSnackBar('Estabelecimento alterado com sucesso', 'X');
       this.router.navigate(['/company-list/company']);
     });
 
@@ -356,14 +669,12 @@ export class AddCompanyComponent implements OnInit {
     { text: 'Dígito Agência', value: 'agencyDigit', subValue: null },
     { text: 'Conta Corrente', value: 'account', subValue: null },
     { text: 'Dígito Conta', value: 'accountDigit', subValue: null },
-    { text: 'Dígito Agência/Conta', value: 'digit', subValue: null },
-    // { text: 'Ações', value: 'action' }
+    { text: 'Dígito Agência/Conta', value: 'digit', subValue: null }
   ];
 
-  headersFoneTable: HeaderModel[] = [
+  headersPhoneTable: HeaderModel[] = [
     { text: 'Nome do contato', value: 'contactName' },
-    { text: 'Telefone', value: 'companyPhone' },
-    // { text: 'Ações', value: 'action' }
+    { text: 'Telefone', value: 'companyPhone' }
   ];
 
   headersPartnerTable: HeaderModel[] = [
@@ -371,8 +682,7 @@ export class AddCompanyComponent implements OnInit {
     { text: 'Nome', value: 'name' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
-    { text: 'Telefone', value: 'contact' },
-    // { text: 'Ações', value: 'action' }
+    { text: 'Telefone', value: 'contact' }
   ];
 
   actions: ActionModel = {
@@ -503,6 +813,10 @@ export class AddCompanyComponent implements OnInit {
         : '';
   }
 
+  getErrorMessageNullValue() {
+    console.log('Esse campo não foi cadastrado')
+  }
+
   getFirstCep(value) {
     this.CepService.getCep(value).subscribe((response: any) => {
       let cep1 = {
@@ -587,7 +901,6 @@ export class AddCompanyComponent implements OnInit {
   }
   onSelectionChanged(value) {
     let a = value.checked;
-    console.log(value.checked);
     if (a === true) {
       this.isChecked = true;
     } else {

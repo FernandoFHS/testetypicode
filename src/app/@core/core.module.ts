@@ -15,13 +15,16 @@ import { AngularMaterialModule } from './modules/angular-material.module';
 import { ThemesComponent } from './components/themes/themes.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
-import { InputHelperComponent } from './components/input-helper/input-helper.component';
-import { InputHelperDirective } from './directives/input-helper.directive';
-import { BackButtonComponent } from './components/back-button/back-button.component';
-import { DataTableComponent } from './components/data-table/data-table.component';
-import { SaveButtonComponent } from './components/save-button/save-button.component';
-import { SimpleDataTableComponent } from './components/simple-data-table/simple-data-table.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { DeleteButtonComponent } from './components/delete-button/delete-button.component';
+import { InputHelperDirective } from './directives/input-helper.directive';
+import { DataTableComponent } from './components/data-table/data-table.component';
+import { InputHelperComponent } from './components/input-helper/input-helper.component';
+import { SimpleDataTableComponent } from './components/simple-data-table/simple-data-table.component';
+import { SaveButtonComponent } from './components/save-button/save-button.component';
+import { BackButtonComponent } from './components/back-button/back-button.component';
+import { NextButtonComponent } from './components/next-button/next-button.component';
+import { CancelButtonComponent } from './components/cancel-button/cancel-button.component';
 
 
 @NgModule({
@@ -45,6 +48,9 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     SaveButtonComponent,
     BackButtonComponent,
     ConfirmDialogComponent,
+    DeleteButtonComponent,
+    NextButtonComponent,
+    CancelButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -69,6 +75,9 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     SimpleDataTableComponent,
     SaveButtonComponent,
     BackButtonComponent,
+    DeleteButtonComponent,
+    NextButtonComponent,
+    CancelButtonComponent,
 
     AccordionDirective,
     AccordionLinkDirective,
