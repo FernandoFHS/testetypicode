@@ -40,6 +40,7 @@ import { SimpleDataTableService } from 'src/app/@core/components/simple-data-tab
 import { CompanyService } from '../../../services/company.service';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { CompanyContent } from 'src/app/models/Company';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 @Component({
   selector: 'app-add-company',
@@ -64,16 +65,38 @@ import { CompanyContent } from 'src/app/models/Company';
 })
 export class AddCompanyComponent implements OnInit {
 
+  customCurrencyMaskConfig = {
+    align: 'left',
+    allowNegative: false,
+    allowZero: true,
+    decimal: ',',
+    precision: 2,
+    prefix: 'R$ ',
+    suffix: '',
+    thousands: '.',
+    nullable: true,
+    min: null,
+    max: null,
+    inputMode: CurrencyMaskInputMode.FINANCIAL
+  };
+
+
   cnaeForm = new FormControl();
   isLinear = false;
   identificationFormGroup: FormGroup;
   adressFormGroup: FormGroup;
   conditionFormGroup: FormGroup;
   complementFormGroup: FormGroup;
-  partnerFormGroup: FormGroup;
 
+  partnerFormGroup: FormGroup;
   contactFormGroup: FormGroup;
   bankingFormGroup: FormGroup;
+  companyPartnerFormGroup: FormGroup;
+  companyAdressFormGroup: FormGroup;
+
+  endereco: any;
+
+
 
   testeform: FormArray;
   isChecked = false;
@@ -87,7 +110,8 @@ export class AddCompanyComponent implements OnInit {
   adress: any = this.localStorageService.get('adressFormGroup');
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
-  partner: any = this.localStorageService.get('partnerFormGroup');
+  partner: any = this.localStorageService.get('partner');
+  companyadress:any = [];  
   partnerSource$: any = [];
   apiPartnerSource$: any = [];
   bankAccount$: any = [];
@@ -104,6 +128,8 @@ export class AddCompanyComponent implements OnInit {
   gpAffiliationDateNullValue: boolean;
   seRegistrationDateNullValue: boolean; 
   discreditationDateNullValue: boolean;
+
+  testesocio: any = this.localStorageService.get('partnerFormGroup');;
 
   mcc: any;
 
@@ -230,7 +256,7 @@ export class AddCompanyComponent implements OnInit {
       complement: [this.adress?.complement || '', Validators.required],
       neighborhoodName: [this.adress?.neighborhoodName || '', Validators.required],
       cityName: [this.adress?.cityName || '', Validators.required],
-      uf: [this.adress?.uf || '', Validators.required],
+      stateName: [this.adress?.stateName || '', Validators.required],
       responsibleNameCtrl: [this.adress?.responsibleNameCtrl || '', Validators.required],
       referencePoint: [this.adress?.referencePoint || ''],
       zipCode: [this.adress?.zipCode || '', Validators.required],
@@ -275,21 +301,36 @@ export class AddCompanyComponent implements OnInit {
       seRegistrationDate: [this.complement?.seRegistrationDate || ''],
       discreditationDate: [this.complement?.discreditationDate || '']
     });
-    this.partnerFormGroup = this._formBuilder.group({
-      partnerSequentialNumber: [{ value: '', disabled: true }, Validators.required],
-      name: ['', Validators.required],
-      cpf: ['', Validators.required],
-      dateOfBirth: ['', Validators.required],
-      cep: ['', Validators.required],
-      street: ['', Validators.required],
-      number: ['', Validators.required],
-      complement: [''],
-      neighborhood: ['', Validators.required],
-      county: ['', Validators.required],
-      state: ['', Validators.required],
-      contact: ['', Validators.required]
+
+    this.companyPartnerFormGroup = this._formBuilder.group({
+
+      companyPartner: this._formBuilder.array(this.partnerSource$),
+
     });
-  
+
+    this.companyAdressFormGroup = this._formBuilder.group({
+
+      companyAddress: this._formBuilder.array(this.companyadress),
+
+    });
+
+    this.contactFormGroup = this._formBuilder.group({
+      companyContact: this._formBuilder.array(this.phoneNumber$),
+    });
+
+    this.bankingFormGroup = this._formBuilder.group({
+      externalBankAccount: this._formBuilder.array(this.bankAccount$),
+    });
+
+
+    this.dataService.refreshTable().subscribe(() => {
+      this.dataSource = this.phoneNumber$;
+      //this.loadData
+    });
+    //this.loadData
+    this.dataSource = this.phoneNumber$;
+    this.gelAllCnaes();
+
     if (this.identification != undefined) {
       this.getLocalStorage('identification');
     }
@@ -308,7 +349,7 @@ export class AddCompanyComponent implements OnInit {
 
     if (this.partner != undefined) {
       this.getLocalStorage('partner');
-    } 
+    }
 
     if (this.response == null) {
       this.response = this.localStorageService.get('cep');
@@ -361,7 +402,7 @@ export class AddCompanyComponent implements OnInit {
       complement: [this.adress?.complement || ''],
       neighborhoodName: [this.adress?.neighborhoodName || ''],
       cityName: [this.adress?.cityName || ''],
-      uf: [this.adress?.uf || ''],
+      stateName: [this.adress?.stateName || ''],
       responsibleNameCtrl: [this.adress?.responsibleNameCtrl || ''],
       referencePoint: [this.adress?.referencePoint || ''],
       zipCode: [this.adress?.zipCode || ''],
@@ -498,7 +539,7 @@ export class AddCompanyComponent implements OnInit {
         complement: company.companyAddress[0].complement,
         neighborhoodName: company.companyAddress[0].street.neighborhood.neighborhoodName,
         cityName: company.companyAddress[0].street.city.cityName,
-        uf: company.companyAddress[0].street.state.uf,
+        stateName: company.companyAddress[0].street.state.stateName,
         referencePoint: company.referencePoint,
         zipCode: company.companyAddress[0].street.zipCode,
         subordinateZipCode: company.companyAddress[1].street.zipCode,
@@ -507,7 +548,7 @@ export class AddCompanyComponent implements OnInit {
         subordinateStreetCtrl: company.companyAddress[1].street.streetName,
         subordinateNumberCtrl: company.companyAddress[1].number,
         subordinateComplementCtrl: company.companyAddress[1].complement,
-        subordinateStateCtrl: company.companyAddress[1].street.state.uf,
+        subordinateStateCtrl: company.companyAddress[1].street.state.stateName,
         subordinateReferencePointCtrl: company.referencePoint
       }); 
 
@@ -518,7 +559,7 @@ export class AddCompanyComponent implements OnInit {
         complement: company.companyAddress[0].complement,
         neighborhoodName: company.companyAddress[0].street.neighborhood.neighborhoodName,
         cityName: company.companyAddress[0].street.city.cityName,
-        uf: company.companyAddress[0].street.state.uf,
+        stateName: company.companyAddress[0].street.state.stateName,
         referencePoint: company.referencePoint,
         zipCode: company.companyAddress[0].street.zipCode,
         subordinateZipCode: company.companyAddress[1].street.zipCode,
@@ -527,7 +568,7 @@ export class AddCompanyComponent implements OnInit {
         subordinateStreetCtrl: company.companyAddress[1].street.streetName,
         subordinateNumberCtrl: company.companyAddress[1].number,
         subordinateComplementCtrl: company.companyAddress[1].complement,
-        subordinateStateCtrl: company.companyAddress[1].street.state.uf,
+        subordinateStateCtrl: company.companyAddress[1].street.state.stateName,
         subordinateReferencePointCtrl: company.referencePoint
       }); 
       console.log(company.companyAddress[0])
@@ -599,18 +640,22 @@ export class AddCompanyComponent implements OnInit {
   }
 
   createCompany() {
-    let formcompleto = Object.assign({},
+    let formulariocompleto = Object.assign({},
       this.identificationFormGroup.value,
       this.adressFormGroup.value,
       this.conditionFormGroup.value,
       this.complementFormGroup.value,
-      this.contactFormGroup.value);
-    console.log(formcompleto);
+      this.companyPartnerFormGroup.value,
+      this.endereco,
+      // this.companyAdressFormGroup.value,
+      this.contactFormGroup.value,
+      this.bankingFormGroup.value);
+    console.log(formulariocompleto);
 
-    this.companyService.create(formcompleto).subscribe((response: any) => {
+    this.companyService.create(formulariocompleto).subscribe((response: any) => {
       console.log(response);
       this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
-      this.router.navigate(['/company-list/company']);
+      this.router.navigate(['/companies/list']);
     });
 
   }
@@ -682,7 +727,8 @@ export class AddCompanyComponent implements OnInit {
     { text: 'Nome', value: 'partnerName' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
-    { text: 'Telefone', value: 'contact' }
+    { text: 'Telefone', value: 'phone' },
+    // { text: 'Ações', value: 'action' }
   ];
 
   actions: ActionModel = {
@@ -825,7 +871,7 @@ export class AddCompanyComponent implements OnInit {
         cityName: response.localidade,
         streetName: response.logradouro,
         neighborhoodName: response.bairro,
-        uf: response.uf,
+        stateName: response.uf,
       };
       this.response = response;
       this.adressFormGroup.patchValue(cep1);
@@ -952,6 +998,55 @@ export class AddCompanyComponent implements OnInit {
   saveForm(form, text) {
     this.localStorageService.set(text, form.value);
     this.localStorageService.set('cep', this.response);
+
+   
+  }
+
+  saveAdress(){
+    let obj = {
+      companyAddress: [{
+        complement: this.adressFormGroup.get('complement').value,
+        number: this.adressFormGroup.get('number').value,
+        street: {
+          city: {
+            cityName: this.adressFormGroup.get('cityName').value,
+          },
+          idStreet: 0,
+          neighborhood: {
+            neighborhoodName: this.adressFormGroup.get('neighborhoodName').value,
+          },
+          state: {
+            stateName: this.adressFormGroup.get('stateName').value,
+            uf: "sp"
+          },
+          streetName: this.adressFormGroup.get('streetName').value,
+          zipCode: this.adressFormGroup.get('zipCode').value,
+        },
+        type:'Comercial',
+      },{
+        complement: this.adressFormGroup.get('subordinateComplementCtrl').value,
+        number: this.adressFormGroup.get('subordinateNumberCtrl').value,
+        street: {
+          city: {
+            cityName: this.adressFormGroup.get('subordinateCityCtrl').value,
+          },
+          idStreet: 0,
+          neighborhood: {
+            neighborhoodName: this.adressFormGroup.get('subordinateNeighborhoodCtrl').value,
+          },
+          state: {
+            stateName: this.adressFormGroup.get('subordinateStateCtrl').value,
+            uf: "sp"
+          },
+          streetName: this.adressFormGroup.get('subordinateStreetCtrl').value,
+          zipCode: this.adressFormGroup.get('subordinateZipCode').value,
+        },
+        type:'Correspondência',
+      }]
+    };
+    
+    this.endereco = Object.assign({},obj);
+    console.log(this.endereco);
   }
 
   getLocalStorage(item) {
@@ -1005,4 +1100,5 @@ export class AddCompanyComponent implements OnInit {
 
     }
   }
+
 }
