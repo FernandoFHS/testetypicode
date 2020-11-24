@@ -264,7 +264,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Estado</mat-label>
-              <input matInput placeholder="Digite o seu estado" formControlName="uf" required />
+              <input matInput placeholder="Digite o seu estado" formControlName="stateName" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>map</mat-icon>
             </mat-form-field>
@@ -429,7 +429,7 @@
             (click)="saveForm(adressFormGroup,'adressFormGroup')">Voltar</button>
 
           <button mat-raised-button matStepperNext color="primary"
-            (click)="saveForm(adressFormGroup,'adressFormGroup')">Avançar</button>
+            (click)="saveForm(adressFormGroup,'adressFormGroup'); saveAdress()">Avançar</button>
 
         </div>
 
@@ -470,16 +470,14 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Custo de Transação</mat-label>
-              <input matInput placeholder="R$ 0,00" formControlName="transactionAmount" required prefix="R$"
-                mask=" 0,00 || 00,00 || || 000,00 || 0.000,00" />
+              <input matInput currencyMask [options]="customCurrencyMaskConfig" placeholder="R$ 0,00" formControlName="transactionAmount" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>attach_money_cicle</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Custo TED/DOC</mat-label>
-              <input matInput placeholder="R$ 0,00" formControlName="tedAmount" required prefix="R$"
-                mask=" 0,00 || 00,00 || || 000,00 || 0.000,00" />
+              <input matInput currencyMask [options]="customCurrencyMaskConfig" placeholder="R$ 0,00" formControlName="tedAmount" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>attach_money_cicle</mat-icon>
             </mat-form-field>
@@ -499,8 +497,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Transação Referencial</mat-label>
-              <input matInput placeholder="R$ 0,00" formControlName="referentialTransacionAmount" required prefix="R$"
-                mask=" 0,00 || 00,00 || || 000,00 || 0.000,00" />
+              <input matInput currencyMask [options]="customCurrencyMaskConfig" placeholder="R$ 0,00" formControlName="referentialTransacionAmount" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>swap_horizontal_circle</mat-icon>
             </mat-form-field>
@@ -508,8 +505,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Taxa de Antecipação</mat-label>
-              <input matInput placeholder="R$ 0,00" formControlName="anticipationFee" required prefix="R$"
-                mask=" 0,00 || 00,00 || || 000,00 || 0.000,00" />
+              <input matInput currencyMask [options]="customCurrencyMaskConfig" placeholder="R$ 0,00" formControlName="anticipationFee" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>attach_money_cicle</mat-icon>
             </mat-form-field>

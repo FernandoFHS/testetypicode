@@ -39,6 +39,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SimpleDataTableService } from 'src/app/@core/components/container/simple-data-table/simple-data-table.service';
 import { CompanyService } from '../../services/company.service';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 @Component({
   selector: 'app-add-company',
@@ -63,6 +64,22 @@ import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 })
 export class AddCompanyComponent implements OnInit {
 
+  customCurrencyMaskConfig = {
+    align: 'left',
+    allowNegative: false,
+    allowZero: true,
+    decimal: ',',
+    precision: 2,
+    prefix: 'R$ ',
+    suffix: '',
+    thousands: '.',
+    nullable: true,
+    min: null,
+    max: null,
+    inputMode: CurrencyMaskInputMode.FINANCIAL
+  };
+
+
   cnaeForm = new FormControl();
   isLinear = false;
   identificationFormGroup: FormGroup;
@@ -74,6 +91,11 @@ export class AddCompanyComponent implements OnInit {
   contactFormGroup: FormGroup;
   bankingFormGroup: FormGroup;
   companyPartnerFormGroup: FormGroup;
+  companyAdressFormGroup: FormGroup;
+
+  endereco: any;
+
+
 
   testeform: FormArray;
   isChecked = false;
@@ -87,10 +109,13 @@ export class AddCompanyComponent implements OnInit {
   adress: any = this.localStorageService.get('adressFormGroup');
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
-  partner: any = this.localStorageService.get('partnerFormGroup');
+  partner: any = this.localStorageService.get('partner');
+  companyadress:any = [];  
   partnerSource$: any = [];
   bankAccount$: any = [];
   phoneNumber$: any = [];
+
+  testesocio: any = this.localStorageService.get('partnerFormGroup');;
 
   mcc: any;
 
@@ -155,7 +180,6 @@ export class AddCompanyComponent implements OnInit {
       this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
     }
 
-
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
       companyResponsibleName: [this.identification?.companyResponsibleName || ''],
@@ -180,7 +204,7 @@ export class AddCompanyComponent implements OnInit {
       complement: [this.adress?.complement || '', Validators.required],
       neighborhoodName: [this.adress?.neighborhoodName || '', Validators.required],
       cityName: [this.adress?.cityName || '', Validators.required],
-      uf: [this.adress?.uf || '', Validators.required],
+      stateName: [this.adress?.stateName || '', Validators.required],
       responsibleNameCtrl: [this.adress?.responsibleNameCtrl || '', Validators.required],
       referencePoint: [this.adress?.referencePoint || ''],
       zipCode: [this.adress?.zipCode || '', Validators.required],
@@ -233,20 +257,11 @@ export class AddCompanyComponent implements OnInit {
 
       companyPartner: this._formBuilder.array(this.partnerSource$),
 
-      // this.partnerFormGroup = this._formBuilder.array({
+    });
 
-      //   name: ['', Validators.required],
-      //   cpf: ['', Validators.required],
-      //   dateOfBirth: ['', Validators.required],
-      //   cep: ['', Validators.required],
-      //   street: ['', Validators.required],
-      //   number: ['', Validators.required],
-      //   complement: [''],
-      //   neighborhood: ['', Validators.required],
-      //   county: ['', Validators.required],
-      //   state: ['', Validators.required],
-      //   contact: ['', Validators.required]
-      // })
+    this.companyAdressFormGroup = this._formBuilder.group({
+
+      companyAddress: this._formBuilder.array(this.companyadress),
 
     });
 
@@ -294,12 +309,6 @@ export class AddCompanyComponent implements OnInit {
     } else {
 
     }
-    // if (this.partnerSource$ != undefined) {
-    //   this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
-    //   this.partnerSource$.content = this.localStorageService.get('partnerFormGroup');
-    // } else {
-
-    // }
 
     if (this.response == null) {
       this.response = this.localStorageService.get('cep');
@@ -314,17 +323,19 @@ export class AddCompanyComponent implements OnInit {
 
 
   createCompany() {
-    let formcompleto = Object.assign({},
+    let formulariocompleto = Object.assign({},
       this.identificationFormGroup.value,
       this.adressFormGroup.value,
       this.conditionFormGroup.value,
       this.complementFormGroup.value,
       this.companyPartnerFormGroup.value,
+      this.endereco,
+      // this.companyAdressFormGroup.value,
       this.contactFormGroup.value,
       this.bankingFormGroup.value);
-    console.log(formcompleto);
+    console.log(formulariocompleto);
 
-    this.companyService.create(formcompleto).subscribe((response: any) => {
+    this.companyService.create(formulariocompleto).subscribe((response: any) => {
       console.log(response);
       this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
       this.router.navigate(['/company-list/company']);
@@ -384,7 +395,7 @@ export class AddCompanyComponent implements OnInit {
     { text: 'Nome', value: 'partnerName' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
-    { text: 'Telefone', value: 'contact' },
+    { text: 'Telefone', value: 'phone' },
     // { text: 'Ações', value: 'action' }
   ];
 
@@ -522,7 +533,7 @@ export class AddCompanyComponent implements OnInit {
         cityName: response.localidade,
         streetName: response.logradouro,
         neighborhoodName: response.bairro,
-        uf: response.uf,
+        stateName: response.uf,
       };
       this.response = response;
       this.adressFormGroup.patchValue(cep1);
@@ -650,6 +661,55 @@ export class AddCompanyComponent implements OnInit {
   saveForm(form, text) {
     this.localStorageService.set(text, form.value);
     this.localStorageService.set('cep', this.response);
+
+   
+  }
+
+  saveAdress(){
+    let obj = {
+      companyAddress: [{
+        complement: this.adressFormGroup.get('complement').value,
+        number: this.adressFormGroup.get('number').value,
+        street: {
+          city: {
+            cityName: this.adressFormGroup.get('cityName').value,
+          },
+          idStreet: 0,
+          neighborhood: {
+            neighborhoodName: this.adressFormGroup.get('neighborhoodName').value,
+          },
+          state: {
+            stateName: this.adressFormGroup.get('stateName').value,
+            uf: "sp"
+          },
+          streetName: this.adressFormGroup.get('streetName').value,
+          zipCode: this.adressFormGroup.get('zipCode').value,
+        },
+        type:'Comercial',
+      },{
+        complement: this.adressFormGroup.get('subordinateComplementCtrl').value,
+        number: this.adressFormGroup.get('subordinateNumberCtrl').value,
+        street: {
+          city: {
+            cityName: this.adressFormGroup.get('subordinateCityCtrl').value,
+          },
+          idStreet: 0,
+          neighborhood: {
+            neighborhoodName: this.adressFormGroup.get('subordinateNeighborhoodCtrl').value,
+          },
+          state: {
+            stateName: this.adressFormGroup.get('subordinateStateCtrl').value,
+            uf: "sp"
+          },
+          streetName: this.adressFormGroup.get('subordinateStreetCtrl').value,
+          zipCode: this.adressFormGroup.get('subordinateZipCode').value,
+        },
+        type:'Correspondência',
+      }]
+    };
+    
+    this.endereco = Object.assign({},obj);
+    console.log(this.endereco);
   }
 
   getLocalStorage(item) {
@@ -703,4 +763,5 @@ export class AddCompanyComponent implements OnInit {
 
     }
   }
+
 }
