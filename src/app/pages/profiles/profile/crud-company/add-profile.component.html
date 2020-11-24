@@ -1,11 +1,23 @@
 <div fxFlexFill>
 
-  <core-breadcrumb [model]="breadcrumbModel"></core-breadcrumb>
+  <div *ngIf="addPage">
+    <core-breadcrumb [model]="addBreadcrumbModel"></core-breadcrumb>
 
-  <div class="m-b-25">
-    <label class="mat-display-1 page-title">
-      Incluir Usuário
-    </label>
+    <div class="m-b-25">
+      <label class="mat-display-1 page-title">
+        Incluir Usuário
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="!addPage">
+    <core-breadcrumb [model]="editBreadcrumbModel"></core-breadcrumb>
+
+    <div class="m-b-25">
+      <label class="mat-display-1 page-title">
+        Editar Usuário
+      </label>
+    </div>
   </div>
 
   <mat-expansion-panel class="m-b-25" [expanded]="true">
@@ -34,15 +46,27 @@
     </mat-form-field>
   </mat-expansion-panel>
 
+
   <div fxLayout="row wrap">
     <div fxFlex>
       <core-back-button (click)="back()" fxFlex>Voltar </core-back-button>
     </div>
 
-    <div fxFlex>
-      <core-save-button (click)="createProfile()" fxFlex>Criar </core-save-button> 
+    <div *ngIf="addPage">
+      <div fxFlex>
+        <core-save-button (click)="createProfile()" fxFlex>Criar </core-save-button> 
+      </div>
+    </div>
+
+    <div *ngIf="!addPage">
+      <div fxFlex>
+        <core-save-button (click)="updateProfile()" fxFlex>Salvar </core-save-button> 
+      </div>
     </div>
   </div>
+
+
+
 
   <!-- <div fxLayout="column" fxLayoutAlign="center center" fxFlexFill> -->
   <!-- <div class="card-box">

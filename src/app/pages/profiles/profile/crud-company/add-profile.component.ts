@@ -5,7 +5,7 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { Content, Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
@@ -17,20 +17,33 @@ import { DataService } from 'src/app/services/data.service';
 })
 export class AddProfileComponent implements OnInit {
 
+  addPage: boolean;
+
   profile: Content = {
     idProfile: null,
     nameProfile: '',
     description: '' 
   }
 
-  breadcrumbModel: BreadcrumbModel = {
+  addBreadcrumbModel: BreadcrumbModel = {
     active: {
       title: 'Incluir Usuário',
-      route: 'profile-partner'
+      route: 'add'
     },
     items: [
       { title: 'Home', route: '' },
-      { title: 'Lista de Usuários', route: 'profile-list' },
+      { title: 'Lista de Usuários', route: 'profiles' },
+    ]
+  };
+
+  editBreadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Editar Usuário',
+      route: 'edit'
+    },
+    items: [
+      { title: 'Home', route: '' },
+      { title: 'Lista de Usuários', route: 'profiles' },
     ]
   };
 
@@ -38,7 +51,21 @@ export class AddProfileComponent implements OnInit {
     public dataService: DataService,
     private router: Router,
     public _snackBar: MatSnackBar,
+    private route: ActivatedRoute
   ) {}
+
+  ngOnInit(): void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.dataService.readById(id).subscribe((profile) => {
+      this.profile = profile;
+    });
+
+    if (id) {
+      this.addPage = false
+    } else {
+      this.addPage = true;
+    }
+  }
 
   formControl = new FormControl('', [
     Validators.required,
@@ -48,14 +75,20 @@ export class AddProfileComponent implements OnInit {
   createProfile(): void {
     this.dataService.create(this.profile).subscribe(() => {
       this.dataService.openSnackBar('Perfil adicionado com sucesso!', 'X')
-      this.router.navigate(['/profile-list'])
+      this.router.navigate(['/profiles/list'])
     })
   }
 
-  ngOnInit(): void {}
+  updateProfile(): void {
+    this.dataService.update(this.profile).subscribe(() => {
+      this.dataService.openSnackBar('Perfil atualizado com sucesso', 'X');
+      this.router.navigate(['/profiles/list']);
+    });
+  }
+
 
   back(): void {
-    this.router.navigate(['/profile-list/user']);
+    this.router.navigate(['/profiles/list']);
   }
 
   getErrorMessage() {
@@ -68,10 +101,6 @@ export class AddProfileComponent implements OnInit {
 
   submit() {
     // emppty stuff
-  }
-
-  onNoClick(): void {
-    this.router.navigate(['/profile-list']);
   }
 
   //confirmAdd(): void {

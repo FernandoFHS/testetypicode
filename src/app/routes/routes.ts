@@ -7,12 +7,11 @@ import { ThemesComponent } from '../@core/components/themes/themes.component';
 import { CompanyComponent } from '../pages/companies/company.component';
 import { HomeComponent } from '../pages/home/home.component';
 import { LoginComponent } from '../pages/login/login.component';
-import { UserComponent } from '../pages/user/user.component';
+// import { UserComponent } from '../pages/user/user.component';
 import { PasswordTransactionComponent } from '../pages/password-transaction/password-transaction.component';
 import { LoginGuard } from '../pages/login/login.guard';
-import { ProfileListComponent } from '../pages/profile-list/profile-list.component';
-import { AddProfileComponent } from '../pages/add-profile/add-profile.component';
-import { EditProfileComponent } from '../pages/edit-profile/edit-profile.component';
+import { ListProfilesComponent } from '../pages/profiles/list-profiles/list-profiles.component';
+import { AddProfileComponent } from '../pages/profiles/profile/crud-company/add-profile.component';
 import { CompanyListComponent } from '../pages/companies/list/list-company.component';
 import { AddCompanyComponent } from '../pages/companies/crud-company/add-company.component';
 import { AddPartnerComponent } from '../pages/companies/partners/add/add-partner.component';
@@ -26,6 +25,7 @@ import { AgreementAreaComponent } from '../pages/agreement-area/agreement-area.c
 import { AddAgreementComponent } from '../pages/agreement-area/add-agreement/add-agreement.component';
 import { RuleComponent } from '../pages/rules/rule/rule.component';
 import { ContainerGuard } from '../@core/components/container/container.guard';
+import { ProfileComponent } from '../pages/profiles/profiles.component';
 
 export const routes: Routes = [
   {
@@ -70,25 +70,25 @@ export const routes: Routes = [
         ]
       },
       {
-        path: 'profile-list',
-        component: ProfileListComponent,
+        path: 'profiles',
+        component: ProfileComponent,
         children: [
           {
             path: '',
-            redirectTo: 'user',
+            redirectTo: 'list',
             pathMatch: 'full',
           },
           {
-            path: 'user',
-            component: UserComponent,
+            path: 'list',
+            component: ListProfilesComponent,
           },
           {
-            path: 'add-profile',
+            path: 'add',
             component: AddProfileComponent,
           },
           {
-            path: 'edit-profile/:id',
-            component: EditProfileComponent,
+            path: 'edit/:id',
+            component: AddProfileComponent,
           },
         ],
       },

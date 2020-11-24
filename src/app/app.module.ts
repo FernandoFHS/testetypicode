@@ -9,12 +9,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { CoreModule } from './@core/core.module';
-import { UserComponent } from './pages/user/user.component';
 import { CompanyComponent } from './pages/companies/company.component';
 import { PasswordTransactionComponent } from './pages/password-transaction/password-transaction.component';
-import { AddProfileComponent } from './pages/add-profile/add-profile.component';
-import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
-import { ProfileListComponent } from './pages/profile-list/profile-list.component';
+import { AddProfileComponent } from './pages/profiles/profile/crud-company/add-profile.component';
 import { FormsModule } from '@angular/forms';
 import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
 import { CompanyListComponent } from './pages/companies/list/list-company.component';
@@ -40,6 +37,8 @@ import { AgreementListComponent } from './pages/agreement-area/agreement-list/ag
 import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
 import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
 import { CdkStepper } from '@angular/cdk/stepper';
+import { ListProfilesComponent } from './pages/profiles/list-profiles/list-profiles.component';
+import { ProfileComponent } from './pages/profiles/profiles.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -63,14 +62,13 @@ export const customCurrencyMaskConfig = {
     AppComponent,
     HomeComponent,
     LoginComponent,
-    UserComponent,
     CompanyComponent,
     PasswordTransactionComponent,
     RulesComponent,
     RuleComponent,
+    ProfileComponent,
     AddProfileComponent,
-    EditProfileComponent,
-    ProfileListComponent,
+    ListProfilesComponent,
     DeleteProfileComponent,
     CompanyListComponent,
     AddCompanyComponent,

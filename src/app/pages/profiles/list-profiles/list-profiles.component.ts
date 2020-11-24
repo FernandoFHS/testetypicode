@@ -6,7 +6,7 @@ import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
-import { DeleteProfileComponent } from '../delete-profile/delete-profile.component';
+import { DeleteProfileComponent } from '../../delete-profile/delete-profile.component';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 
 /**
@@ -14,10 +14,10 @@ import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
  */
 @Component({
   selector: 'app-user',
-  styleUrls: ['user.component.scss'],
-  templateUrl: 'user.component.html',
+  styleUrls: ['list-profiles.component.scss'],
+  templateUrl: 'list-profiles.component.html',
 })
-export class UserComponent implements AfterViewInit {
+export class ListProfilesComponent implements AfterViewInit {
   dataSource: Profile[] = [];
 
   resultsLength = 0;
@@ -69,10 +69,10 @@ export class UserComponent implements AfterViewInit {
 
   onEdit(row: any) {
     const { idProfile } = row;
-    this.router.navigate([`/profile-list/edit-profile/${idProfile}`]);
+    this.router.navigate([`/profiles/edit/${idProfile}`]);
   }
 
   onAdd(index: number) {
-    this.router.navigate(['/profile-list/add-profile']);
+    this.router.navigate(['/profiles/add']);
   }
 }

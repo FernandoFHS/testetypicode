@@ -204,7 +204,12 @@
 
   <div class="group-buttons-actions">
     <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
-    <core-save-button (click)="savePartner(partnerFormGroup)">Salvar </core-save-button>
+    <div *ngIf="addPage">
+      <core-save-button (click)="savePartner(partnerFormGroup)">Salvar </core-save-button>
+    </div>
+    <div *ngIf="!addPage">
+      <core-save-button (click)="editPartner()">Atualizar </core-save-button>
+    </div>
   </div>
 
 </div>

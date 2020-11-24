@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-profile-list',
-  templateUrl: './profile-list.component.html',
-  styleUrls: ['./profile-list.component.scss']
+  templateUrl: './profiles.component.html',
+  styleUrls: ['./profiles.component.scss']
 })
-export class ProfileListComponent implements OnInit {
+export class ProfileComponent implements OnInit {
 
   constructor() { }
 

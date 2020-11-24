@@ -177,4 +177,33 @@ export class AddPartnerComponent implements OnInit {
     this.router.navigate(['/companies/add']);
   }
 
+  editPartner() {
+    let index = this.index;
+    console.log(index);
+
+    let editableItem = {
+      sequenceNumber: this.partnerFormGroup.get('sequenceNumber').value,
+      name: this.partnerFormGroup.get('name').value,
+      cpf: this.partnerFormGroup.get('cpf').value,
+      dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
+      cep: this.partnerFormGroup.get('cep').value,
+      street: this.partnerFormGroup.get('street').value,
+      number: this.partnerFormGroup.get('number').value,
+      complement: this.partnerFormGroup.get('complement').value,
+      neighborhood: this.partnerFormGroup.get('neighborhood').value,
+      county: this.partnerFormGroup.get('county').value,
+      state: this.partnerFormGroup.get('state').value,
+      contact: this.partnerFormGroup.get('contact').value,
+    }
+
+    if (index > -1) {
+      Object.assign(this.partnerSource[index], editableItem);
+      localStorage.setItem('partnerFormGroup', JSON.stringify(this.partnerSource));
+      console.log(this.partnerFormGroup);
+    } else {
+      console.log(editableItem);
+    }
+    this.router.navigate(['/companies/add']);
+  }
+
 }
