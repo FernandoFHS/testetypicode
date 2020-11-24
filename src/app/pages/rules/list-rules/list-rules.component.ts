@@ -34,7 +34,8 @@ export class ListRulesComponent implements OnInit {
   actions: ActionModel = {
     add: true,
     edit: true,
-    delete: false
+    delete: false,
+    view: true
   };
 
   data: MonitoringRuleResponseModel;
@@ -87,15 +88,19 @@ export class ListRulesComponent implements OnInit {
     this.isLoading = false;
   }
 
-  onDelete(item: any): void { }
+  onDelete(item): void { }
 
-  onAdd(item: any): void {
+  onAdd(item): void {
     this._router.navigate(['rules/add']);
   }
 
   onEdit(item: MonitoringRuleModel): void {
     this._monitoringRuleService.setRuleToEdit(item);
     this._router.navigate([`rules/edit/${item.id}`]);
-   }
+  }
+
+  onView(item: MonitoringRuleModel): void {
+    this._router.navigate([`rules/view/${item.id}`]);
+  }
 
 }

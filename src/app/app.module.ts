@@ -29,8 +29,7 @@ import { DeletePartnerComponent } from './pages/companies/crud-company/dialogs/d
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { RulesComponent } from './pages/rules/rules.component';
-import { AddRuleComponent } from './pages/rules/add-rule/add-rule.component';
-import { EditRuleComponent } from './pages/rules/edit-rule/edit-rule.component';
+import { RuleComponent } from './pages/rules/rule/rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
 import { EditPhoneComponent } from './pages/companies/crud-company/dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './pages/companies/crud-company/dialogs/add-phone/add-phone.component';
@@ -68,7 +67,7 @@ export const customCurrencyMaskConfig = {
     CompanyComponent,
     PasswordTransactionComponent,
     RulesComponent,
-    AddRuleComponent,
+    RuleComponent,
     AddProfileComponent,
     EditProfileComponent,
     ProfileListComponent,
@@ -92,7 +91,6 @@ export const customCurrencyMaskConfig = {
     AddAgreementComponent,
     PlansComponent,
     DeleteTaxComponent,
-    EditRuleComponent,
   ],
   imports: [
     BrowserModule,

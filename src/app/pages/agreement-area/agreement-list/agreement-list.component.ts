@@ -53,7 +53,8 @@ headers: HeaderModel[] = [
 actions: ActionModel = {
   add: true,
   edit: true,
-  delete: false
+  delete: false,
+  view: false
 };
 
 dinamicAddRouter = "/company-list/add-company";

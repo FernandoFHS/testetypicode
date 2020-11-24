@@ -57,6 +57,7 @@ export class UserComponent implements AfterViewInit {
     add: true,
     edit: true,
     delete: true,
+    view: false
   };
 
   onDelete(row: any) {

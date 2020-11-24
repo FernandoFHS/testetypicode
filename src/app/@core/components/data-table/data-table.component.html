@@ -2,8 +2,17 @@
   <mat-spinner [diameter]="50"></mat-spinner>
 </div>
 
+<div fxLayout="row wrap" class="m-b-25 m-t-20" *ngIf="actions.add && !isLoadingResults" fxLayoutAlign="end end">
+  <button mat-flat-button color="primary" class="float-right" (click)="addItem()">
+    <mat-icon [inline]="true" class="m-r-5">
+      add
+    </mat-icon>
+    Cadastrar
+  </button>
+</div>
+
 <div class="mat-cell mat-elevation-z1" [hidden]="isLoadingResults">
-  
+
   <mat-table #table [dataSource]="dataSource" matSort [matSortActive]="sortColumns" matSortDisableClear
     matSortDirection="desc">
 
@@ -37,12 +46,17 @@
 
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>
-        <button mat-icon-button color="primary" (click)="addItem()" *ngIf="actions.add">
+        <!-- <button mat-icon-button color="primary" (click)="addItem()" *ngIf="actions.add">
           <mat-icon aria-label="Add icon" matTooltip="Cadastrar">add</mat-icon>
-        </button>
+        </button> -->
+        Ações
       </mat-header-cell>
 
       <mat-cell *matCellDef="let row; let i = index">
+        <button mat-icon-button color="accent" (click)="viewItem(row)" *ngIf="actions.view">
+          <mat-icon aria-label="View icon" matTooltip="Visualizar">visibility</mat-icon>
+        </button>
+
         <button mat-icon-button color="primary" (click)="editItem(row)" *ngIf="actions.edit">
           <mat-icon aria-label="Edit icon" matTooltip="Editar">edit</mat-icon>
         </button>

@@ -18,15 +18,14 @@ import { AddCompanyComponent } from '../pages/companies/crud-company/add-company
 import { AddPartnerComponent } from '../pages/companies/partners/add/add-partner.component';
 
 import { RulesComponent } from '../pages/rules/rules.component';
-import { ContainerGuard } from '../@core/components/container/container.guard';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 import { AgreementListComponent } from '../pages/agreement-area/agreement-list/agreement-list.component';
 import { ListRulesComponent } from '../pages/rules/list-rules/list-rules.component';
-import { AddRuleComponent } from '../pages/rules/add-rule/add-rule.component';
-import { EditRuleComponent } from '../pages/rules/edit-rule/edit-rule.component';
 import { PlansComponent } from '../pages/plans/plans.component';
 import { AgreementAreaComponent } from '../pages/agreement-area/agreement-area.component';
 import { AddAgreementComponent } from '../pages/agreement-area/add-agreement/add-agreement.component';
+import { RuleComponent } from '../pages/rules/rule/rule.component';
+import { ContainerGuard } from '../@core/components/container/container.guard';
 
 export const routes: Routes = [
   {
@@ -58,11 +57,15 @@ export const routes: Routes = [
           },
           {
             path: 'add',
-            component: AddRuleComponent
+            component: RuleComponent
           },
           {
             path: 'edit/:id',
-            component: EditRuleComponent
+            component: RuleComponent
+          },
+          {
+            path: 'view/:id',
+            component: RuleComponent
           }
         ]
       },
@@ -109,6 +112,10 @@ export const routes: Routes = [
           {
             path: 'edit/:idCompany',
             component: AddCompanyComponent,
+          },
+          {
+            path: 'view/:id',
+            component: AddCompanyComponent
           },          
           {
             path: 'partners/add',
