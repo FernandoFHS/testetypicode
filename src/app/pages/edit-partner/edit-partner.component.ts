@@ -34,8 +34,7 @@ import {
 })
 export class EditPartnerComponent implements OnInit {
 
-  partnerFormGroup: FormGroup;
-
+  
   partnerSource: any = this.localStorageService.get('partnerFormGroup');
   partnerSourceEdit: any = this.localStorageService.get('editPartner');
   cep: number;
@@ -43,6 +42,9 @@ export class EditPartnerComponent implements OnInit {
   partnerArray: any;
   partner: any;
   index: any;
+
+  partnerFormGroup: FormGroup;
+
 
   breadcrumbModel: BreadcrumbModel = {
     active: {
@@ -65,6 +67,7 @@ export class EditPartnerComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) { }
 
+  
   ngOnInit(): void {
     this.loadParams().then(() => {
       this.partnerFormGroup = new FormGroup({

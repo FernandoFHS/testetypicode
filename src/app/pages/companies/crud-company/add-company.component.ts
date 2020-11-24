@@ -144,7 +144,7 @@ export class AddCompanyComponent implements OnInit {
     },
     items: [
       { title: 'Home', route: '' },
-      { title: 'Lista de Estabelecimentos', route: 'company-list' }
+      { title: 'Lista de Estabelecimentos', route: 'companies/list' }
     ]
   };
   
@@ -155,7 +155,7 @@ export class AddCompanyComponent implements OnInit {
     },
     items: [
       { title: 'Home', route: '' },
-      { title: 'Lista de Estabelecimentos', route: 'company-list' }
+      { title: 'Lista de Estabelecimentos', route: 'companies/list' }
     ]
   };
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -229,7 +229,6 @@ export class AddCompanyComponent implements OnInit {
       this.phoneNumber$ = []
     } else {
       this.phoneNumber$ = this.localStorageService.get('phoneNumber');
-      console.log(this.phoneNumber$);
     }
 
     this.identificationFormGroup = this._formBuilder.group({
@@ -256,7 +255,7 @@ export class AddCompanyComponent implements OnInit {
       complement: [this.adress?.complement || '', Validators.required],
       neighborhoodName: [this.adress?.neighborhoodName || '', Validators.required],
       cityName: [this.adress?.cityName || '', Validators.required],
-      stateName: [this.adress?.stateName || '', Validators.required],
+      uf: [this.adress?.uf || '', Validators.required],
       responsibleNameCtrl: [this.adress?.responsibleNameCtrl || '', Validators.required],
       referencePoint: [this.adress?.referencePoint || ''],
       zipCode: [this.adress?.zipCode || '', Validators.required],
@@ -369,7 +368,6 @@ export class AddCompanyComponent implements OnInit {
         this.apiPhoneNumber$ = company.companyContact;
         this.apiBankAccount$ = company.externalBankAccount;
         this.apiPartnerSource$ = company.companyPartner;
-        console.log(this.apiPartnerSource$);
         this.changeDetectorRefs.detectChanges();       
         
         this.loadForm();
@@ -402,7 +400,7 @@ export class AddCompanyComponent implements OnInit {
       complement: [this.adress?.complement || ''],
       neighborhoodName: [this.adress?.neighborhoodName || ''],
       cityName: [this.adress?.cityName || ''],
-      stateName: [this.adress?.stateName || ''],
+      uf: [this.adress?.uf || ''],
       responsibleNameCtrl: [this.adress?.responsibleNameCtrl || ''],
       referencePoint: [this.adress?.referencePoint || ''],
       zipCode: [this.adress?.zipCode || ''],
@@ -539,7 +537,7 @@ export class AddCompanyComponent implements OnInit {
         complement: company.companyAddress[0].complement,
         neighborhoodName: company.companyAddress[0].street.neighborhood.neighborhoodName,
         cityName: company.companyAddress[0].street.city.cityName,
-        stateName: company.companyAddress[0].street.state.stateName,
+        uf: company.companyAddress[0].street.state.uf,
         referencePoint: company.referencePoint,
         zipCode: company.companyAddress[0].street.zipCode,
         subordinateZipCode: company.companyAddress[1].street.zipCode,
@@ -548,7 +546,7 @@ export class AddCompanyComponent implements OnInit {
         subordinateStreetCtrl: company.companyAddress[1].street.streetName,
         subordinateNumberCtrl: company.companyAddress[1].number,
         subordinateComplementCtrl: company.companyAddress[1].complement,
-        subordinateStateCtrl: company.companyAddress[1].street.state.stateName,
+        subordinateStateCtrl: company.companyAddress[1].street.state.uf,
         subordinateReferencePointCtrl: company.referencePoint
       }); 
 
@@ -559,7 +557,7 @@ export class AddCompanyComponent implements OnInit {
         complement: company.companyAddress[0].complement,
         neighborhoodName: company.companyAddress[0].street.neighborhood.neighborhoodName,
         cityName: company.companyAddress[0].street.city.cityName,
-        stateName: company.companyAddress[0].street.state.stateName,
+        uf: company.companyAddress[0].street.state.uf,
         referencePoint: company.referencePoint,
         zipCode: company.companyAddress[0].street.zipCode,
         subordinateZipCode: company.companyAddress[1].street.zipCode,
@@ -568,7 +566,7 @@ export class AddCompanyComponent implements OnInit {
         subordinateStreetCtrl: company.companyAddress[1].street.streetName,
         subordinateNumberCtrl: company.companyAddress[1].number,
         subordinateComplementCtrl: company.companyAddress[1].complement,
-        subordinateStateCtrl: company.companyAddress[1].street.state.stateName,
+        subordinateStateCtrl: company.companyAddress[1].street.state.uf,
         subordinateReferencePointCtrl: company.referencePoint
       }); 
       console.log(company.companyAddress[0])
@@ -871,7 +869,7 @@ export class AddCompanyComponent implements OnInit {
         cityName: response.localidade,
         streetName: response.logradouro,
         neighborhoodName: response.bairro,
-        stateName: response.uf,
+        uf: response.uf,
       };
       this.response = response;
       this.adressFormGroup.patchValue(cep1);
@@ -1016,8 +1014,7 @@ export class AddCompanyComponent implements OnInit {
             neighborhoodName: this.adressFormGroup.get('neighborhoodName').value,
           },
           state: {
-            stateName: this.adressFormGroup.get('stateName').value,
-            uf: "sp"
+            uf: this.adressFormGroup.get('uf').value,
           },
           streetName: this.adressFormGroup.get('streetName').value,
           zipCode: this.adressFormGroup.get('zipCode').value,
@@ -1035,8 +1032,7 @@ export class AddCompanyComponent implements OnInit {
             neighborhoodName: this.adressFormGroup.get('subordinateNeighborhoodCtrl').value,
           },
           state: {
-            stateName: this.adressFormGroup.get('subordinateStateCtrl').value,
-            uf: "sp"
+            uf: this.adressFormGroup.get('subordinateStateCtrl').value,
           },
           streetName: this.adressFormGroup.get('subordinateStreetCtrl').value,
           zipCode: this.adressFormGroup.get('subordinateZipCode').value,
@@ -1046,7 +1042,6 @@ export class AddCompanyComponent implements OnInit {
     };
     
     this.endereco = Object.assign({},obj);
-    console.log(this.endereco);
   }
 
   getLocalStorage(item) {
