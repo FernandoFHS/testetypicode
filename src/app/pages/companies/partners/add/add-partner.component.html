@@ -28,15 +28,12 @@
   <div class="card-box">
     <mat-card class="mat-elevation-z2">
       <mat-card-content>
-        <!-- <div class="text-center m-b-20 font-light-bold title-size">
-          <label> Adicionar Sócio </label>
-        </div> -->
         <form [formGroup]="partnerFormGroup">
           <div class="line-form">
             <div class="short-line-form">
               <mat-form-field appearance="outline">
                 <mat-label>Número Sequência</mat-label>
-                <input matInput placeholder="Número Sequência" formControlName="sequenceNumber" required />
+                <input matInput placeholder="Número Sequência" formControlName="partnerSequentialNumber" />
                 <mat-icon matSuffix>fast_forward</mat-icon>
                 <mat-error *ngIf="formControl.invalid">{{
                 getErrorMessage()
@@ -48,7 +45,7 @@
           <div class="line-form">
             <mat-form-field appearance="outline">
               <mat-label>Nome</mat-label>
-              <input matInput placeholder="Nome" formControlName="name" required />
+              <input matInput placeholder="Nome" formControlName="partnerName" required />
               <mat-icon matSuffix>account_box</mat-icon>
               <mat-error *ngIf="formControl.invalid">{{
               getErrorMessage()
@@ -67,117 +64,90 @@
 
               <mat-form-field appearance="outline">
                 <mat-label>Data de nascimento</mat-label>
-                <input matInput placeholder="00/00/0000" formControlName="dateOfBirth" mask="00/00/0000" required />
-                <mat-icon matSuffix>today</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-
-              <!--
-              <mat-form-field appearance="outline">
-                <mat-label>Data de nascimento</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="dp"
-                  formControlName="dateOfBirth"
-                  placeholder="00/00/0000"
-                  required
-                />
-                <mat-datepicker-toggle
-                  matSuffix
-                  [for]="dp"
-                ></mat-datepicker-toggle>
+                <input matInput [matDatepicker]="dp" formControlName="dateOfBirth" placeholder="00/00/0000" required />
+                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
                 <mat-datepicker #dp></mat-datepicker>
                 <mat-error *ngIf="formControl.invalid">{{
                   getErrorMessage()
                 }}</mat-error>
               </mat-form-field>
-              -->
+
             </div>
           </div>
-
 
           <mat-divider></mat-divider>
           <h3>Endereço</h3>
 
           <div class="line-form">
             <div class="short-line-form">
+
               <mat-form-field appearance="outline">
                 <mat-label>CEP</mat-label>
-                <input matInput placeholder="CEP" formControlName="cep" #cep (blur)="getAdressByCep(cep.value)"
+                <input matInput placeholder="CEP" formControlName="zipCode" #cep (blur)="getAdressByCep(cep.value)"
                   mask="00000-000" required [showMaskTyped]="true" />
                 <mat-icon matSuffix>place</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
+                <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               </mat-form-field>
+
             </div>
           </div>
-
 
           <div class="line-form">
             <mat-form-field appearance="outline">
               <mat-label>Logradouro</mat-label>
-              <input matInput placeholder="Logradouro" formControlName="street" required />
+              <input matInput placeholder="Logradouro" formControlName="streetName" required />
               <mat-icon matSuffix>add_road</mat-icon>
-              <mat-error *ngIf="formControl.invalid">{{
-              getErrorMessage()
-            }}</mat-error>
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             </mat-form-field>
-
-            <div class="short-line-form">
-              <mat-form-field appearance="outline">
-                <mat-label>Número</mat-label>
-                <input matInput placeholder="Número" formControlName="number" required />
-                <mat-icon matSuffix>looks_one</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Complemento</mat-label>
-                <input matInput placeholder="Complemento" formControlName="complement" />
-                <mat-icon matSuffix>note_add</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
-              </mat-form-field>
-            </div>
 
           </div>
 
+
+          <div class="short-line-form">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Número</mat-label>
+              <input matInput placeholder="Número" formControlName="number" required />
+              <mat-icon matSuffix>looks_one</mat-icon>
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Complemento</mat-label>
+              <input matInput placeholder="Complemento" formControlName="complement" />
+              <mat-icon matSuffix>note_add</mat-icon>
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+          </div>
+
+
           <div class="line-form">
+
             <mat-form-field appearance="outline">
               <mat-label>Bairro</mat-label>
-              <input matInput placeholder="Bairro" formControlName="neighborhood" required />
+              <input matInput placeholder="Bairro" formControlName="neighborhoodName" required />
               <mat-icon matSuffix>map</mat-icon>
-              <mat-error *ngIf="formControl.invalid">{{
-              getErrorMessage()
-            }}</mat-error>
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             </mat-form-field>
 
             <div class="short-line-form">
+
               <mat-form-field appearance="outline">
                 <mat-label>Município</mat-label>
-                <input matInput placeholder="Bairro" formControlName="county" required />
+                <input matInput placeholder="Município" formControlName="cityName" required />
                 <mat-icon matSuffix>map</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
+                <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               </mat-form-field>
+
 
               <mat-form-field appearance="outline">
                 <mat-label>Estado</mat-label>
-                <input matInput placeholder="Estado" formControlName="state" required />
+                <input matInput placeholder="Estado" formControlName="stateName" required />
                 <mat-icon matSuffix>map</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                  getErrorMessage()
-                }}</mat-error>
+                <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               </mat-form-field>
-            </div>
 
+            </div>
           </div>
 
           <mat-divider></mat-divider>
@@ -187,12 +157,10 @@
             <div class="short-line-form">
               <mat-form-field appearance="outline">
                 <mat-label>Telefone/Celular</mat-label>
-                <input matInput placeholder="(00) 0000-0000" formControlName="contact"
-                  mask="(00) 0000-0000 || (00) 0 0000-0000" required />
+                <input matInput placeholder="(00) 0000-0000" formControlName="phone" [showMaskTyped]="true"
+                  mask="(00) 0000-0000||(00) 0 0000-0000" required />
                 <mat-icon matSuffix>call</mat-icon>
-                <mat-error *ngIf="formControl.invalid">{{
-                getErrorMessage()
-              }}</mat-error>
+                <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -202,14 +170,17 @@
     </mat-card>
   </div>
 
-  <div class="group-buttons-actions">
-    <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
-    <div *ngIf="addPage">
+  <div *ngIf="addPage">
+    <div class="group-buttons-actions">
+      <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
       <core-save-button (click)="savePartner(partnerFormGroup)">Salvar </core-save-button>
-    </div>
-    <div *ngIf="!addPage">
-      <core-save-button (click)="editPartner()">Atualizar </core-save-button>
     </div>
   </div>
 
+  <div *ngIf="!addPage">
+    <div class="group-buttons-actions">
+      <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
+      <core-save-button (click)="editPartner()">Atualizar </core-save-button>
+    </div>
+  </div>
 </div>
