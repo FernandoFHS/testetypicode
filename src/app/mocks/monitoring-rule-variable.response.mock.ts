@@ -153,7 +153,7 @@ export const MonitoringRuleVariableResponseMock: MonitoringRuleVariableResponseM
     ]
   },
   {
-    variable_name: "StatusTransação",
+    variable_name: "StatusTransacao",
     display_name: "Status transação",
     data_type: VariableDataTypeEnum.LIST_OF_VALUE,
     options_condition_type_list: [],
@@ -176,7 +176,7 @@ export const MonitoringRuleVariableResponseMock: MonitoringRuleVariableResponseM
     ]
   },
   {
-    variable_name: "CódigoRetorno",
+    variable_name: "CodigoRetorno",
     display_name: "Código retorno",
     data_type: VariableDataTypeEnum.LIST_OF_VALUE,
     options_condition_type_list: [],
@@ -199,7 +199,7 @@ export const MonitoringRuleVariableResponseMock: MonitoringRuleVariableResponseM
     ]
   },
   {
-    variable_name: "HorárioTransação",
+    variable_name: "HorarioTransacao",
     display_name: "Horário transação",
     data_type: VariableDataTypeEnum.LIST_OF_VALUE,
     options_condition_type_list: [],

@@ -1,17 +1,18 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { RuleConditionTypeListEnum } from '../enums/rule-condition-type-list.enum';
 import { TransactionTypeEnum } from '../enums/transaction-status.enum';
 import { MonitoringRuleModel } from '../models/monitoring-rule.model';
 import { MonitoringRuleChangeStatusRequestModel } from '../models/requests/monitoring-rule-change-status.request.model';
-import { MonitoringRuleUpdateRequestModel } from '../models/requests/monitoring-rule-update.request.model';
 import { MonitoringRuleRequestModel } from '../models/requests/monitoring-rule.request.model';
 import { MonitoringRuleVariableResponseModel } from '../models/response/monitoring-rule-variable.response.model';
 import { MonitoringRuleResponseModel } from '../models/response/monitoring-rule.response.model';
 import { ConditionTypeListModel } from '../models/rules/condition-type-list.model';
 import { RuleConditionTypeListModel } from '../models/rules/rule-condition-type-list.model';
 import { GeneralService } from './general.service';
+import { of } from 'rxjs/internal/observable/of';
 
 @Injectable({
   providedIn: 'root'
@@ -79,27 +80,19 @@ export class MonitoringRuleService {
     });
   }
 
-  getRules(page: number, size: number): Promise<MonitoringRuleResponseModel> {
-    return new Promise<MonitoringRuleResponseModel>((resolve, reject) => {
-      try {
-        if (environment.api.mock) {
-          resolve(MonitoringRuleResponseModel.mock());
-        }
-        else {
-          this._http.get(`${environment.api.url}/monitoring-rule?page=${page}&size=${size}`).subscribe((response: MonitoringRuleResponseModel) => {
-            resolve(response);
-          }, (error) => {
-            console.log('-- Erro  na chamada monitoring-rule.service.ts função getRules');
-            console.log(error);
-            reject(error);
-          });
-        }
+  getRules(page: number, size: number): Observable<MonitoringRuleResponseModel> {
+    try {
+      if (environment.api.mock) {
+        return of(MonitoringRuleResponseModel.mock());
       }
-      catch (error) {
-        console.log(error);
-        reject(error);
+      else {
+        return this._http.get<MonitoringRuleResponseModel>(`${environment.api.url}/monitoring-rule?page=${page}&size=${size}`);
       }
-    });
+    }
+    catch (error) {
+      console.log(error);
+      of([]);
+    }
   }
 
   getVariables(): Promise<MonitoringRuleVariableResponseModel[]> {
@@ -161,7 +154,7 @@ export class MonitoringRuleService {
     });
   }
 
-  update(request: MonitoringRuleUpdateRequestModel): Promise<void> {
+  update(request: MonitoringRuleRequestModel): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       try {
         this._http.put(`${environment.api.url}/monitoring-rule`, request).subscribe((response) => {
@@ -481,7 +474,7 @@ export class MonitoringRuleService {
       const v1 = selectedVariables.find(f => v1Invalid.includes(f.variable_name));
       const v2 = selectedVariables.find(f => v2Invalid.includes(f.variable_name));
 
-      this._generalService.openOkDialog(`${msgError}: "${v1.display_name}" e "${v2.display_name}" juntas na mesma regra.`, () => { }, 'Variável inválida');
+      this._generalService.openOkDialog(`${msgError}: "${v1.display_name}" e "${v2.display_name}" juntas na mesma regra.`, () => { }, 'Condição inválida');
     };
 
     const variableTransactionHour: string[] = [
@@ -495,6 +488,10 @@ export class MonitoringRuleService {
       RuleConditionTypeListEnum.VOLUME_PER_HOUR,
       RuleConditionTypeListEnum.MEDIUM_TICKET_PER_HOUR
     ];
+
+    // console.log(selectedVariables);
+    // console.log(variableTransactionHour);
+    // console.log(variableTransactionHourInvalid);
 
     if (
       selectedVariables.find(f => variableTransactionHour.includes(f.variable_name)) &&

@@ -5,11 +5,11 @@ export enum RuleConditionTypeListEnum {
   ACQUIRER = 'Adiquirente',
   INPUT_MODE = 'ModoEntrada',
   TYPE_SELL = 'TipoVenda',
-  TRANSACTION_STATUS = 'StatusTransação',
-  RETURN_CODE = 'CódigoRetorno',
+  TRANSACTION_STATUS = 'StatusTransacao',
+  RETURN_CODE = 'CodigoRetorno',
 
   // Others
-  TRANSACTION_HOUR = 'HorárioTransação',
+  TRANSACTION_HOUR = 'HorarioTransacao',
   RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION = 'RecorrenciaMesmoEstabelecimentoEMesmoValorTransação',
   RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION_AND_CARD_NUMBER = 'RecorrenciaMesmoEstabelecimentoEMesmoValorEMesmoCartão',
   RECURRENCE_SAME_COMPANY_AND_CARD_NUMBER = 'RecorrenciaMesmoEstabelecimentoEMesmoCartão',
