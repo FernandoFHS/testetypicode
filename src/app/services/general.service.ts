@@ -12,7 +12,8 @@ export class GeneralService {
 
   openConfirmDialog(message: string, yesCallback: Function, noCallback: Function, title: string = null): void {
     const confirmDialog = this._matDialog.open(ConfirmDialogComponent, {
-      disableClose: true
+      disableClose: true,
+      autoFocus: false
     });
 
     confirmDialog.componentInstance.title = title;
@@ -34,7 +35,8 @@ export class GeneralService {
 
   openOkDialog(message: string, okCallback: Function, title: string = null): void {
     const confirmDialog = this._matDialog.open(ConfirmDialogComponent, {
-      disableClose: true
+      disableClose: true,
+      autoFocus: false
     });
 
     confirmDialog.componentInstance.title = title;
@@ -46,5 +48,9 @@ export class GeneralService {
     confirmDialog.afterClosed().subscribe(result => {
       okCallback();
     });
+  }
+
+  copyWithoutReferences<T>(objToCopy): T {
+    return JSON.parse(JSON.stringify(objToCopy));
   }
 }

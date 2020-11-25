@@ -22,6 +22,7 @@ import { MonitoringRuleConditionResponseModel } from 'src/app/models/response/mo
 import { MonitoringRuleUpdateRequestModel } from 'src/app/models/requests/monitoring-rule-update.request.model';
 import { GeneralService } from 'src/app/services/general.service';
 import { MonitoringRuleChangeStatusRequestModel } from 'src/app/models/requests/monitoring-rule-change-status.request.model';
+import { RuleConditionTypeListEnum } from 'src/app/enums/rule-condition-type-list.enum';
 
 @Component({
   selector: 'app-rule',
@@ -173,12 +174,14 @@ export class RuleComponent implements OnInit {
   addCondition(): void {
     const conditions = this.form.get('conditions') as FormArray;
     conditions.push(this._createCondition());
+
+    this.selectedVariables.push(new MonitoringRuleVariableResponseModel());
   }
 
   onChangeVariable(event: MatSelectChange, index: number): void {
     const conditionsForm = this.form.get('conditions') as FormArray;
 
-    const variable = this.variables.find(v => v.variable_name == event.value);
+    const variable = this._generalService.copyWithoutReferences<MonitoringRuleVariableResponseModel>(this.variables.find(v => v.variable_name == event.value));
     const comparisonOperatorForm = conditionsForm.controls[index].get('comparison_op');
     const valueForm = conditionsForm.controls[index].get('value');
 
@@ -194,21 +197,39 @@ export class RuleComponent implements OnInit {
       this.selectedVariables.push(variable);
     }
 
-    if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
-      this.selectedVariables[index].is_loading_data = true;
+    const combinationIsValid = this._monitoringRuleService.validateCombinationOfVariables(this.selectedVariables);
 
-      this._monitoringRuleService.getRuleConditionListByEnum(variable.variable_name).then((data) => {
-        if (data && data.length > 0) {
-          variable.options_condition_type_list = data;
-          variable.filtered_options_condition_type_list = data;
-        }
-        else {
-          variable.options_condition_type_list = [];
-          variable.filtered_options_condition_type_list = [];
-        }
-      }).finally(() => {
-        variable.is_loading_data = false;
-      });
+    if (combinationIsValid) {
+      if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
+        this.selectedVariables[index].is_loading_data = true;
+
+        this._monitoringRuleService.getRuleConditionListByEnum(variable.variable_name).then((data) => {
+          if (data && data.length > 0) {
+            variable.options_condition_type_list = data;
+            variable.filtered_options_condition_type_list = data;
+          }
+          else {
+            variable.options_condition_type_list = [];
+            variable.filtered_options_condition_type_list = [];
+          }
+        }).finally(() => {
+          variable.is_loading_data = false;
+        });
+      }
+    }
+    else {
+      this.removeCondition(index, false, false);
+    }
+  }
+
+  disableVariable(variable: MonitoringRuleVariableResponseModel): boolean {
+    const variableAdded = this.selectedVariables.find(f => f.variable_name == variable.variable_name);
+
+    if (variableAdded) {
+      return true;
+    }
+    else {
+      return false;
     }
   }
 
@@ -292,55 +313,60 @@ export class RuleComponent implements OnInit {
     this.form.get('email').setValue('');
 
     if (this.form.valid) {
-      this._spinnerService.show();
-
       const form = this.form.getRawValue();
       const formConditions = (this.form.get('conditions') as FormArray);
 
-      const conditions: MonitoringRuleConditionRequestModel[] = [];
+      if (formConditions.controls.length == 0) {
+        this._notificationService.error('Formulário inválido, você deve informar pelo menos uma condição.')
+      }
+      else {
+        this._spinnerService.show();
 
-      for (let index = 0; index < formConditions.controls.length; index++) {
-        const formCondition = formConditions.at(index);
-        const selectedVariable = this.selectedVariables[index];
+        const conditions: MonitoringRuleConditionRequestModel[] = [];
 
-        const condition: MonitoringRuleConditionRequestModel = {
-          comparison_operator: formCondition.get('comparison_op').value,
-          comparison_sequence: index.toString(),
-          createdAt: '', // TODO
-          id: 0, // TODO
-          logical_operator: (index == formConditions.controls.length || formConditions.controls.length == 1) ? '' : formCondition.get('logic_op').value,
-          monetary_value: selectedVariable.data_type == VariableDataTypeEnum.MONETARY ? formCondition.get('value').value : null,
-          numeric_without_decimal_places_value: selectedVariable.data_type == VariableDataTypeEnum.LIST_OF_VALUE ? formCondition.get('value').value : null,
-          updatedAt: '', // TODO
-          variable_name: formCondition.get('variable').value
+        for (let index = 0; index < formConditions.controls.length; index++) {
+          const formCondition = formConditions.at(index);
+          const selectedVariable = this.selectedVariables[index];
+
+          const condition: MonitoringRuleConditionRequestModel = {
+            comparison_operator: formCondition.get('comparison_op').value,
+            comparison_sequence: index.toString(),
+            createdAt: '', // TODO
+            id: 0, // TODO
+            logical_operator: (index == formConditions.controls.length || formConditions.controls.length == 1) ? '' : formCondition.get('logic_op').value,
+            monetary_value: selectedVariable.data_type == VariableDataTypeEnum.MONETARY ? formCondition.get('value').value : null,
+            numeric_without_decimal_places_value: selectedVariable.data_type == VariableDataTypeEnum.LIST_OF_VALUE ? formCondition.get('value').value : null,
+            updatedAt: '', // TODO
+            variable_name: formCondition.get('variable').value
+          }
+
+          conditions.push(condition);
         }
 
-        conditions.push(condition);
-      }
+        const request: MonitoringRuleRequestModel = {
+          active: false,
+          block_merchant_transactions: form.block_merchant_transactions,
+          createdAt: '', // TODO
+          critical_level: form.critical_level,
+          description: form.description,
+          email_notification_mode: form.email_notification_mode,
+          email_notification_recipients: this.emails || [],
+          id: 0, // TODO
+          id_user_of_activation: 0, // TODO
+          monitoring_rule_condition: conditions,
+          updatedAt: '', // TODO
+          rule_type: RuleTypeEnum.NORMAL // TODO
+        }
 
-      const request: MonitoringRuleRequestModel = {
-        active: false,
-        block_merchant_transactions: form.block_merchant_transactions,
-        createdAt: '', // TODO
-        critical_level: form.critical_level,
-        description: form.description,
-        email_notification_mode: form.email_notification_mode,
-        email_notification_recipients: this.emails || [],
-        id: 0, // TODO
-        id_user_of_activation: 0, // TODO
-        monitoring_rule_condition: conditions,
-        updatedAt: '', // TODO
-        rule_type: RuleTypeEnum.NORMAL // TODO
+        this._monitoringRuleService.add(request).then((response) => {
+          this._notificationService.success('Regra criada com sucesso!');
+          this._router.navigate(['rules/list']);
+        }, (error) => {
+          this._notificationService.error('Erro ao criar Regra, tente novamente.');
+        }).finally(() => {
+          this._spinnerService.hide();
+        });
       }
-
-      this._monitoringRuleService.add(request).then((response) => {
-        this._notificationService.success('Regra criada com sucesso!');
-        this._router.navigate(['rules/list']);
-      }, (error) => {
-        this._notificationService.error('Erro ao criar Regra, tente novamente.');
-      }).finally(() => {
-        this._spinnerService.hide();
-      });
     }
     else {
       this._notificationService.error('Formulário inválido.');
@@ -472,8 +498,14 @@ export class RuleComponent implements OnInit {
   onKeyupValue(event, index: number): void {
     const selectedVariable = this.selectedVariables[index];
 
-    selectedVariable.filtered_options_condition_type_list =
-      selectedVariable.options_condition_type_list.filter(f => f.description.toLowerCase().includes(event.target.value));
+    if (selectedVariable.variable_name == RuleConditionTypeListEnum.CNAE || selectedVariable.variable_name == RuleConditionTypeListEnum.MCC) {
+      selectedVariable.filtered_options_condition_type_list =
+        selectedVariable.options_condition_type_list.filter(f => f.description.toLowerCase().includes(event.target.value) || f.code.includes(event.target.value));
+    }
+    else {
+      selectedVariable.filtered_options_condition_type_list =
+        selectedVariable.options_condition_type_list.filter(f => f.description.toLowerCase().includes(event.target.value));
+    }
   }
 
   disableValueInput(index: number): boolean {
@@ -567,5 +599,46 @@ export class RuleComponent implements OnInit {
       });
     }, () => {
     }, 'Inativar Regra');
+  }
+
+  removeCondition(index: number, showConfirmDialog: boolean, deleteControl: boolean): void {
+    const deleteFn = () => {
+      let conditionsForm = this.form.get('conditions') as FormArray;
+
+      if (deleteControl) {
+        this.selectedVariables.splice(index, 1);
+        conditionsForm.removeAt(index);
+      }
+      else {
+        this.selectedVariables[index] = new MonitoringRuleVariableResponseModel();
+
+        const valueForm = conditionsForm.controls[index].get('value');
+        const variableForm = conditionsForm.controls[index].get('variable');
+        const comparisonOpForm = conditionsForm.controls[index].get('comparison_op');
+        const logicOpForm = conditionsForm.controls[index].get('logic_op');
+
+        variableForm.setValue('');
+
+        valueForm.setValue('');
+        valueForm.disable();
+
+        comparisonOpForm.setValue('');
+        comparisonOpForm.disable();
+
+        logicOpForm.setValue('');
+        logicOpForm.disable();
+      }
+    };
+
+    if (showConfirmDialog) {
+      this._generalService.openConfirmDialog('Tem certeza que deseja excluir a condição?', () => {
+        deleteFn()
+      }, () => {
+        // no
+      }, 'Excluir Condição');
+    }
+    else {
+      deleteFn();
+    }
   }
 }

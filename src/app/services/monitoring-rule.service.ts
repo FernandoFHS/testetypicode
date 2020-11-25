@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { RuleConditionTypeListEnum } from '../enums/rule-condition-type-list.enum';
@@ -11,6 +11,7 @@ import { MonitoringRuleVariableResponseModel } from '../models/response/monitori
 import { MonitoringRuleResponseModel } from '../models/response/monitoring-rule.response.model';
 import { ConditionTypeListModel } from '../models/rules/condition-type-list.model';
 import { RuleConditionTypeListModel } from '../models/rules/rule-condition-type-list.model';
+import { GeneralService } from './general.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,8 @@ export class MonitoringRuleService {
   private _ruleConditionTypeList: RuleConditionTypeListModel;
 
   constructor(
-    private _http: HttpClient
+    private _http: HttpClient,
+    private _generalService: GeneralService
   ) { }
 
   setRuleConditionTypeList(model: RuleConditionTypeListModel): void {
@@ -193,7 +195,8 @@ export class MonitoringRuleService {
                     return {
                       description: item.description,
                       disabled: false,
-                      id: item.id
+                      id: item.id,
+                      code: ''
                     };
                   });
 
@@ -230,7 +233,8 @@ export class MonitoringRuleService {
                     return {
                       description: item.description,
                       disabled: false,
-                      id: item.idCnae
+                      id: item.idCnae,
+                      code: item.code
                     };
                   });
 
@@ -260,7 +264,42 @@ export class MonitoringRuleService {
               resolve(this._ruleConditionTypeList.input_mode_list);
             }
             else {
-              resolve([]);
+              let params = new HttpParams();
+              params = params.append('page', '0');
+              params = params.append('size', '999999999');
+
+              this._http.get(`${environment.api.url}/monitoring-rules/transactions/entry-mode`, {
+                params: params
+              }).subscribe((data: { content: { id: number, disabled: boolean, description: string }[] }) => {
+
+                if (data && data.content) {
+                  const response: ConditionTypeListModel[] = data.content.filter(item => !item.disabled).map(item => {
+                    return {
+                      description: item.description,
+                      disabled: item.disabled,
+                      id: item.id,
+                      code: ''
+                    };
+                  });
+
+                  this._ruleConditionTypeList = {
+                    ...this._ruleConditionTypeList,
+                    input_mode_list: response
+                  };
+
+                  this.setRuleConditionTypeList(this._ruleConditionTypeList);
+
+                  resolve(response);
+                }
+                else {
+                  resolve([]);
+                }
+
+              }, (error) => {
+                console.log('Erro ao chamar API de Modo de Entrada');
+                console.log(error);
+                reject();
+              });
             }
 
             break;
@@ -276,7 +315,8 @@ export class MonitoringRuleService {
                     return {
                       description: item.description,
                       disabled: false,
-                      id: item.id
+                      id: item.id,
+                      code: item.code
                     };
                   });
 
@@ -302,11 +342,46 @@ export class MonitoringRuleService {
 
             break;
           case RuleConditionTypeListEnum.RETURN_CODE:
-            if (this._ruleConditionTypeList != null && this._ruleConditionTypeList.return_code) {
-              resolve(this._ruleConditionTypeList.return_code);
+            if (this._ruleConditionTypeList != null && this._ruleConditionTypeList.return_code_list) {
+              resolve(this._ruleConditionTypeList.return_code_list);
             }
             else {
-              resolve([]);
+              let params = new HttpParams();
+              params = params.append('page', '0');
+              params = params.append('size', '999999999');
+
+              this._http.get(`${environment.api.url}/monitoring-rules/transactions/transaction-return-code`, {
+                params: params
+              }).subscribe((data: { content: { id: number, disabled: boolean, description: string }[] }) => {
+
+                if (data && data.content) {
+                  const response: ConditionTypeListModel[] = data.content.filter(item => !item.disabled).map(item => {
+                    return {
+                      description: item.description,
+                      disabled: item.disabled,
+                      id: item.id,
+                      code: ''
+                    };
+                  });
+
+                  this._ruleConditionTypeList = {
+                    ...this._ruleConditionTypeList,
+                    return_code_list: response
+                  };
+
+                  this.setRuleConditionTypeList(this._ruleConditionTypeList);
+
+                  resolve(response);
+                }
+                else {
+                  resolve([]);
+                }
+
+              }, (error) => {
+                console.log('Erro ao chamar API de Código Retorno');
+                console.log(error);
+                reject();
+              });
             }
 
             break;
@@ -318,15 +393,18 @@ export class MonitoringRuleService {
               const response: ConditionTypeListModel[] = [{
                 id: TransactionTypeEnum.AUTHORIZED,
                 description: 'Aprovada',
-                disabled: false
+                disabled: false,
+                code: ''
               }, {
                 id: TransactionTypeEnum.REFUNDED,
                 description: 'Estornada',
-                disabled: false
+                disabled: false,
+                code: ''
               }, {
                 id: TransactionTypeEnum.REFUSED,
                 description: 'Rejeitada',
-                disabled: false
+                disabled: false,
+                code: ''
               }];
 
               this._ruleConditionTypeList = {
@@ -345,7 +423,42 @@ export class MonitoringRuleService {
               resolve(this._ruleConditionTypeList.type_sell_list);
             }
             else {
-              resolve([]);
+              let params = new HttpParams();
+              params = params.append('page', '0');
+              params = params.append('size', '999999999');
+
+              this._http.get(`${environment.api.url}/monitoring-rules/transactions/transaction-type`, {
+                params: params
+              }).subscribe((data: { content: { id: number, disabled: boolean, description: string }[] }) => {
+
+                if (data && data.content) {
+                  const response: ConditionTypeListModel[] = data.content.filter(item => !item.disabled).map(item => {
+                    return {
+                      description: item.description,
+                      disabled: item.disabled,
+                      id: item.id,
+                      code: ''
+                    };
+                  });
+
+                  this._ruleConditionTypeList = {
+                    ...this._ruleConditionTypeList,
+                    type_sell_list: response
+                  };
+
+                  this.setRuleConditionTypeList(this._ruleConditionTypeList);
+
+                  resolve(response);
+                }
+                else {
+                  resolve([]);
+                }
+
+              }, (error) => {
+                console.log('Erro ao chamar API de Tipo de Venda');
+                console.log(error);
+                reject();
+              });
             }
 
             break;
@@ -359,5 +472,61 @@ export class MonitoringRuleService {
         reject();
       }
     });
+  }
+
+  validateCombinationOfVariables(selectedVariables: MonitoringRuleVariableResponseModel[]): boolean {
+    const showError = (v1Invalid: string[], v2Invalid: string[]) => {
+      const msgError = 'Combinação da variáveis inválida, não é possível incluir as variáveis';
+
+      const v1 = selectedVariables.find(f => v1Invalid.includes(f.variable_name));
+      const v2 = selectedVariables.find(f => v2Invalid.includes(f.variable_name));
+
+      this._generalService.openOkDialog(`${msgError}: "${v1.display_name}" e "${v2.display_name}" juntas na mesma regra.`, () => { }, 'Variável inválida');
+    };
+
+    const variableTransactionHour: string[] = [
+      RuleConditionTypeListEnum.TRANSACTION_HOUR
+    ];
+
+    const variableTransactionHourInvalid: string[] = [
+      RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION,
+      RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION_AND_CARD_NUMBER,
+      RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_CARD_NUMBER,
+      RuleConditionTypeListEnum.VOLUME_PER_HOUR,
+      RuleConditionTypeListEnum.MEDIUM_TICKET_PER_HOUR
+    ];
+
+    if (
+      selectedVariables.find(f => variableTransactionHour.includes(f.variable_name)) &&
+      selectedVariables.find(f => variableTransactionHourInvalid.includes(f.variable_name))
+    ) {
+      showError(variableTransactionHour, variableTransactionHourInvalid);
+      return false;
+    }
+    else if (
+      selectedVariables.find(f => f.variable_name?.includes(RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_CARD_NUMBER)) &&
+      selectedVariables.find(f => f.variable_name?.includes(RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION))
+    ) {
+      showError([RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_CARD_NUMBER], [RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION]);
+      return false;
+    }
+    else if (
+      selectedVariables.find(f => f.variable_name?.includes(RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_CARD_NUMBER)) &&
+      selectedVariables.find(f => f.variable_name?.includes(RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION_AND_CARD_NUMBER))
+    ) {
+      showError([RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_CARD_NUMBER], [RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION_AND_CARD_NUMBER]);
+      return false;
+    }
+    else if (
+      selectedVariables.find(f => f.variable_name?.includes(RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION)) &&
+      selectedVariables.find(f => f.variable_name?.includes(RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION_AND_CARD_NUMBER))
+    ) {
+      showError([RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION], [RuleConditionTypeListEnum.RECURRENCE_SAME_COMPANY_AND_VALUE_TRANSACTION_AND_CARD_NUMBER]);
+      return false;
+
+    }
+    else {
+      return true;
+    }
   }
 }
