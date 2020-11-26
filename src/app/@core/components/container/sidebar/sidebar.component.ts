@@ -1,6 +1,8 @@
-import { ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { menuItems } from 'src/app/@core/consts/menu-items';
+import { Menu } from 'src/app/@core/models/menu.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'core-container-sidebar',
@@ -8,7 +10,7 @@ import { menuItems } from 'src/app/@core/consts/menu-items';
   styleUrls: ['./sidebar.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ContainerSidebarComponent implements OnDestroy {
+export class ContainerSidebarComponent implements OnDestroy, OnInit {
   mobileQuery: MediaQueryList;
   menuList = menuItems;
 
@@ -16,7 +18,8 @@ export class ContainerSidebarComponent implements OnDestroy {
 
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
-    private _media: MediaMatcher
+    private _media: MediaMatcher,
+    private _router: Router
   ) {
     this.mobileQuery = _media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => _changeDetectorRef.detectChanges();
@@ -25,5 +28,8 @@ export class ContainerSidebarComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+  }
+
+  ngOnInit(): void {
   }
 }

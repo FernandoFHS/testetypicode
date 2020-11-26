@@ -28,6 +28,11 @@ import { Error404Component } from '../pages/errors/404/error-404.component';
 
 export const routes: Routes = [
   {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [LoginGuard]
+  },
+  {
     path: '',
     component: ContainerComponent,
     // canActivateChild: [ContainerGuard],
@@ -163,10 +168,5 @@ export const routes: Routes = [
         component: Error404Component,
       },
     ],
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [LoginGuard]
   }
 ];

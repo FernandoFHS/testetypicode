@@ -1,13 +1,54 @@
 @import '~@angular/material/theming';
 @import 'palletes';
 
+@mixin get-primary-color() {
+  .default-theme & {
+    color: map-get($map: $core-default, $key: 500);
+  }
+
+  .orange-theme & {
+    color: map-get($map: $mat-custom-orange, $key: 500);
+  }
+
+  .blue-theme & {
+    color: map-get($map: $mat-blue, $key: 500);
+  }
+
+  .grey-theme & {
+    color: map-get($map: $mat-custom-grey, $key: 500);
+  }
+
+  .gold-theme & {
+    color: map-get($map: $mat-custom-gold, $key: 500);
+  }
+
+  .green-theme & {
+    color: map-get($map: $mat-custom-green, $key: 500);
+  }
+
+  .purple-theme & {
+    color: map-get($map: $mat-deep-purple, $key: 500);
+  }
+
+  .wine-theme & {
+    color: map-get($map: $mat-custom-wine, $key: 500);
+  }
+
+  .dark-theme & {
+    color: map-get($map: $mat-custom-dark, $key: 800);
+  }
+
+  .pink-theme & {
+    color: map-get($map: $mat-pink, $key: 800);
+  }
+}
+
 @mixin get-primary-background-color() {
   .default-theme & {
     background-color: map-get($map: $core-default, $key: 500);
   }
 
   .orange-theme & {
-    // background-color: #0d2c3f;
     background-color: map-get($map: $mat-custom-orange, $key: 500);
   }
 

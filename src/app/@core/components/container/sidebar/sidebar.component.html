@@ -11,23 +11,55 @@
 </div>
 
 <mat-nav-list accordion>
+  <span *ngFor="let item of menuList">
 
-  <mat-list-item accordion-link *ngFor="let menuItem of menuList" routerLinkActive="selected"
-    group="{{menuItem.route}}">
+    <span *ngIf="item.children && item.children.length > 0">
 
-    <a accordion-anchor [routerLink]="[menuItem.route]" *ngIf="menuItem.type === 'link'">
-      <mat-icon>
-        {{ menuItem.icon }}
-      </mat-icon>
-      <span>
-        {{ menuItem.name }}
-      </span>
-      <span fxFlex></span>
-      <span class="label label-{{ badge.type }}" *ngFor="let badge of menuItem.badge">
-        {{ badge.value }}
-      </span>
-    </a>
+      <mat-accordion>
 
-  </mat-list-item>
+        <mat-expansion-panel class="mat-elevation-z0" [expanded]="item.open">
+
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div fxLayout="row" fxLayoutAlign="space-between center">
+                <mat-icon color="primary">
+                  {{item.icon_name}}
+                </mat-icon>
+                {{item.display_name}}
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <span *ngFor="let child of item.children" accordion-link routerLinkActive="selected" [menuItem]="item"
+            [group]="child.route">
+            <mat-list-item [routerLink]="[child.route]">
+              <div fxLayout="row" fxLayoutAlign="space-between center">
+                <mat-icon color="primary">
+                  {{child.icon_name}}
+                </mat-icon>
+                {{child.display_name}}
+              </div>
+            </mat-list-item>
+          </span>
+
+        </mat-expansion-panel>
+
+      </mat-accordion>
+
+    </span>
+
+    <span *ngIf="!item.children || item.children.length === 0" accordion-link routerLinkActive="selected"
+      [menuItem]="item" [group]="item.route">
+      <mat-list-item [routerLink]="[item.route]">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-icon color="primary">
+            {{item.icon_name}}
+          </mat-icon>
+          {{item.display_name}}
+        </div>
+      </mat-list-item>
+    </span>
+
+  </span>
 
 </mat-nav-list>

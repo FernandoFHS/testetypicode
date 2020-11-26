@@ -349,137 +349,147 @@ export class RuleComponent implements OnInit {
     }
   }
 
-  save(): void {
-    this.form.markAllAsTouched();
-
-    this.form.get('email').setValue('');
+  private _validateForm(): boolean {
+    let isValid: boolean = true;
 
     if (this.form.valid) {
       const form = this.form.getRawValue();
       const formConditions = (this.form.get('conditions') as FormArray);
 
       if (formConditions.controls.length == 0) {
-        this._notificationService.error('Formulário inválido, você deve informar pelo menos uma condição.')
+        isValid = false;
+        this._notificationService.error('Formulário inválido, nenhuma condição informada.')
       }
-      else {
-        this._spinnerService.show();
-
-        const conditions: MonitoringRuleConditionRequestModel[] = [];
-
-        for (let index = 0; index < formConditions.controls.length; index++) {
-          const formCondition = formConditions.at(index);
-          const selectedVariable = this.selectedVariables[index];
-
-          const condition: MonitoringRuleConditionRequestModel = {
-            comparison_operator: formCondition.get('comparison_op').value,
-            created_at: '', // TODO
-            id: 0, // TODO
-            logical_operator: (index == formConditions.controls.length || formConditions.controls.length == 1) ? '' : formCondition.get('logic_op').value,
-            list_item_value: selectedVariable.data_type == VariableDataTypeEnum.LIST_OF_VALUE ? selectedVariable.selected_options_condition_type_list.map(m => m.id).join(',') : null,
-            monetary_value: selectedVariable.data_type == VariableDataTypeEnum.MONETARY ? formCondition.get('value').value : null,
-            numeric_without_decimal_places_value: null,
-            updated_at: '', // TODO
-            number_per_hour: null,
-            value: null, // TODO
-            variable_name: formCondition.get('variable').value
-          }
-
-          conditions.push(condition);
-        }
-
-        const request: MonitoringRuleRequestModel = {
-          active: false,
-          block_merchant_transactions: form.block_merchant_transactions,
-          created_at: '', // TODO
-          critical_level: form.critical_level,
-          description: form.description,
-          email_notification_mode: form.email_notification_mode,
-          email_notification_recipients: this.emails || [],
-          id: 0, // TODO
-          id_user_of_activation: 0, // TODO
-          monitoring_rule_condition: conditions,
-          updated_at: '', // TODO
-          rule_type: RuleTypeEnum.NORMAL // TODO
-        }
-
-        this._monitoringRuleService.add(request).then((response) => {
-          this._notificationService.success('Regra criada com sucesso!');
-          this._router.navigate(['rules/list']);
-        }, (error) => {
-          this._notificationService.error('Erro ao criar Regra, tente novamente.');
-        }).finally(() => {
-          this._spinnerService.hide();
-        });
+      else if (form.email_notification_mode !== 'NOT_SEND' && this.emails?.length == 0) {
+        isValid = false;
+        this._notificationService.error('Formulário inválido, nenhum e-mail informado.');
       }
     }
     else {
-      this._notificationService.error('Formulário inválido.');
+      isValid = false;
+      this._notificationService.error('Formulário inválido, consulte os campos.');
+    }
+
+    return isValid;
+  }
+
+  save(): void {
+    this.form.markAllAsTouched();
+
+    const isValid = this._validateForm();
+
+    if (isValid) {
+      this._spinnerService.show();
+
+      const form = this.form.getRawValue();
+      const formConditions = (this.form.get('conditions') as FormArray);
+
+      const conditions: MonitoringRuleConditionRequestModel[] = [];
+
+      for (let index = 0; index < formConditions.controls.length; index++) {
+        const formCondition = formConditions.at(index);
+        const selectedVariable = this.selectedVariables[index];
+
+        const condition: MonitoringRuleConditionRequestModel = {
+          comparison_operator: formCondition.get('comparison_op').value,
+          created_at: '', // TODO
+          id: 0, // TODO
+          logical_operator: (index == formConditions.controls.length || formConditions.controls.length == 1) ? '' : formCondition.get('logic_op').value,
+          list_item_value: selectedVariable.data_type == VariableDataTypeEnum.LIST_OF_VALUE ? selectedVariable.selected_options_condition_type_list.map(m => m.id).join(',') : null,
+          monetary_value: selectedVariable.data_type == VariableDataTypeEnum.MONETARY ? formCondition.get('value').value : null,
+          numeric_without_decimal_places_value: null,
+          updated_at: '', // TODO
+          number_per_hour: null,
+          value: null, // TODO
+          variable_name: formCondition.get('variable').value
+        }
+
+        conditions.push(condition);
+      }
+
+      const request: MonitoringRuleRequestModel = {
+        active: false,
+        block_merchant_transactions: form.block_merchant_transactions,
+        created_at: '', // TODO
+        critical_level: form.critical_level,
+        description: form.description,
+        email_notification_mode: form.email_notification_mode,
+        email_notification_recipients: this.emails || [],
+        id: 0, // TODO
+        id_user_of_activation: 0, // TODO
+        monitoring_rule_condition: conditions,
+        updated_at: '', // TODO
+        rule_type: RuleTypeEnum.NORMAL // TODO
+      }
+
+      this._monitoringRuleService.add(request).then((response) => {
+        this._notificationService.success('Regra criada com sucesso!');
+        this._router.navigate(['rules/list']);
+      }, (error) => {
+        this._notificationService.error('Erro ao criar Regra, tente novamente.');
+      }).finally(() => {
+        this._spinnerService.hide();
+      });
     }
   }
 
   update(): void {
     this.form.markAllAsTouched();
 
-    if (this.form.valid) {
+    const isValid = this._validateForm();
+
+    if (isValid) {
+      this._spinnerService.show();
+
       const form = this.form.getRawValue();
       const formConditions = (this.form.get('conditions') as FormArray);
 
-      if (formConditions.controls.length == 0) {
-        this._notificationService.error('Formulário inválido, você deve informar pelo menos uma condição.')
-      }
-      else {
-        this._spinnerService.show();
+      const conditions: MonitoringRuleConditionRequestModel[] = [];
 
-        const conditions: MonitoringRuleConditionRequestModel[] = [];
+      for (let index = 0; index < formConditions.controls.length; index++) {
+        const formCondition = formConditions.at(index);
+        const selectedVariable = this.selectedVariables[index];
 
-        for (let index = 0; index < formConditions.controls.length; index++) {
-          const formCondition = formConditions.at(index);
-          const selectedVariable = this.selectedVariables[index];
-
-          const condition: MonitoringRuleConditionRequestModel = {
-            comparison_operator: formCondition.get('comparison_op').value,
-            created_at: '', // TODO
-            id: 0, // TODO
-            logical_operator: (index == formConditions.controls.length || formConditions.controls.length == 1) ? '' : formCondition.get('logic_op').value,
-            list_item_value: selectedVariable.data_type == VariableDataTypeEnum.LIST_OF_VALUE ? selectedVariable.selected_options_condition_type_list.map(m => m.id).join(',') : null,
-            monetary_value: selectedVariable.data_type == VariableDataTypeEnum.MONETARY ? formCondition.get('value').value : null,
-            numeric_without_decimal_places_value: null,
-            updated_at: '', // TODO
-            number_per_hour: null,
-            value: null, // TODO
-            variable_name: formCondition.get('variable').value
-          }
-
-          conditions.push(condition);
-        }
-
-        const request: MonitoringRuleRequestModel = {
-          active: this.model.active,
-          block_merchant_transactions: form.block_merchant_transactions,
-          created_at: this.model.created_at,
-          critical_level: form.critical_level,
-          description: form.description,
-          email_notification_mode: form.email_notification_mode,
-          email_notification_recipients: this.emails || [],
-          id: this.model.id,
-          id_user_of_activation: this.model.id_user_of_activation,
-          monitoring_rule_condition: conditions,
+        const condition: MonitoringRuleConditionRequestModel = {
+          comparison_operator: formCondition.get('comparison_op').value,
+          created_at: '', // TODO
+          id: 0, // TODO
+          logical_operator: (index == formConditions.controls.length || formConditions.controls.length == 1) ? '' : formCondition.get('logic_op').value,
+          list_item_value: selectedVariable.data_type == VariableDataTypeEnum.LIST_OF_VALUE ? selectedVariable.selected_options_condition_type_list.map(m => m.id).join(',') : null,
+          monetary_value: selectedVariable.data_type == VariableDataTypeEnum.MONETARY ? formCondition.get('value').value : null,
+          numeric_without_decimal_places_value: null,
           updated_at: '', // TODO
-          rule_type: RuleTypeEnum.NORMAL // TODO
+          number_per_hour: null,
+          value: null, // TODO
+          variable_name: formCondition.get('variable').value
         }
 
-        this._monitoringRuleService.update(request).then(() => {
-          this.back();
-          this._notificationService.success('Regra atualizada com sucesso.')
-        }, (error) => {
-          this._notificationService.error('Erro ao atualizar regra, tente novamente.');
-        }).finally(() => {
-          this._spinnerService.hide();
-        });
+        conditions.push(condition);
       }
-    }
-    else {
-      this._notificationService.error('Formulário inválido.');
+
+      const request: MonitoringRuleRequestModel = {
+        active: this.model.active,
+        block_merchant_transactions: form.block_merchant_transactions,
+        created_at: this.model.created_at,
+        critical_level: form.critical_level,
+        description: form.description,
+        email_notification_mode: form.email_notification_mode,
+        email_notification_recipients: this.emails || [],
+        id: this.model.id,
+        id_user_of_activation: this.model.id_user_of_activation,
+        monitoring_rule_condition: conditions,
+        updated_at: '', // TODO
+        rule_type: RuleTypeEnum.NORMAL // TODO
+      }
+
+      this._monitoringRuleService.update(request).then(() => {
+        this.back();
+        this._notificationService.success('Regra atualizada com sucesso.')
+      }, (error) => {
+        this._notificationService.error('Erro ao atualizar regra, tente novamente.');
+      }).finally(() => {
+        this._spinnerService.hide();
+      });
     }
   }
 
