@@ -24,6 +24,7 @@ import { ListRulesComponent } from '../pages/rules/list-rules/list-rules.compone
 import { RuleComponent } from '../pages/rules/rule/rule.component';
 import { AgreementListComponent } from '../pages/agreement-area/agreement-list/agreement-list.component';
 import { ContainerGuard } from '../@core/components/container/container.guard';
+import { Error404Component } from '../pages/errors/404/error-404.component';
 
 export const routes: Routes = [
   {
@@ -156,7 +157,11 @@ export const routes: Routes = [
       {
         path: 'plans',
         component: PlansComponent,
-      }
+      },
+      {
+        path: '**',
+        component: Error404Component,
+      },
     ],
   },
   {

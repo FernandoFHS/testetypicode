@@ -13,6 +13,7 @@ import { ConditionTypeListModel } from '../models/rules/condition-type-list.mode
 import { RuleConditionTypeListModel } from '../models/rules/rule-condition-type-list.model';
 import { GeneralService } from './general.service';
 import { of } from 'rxjs/internal/observable/of';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -86,7 +87,35 @@ export class MonitoringRuleService {
         return of(MonitoringRuleResponseModel.mock());
       }
       else {
-        return this._http.get<MonitoringRuleResponseModel>(`${environment.api.url}/monitoring-rule?page=${page}&size=${size}`);
+        return this._http.get<MonitoringRuleResponseModel>(`${environment.api.url}/monitoring-rule?page=${page}&size=${size}`)
+          .pipe(
+            map((data) => {
+              data.content.forEach((content) => {
+                switch (content.critical_level) {
+                  case 'LOW':
+                    content.critical_level = 'Baixa';
+                    break;
+                  case 'MEDIUM':
+                    content.critical_level = 'Normal';
+                    break;
+                  case 'AVERAGE':
+                    content.critical_level = 'Alta';
+                    break;
+                }
+
+                switch (content.active) {
+                  case true:
+                    content.active = 'Ativa';
+                    break;
+                  case false:
+                    content.active = 'Inativa';
+                    break;
+                }
+              });
+
+              return data;
+            })
+          );
       }
     }
     catch (error) {

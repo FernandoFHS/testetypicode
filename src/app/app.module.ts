@@ -40,6 +40,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { RulesComponent } from './pages/rules/rules.component';
 import { RuleComponent } from './pages/rules/rule/rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
+import { Error404Module } from './pages/errors/404/error-404.module';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -98,12 +99,12 @@ export const customCurrencyMaskConfig = {
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
     FormsModule,
     NgxMaskModule.forRoot(),
     CoreModule,
     NgxSpinnerModule,
-    NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    Error404Module
   ],
   providers: [],
   bootstrap: [AppComponent]
