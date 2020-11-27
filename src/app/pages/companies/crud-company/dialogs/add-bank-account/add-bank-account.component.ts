@@ -46,7 +46,10 @@ export class AddBankAccountComponent implements OnInit {
         digit: [''],
         accountDigit: [''],
         idBank:[''],
+        accountType:[''],
         masterAccount: false,
+        idCompany: 0,
+        idExternalBankAccount: 0,
       })
 
       this.getAllBanks();

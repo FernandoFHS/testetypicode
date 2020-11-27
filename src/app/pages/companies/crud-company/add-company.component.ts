@@ -97,7 +97,7 @@ export class AddCompanyComponent implements OnInit {
   endereco: any;
 
 
-
+  plus:any;
   testeform: FormArray;
   isChecked = false;
   isCheckedBankAdress = true;
@@ -129,7 +129,7 @@ export class AddCompanyComponent implements OnInit {
   seRegistrationDateNullValue: boolean; 
   discreditationDateNullValue: boolean;
 
-  testesocio: any = this.localStorageService.get('partnerFormGroup');;
+  testesocio: any = this.localStorageService.get('partnerFormGroup');
 
   mcc: any;
 
@@ -216,8 +216,65 @@ export class AddCompanyComponent implements OnInit {
     this.contactFormGroup = this._formBuilder.group({
       companyContact: this._formBuilder.array(this.phoneNumber$),
     });
+
+    this.companyPartnerFormGroup = this._formBuilder.group({
+
+      companyPartnerForm: this._formBuilder.array(this.partnerSource$),
+
+    });
+
+    // this.companyAdressFormGroup = this._formBuilder.group({
+
+    //   companyAddress: this._formBuilder.array(this.companyadress),
+
+    // });
+
+    this.contactFormGroup = this._formBuilder.group({
+      companyContact: this._formBuilder.array(this.phoneNumber$),
+    });
+
+    this.bankingFormGroup = this._formBuilder.group({
+      externalBankAccount: this._formBuilder.array(this.bankAccount$),
+    });
     
     this.gelAllCnaes();
+    
+    this.plus = {
+      antecipationTaxPercent: 0,
+      anticipationByAssignmentIndicator: true,
+      automaticAnticipationIndicator: "string",
+      beneficiaryApartBankAddress: "string",
+      beneficiaryOperationType: "string",
+      beneficiaryTypeAcount: "string",
+      companyLevel: [
+        {
+          description: "string",
+          level: 0
+        }
+      ],
+      companyStatus: 0,
+      equipmentIdentifier: 0,
+      gpReturnDate: "string",
+      // idCompanyOwner:1008,
+      idCompanyLevelItem:1,
+      idPlan: 0,
+      inclusionRegistrationDateTime: "string",
+      mcccode: 0,
+      orderType: 0,
+      posBillingTypeRental: "string",
+      posChargeAmountRental: 0,
+      posPercentageRateValue: 0,
+      recordChangeDateTime: "string",
+      referentialTransactionAmount: 0,
+      rentalExemptionDays: 0,
+      searchNickname: "string",
+      shopping: "string",
+      tedBillingIdentifier: "string",
+      tradingPartnerCode: 0,
+      tradingPartnerParticipationPercent: 0,
+      userChangeCode: "string",
+      userInclusionCode: "string"
+    };
 
   }
 
@@ -237,13 +294,13 @@ export class AddCompanyComponent implements OnInit {
       companyType: [this.identification?.companyType || '', Validators.required],
       situation: [this.identification?.situation || '', Validators.required],
       documentNumberCompany: [this.identification?.documentNumberCompany || '', Validators.required],
-      gpEstablishmentNumber: [this.identification?.gpEstablishmentNumber || '', Validators.required],
-      stateRegistration: [this.identification?.stateRegistration || '', Validators.required],
+      gpEstablishmentNumber: [parseInt(this.identification?.gpEstablishmentNumber) || '', Validators.required],
+      stateRegistration: [parseInt(this.identification?.stateRegistration) || '', Validators.required],
       companyName: [this.identification?.companyName || '', Validators.required],
       fancyName: [this.identification?.fancyName || '', Validators.required],
       companyShortName: [this.identification?.companyShortName || '', Validators.required],
       mcccode: [this.identification?.mcccode || '', Validators.required],
-      idDepartament: [this.identification?.idDepartament || '', Validators.required],
+      idDepartament: [parseInt(this.identification?.idDepartament) || '', Validators.required],
       cnae: [this.identification?.cnae || '', Validators.required],
       idCnae: [this.identification?.idCnae || ''],
       businessActivity: [this.identification?.businessActivity || '', Validators.required],
@@ -285,12 +342,12 @@ export class AddCompanyComponent implements OnInit {
       beneficiaryDocumentNumber: [this.condition?.beneficiaryDocumentNumber || '', Validators.required],
     });
     this.complementFormGroup = this._formBuilder.group({
-      openingHours: [this.complement?.openingHours || '', Validators.required],
+      openingHours: [parseInt(this.complement?.openingHours) || '', Validators.required],
       ecommerceURL: [this.complement?.ecommerceURL || '', Validators.required],
       estUrl: [this.complement?.estUrl || '', Validators.required],
       email: [this.complement?.email || '', Validators.required],
-      posQuantity: [this.complement?.posQuantity || '', Validators.required],
-      logicalNumber: [this.complement?.logicalNumber || '', Validators.required],
+      posQuantity: [parseInt(this.complement?.posQuantity) || '', Validators.required],
+      logicalNumber: [parseInt(this.complement?.logicalNumber) || '', Validators.required],
       idTerminal: [this.complement?.idTerminal || '', Validators.required],
       registerCode: [this.complement?.registerCode || '', Validators.required],
       registrationDate: [this.complement?.registrationDate || ''],
@@ -303,7 +360,7 @@ export class AddCompanyComponent implements OnInit {
 
     this.companyPartnerFormGroup = this._formBuilder.group({
 
-      companyPartner: this._formBuilder.array(this.partnerSource$),
+      companyPartnerForm: this._formBuilder.array(this.partnerSource$),
 
     });
 
@@ -330,24 +387,8 @@ export class AddCompanyComponent implements OnInit {
     this.dataSource = this.phoneNumber$;
     this.gelAllCnaes();
 
-    if (this.identification != undefined) {
-      this.getLocalStorage('identification');
-    }
-
     if (this.adress != undefined) {
       this.getLocalStorage('adress');
-    }
-
-    if (this.condition != undefined) {
-      this.getLocalStorage('condition');
-    } 
-
-    if (this.complement != undefined) {
-      this.getLocalStorage('complement');
-    } 
-
-    if (this.partner != undefined) {
-      this.getLocalStorage('partner');
     }
 
     if (this.response == null) {
@@ -383,7 +424,7 @@ export class AddCompanyComponent implements OnInit {
       situation: [this.identification?.situation || ''],
       documentNumberCompany: [this.identification?.documentNumberCompany || ''],
       gpEstablishmentNumber: [this.identification?.gpEstablishmentNumber || ''],
-      stateRegistration: [this.identification?.stateRegistration || ''],
+      stateRegistration: [parseInt(this.identification?.stateRegistration) || ''],
       companyName: [this.identification?.companyName || ''],
       fancyName: [this.identification?.fancyName || ''],
       companyShortName: [this.identification?.companyShortName || ''],
@@ -429,12 +470,12 @@ export class AddCompanyComponent implements OnInit {
       beneficiaryDocumentNumber: [this.condition?.beneficiaryDocumentNumber || ''],
     });
     this.complementFormGroup = this._formBuilder.group({
-      openingHours: [this.complement?.openingHours || ''],
+      openingHours: [parseInt(this.complement?.openingHours) || ''],
       ecommerceURL: [this.complement?.ecommerceURL || ''],
       estUrl: [this.complement?.estUrl || ''],
       email: [this.complement?.email || ''],
-      posQuantity: [this.complement?.posQuantity || ''],
-      logicalNumber: [this.complement?.logicalNumber || ''],
+      posQuantity: [parseInt(this.complement?.posQuantity) || ''],
+      logicalNumber: [parseInt(this.complement?.logicalNumber) || ''],
       idTerminal: [this.complement?.idTerminal || ''],
       registerCode: [this.complement?.registerCode || ''],
       registrationDate: [this.complement?.registrationDate || ''],
@@ -645,16 +686,20 @@ export class AddCompanyComponent implements OnInit {
       this.complementFormGroup.value,
       this.companyPartnerFormGroup.value,
       this.endereco,
+      this.plus,
       // this.companyAdressFormGroup.value,
       this.contactFormGroup.value,
       this.bankingFormGroup.value);
     console.log(formulariocompleto);
+    console.log(this.companyPartnerFormGroup.value);
 
     this.companyService.create(formulariocompleto).subscribe((response: any) => {
       console.log(response);
       this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
       this.router.navigate(['/companies/list']);
     });
+
+    console.log(formulariocompleto);
 
   }
 
@@ -953,6 +998,14 @@ export class AddCompanyComponent implements OnInit {
       this.isChecked = false;
     }
   }
+  CheckCompany(value) {
+    let a = value.checked;
+    if (a === true) {
+      this.isCheckedSituation = true;
+    } else {
+      this.isCheckedSituation = false;
+    }
+  }
 
   checkValueBankAdress(value) {
     let a = value.checked;
@@ -1004,6 +1057,7 @@ export class AddCompanyComponent implements OnInit {
     let obj = {
       companyAddress: [{
         complement: this.adressFormGroup.get('complement').value,
+        maxDistanceDelivery: "string",
         number: this.adressFormGroup.get('number').value,
         street: {
           city: {
@@ -1019,9 +1073,10 @@ export class AddCompanyComponent implements OnInit {
           streetName: this.adressFormGroup.get('streetName').value,
           zipCode: this.adressFormGroup.get('zipCode').value,
         },
-        type:'Comercial',
+        type:"Comercial",
       },{
         complement: this.adressFormGroup.get('subordinateComplementCtrl').value,
+        maxDistanceDelivery: "string",
         number: this.adressFormGroup.get('subordinateNumberCtrl').value,
         street: {
           city: {
@@ -1037,7 +1092,7 @@ export class AddCompanyComponent implements OnInit {
           streetName: this.adressFormGroup.get('subordinateStreetCtrl').value,
           zipCode: this.adressFormGroup.get('subordinateZipCode').value,
         },
-        type:'Correspondência',
+        type:"Correspondência",
       }]
     };
     
@@ -1072,28 +1127,6 @@ export class AddCompanyComponent implements OnInit {
       this.adressFormGroup.patchValue(localStorageAdress);
     }
 
-    if (item == 'condition') {
-      let localStorageCondition = {
-        agencyCtrl: this.condition.agencyCtrl,
-        agencyDigitCtrl: this.condition.agencyDigitCtrl,
-        anticipationFee: this.condition.anticipationFee,
-        comercialCredit: this.condition.comercialCredit,
-        currentAccountAgencyCtrl: this.condition.currentAccountAgencyCtrl,
-        currentAccountCtrl: this.condition.currentAccountCtrl,
-        currentAccountDigitCtrl: this.condition.currentAccountDigitCtrl,
-        ignoreRuleAjCtrl: this.condition.ignoreRuleAjCtrl,
-        referralTransacionCtrl: this.condition.referralTransacionCtrl,
-        tableSaleCtrl: this.condition.tableSaleCtrl,
-        tedCostCtrl: this.condition.tedCostCtrl,
-        transactionCostCtrl: this.condition.transactionCostCtrl,
-        tratamentAjCtrl: this.condition.tratamentAjCtrl,
-      }
-      this.conditionFormGroup.patchValue(localStorageCondition);
-    }
-
-    if (item == 'partner') {
-
-    }
   }
 
 }

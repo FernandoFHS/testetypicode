@@ -215,23 +215,25 @@ export class AddPartnerComponent implements OnInit {
   }
 
   savePartner(form) {
-    const form1  = this.partnerFormGroup.getRawValue();
+    // const form1  = this.partnerFormGroup.getRawValue();
     this.partner =  {
-      cpf : form1.cpf,
-      dateOfBirth: "2020-11-19T19:21:08.349Z",
-      partnerName: this.partnerFormGroup.get('partnerName').value,
+      cpf : parseInt(this.partnerFormGroup.get('cpf').value),
+      dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
       partnerAddress:[{
         complement:this.partnerFormGroup.get('complement').value,
+        idCompanyPartner: 0,
+        idPartnerAddress: 0,
         number:this.partnerFormGroup.get('number').value,
         street:{
           city:{
             cityName: this.partnerFormGroup.get('cityName').value,
           },
+          idStreet: 0,
           neighborhood:{
             neighborhoodName:this.partnerFormGroup.get('neighborhoodName').value,
           },
           state:{
-            uf: this.partnerFormGroup.get('uf').value.toLowerCase()
+             uf: this.partnerFormGroup.get('uf').value
           },
           streetName: this.partnerFormGroup.get('streetName').value,
           zipCode: this.partnerFormGroup.get('zipCode').value,
@@ -239,10 +241,11 @@ export class AddPartnerComponent implements OnInit {
       }],
       partnerContact: [
         {
-          phone: parseInt(this.partnerFormGroup.get('phone').value),
+          phone: this.partnerFormGroup.get('phone').value,
         }
       ],
-      partnerSequentialNumber: 1
+      partnerName: this.partnerFormGroup.get('partnerName').value,
+      partnerSequentialNumber: 0,
       
     }
     console.log(this.partner);
@@ -269,7 +272,7 @@ export class AddPartnerComponent implements OnInit {
     let index = this.index;
 
     let editable = {
-      cpf: this.partnerFormGroup.get('cpf').value,
+      cpf: parseInt(this.partnerFormGroup.get('cpf').value),
       dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
       cityName: this.partnerFormGroup.get('cityName').value,
       neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value,
@@ -277,28 +280,30 @@ export class AddPartnerComponent implements OnInit {
       streetName: this.partnerFormGroup.get('streetName').value,
       complement: this.partnerFormGroup.get('complement').value,
       number: this.partnerFormGroup.get('number').value,
-      phone: parseInt(this.partnerFormGroup.get('phone').value),
+      phone: this.partnerFormGroup.get('phone').value,
       zipCode: this.partnerFormGroup.get('zipCode').value,
       partnerName: this.partnerFormGroup.get('partnerName').value,
       partnerSequentialNumber: 1,
     }
 
     let editableItem =  {
-      cpf : this.partnerFormGroup.get('cpf').value,
+      cpf : parseInt(this.partnerFormGroup.get('cpf').value),
       dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
-      partnerName: this.partnerFormGroup.get('partnerName').value,
       partnerAddress:[{
         complement:this.partnerFormGroup.get('complement').value,
+        idCompanyPartner: 0,
+        idPartnerAddress: 0,
         number:this.partnerFormGroup.get('number').value,
         street:{
           city:{
             cityName: this.partnerFormGroup.get('cityName').value,
           },
+          idStreet: 0,
           neighborhood:{
             neighborhoodName:this.partnerFormGroup.get('neighborhoodName').value,
           },
           state:{
-             uf: this.partnerFormGroup.get('uf').value.toLowerCase()
+             uf: this.partnerFormGroup.get('uf').value
           },
           streetName: this.partnerFormGroup.get('streetName').value,
           zipCode: this.partnerFormGroup.get('zipCode').value,
@@ -306,10 +311,11 @@ export class AddPartnerComponent implements OnInit {
       }],
       partnerContact: [
         {
-          phone: parseInt(this.partnerFormGroup.get('phone').value),
+          phone: this.partnerFormGroup.get('phone').value,
         }
       ],
-      partnerSequentialNumber: 1,
+      partnerName: this.partnerFormGroup.get('partnerName').value,
+      partnerSequentialNumber: 0,
       
     }
 
