@@ -26,6 +26,9 @@ import { AddAgreementComponent } from '../pages/agreement-area/add-agreement/add
 import { RuleComponent } from '../pages/rules/rule/rule.component';
 import { ContainerGuard } from '../@core/components/container/container.guard';
 import { ProfileComponent } from '../pages/profiles/profiles.component';
+import { InitialPasswordTransactionComponent } from '../pages/password-transaction/initial-password-transaction/initial-password-transaction.component';
+import { ChangePasswordTransactionComponent } from '../pages/password-transaction/change-password-transaction/change-password-transaction.component';
+import { RecoverPasswordTransactionComponent } from '../pages/password-transaction/recover-password-transaction/recover-password-transaction.component';
 
 export const routes: Routes = [
   {
@@ -133,7 +136,25 @@ export const routes: Routes = [
       },
       {
         path: 'password-transaction',
-        component: PasswordTransactionComponent
+        component: PasswordTransactionComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'initial',
+            pathMatch: 'full'
+          },
+          {
+            path: 'initial',
+            component: InitialPasswordTransactionComponent
+          },
+          {
+            path: 'change',
+            component: ChangePasswordTransactionComponent
+          },
+          {
+            path: 'recover',
+            component: RecoverPasswordTransactionComponent          },
+        ],
       },
 
       {

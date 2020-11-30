@@ -39,6 +39,10 @@ import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-
 import { CdkStepper } from '@angular/cdk/stepper';
 import { ListProfilesComponent } from './pages/profiles/list-profiles/list-profiles.component';
 import { ProfileComponent } from './pages/profiles/profiles.component';
+import { InitialPasswordTransactionComponent } from './pages/password-transaction/initial-password-transaction/initial-password-transaction.component';
+import { RecoverPasswordTransactionComponent } from './pages/password-transaction/recover-password-transaction/recover-password-transaction.component';
+import { ChangePasswordTransactionComponent } from './pages/password-transaction/change-password-transaction/change-password-transaction.component';
+
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -89,6 +93,9 @@ export const customCurrencyMaskConfig = {
     AddAgreementComponent,
     PlansComponent,
     DeleteTaxComponent,
+    InitialPasswordTransactionComponent,
+    RecoverPasswordTransactionComponent,
+    ChangePasswordTransactionComponent
   ],
   imports: [
     BrowserModule,
