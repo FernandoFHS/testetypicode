@@ -36,3 +36,32 @@ export interface PlanResponse {
   paymentMethod: PaymentMethodRequest,
   service: ServiceEntityRequest
 }
+
+export interface RootPlan {
+  content: PlanResponse[],
+  pageable: {
+    sort: {
+      sorted: boolean,
+      unsorted: boolean,
+      empty: boolean
+    },
+    pageNumber: number,
+    pageSize: number,
+    offset: number,
+    paged: boolean,
+    unpaged: boolean
+  },
+  totalElements: number,
+  last: boolean,
+  totalPages: number,
+  sort: {
+    sorted: boolean,
+    unsorted: boolean,
+    empty: boolean
+  },
+  number: number,
+  numberOfElements: number,
+  first: boolean,
+  size: number,
+  empty: boolean
+}

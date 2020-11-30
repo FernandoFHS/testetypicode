@@ -44,6 +44,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ListRuleComponent } from './pages/rule-area/list-rule/list-rule.component';
 import { EditRuleComponent } from './pages/rule-area/edit-rule/edit-rule.component';
 import { SimpleDataTableComponent } from './@core/components/simple-data-table/simple-data-table.component';
+import { AddPlanComponent } from './pages/dialogs/add-plan/add-plan.component';
+
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -97,7 +99,8 @@ export const customCurrencyMaskConfig = {
     PlansComponent,
     DeleteTaxComponent,
     ListRuleComponent,
-    EditRuleComponent,    
+    EditRuleComponent,
+    AddPlanComponent    
   ],
   imports: [
     BrowserModule,
