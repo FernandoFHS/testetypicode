@@ -95,12 +95,7 @@ export class CompanyService {
   }
 
   update(company: CompanyContent): Observable<CompanyContent> {
-    const url = `${this.API_URL}/${company.idCompany}`;
-    return this.httpClient.put<CompanyContent>(url, company).pipe(
-      tap(() => {
-        this._refreshTable.next();
-      })
-    );;
+    return this.httpClient.put<CompanyContent>(this.API_URL + 'company', company);
   }
 
   delete(idCompany: number): Observable<CompanyContent> {

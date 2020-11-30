@@ -1,0 +1,418 @@
+form .initial-data {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 35%;
+  padding: 5px;
+}
+
+form .initial-data h2 {
+  font-size: 16px;
+}
+
+form .initial-data .establishment-container{
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+}
+
+form .initial-data .status-container h2 {
+  color: green;
+}
+
+form .initial-data h2 span{
+  font-weight: 500;
+  color: black;
+}
+
+form .line-form{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+form .line-form{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+form .line-form .mat-form-field{
+  width: 48%;
+}
+
+form .line-form .line-3-form{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+form .line-form .line-3-form .mat-form-field{
+  width: 30%;
+}
+
+form .line-form .line-3-form .filled-or-empty-form-field{
+  display: flex;
+  align-items: center;
+  width: 30%;
+}
+
+form .line-form .line-3-form .filled-or-empty-form-field .mat-form-field{
+  width: 100%;
+}
+
+form .line-form .short-line-form{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 48%;
+}
+
+form .line-form .short-line-form .mat-form-field{
+  width: 40%;
+} 
+
+form .line-form .short-line-2-form{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 48%;
+}
+
+form .line-form .short-line-2-form .mat-form-field{
+  width: 45%;
+} 
+
+form .line-form .short-line-3-form{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 48%;
+}
+
+form .line-form .short-line-3-form .mat-form-field {
+  width: 30%;
+} 
+
+form .line-form .short-line-form-threeOfFour{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+form .line-form .short-line-form-threeOfFour .mat-form-field { 
+  width: 73.5%;
+}
+
+form .line-form .short-line-form-threeOfFour .mat-form-field + .mat-form-field{ 
+  width: 21.5%;
+}
+
+form .line-form .short-line-2-form .mat-checkbox{
+  width: 50%;
+} 
+
+.mat-divider {
+  border-top-color: black;
+}
+
+h3 {
+  padding: 1% 0 1%;
+}
+
+.mat-input {
+  height: 50px!important;
+}
+
+textarea {
+  height: 16px;
+  resize: none!important;
+}
+
+.next-button button{
+  width: 8em;
+  height: 3em;
+}
+
+.group-actions-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.space-bottom{
+  margin-bottom: 20px;
+}
+
+h1{
+  font-size: 14px;
+}
+
+form .line-form .filled-or-empty-form-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 48%;
+}
+
+form .line-form .filled-or-empty-form-field .mat-form-field{
+  width: 100%;
+}
+
+
+form .line-form .filled-or-empty-form-field mat-error {
+  width: 100%;
+  margin-top: -20px;
+  font-size: 14px;
+}
+
+mat-error {
+  height: 14px!important;
+}
+
+form .line-form .line-3-form .filled-or-empty-form-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+form .line-form .line-3-form .filled-or-empty-form-field mat-error {
+  width: 100%;
+  margin-top: -20px;
+  font-size: 14px;
+}
+
+@media (max-width: 1800px) {
+  input,
+  input::-webkit-input-placeholder {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1400px) {
+  form .line-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form .line-form .mat-form-field{
+    width: 100%;
+  }
+
+  form .line-form .line-3-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .line-3-form .mat-form-field{
+    width: 100%;
+  }
+
+  input,
+  input::-webkit-input-placeholder {
+    font-size: 14px;
+  }
+
+  form .line-form .short-line-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .short-line-form .mat-form-field {
+    width: 100%;
+  } 
+
+  form .line-form .short-line-2-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .short-line-2-form .mat-form-field{
+    width: 100%;
+  } 
+
+  form .line-form .short-line-3-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .short-line-3-form .mat-form-field { 
+    width: 100%;
+  }
+
+  form .line-form .line-3-form .filled-or-empty-form-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  form .line-form .filled-or-empty-form-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  form .line-form .short-line-form-threeOfFour{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  form .line-form .short-line-form-threeOfFour .mat-form-field { 
+    width: 100%;
+  }
+
+  form .line-form .short-line-form-threeOfFour .mat-form-field + .mat-form-field{ 
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  form .line-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form .line-form .mat-form-field{
+    width: 100%;
+  }
+
+  form .line-form .short-line-2-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .short-line-2-form .mat-form-field{
+    width: 100%;
+  } 
+
+  form .line-form .line-3-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .line-3-form .mat-form-field{
+    width: 100%;
+  }
+
+  form .line-form .short-line-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .short-line-form .mat-form-field {
+    width: 100%;
+  } 
+
+  form .line-form .short-line-3-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .short-line-3-form .mat-form-field { 
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+
+  form .initial-data {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    padding: 5px;
+  }
+
+  form .line-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form .line-form .mat-form-field{
+    width: 100%;
+  }
+
+  form .line-form .short-line-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .line-3-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .line-3-form .mat-form-field{
+    width: 100%;
+  }
+
+  form .line-form .short-line-form .mat-form-field {
+    width: 100%;
+  } 
+
+  form .line-form .short-line-2-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .short-line-2-form .mat-form-field{
+    width: 100%;
+  } 
+
+  form .line-form .short-line-3-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .short-line-3-form .mat-form-field { 
+    width: 100%;
+  }
+
+  input,
+  input::-webkit-input-placeholder {
+    font-size: 16px;
+  }
+
+  h3 {
+    padding: 5% 0 1%;
+    font-size: 18px;
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'core-back-button',
@@ -6,6 +6,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./back-button.component.scss']
 })
 export class BackButtonComponent implements OnInit {
+
+  @Input() color: string;
 
   @Output() clickEvent: EventEmitter<void> = new EventEmitter<void>();
 

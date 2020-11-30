@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
 
 @Component({
-  selector: 'app-password-transaction',
-  templateUrl: './password-transaction.component.html',
-  styleUrls: ['./password-transaction.component.scss']
+  selector: 'app-initial-password-transaction',
+  templateUrl: './initial-password-transaction.component.html',
+  styleUrls: ['./initial-password-transaction.component.scss']
 })
-export class PasswordTransactionComponent implements OnInit {
+export class InitialPasswordTransactionComponent implements OnInit {
+
   passwordForm: FormGroup;
   hide1 = true;
   hide2 = true;
@@ -19,9 +21,9 @@ export class PasswordTransactionComponent implements OnInit {
   //password = sessionStorage....
 
   // hasPassword: boolean;
-  // if (password) {
+  // if (hasPassword) {
     //hasPassowrd = true;
-  //}
+  //} 
 
 
   breadcrumbModel: BreadcrumbModel = {
@@ -35,7 +37,8 @@ export class PasswordTransactionComponent implements OnInit {
   };
 
   constructor(
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -57,17 +60,14 @@ export class PasswordTransactionComponent implements OnInit {
 
       console.log(this.passwordForm);
     }
-
-    // this._authService.login(user, password).then(() => {
-    //     this._router.navigate(['']);
-    // }).catch((message) => {
-    //     const dialogRef = this._generalService.openOkDialog(message);
-
-    //     dialogRef.subscribe(() => {
-
-    //     });
-    // });
   }
 
+  navigateToChangePassword(): void {
+    this.router.navigate(['/password-transaction/change'])
+  }
+
+  navigateToRecoverPassword(): void {
+    this.router.navigate(['/password-transaction/recover'])
+  }
 
 }
