@@ -219,7 +219,7 @@ export class AddCompanyComponent implements OnInit {
 
     this.companyPartnerFormGroup = this._formBuilder.group({
 
-      companyPartnerForm: this._formBuilder.array(this.partnerSource$),
+      companyPartner: this._formBuilder.array(this.partnerSource$),
 
     });
 
@@ -360,7 +360,7 @@ export class AddCompanyComponent implements OnInit {
 
     this.companyPartnerFormGroup = this._formBuilder.group({
 
-      companyPartnerForm: this._formBuilder.array(this.partnerSource$),
+      companyPartner: this._formBuilder.array(this.partnerSource$),
 
     });
 
@@ -691,7 +691,7 @@ export class AddCompanyComponent implements OnInit {
       this.contactFormGroup.value,
       this.bankingFormGroup.value);
     console.log(formulariocompleto);
-    console.log(this.companyPartnerFormGroup.value);
+   
 
     this.companyService.create(formulariocompleto).subscribe((response: any) => {
       console.log(response);
