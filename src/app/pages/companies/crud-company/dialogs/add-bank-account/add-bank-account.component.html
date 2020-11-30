@@ -1,0 +1,90 @@
+<h3 mat-dialog-title class="text-center m-b-20 font-light-bold title-size">
+  Adicionar Conta Bancária
+</h3>
+<div mat-dialog-content>
+  <form [formGroup]="accountFormGroup">
+    <!-- <mat-form-field appearance="outline">
+      <mat-label>Banco</mat-label>
+      <input matInput placeholder="Dígito Agência" formControlName="bank" required />
+      <mat-icon matSuffix>business_center</mat-icon>
+      <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
+    </mat-form-field> -->
+
+    <mat-form-field appearance="outline">
+      <mat-label>Banco</mat-label>
+      <input matInput aria-label="Banco" formControlName="bank" [matAutocomplete]="auto" [formControl]="bankForm"
+        placeholder="Escolha um dos bancos abaixo" required>
+      <mat-autocomplete #auto="matAutocomplete" required [displayWith]="displayFn">
+        <mat-option *ngFor="let item of filteredBanks | async" [value]="item">
+          <span>{{item.name}}</span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-error *ngIf="bankValidatorError">Selecione um banco da lista</mat-error>
+    <mat-checkbox class="example-margin" formControlName="masterAccount">Conta Principal</mat-checkbox>
+    <div class="line-form">
+     
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo de conta</mat-label>
+        <mat-select name="type" formControlName="accountType" required>
+          <mat-option value="1"> Conta Poupança </mat-option>
+          <mat-option value="2"> Conta Pessoa Física </mat-option>
+          <mat-option value="3"> Conta Pessoa Jurídica </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+
+     
+      <!-- <mat-checkbox class="example-margin" formControlName="masterAccount" (change)="CheckCompany($event)">Ativo</mat-checkbox> -->
+    </div>
+
+    <div class="line-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Agência</mat-label>
+        <input matInput placeholder="Agência" formControlName="agency" required />
+        <mat-icon matSuffix>account_balance</mat-icon>
+        <mat-error>Campo obrigatório</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Dígito Agência</mat-label>
+        <input matInput placeholder="Dígito Agência" formControlName="agencyDigit" required />
+        <mat-icon matSuffix>looks_one</mat-icon>
+        <mat-error>Campo obrigatório</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Conta Corrente</mat-label>
+      <input matInput placeholder="Conta Corrente" formControlName="account" required />
+      <mat-icon matSuffix>payment</mat-icon>
+      <mat-error>Campo obrigatório</mat-error>
+    </mat-form-field>
+
+    <div class="line-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Dígito Conta</mat-label>
+        <input matInput placeholder="Dígito Conta" formControlName="digit" required />
+        <mat-icon matSuffix>looks_3</mat-icon>
+        <mat-error>Campo obrigatório</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Dígito Agência/Conta</mat-label>
+        <input matInput placeholder="Dígito Agência/Conta" formControlName="accountDigit" required />
+        <mat-icon matSuffix>looks_3</mat-icon>
+        <mat-error>Campo obrigatório</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div mat-dialog-actions class="dialog-actions-buttons">
+      <button mat-raised-button color="accent" (click)="closeDialog()">
+        Cancelar
+      </button>
+      <button mat-raised-button color="primary" tabindex="-1" [disabled]="!accountFormGroup.valid"
+        (click)="saveAccount(accountFormGroup)">
+        Salvar
+      </button>
+    </div>
+  </form>
+</div>

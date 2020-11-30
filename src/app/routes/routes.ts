@@ -1,30 +1,32 @@
-import { PlansComponent } from './../pages/plans/plans.component';
+
 import { EditAgreementComponent } from './../pages/agreement-area/edit-agreement/edit-agreement.component';
-import { AddAgreementComponent } from './../pages/agreement-area/add-agreement/add-agreement.component';
-import { AgreementAreaComponent } from './../pages/agreement-area/agreement-area.component';
+
 import { Routes } from '@angular/router';
 import { ContainerComponent } from '../@core/components/container/container.component';
 import { ThemesComponent } from '../@core/components/themes/themes.component';
-import { CompanyComponent } from '../pages/company/company.component';
+import { CompanyComponent } from '../pages/companies/company.component';
 import { HomeComponent } from '../pages/home/home.component';
 import { LoginComponent } from '../pages/login/login.component';
-import { UserComponent } from '../pages/user/user.component';
+// import { UserComponent } from '../pages/user/user.component';
 import { PasswordTransactionComponent } from '../pages/password-transaction/password-transaction.component';
 import { LoginGuard } from '../pages/login/login.guard';
-import { ProfileListComponent } from '../pages/profile-list/profile-list.component';
-import { AddProfileComponent } from '../pages/add-profile/add-profile.component';
-import { EditProfileComponent } from '../pages/edit-profile/edit-profile.component';
-import { CompanyListComponent } from '../pages/company-list/company-list.component';
-import { AddCompanyComponent } from '../pages/add-company/add-company.component';
-import { EditCompanyComponent } from '../pages/edit-company/edit-company.component';
-import { AddPartnerComponent } from '../pages/add-partner/add-partner.component';
-import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
+import { ListProfilesComponent } from '../pages/profiles/list-profiles/list-profiles.component';
+import { AddProfileComponent } from '../pages/profiles/profile/crud-company/add-profile.component';
+import { CompanyListComponent } from '../pages/companies/list/list-company.component';
+import { AddCompanyComponent } from '../pages/companies/crud-company/add-company.component';
+import { AddPartnerComponent } from '../pages/companies/partners/add/add-partner.component';
+
 import { RulesComponent } from '../pages/rules/rules.component';
-import { ListRulesComponent } from '../pages/rules/list-rules/list-rules.component';
-import { RuleComponent } from '../pages/rules/rule/rule.component';
+import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 import { AgreementListComponent } from '../pages/agreement-area/agreement-list/agreement-list.component';
+import { ListRulesComponent } from '../pages/rules/list-rules/list-rules.component';
+import { PlansComponent } from '../pages/plans/plans.component';
+import { AgreementAreaComponent } from '../pages/agreement-area/agreement-area.component';
+import { AddAgreementComponent } from '../pages/agreement-area/add-agreement/add-agreement.component';
+import { RuleComponent } from '../pages/rules/rule/rule.component';
 import { ContainerGuard } from '../@core/components/container/container.guard';
 import { Error404Component } from '../pages/errors/404/error-404.component';
+import { ProfileComponent } from '../pages/profiles/profiles.component';
 
 export const routes: Routes = [
   {
@@ -74,48 +76,60 @@ export const routes: Routes = [
         ]
       },
       {
-        path: 'profile-list',
-        component: ProfileListComponent,
+        path: 'profiles',
+        component: ProfileComponent,
         children: [
           {
             path: '',
-            redirectTo: 'user',
+            redirectTo: 'list',
             pathMatch: 'full',
           },
           {
-            path: 'user',
-            component: UserComponent,
+            path: 'list',
+            component: ListProfilesComponent,
           },
           {
-            path: 'add-profile',
+            path: 'add',
             component: AddProfileComponent,
           },
           {
-            path: 'edit-profile/:id',
-            component: EditProfileComponent,
+            path: 'edit/:id',
+            component: AddProfileComponent,
           },
         ],
       },
       {
-        path: 'company-list',
-        component: CompanyListComponent,
+        path: 'companies',
+        component: CompanyComponent,
         children: [
           {
             path: '',
-            redirectTo: 'company',
+            redirectTo: 'list',
             pathMatch: 'full',
           },
           {
-            path: 'company',
-            component: CompanyComponent,
+            path: 'list',
+            component: CompanyListComponent,
           },
           {
-            path: 'add-company',
+            path: 'add',
             component: AddCompanyComponent,
           },
           {
-            path: 'edit-company/:idCompany',
-            component: EditCompanyComponent,
+            path: 'edit/:idCompany',
+            component: AddCompanyComponent,
+          },
+          {
+            path: 'view/:id',
+            component: AddCompanyComponent
+          },          
+          {
+            path: 'partners/add',
+            component: AddPartnerComponent,
+          },
+          {
+            path: 'partners/edit/:index',
+            component: AddPartnerComponent,
           },
         ]
       },
@@ -128,14 +142,6 @@ export const routes: Routes = [
         component: PasswordTransactionComponent
       },
 
-      {
-        path: 'add-partner',
-        component: AddPartnerComponent,
-      },
-      {
-        path: 'edit-partner/:index',
-        component: EditPartnerComponent,
-      },
       {
         path: 'agreements',
         component: AgreementAreaComponent,
