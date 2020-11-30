@@ -52,7 +52,7 @@
   <br />
 
   <core-data-table [headers]="headers" [actions]="actions" (addEvent)="onAdd($event)" (deleteEvent)="onDelete($event)"
-    (editEvent)="onEdit($event)" [loadFunc]="loadData" [idItems]="'idCompany'" [filterFunc]="loadDataByFilter"
+    (editEvent)="onEdit($event)" (viewEvent)="onView($event)" [loadFunc]="loadData" [idItems]="'idCompany'" [filterFunc]="loadDataByFilter"
     [clearFilterFunc]="clearFilter">
   </core-data-table>
 

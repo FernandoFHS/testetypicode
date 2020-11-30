@@ -1,14 +1,10 @@
 <div fxFlexFill>
 
-  <div *ngIf="addPage">
-    <core-breadcrumb [model]="addPageBreadcrumbModel"></core-breadcrumb>
-  </div>
+  <core-breadcrumb [model]="addBreadcrumbModel" *ngIf="isPageAdd()"></core-breadcrumb>
+  <core-breadcrumb [model]="editBreadcrumbModel" *ngIf="isPageEdit()"></core-breadcrumb>
+  <core-breadcrumb [model]="viewBreadcrumbModel" *ngIf="isPageView()"></core-breadcrumb>
 
-  <div *ngIf="!addPage">
-    <core-breadcrumb [model]="editPageBreadcrumbModel"></core-breadcrumb>
-  </div>
-
-  <div *ngIf="addPage">
+  <div *ngIf="isPageAdd()">
     <div class="m-b-25">
       <label class="mat-display-1 page-title">
         Incluir Estabelecimento
@@ -16,10 +12,18 @@
     </div>
   </div>
 
-  <div *ngIf="!addPage">
+  <div *ngIf="isPageEdit()">
     <div class="m-b-25">
       <label class="mat-display-1 page-title">
         Editar Estabelecimento
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="isPageView()">
+    <div class="m-b-25">
+      <label class="mat-display-1 page-title">
+        Visualizar Estabelecimento
       </label>
     </div>
   </div>

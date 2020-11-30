@@ -28,7 +28,8 @@ import { ContainerGuard } from '../@core/components/container/container.guard';
 import { ProfileComponent } from '../pages/profiles/profiles.component';
 import { InitialPasswordTransactionComponent } from '../pages/password-transaction/initial-password-transaction/initial-password-transaction.component';
 import { ChangePasswordTransactionComponent } from '../pages/password-transaction/change-password-transaction/change-password-transaction.component';
-import { RecoverPasswordTransactionComponent } from '../pages/password-transaction/recover-password-transaction/recover-password-transaction.component';
+import { RecoverPasswordTransactionComponent } from '../pages/password-transaction/recover/recover-password-transaction/recover-password-transaction.component';
+import { RecoverPasswordAfterValidationComponent } from '../pages/recover-password-after-validation/recover-password-after-validation.component';
 
 export const routes: Routes = [
   {
@@ -113,7 +114,7 @@ export const routes: Routes = [
             component: AddCompanyComponent,
           },
           {
-            path: 'edit/:idCompany',
+            path: 'edit/:id',
             component: AddCompanyComponent,
           },
           {
@@ -153,7 +154,8 @@ export const routes: Routes = [
           },
           {
             path: 'recover',
-            component: RecoverPasswordTransactionComponent          },
+            component: RecoverPasswordTransactionComponent          
+          },
         ],
       },
 
@@ -190,5 +192,9 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     canActivate: [LoginGuard]
-  }
+  },
+  {
+    path: 'password-recover-validation',
+    component: RecoverPasswordAfterValidationComponent          
+  },
 ];
