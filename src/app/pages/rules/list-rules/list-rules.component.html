@@ -9,7 +9,8 @@
   </div>
 
   <core-data-table *ngIf="!isLoading" [headers]="headers" [data]="data" [actions]="actions" (addEvent)="onAdd($event)"
-    (deleteEvent)="onDelete($event)" (editEvent)="onEdit($event)" [async]="false">
+    (deleteEvent)="onDelete($event)" (editEvent)="onEdit($event)" (viewEvent)="onView($event)" [async]="true"
+    [filterFunc]="loadDataByFilter" [loadFunc]="loadData">
   </core-data-table>
 
   <div class="h-200 loading-data p-t-20" *ngIf="isLoading">

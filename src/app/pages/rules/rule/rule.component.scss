@@ -1,0 +1,21 @@
+.label-status-inactive {
+  color: darkred;
+}
+
+.label-status-active {
+  color: #14b866;
+}
+
+.subtitle-option {
+  display: block;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  
+  strong {
+    font-size: 12px;
+  }
+}
+
+mat-option {
+  font-size: 14px;
+}

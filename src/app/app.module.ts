@@ -17,8 +17,6 @@ import { EditProfileComponent } from './pages/edit-profile/edit-profile.componen
 import { ProfileListComponent } from './pages/profile-list/profile-list.component';
 import { FormsModule } from '@angular/forms';
 import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
-import { AddRuleComponent } from './pages/rule-area/add-rule/add-rule.component';
-import { RuleAreaComponent } from './pages/rule-area/rule-area.component';
 import { CompanyListComponent } from './pages/company-list/company-list.component';
 import { AddCompanyComponent } from './pages/add-company/add-company.component';
 import { EditCompanyComponent } from './pages/edit-company/edit-company.component';
@@ -32,20 +30,20 @@ import { DeletePartnerComponent } from './pages/dialogs/delete-partner/delete-pa
 import { EditPhoneComponent } from './pages/dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component';
 import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
-
 import { DeleteTaxComponent } from './pages/agreement-area/delete-tax/delete-tax.component';
 import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
 import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
 import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
 import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
-import {MatSelectModule} from '@angular/material/select';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { ListRuleComponent } from './pages/rule-area/list-rule/list-rule.component';
-import { EditRuleComponent } from './pages/rule-area/edit-rule/edit-rule.component';
 import { SimpleDataTableComponent } from './@core/components/simple-data-table/simple-data-table.component';
 import { AddPlanComponent } from './pages/dialogs/add-plan/add-plan.component';
 
+import { RulesComponent } from './pages/rules/rules.component';
+import { RuleComponent } from './pages/rules/rule/rule.component';
+import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
+import { Error404Module } from './pages/errors/404/error-404.module';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -72,8 +70,8 @@ export const customCurrencyMaskConfig = {
     UserComponent,
     CompanyComponent,
     PasswordTransactionComponent,
-    RuleAreaComponent,
-    AddRuleComponent,
+    RulesComponent,
+    RuleComponent,
     AddProfileComponent,
     EditProfileComponent,
     ProfileListComponent,
@@ -92,14 +90,12 @@ export const customCurrencyMaskConfig = {
     AgreementAreaComponent,
     DeleteTaxComponent,
     EditPartnerComponent,
-    SimpleDataTableComponent,
+    ListRulesComponent,
     AgreementListComponent,
     EditAgreementComponent,
     AddAgreementComponent,
     PlansComponent,
     DeleteTaxComponent,
-    ListRuleComponent,
-    EditRuleComponent,
     AddPlanComponent    
   ],
   imports: [
@@ -107,12 +103,12 @@ export const customCurrencyMaskConfig = {
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
     FormsModule,
     NgxMaskModule.forRoot(),
     CoreModule,
     NgxSpinnerModule,
-    NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    Error404Module
   ],
   providers: [],
   bootstrap: [AppComponent]

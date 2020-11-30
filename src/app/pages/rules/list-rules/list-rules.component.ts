@@ -1,18 +1,19 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { HeaderModel } from 'src/app/@core/models/header.model';
+import { MonitoringRuleModel } from 'src/app/models/monitoring-rule.model';
 import { MonitoringRuleResponseModel } from 'src/app/models/response/monitoring-rule.response.model';
 import { MonitoringRuleService } from 'src/app/services/monitoring-rule.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
-  selector: 'app-list-rule',
-  templateUrl: './list-rule.component.html',
-  styleUrls: ['./list-rule.component.scss']
+  selector: 'app-list-rules',
+  templateUrl: './list-rules.component.html',
+  styleUrls: ['./list-rules.component.scss']
 })
-export class ListRuleComponent implements OnInit {
+export class ListRulesComponent implements OnInit {
 
   breadcrumbModel: BreadcrumbModel = {
     active: {
@@ -32,8 +33,9 @@ export class ListRuleComponent implements OnInit {
 
   actions: ActionModel = {
     add: true,
-    edit: false,
-    delete: false
+    edit: true,
+    delete: false,
+    view: true
   };
 
   data: MonitoringRuleResponseModel;
@@ -47,14 +49,14 @@ export class ListRuleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.isLoading = true;
+    // this.isLoading = true;
 
-    this._monitoringRuleService.getRules(0, 999).then((data) => {
-      this._loadData(data);
-    }, (error) => {
-      this._router.navigate(['/home']);
-      this._notificationService.error('Erro ao carregar a lista de Regras, tente novamente.');
-    });
+    // this._monitoringRuleService.getRules(0, 99999).then((data) => {
+    //   this._loadData(data);
+    // }, (error) => {
+    //   this._router.navigate(['/home']);
+    //   this._notificationService.error('Erro ao carregar a lista de Regras, tente novamente.');
+    // });
   }
 
   private _loadData(data: MonitoringRuleResponseModel): void {
@@ -86,12 +88,27 @@ export class ListRuleComponent implements OnInit {
     this.isLoading = false;
   }
 
-  onDelete(item: any): void { }
+  onDelete(item): void { }
 
-  onAdd(item: any): void {
-    this._router.navigate(['rule-area/add-rule']);
+  onAdd(item): void {
+    this._router.navigate(['rules/add']);
   }
 
-  onEdit(item: any): void { }
+  onEdit(item: MonitoringRuleModel): void {
+    this._monitoringRuleService.setRuleToEdit(item);
+    this._router.navigate([`rules/edit/${item.id}`]);
+  }
+
+  onView(item: MonitoringRuleModel): void {
+    this._router.navigate([`rules/view/${item.id}`]);
+  }
+
+  loadDataByFilter = (sort: string, order: string, page: number, size: number) => {
+    return this._monitoringRuleService.getRules(page, 10);
+  }
+
+  loadData = (sort: string, order: string, page: number, size: number) => {
+    return this._monitoringRuleService.getRules(page, 10);
+  };
 
 }

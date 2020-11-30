@@ -55,7 +55,8 @@ export class PlansComponent implements OnInit {
   actions: ActionModel = {
     add: true,
     edit: true,
-    delete: true
+    delete: true,
+    view: false
   };
 
   dataSource: any[] = [];
