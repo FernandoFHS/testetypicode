@@ -27,6 +27,10 @@ import { RuleComponent } from '../pages/rules/rule/rule.component';
 import { ContainerGuard } from '../@core/components/container/container.guard';
 import { Error404Component } from '../pages/errors/404/error-404.component';
 import { ProfileComponent } from '../pages/profiles/profiles.component';
+import { InitialPasswordTransactionComponent } from '../pages/password-transaction/initial-password-transaction/initial-password-transaction.component';
+import { ChangePasswordTransactionComponent } from '../pages/password-transaction/change-password-transaction/change-password-transaction.component';
+import { RecoverPasswordTransactionComponent } from '../pages/password-transaction/recover/recover-password-transaction/recover-password-transaction.component';
+import { RecoverPasswordAfterValidationComponent } from '../pages/recover-password-after-validation/recover-password-after-validation.component';
 
 export const routes: Routes = [
   {
@@ -116,7 +120,7 @@ export const routes: Routes = [
             component: AddCompanyComponent,
           },
           {
-            path: 'edit/:idCompany',
+            path: 'edit/:id',
             component: AddCompanyComponent,
           },
           {
@@ -139,7 +143,26 @@ export const routes: Routes = [
       },
       {
         path: 'password-transaction',
-        component: PasswordTransactionComponent
+        component: PasswordTransactionComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'initial',
+            pathMatch: 'full'
+          },
+          {
+            path: 'initial',
+            component: InitialPasswordTransactionComponent
+          },
+          {
+            path: 'change',
+            component: ChangePasswordTransactionComponent
+          },
+          {
+            path: 'recover',
+            component: RecoverPasswordTransactionComponent          
+          },
+        ],
       },
 
       {
@@ -174,5 +197,14 @@ export const routes: Routes = [
         component: Error404Component,
       },
     ],
-  }
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [LoginGuard]
+  },
+  {
+    path: 'password-recover-validation',
+    component: RecoverPasswordAfterValidationComponent          
+  },
 ];

@@ -335,5 +335,6 @@ export class AddPartnerComponent implements OnInit {
     this.router.navigate(['/companies/add']);
   }
 
+ 
 
 }
