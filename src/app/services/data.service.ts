@@ -46,7 +46,7 @@ export class DataService {
 
   getAllProfiles(sort: string, order: string, page: number, size: number): Observable<Profile[]> {
     const requestUrl =
-        `${this.API_URL}?sort=${sort},${order}&page=${page + 1}&size=${size}`;
+        `${this.API_URL}?sort=${sort},${order}&page=${page}&size=${size}`;
 
     return this.httpClient.get<Profile[]>(requestUrl);
   }

@@ -1,0 +1,289 @@
+.card-box {
+  vertical-align: middle;
+  width: 100%;
+}
+
+.title-size {
+  font-size: 26px;
+}
+
+form .line-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+form .line-form .mat-form-field {
+  width: 48%;
+}
+
+form .line-form .short-line-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 48%;
+}
+
+form .line-form .short-line-form .mat-form-field {
+  width: 45%;
+}
+
+h3 {
+  padding: 1% 0 1%;
+}
+
+.group-buttons-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+@media (max-width: 1800px) {
+  .mat-elevation-z2{
+    margin-bottom: 40px;
+  }
+
+  input,
+  input::-webkit-input-placeholder {
+    font-size: 14px;
+  }
+
+  .group-buttons-actions {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .mat-elevation-z2{
+    margin-bottom: 40px;
+  }
+
+  form .line-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form .line-form .mat-form-field{
+    width: 100%;
+  }
+
+  form .line-form .line-3-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .line-3-form .mat-form-field{
+    width: 100%;
+  }
+
+  input,
+  input::-webkit-input-placeholder {
+    font-size: 14px;
+  }
+
+  form .line-form .short-line-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .short-line-form .mat-form-field {
+    width: 100%;
+  } 
+
+  form .line-form .short-line-2-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .short-line-2-form .mat-form-field{
+    width: 100%;
+  } 
+
+  form .line-form .short-line-3-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .short-line-3-form .mat-form-field { 
+    width: 100%;
+  }
+
+  .group-buttons-actions {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 700px) {
+  .mat-elevation-z2{
+    margin-bottom: 40px;
+  }
+
+  form .line-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form .line-form .mat-form-field{
+    width: 100%;
+  }
+
+  form .line-form .short-line-2-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .short-line-2-form .mat-form-field{
+    width: 100%;
+  } 
+
+  form .line-form .line-3-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .line-3-form .mat-form-field{
+    width: 100%;
+  }
+
+  form .line-form .short-line-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .short-line-form .mat-form-field {
+    width: 100%;
+  } 
+
+  form .line-form .short-line-3-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .short-line-3-form .mat-form-field { 
+    width: 100%;
+  }
+
+  .group-buttons-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+
+  // .group-buttons-actions button + button{
+  //   margin-top: 15px;
+  //   margin-left: 0;
+  // }
+}
+
+@media (max-width: 400px) {
+
+  .mat-elevation-z2{
+    margin-bottom: 40px;
+  }
+
+  form .initial-data {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    padding: 5px;
+  }
+
+  form .line-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form .line-form .mat-form-field{
+    width: 100%;
+  }
+
+  form .line-form .short-line-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .line-3-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .line-3-form .mat-form-field{
+    width: 100%;
+  }
+
+  form .line-form .short-line-form .mat-form-field {
+    width: 100%;
+  } 
+
+  form .line-form .short-line-2-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  form .line-form .short-line-2-form .mat-form-field{
+    width: 100%;
+  } 
+
+  form .line-form .short-line-3-form {
+    display: flex;  
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  form .line-form .short-line-3-form .mat-form-field { 
+    width: 100%;
+  }
+
+  input,
+  input::-webkit-input-placeholder {
+    font-size: 16px;
+  }
+
+  h3 {
+    padding: 5% 0 1%;
+    font-size: 18px;
+  }
+
+  .group-buttons-actions {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+
+  .group-buttons-actions .button{
+    color: yellow!important;
+  }
+}

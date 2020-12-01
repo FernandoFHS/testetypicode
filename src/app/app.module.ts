@@ -8,32 +8,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { CoreModule } from './@core/core.module';
-import { UserComponent } from './pages/user/user.component';
-import { CompanyComponent } from './pages/company/company.component';
+import { CompanyComponent } from './pages/companies/company.component';
 import { PasswordTransactionComponent } from './pages/password-transaction/password-transaction.component';
-import { AddProfileComponent } from './pages/add-profile/add-profile.component';
-import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
-import { ProfileListComponent } from './pages/profile-list/profile-list.component';
+import { AddProfileComponent } from './pages/profiles/profile/crud-company/add-profile.component';
 import { FormsModule } from '@angular/forms';
 import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
-import { CompanyListComponent } from './pages/company-list/company-list.component';
-import { AddCompanyComponent } from './pages/add-company/add-company.component';
-import { EditCompanyComponent } from './pages/edit-company/edit-company.component';
-import { AddPartnerComponent } from './pages/add-partner/add-partner.component';
+import { CompanyListComponent } from './pages/companies/list/list-company.component';
+import { AddCompanyComponent } from './pages/companies/crud-company/add-company.component';
+import { AddPartnerComponent } from './pages/companies/partners/add/add-partner.component';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
-import { AddBankAccountComponent } from './pages/dialogs/add-bank-account/add-bank-account.component';
-import { EditBankAccountComponent } from './pages/dialogs/edit-bank-account/edit-bank-account.component';
-import { DeleteBankAccountComponent } from './pages/dialogs/delete-bank-account/delete-bank-account.component';
-import { DeletePhoneComponent } from './pages/dialogs/delete-phone/delete-phone.component';
-import { DeletePartnerComponent } from './pages/dialogs/delete-partner/delete-partner.component';
-import { EditPhoneComponent } from './pages/dialogs/edit-phone/edit-phone.component';
-import { AddPhoneComponent } from './pages/dialogs/add-phone/add-phone.component';
-import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
-import { DeleteTaxComponent } from './pages/agreement-area/delete-tax/delete-tax.component';
-import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
-import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
-import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
-import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
+import { AddBankAccountComponent } from './pages/companies/crud-company/dialogs/add-bank-account/add-bank-account.component';
+import { EditBankAccountComponent } from './pages/companies/crud-company/dialogs/edit-bank-account/edit-bank-account.component';
+import { DeleteBankAccountComponent } from './pages/companies/crud-company/dialogs/delete-bank-account/delete-bank-account.component';
+import { DeletePhoneComponent } from './pages/companies/crud-company/dialogs/delete-phone/delete-phone.component';
+import { DeletePartnerComponent } from './pages/companies/crud-company/dialogs/delete-partner/delete-partner.component';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { RulesComponent } from './pages/rules/rules.component';
@@ -47,6 +35,21 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MglTimelineModule } from 'angular-mgl-timeline';
+import { EditPhoneComponent } from './pages/companies/crud-company/dialogs/edit-phone/edit-phone.component';
+import { AddPhoneComponent } from './pages/companies/crud-company/dialogs/add-phone/add-phone.component';
+import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
+import { DeleteTaxComponent } from './pages/plans/delete-tax/delete-tax.component';
+import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
+import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
+import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
+import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
+import { CdkStepper } from '@angular/cdk/stepper';
+import { ListProfilesComponent } from './pages/profiles/list-profiles/list-profiles.component';
+import { ProfileComponent } from './pages/profiles/profiles.component';
+import { InitialPasswordTransactionComponent } from './pages/password-transaction/initial-password-transaction/initial-password-transaction.component';
+import { RecoverPasswordTransactionComponent } from './pages/password-transaction/recover-password-transaction/recover-password-transaction.component';
+import { ChangePasswordTransactionComponent } from './pages/password-transaction/change-password-transaction/change-password-transaction.component';
+
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -70,18 +73,16 @@ export const customCurrencyMaskConfig = {
     AppComponent,
     HomeComponent,
     LoginComponent,
-    UserComponent,
     CompanyComponent,
     PasswordTransactionComponent,
     RulesComponent,
     RuleComponent,
+    ProfileComponent,
     AddProfileComponent,
-    EditProfileComponent,
-    ProfileListComponent,
+    ListProfilesComponent,
     DeleteProfileComponent,
     CompanyListComponent,
     AddCompanyComponent,
-    EditCompanyComponent,
     AddPartnerComponent,
     AddBankAccountComponent,
     EditBankAccountComponent,
@@ -102,6 +103,9 @@ export const customCurrencyMaskConfig = {
     CurrentAccountComponent,
     ExtractComponent,
     TransactionsComponent,
+    InitialPasswordTransactionComponent,
+    RecoverPasswordTransactionComponent,
+    ChangePasswordTransactionComponent
   ],
   imports: [
     BrowserModule,
@@ -117,6 +121,7 @@ export const customCurrencyMaskConfig = {
     MglTimelineModule
   ],
   providers: [
+    CdkStepper,
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false },

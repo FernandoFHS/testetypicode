@@ -10,7 +10,7 @@
     </div>
   
     <div mat-dialog-actions>
-      <button mat-raised-button color="accent" (click)="onNoClick()" tabindex="-1">Cancelar</button>
-      <button mat-raised-button color="warn" [mat-dialog-close]="1" (click)="confirmDelete()">Deletar</button>
+      <core-cancel-button button (click)="onNoClick()" fxFlex>Cancelar </core-cancel-button>
+      <core-delete-button button (click)="deleteProfile()" fxFlex>Deletar </core-delete-button>
     </div>
   </div>
