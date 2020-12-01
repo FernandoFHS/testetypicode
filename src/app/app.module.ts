@@ -28,6 +28,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { RulesComponent } from './pages/rules/rules.component';
 import { RuleComponent } from './pages/rules/rule/rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
+import { Error404Module } from './pages/errors/404/error-404.module';
 import { EditPhoneComponent } from './pages/companies/crud-company/dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './pages/companies/crud-company/dialogs/add-phone/add-phone.component';
 import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
@@ -104,12 +105,12 @@ export const customCurrencyMaskConfig = {
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
     FormsModule,
     NgxMaskModule.forRoot(),
     CoreModule,
     NgxSpinnerModule,
-    NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    Error404Module
   ],
   providers: [CdkStepper],
   bootstrap: [AppComponent]

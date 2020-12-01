@@ -43,6 +43,11 @@ export class EditBankAccountComponent implements OnInit {
       account: ['', Validators.required],
       digit: [''],
       accountDigit: [''],
+      idBank:[''],
+      accountType:[''],
+      masterAccount: [''],
+      idCompany: 0,
+      idExternalBankAccount: 0,
     });
 
     if (this.bankAccount != undefined) {
@@ -105,6 +110,8 @@ export class EditBankAccountComponent implements OnInit {
       account: this.accountFormGroup.get('account').value,
       digit: this.accountFormGroup.get('digit').value,
       accountDigit: this.accountFormGroup.get('accountDigit').value,
+      masterAccount:this.accountFormGroup.get('masterAccount').value,
+      accountType:this.accountFormGroup.get('accountType').value,
     };
 
     let bankValidator = form.value.bank;
@@ -132,6 +139,8 @@ export class EditBankAccountComponent implements OnInit {
         account: this.bankAccount[this.data].account,
         digit: this.bankAccount[this.data].digit,
         accountDigit: this.bankAccount[this.data].accountDigit,
+        masterAccount:this.bankAccount[this.data].masterAccount,
+        accountType:this.bankAccount[this.data].accountType,
       };
       this.accountFormGroup.patchValue(localStorage);
     }

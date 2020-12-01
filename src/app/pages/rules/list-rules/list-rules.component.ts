@@ -49,14 +49,14 @@ export class ListRulesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.isLoading = true;
+    // this.isLoading = true;
 
-    this._monitoringRuleService.getRules(0, 99999).then((data) => {
-      this._loadData(data);
-    }, (error) => {
-      this._router.navigate(['/home']);
-      this._notificationService.error('Erro ao carregar a lista de Regras, tente novamente.');
-    });
+    // this._monitoringRuleService.getRules(0, 99999).then((data) => {
+    //   this._loadData(data);
+    // }, (error) => {
+    //   this._router.navigate(['/home']);
+    //   this._notificationService.error('Erro ao carregar a lista de Regras, tente novamente.');
+    // });
   }
 
   private _loadData(data: MonitoringRuleResponseModel): void {
@@ -102,5 +102,13 @@ export class ListRulesComponent implements OnInit {
   onView(item: MonitoringRuleModel): void {
     this._router.navigate([`rules/view/${item.id}`]);
   }
+
+  loadDataByFilter = (sort: string, order: string, page: number, size: number) => {
+    return this._monitoringRuleService.getRules(page, 10);
+  }
+
+  loadData = (sort: string, order: string, page: number, size: number) => {
+    return this._monitoringRuleService.getRules(page, 10);
+  };
 
 }

@@ -1,4 +1,5 @@
 import { Directive, HostBinding, Inject, Input, OnInit, OnDestroy } from '@angular/core';
+import { Menu } from '../models/menu.model';
 import { AccordionDirective } from './accordion.directive';
 
 @Directive({
@@ -10,6 +11,15 @@ export class AccordionLinkDirective implements OnInit, OnDestroy {
 
   @Input()
   public group: any;
+
+  @HostBinding('class.selected')
+  @Input()
+  get selected() {
+    return this._selected;
+  }
+
+  @Input()
+  public menuItem: Menu;
 
   constructor(
     @Inject(AccordionDirective) nav: AccordionDirective
@@ -29,12 +39,6 @@ export class AccordionLinkDirective implements OnInit, OnDestroy {
     if (!this.selected) {
       this.selected = true;
     }
-  }
-
-  @HostBinding('class.selected')
-  @Input()
-  get selected() {
-    return this._selected;
   }
 
   set selected(value: boolean) {

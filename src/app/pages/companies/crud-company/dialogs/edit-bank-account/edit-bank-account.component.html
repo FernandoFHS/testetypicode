@@ -13,6 +13,19 @@
       </mat-autocomplete>
     </mat-form-field>
     <mat-error *ngIf="bankValidatorError">Selecione um banco da lista</mat-error>
+    <mat-checkbox formControlName="masterAccount">Conta Principal</mat-checkbox>
+
+    <div class="line-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Tipo de conta</mat-label>
+        <mat-select name="type" formControlName="accountType" required>
+          <mat-option value="1"> Conta Poupança </mat-option>
+          <mat-option value="2"> Conta Pessoa Física </mat-option>
+          <mat-option value="3"> Conta Pessoa Jurídica </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
 
     <div class="line-form">
       <mat-form-field appearance="outline">

@@ -1,7 +1,7 @@
-import { RuleEmailNotificationModeEnum } from 'src/app/enums/rule-email-notification-mode.enum';
+// import { RuleEmailNotificationModeEnum } from 'src/app/enums/rule-email-notification-mode.enum';
 
-export class MonitoringRuleUpdateRequestModel {
-  description: string;
-  email_notification_mode: RuleEmailNotificationModeEnum;
-  id: number;
-}
+// export class MonitoringRuleUpdateRequestModel {
+//   description: string;
+//   email_notification_mode: RuleEmailNotificationModeEnum;
+//   id: number;
+// }

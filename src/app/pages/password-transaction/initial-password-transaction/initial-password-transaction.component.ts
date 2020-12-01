@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
+import { PasswordService } from '../../../services/password/password.service';
 
 @Component({
   selector: 'app-initial-password-transaction',
@@ -14,7 +15,8 @@ export class InitialPasswordTransactionComponent implements OnInit {
   passwordForm: FormGroup;
   hide1 = true;
   hide2 = true;
-  hasPassword: boolean = true;
+  hasPassword: boolean = false;
+  passwordform:any;
 
   //RASCUNHOS PARA O FUTURO
 
@@ -22,7 +24,7 @@ export class InitialPasswordTransactionComponent implements OnInit {
 
   // hasPassword: boolean;
   // if (hasPassword) {
-    //hasPassowrd = true;
+  //hasPassowrd = true;
   //} 
 
 
@@ -38,7 +40,8 @@ export class InitialPasswordTransactionComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private PasswordService:PasswordService,
   ) { }
 
   ngOnInit(): void {
@@ -48,19 +51,20 @@ export class InitialPasswordTransactionComponent implements OnInit {
     }, {
       validator: ConfirmedValidator('password', 'passwordconfirm')
     })
+    this.checkPassword();
   }
 
 
-  submit(): void {
-    this.passwordForm.markAllAsTouched();
+  // submit(): void {
+  //   this.passwordForm.markAllAsTouched();
 
-    if (this.passwordForm.valid) {
-      const password = this.passwordForm.get('password').value;
-      const passwordconfirm = this.passwordForm.get('passwordconfirm').value;
+  //   if (this.passwordForm.valid) {
+  //     const password = this.passwordForm.get('password').value;
+  //     const passwordconfirm = this.passwordForm.get('passwordconfirm').value;
 
-      console.log(this.passwordForm);
-    }
-  }
+  //     console.log(this.passwordForm);
+  //   }
+  // }
 
   navigateToChangePassword(): void {
     this.router.navigate(['/password-transaction/change'])
@@ -68,6 +72,25 @@ export class InitialPasswordTransactionComponent implements OnInit {
 
   navigateToRecoverPassword(): void {
     this.router.navigate(['/password-transaction/recover'])
+  }
+
+  checkPassword() {
+    this.PasswordService.checkLoginPassword().subscribe((response: any) => {
+      console.log(response);
+    });
+  }
+
+  submit(){
+    this.passwordform = {
+      documentNumberCompany: "string",
+      idCompany: 2,
+      localTransaction: "P",
+      passSale: this.passwordForm.get('password').value
+    }
+    this.PasswordService.createPassword(this.passwordform).subscribe((response:any) =>{
+      console.log(response);
+    })
+    console.log(this.passwordform);
   }
 
 }

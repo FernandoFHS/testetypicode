@@ -1,72 +1,52 @@
-@import 'src/app/@core/styles/variables';
+@import "src/app/@core/styles/variables";
 
-.mat-list-item {
-    height: auto;
+mat-nav-list {
+    .mat-list-item {
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        color: inherit !important;
+        padding: 0 10px !important;
 
-    &:hover {
-        background: none;
+        .mat-list-item-content {
+            padding: 0 6px !important;
+        }
     }
 
-    .mat-list-item-content {
-        display: block;
-        padding: 0px 15px;
+    mat-icon {
+        margin-right: 8px;
+    }
 
-        &:hover {
-            background: none;
+    mat-expansion-panel {
+        padding: 0 10px;
 
-            > a {
-                color: $info;
+        .mat-expansion-panel-header {
+            padding: 0 6px !important;
+            font-weight: 500 !important;
+            font-size: 13px !important;
+
+            .mat-expansion-indicator {
+                margin-right: 10px;
+
+                &::after {
+                    @include get-primary-color();
+                }
             }
         }
-    }
 
-    a {
-        height: 45px;
-        padding: 0 10px;
-        //   margin-bottom: 10px;
-        align-items: center;
-        display: flex;
-        font-size: 15px;
-        white-space: nowrap;
-        color: #607d8b;
-        width: 100%;
-
-        mat-icon:not(.dd-icon) {
-            margin-right: 8px;
-        }
-
-        mat-icon {
-            color: #99abb4;
-        }
-
-        .dd-icon {
-            font-size: 16px;
-            width: 16px;
-            transition: 0.2s ease-in;
-            margin: 5px 0 5px 5px;
-            height: 16px;
+        .mat-list-item, .mat-list-item-content {
+            padding: 0px !important;
         }
     }
 
-    &.selected > .mat-list-item-content > a {
+    .selected .mat-list-item-content {
         @include get-primary-background-color();
-
+    
         border-radius: $radius;
         color: white;
-
+    
         mat-icon {
-            color: white;
+            color: white !important;
         }
-        .dd-icon {
-            -webkit-transform: rotate(-180deg);
-            transform: rotate(-180deg);
-        }
-    }
-
-    &.selected .sub-item .mat-list-item-content a.selected {
-        background: transparent;
-        color: $inverse;
-        font-weight: 500;
     }
 }
 

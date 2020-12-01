@@ -14,7 +14,7 @@ export class RuleConditionTypeListModel {
 
   type_sell_list: ConditionTypeListModel[];
 
-  return_code: ConditionTypeListModel[];
+  return_code_list: ConditionTypeListModel[];
 
   transaction_status_list: ConditionTypeListModel[];
 }

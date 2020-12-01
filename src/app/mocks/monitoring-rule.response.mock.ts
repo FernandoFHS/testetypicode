@@ -23,8 +23,10 @@ export const MonitoringRuleResponseMock: MonitoringRuleResponseModel = {
           comparison_operator: ">",
           monetary_value: 100.0,
           numeric_without_decimal_places_value: 0,
-          comparison_sequence: "",
-          logical_operator: "&&"
+          logical_operator: "&&",
+          list_item_value: null,
+          number_per_hour: null,
+          value: null
         },
         {
           id: 2,
@@ -34,8 +36,10 @@ export const MonitoringRuleResponseMock: MonitoringRuleResponseModel = {
           comparison_operator: ">=",
           monetary_value: 189.99,
           numeric_without_decimal_places_value: 0,
-          comparison_sequence: "",
-          logical_operator: ""
+          logical_operator: "",
+          list_item_value: null,
+          number_per_hour: null,
+          value: null
         }
       ]
     },
@@ -60,8 +64,10 @@ export const MonitoringRuleResponseMock: MonitoringRuleResponseModel = {
           comparison_operator: ">",
           monetary_value: 100.0,
           numeric_without_decimal_places_value: 0,
-          comparison_sequence: "",
-          logical_operator: "&&"
+          logical_operator: "&&",
+          list_item_value: null,
+          number_per_hour: null,
+          value: null
         },
         {
           id: 4,
@@ -71,8 +77,10 @@ export const MonitoringRuleResponseMock: MonitoringRuleResponseModel = {
           comparison_operator: ">=",
           monetary_value: 189.99,
           numeric_without_decimal_places_value: 0,
-          comparison_sequence: "",
-          logical_operator: ""
+          logical_operator: "",
+          list_item_value: null,
+          number_per_hour: null,
+          value: null
         }
       ]
     }

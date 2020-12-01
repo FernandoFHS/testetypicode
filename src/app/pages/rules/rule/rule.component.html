@@ -137,7 +137,7 @@
               E-mails notificados
             </mat-label>
 
-            <mat-chip-list #emailList [disabled]="!isPageAdd()">
+            <mat-chip-list #emailList [disabled]="isPageView()">
               <mat-chip *ngFor="let email of emails; let i = index" (removed)="removeEmail(i)"
                 [color]="i % 2 == 0 ? 'primary' : 'primary'" selected>
                 {{email}}
@@ -183,13 +183,23 @@
           <div *ngFor="let item of form.get('conditions').controls; let i = index; let last = last; let count = count"
             [formGroupName]="i" fxLayout="row wrap" fxLayoutGap="2% grid">
 
+            <div fxFlex="100%" *ngIf="isPageAdd() || (isPageEdit() && !ruleAlreadyActivated)">
+              <button mat-flat-button color="warn" class="float-left" (click)="removeCondition(i, true, true)">
+                <mat-icon [inline]="true" class="m-r-5">
+                  delete
+                </mat-icon>
+                Remover Condição
+              </button>
+            </div>
+
             <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="25%" fxFlex.sm="75%" fxFlex.xs="50%">
               <mat-label>
                 Variável
               </mat-label>
 
               <mat-select formControlName="variable" (selectionChange)="onChangeVariable($event, i)">
-                <mat-option *ngFor="let variable of variables" [value]="variable.variable_name">
+                <mat-option *ngFor="let variable of variables" [value]="variable.variable_name"
+                  [disabled]="disableVariable(variable)">
                   {{variable.display_name}}
                 </mat-option>
               </mat-select>
@@ -222,7 +232,7 @@
                 Valor
               </mat-label>
 
-              <input matInput id="condition-value-{{i}}" *ngIf="!selectedVariables[i]" formControlName="value" />
+              <input matInput id="condition-value-{{i}}" *ngIf="!selectedVariables[i] || !selectedVariables[i]?.variable_name" formControlName="value" />
 
               <input matInput currencyMask id="condition-value-{{i}}"
                 *ngIf="selectedVariables[i]?.data_type == 'Monetary'" formControlName="value" />
@@ -231,8 +241,18 @@
                 [disabled]="disableValueInput(i)">
                 <mat-chip
                   *ngFor="let selected_option of selectedVariables[i].selected_options_condition_type_list; let i2 = index"
-                  (removed)="removeOptionConditionTypeList(i, i2)" color="primary" selected>
-                  {{selected_option.description}}
+                  (removed)="removeOptionConditionTypeList(i, i2)">
+                  <span
+                    *ngIf="selectedVariables[i].variable_name == 'CNAE' || selectedVariables[i].variable_name == 'MCC'">
+                    {{selected_option.code}}
+                  </span>
+                  <span *ngIf="selectedVariables[i].variable_name == 'CodigoRetorno'">
+                    {{selected_option.id}} {{selected_option.description}}
+                  </span>
+                  <span
+                    *ngIf="selectedVariables[i].variable_name != 'CNAE' && selectedVariables[i].variable_name != 'MCC' && selectedVariables[i].variable_name != 'CodigoRetorno'">
+                    {{selected_option.description}}
+                  </span>
                   <mat-icon matChipRemove>cancel</mat-icon>
                 </mat-chip>
 
@@ -252,13 +272,36 @@
                 </mat-option>
                 <mat-option *ngFor="let option of selectedVariables[i]?.filtered_options_condition_type_list"
                   [value]="option">
-                  {{option.description}}
+
+                  <span class="subtitle-option"
+                    *ngIf="selectedVariables[i]?.variable_name == 'CNAE' || selectedVariables[i]?.variable_name == 'MCC'">
+                    <strong>{{selectedVariables[i]?.variable_name}}: </strong> {{option.code}}
+                  </span>
+                  <span class="subtitle-option"
+                    *ngIf="selectedVariables[i]?.variable_name == 'CNAE' || selectedVariables[i]?.variable_name == 'MCC'">
+                    <strong>Descrição: </strong> {{option.description}}
+                  </span>
+
+                  <span class="subtitle-option" *ngIf="selectedVariables[i]?.variable_name == 'CodigoRetorno'">
+                    <strong>Código: </strong> {{option.id}}
+                  </span>
+                  <span class="subtitle-option" *ngIf="selectedVariables[i]?.variable_name == 'CodigoRetorno'">
+                    <strong>Descrição: </strong> {{option.description}}
+                  </span>
+
+                  <span
+                    *ngIf="selectedVariables[i]?.variable_name != 'CNAE' && selectedVariables[i]?.variable_name != 'MCC' && selectedVariables[i]?.variable_name != 'CodigoRetorno'">
+                    {{option.description}}
+                  </span>
+
                 </mat-option>
               </mat-autocomplete>
 
-              <!-- <mat-error *ngIf="form.get('conditions').controls[i].get('value').hasError('required')">
-              Obrigatório
-            </mat-error> -->
+              <mat-icon matSuffix *ngIf="selectedVariables[i]?.data_type == 'ListOfValue'">home_work</mat-icon>
+
+              <mat-error *ngIf="form.get('conditions').controls[i].get('value').hasError('required')">
+                Obrigatório
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" floatLabel="always" fxFlex.gt-sm="15%" fxFlex.sm="25%" fxFlex.xs="50%"
@@ -280,7 +323,10 @@
 
           </div>
 
-          <button mat-flat-button color="accent" class="m-t-15 float-left" (click)="addCondition()" *ngIf="isPageAdd()">
+          <button mat-flat-button color="accent" class="m-t-15 float-left" (click)="addCondition()" *ngIf="isPageAdd() || (isPageEdit() && !ruleAlreadyActivated)">
+            <mat-icon [inline]="true" class="m-r-5">
+              add
+            </mat-icon>
             Nova Condição
           </button>
 

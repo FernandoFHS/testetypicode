@@ -19,9 +19,10 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { PageTypeEnum } from 'src/app/enums/page-type.enum';
 import { MonitoringRuleModel } from 'src/app/models/monitoring-rule.model';
 import { MonitoringRuleConditionResponseModel } from 'src/app/models/response/monitoring-rule-condition.response.model';
-import { MonitoringRuleUpdateRequestModel } from 'src/app/models/requests/monitoring-rule-update.request.model';
 import { GeneralService } from 'src/app/services/general.service';
 import { MonitoringRuleChangeStatusRequestModel } from 'src/app/models/requests/monitoring-rule-change-status.request.model';
+import { RuleConditionTypeListEnum } from 'src/app/enums/rule-condition-type-list.enum';
+import { RuleCriticalLevelEnum } from 'src/app/enums/rule-critical-level.enum';
 
 @Component({
   selector: 'app-rule',
@@ -83,6 +84,7 @@ export class RuleComponent implements OnInit {
   isLoading: boolean;
   id: number;
   model: MonitoringRuleModel;
+  ruleAlreadyActivated: boolean;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -98,6 +100,10 @@ export class RuleComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.isLoading = true;
+
+    // setInterval(() => {
+    //   console.log('selected', this.selectedVariables);
+    // }, 1000)
 
     await this._loadParams();
     await this._loadVariables();
@@ -157,6 +163,11 @@ export class RuleComponent implements OnInit {
 
         if (this.model) {
           this.emails = this.model.email_notification_recipients;
+
+          // TODO
+          // this.ruleAlreadyActivated = this.model.id_user_of_activation > 0 || this.isPageView();
+          this.ruleAlreadyActivated = this.model.active || this.isPageView() ? true : false;
+
           resolve();
         }
         else {
@@ -173,19 +184,22 @@ export class RuleComponent implements OnInit {
   addCondition(): void {
     const conditions = this.form.get('conditions') as FormArray;
     conditions.push(this._createCondition());
+
+    this.selectedVariables.push(new MonitoringRuleVariableResponseModel());
   }
 
-  onChangeVariable(event: MatSelectChange, index: number): void {
+  onChangeVariable(event: MatSelectChange, index: number, controlForms: boolean = true, listItemValueList: string[] = []): void {
     const conditionsForm = this.form.get('conditions') as FormArray;
 
-    const variable = this.variables.find(v => v.variable_name == event.value);
+    const variable = this._generalService.copyWithoutReferences<MonitoringRuleVariableResponseModel>(this.variables.find(v => v.variable_name == event.value));
     const comparisonOperatorForm = conditionsForm.controls[index].get('comparison_op');
     const valueForm = conditionsForm.controls[index].get('value');
 
-    comparisonOperatorForm.setValue('');
-
-    valueForm.disable();
-    comparisonOperatorForm.enable();
+    if (controlForms) {
+      valueForm.disable();
+      comparisonOperatorForm.enable();
+      comparisonOperatorForm.setValue('');
+    }
 
     if (this.selectedVariables[index]) {
       this.selectedVariables[index] = variable;
@@ -194,21 +208,44 @@ export class RuleComponent implements OnInit {
       this.selectedVariables.push(variable);
     }
 
-    if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
-      this.selectedVariables[index].is_loading_data = true;
+    const combinationIsValid = this._monitoringRuleService.validateCombinationOfVariables(this.selectedVariables);
 
-      this._monitoringRuleService.getRuleConditionListByEnum(variable.variable_name).then((data) => {
-        if (data && data.length > 0) {
-          variable.options_condition_type_list = data;
-          variable.filtered_options_condition_type_list = data;
-        }
-        else {
-          variable.options_condition_type_list = [];
-          variable.filtered_options_condition_type_list = [];
-        }
-      }).finally(() => {
-        variable.is_loading_data = false;
-      });
+    if (combinationIsValid) {
+      if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
+        this.selectedVariables[index].is_loading_data = true;
+
+        this._monitoringRuleService.getRuleConditionListByEnum(variable.variable_name).then((data) => {
+          if (data && data.length > 0) {
+            variable.options_condition_type_list = data;
+            variable.filtered_options_condition_type_list = data;
+
+            if (!controlForms) {
+              this.selectedVariables[index].selected_options_condition_type_list = data.filter(f => listItemValueList.find(f1 => f1 == f.id));
+            }
+          }
+          else {
+            variable.options_condition_type_list = [];
+            variable.filtered_options_condition_type_list = [];
+          }
+        }).finally(() => {
+          variable.is_loading_data = false;
+        });
+      }
+    }
+    else {
+      this.removeCondition(index, false, false);
+    }
+  }
+
+  disableVariable(variable: MonitoringRuleVariableResponseModel): boolean {
+    const variableAdded = this.selectedVariables.find(f => f.variable_name == variable.variable_name);
+
+    if (variableAdded) {
+      // return true; TODO
+      return false;
+    }
+    else {
+      return false;
     }
   }
 
@@ -229,7 +266,7 @@ export class RuleComponent implements OnInit {
     this.form = this._formBuilder.group({
       description: ['', [Validators.required]],
       conditions: this._formBuilder.array([]),
-      critical_level: [RuleTypeEnum.LOW, []],
+      critical_level: [RuleCriticalLevelEnum.LOW, []],
       email_notification_mode: [RuleEmailNotificationModeEnum.SEND_FOR_ALL, []],
       block_merchant_transactions: [false, []],
       email: ['', [Validators.email]]
@@ -240,14 +277,24 @@ export class RuleComponent implements OnInit {
     this.form = this._formBuilder.group({
       description: [this.model.description, [Validators.required]],
       conditions: this._formBuilder.array(this.model.monitoring_rule_condition.map((condition) => {
-        const variable = this.variables.find(v => v.variable_name == condition.variable_name);
-        this.selectedVariables.push(variable);
+        // const variable = this.variables.find(v => v.variable_name == condition.variable_name);
+        // this.selectedVariables.push(variable);
         return this._createCondition(condition);
       })),
-      critical_level: [{ value: this.model.critical_level, disabled: true }, []],
+      critical_level: [{ value: this.model.critical_level, disabled: this.ruleAlreadyActivated }, []],
       email_notification_mode: [this.model.email_notification_mode, []],
-      block_merchant_transactions: [{ value: this.model.block_merchant_transactions, disabled: true }, []],
-      email: [{ value: '', disabled: true }, [Validators.email]]
+      block_merchant_transactions: [{ value: this.model.block_merchant_transactions, disabled: this.ruleAlreadyActivated }, []],
+      email: [{ value: '', disabled: this.isPageView() }, [Validators.email]]
+    });
+
+    this.model.monitoring_rule_condition.forEach((condition, index) => {
+      const variable = this.variables.find(v => v.variable_name == condition.variable_name);
+
+      const event = <MatSelectChange>{
+        value: variable.variable_name
+      };
+
+      this.onChangeVariable(event, index, false, condition.list_item_value?.split(',') || []);
     });
   }
 
@@ -255,8 +302,8 @@ export class RuleComponent implements OnInit {
     this.form = this._formBuilder.group({
       description: [{ value: this.model.description, disabled: true }, []],
       conditions: this._formBuilder.array(this.model.monitoring_rule_condition.map((condition) => {
-        const variable = this.variables.find(v => v.variable_name == condition.variable_name);
-        this.selectedVariables.push(variable);
+        // const variable = this.variables.find(v => v.variable_name == condition.variable_name);
+        // this.selectedVariables.push(variable);
         return this._createCondition(condition);
       })),
       critical_level: [{ value: this.model.critical_level, disabled: true }, []],
@@ -264,34 +311,74 @@ export class RuleComponent implements OnInit {
       block_merchant_transactions: [{ value: this.model.block_merchant_transactions, disabled: true }, []],
       email: [{ value: '', disabled: true }, []]
     });
+
+    this.model.monitoring_rule_condition.forEach((condition, index) => {
+      const variable = this.variables.find(v => v.variable_name == condition.variable_name);
+
+      const event = <MatSelectChange>{
+        value: variable.variable_name
+      };
+
+      this.onChangeVariable(event, index, false, condition.list_item_value?.split(',') || []);
+    });
   }
 
   private _createCondition(condition: MonitoringRuleConditionResponseModel = null): FormGroup {
     return this._formBuilder.group({
-      logic_op: [{ value: condition ? condition.logical_operator : '&&', disabled: condition ? true : false }, []],
-      variable: [{ value: condition ? condition.variable_name : '', disabled: condition ? true : false }, [Validators.required]],
-      comparison_op: [{ value: condition ? condition.comparison_operator : '', disabled: true }, [Validators.required]],
-      value: [{ value: condition ? this._getValue(condition) : '', disabled: true }, []]
+      logic_op: [{ value: condition ? condition.logical_operator : '&&', disabled: condition ? this.ruleAlreadyActivated : false }, []],
+      variable: [{ value: condition ? condition.variable_name : '', disabled: condition ? this.ruleAlreadyActivated : false }, [Validators.required]],
+      comparison_op: [{ value: condition ? condition.comparison_operator : '', disabled: condition ? this.ruleAlreadyActivated : true }, [Validators.required]],
+      value: [{ value: condition ? this._getValue(condition) : '', disabled: condition ? this.ruleAlreadyActivated : true }, []]
     });
   }
 
   private _getValue(condition: MonitoringRuleConditionResponseModel): string {
-    const variable = this.variables.find(v => v.variable_name == condition.variable_name);
+    try {
+      const variable = this.variables.find(v => v.variable_name == condition.variable_name);
 
-    if (variable.data_type == VariableDataTypeEnum.MONETARY) {
-      return condition.monetary_value.toString();
+      if (variable.data_type == VariableDataTypeEnum.MONETARY) {
+        return condition.monetary_value.toString();
+      }
+      else if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
+        return condition.numeric_without_decimal_places_value.toString();
+      }
     }
-    else if (variable.data_type == VariableDataTypeEnum.LIST_OF_VALUE) {
-      return condition.numeric_without_decimal_places_value.toString();
+    catch (error) {
+      console.log(`Variável ${condition.variable_name} não encontrada na lista de variaveis!`, this.variables);
+      return '';
     }
+  }
+
+  private _validateForm(): boolean {
+    let isValid: boolean = true;
+
+    if (this.form.valid) {
+      const form = this.form.getRawValue();
+      const formConditions = (this.form.get('conditions') as FormArray);
+
+      if (formConditions.controls.length == 0) {
+        isValid = false;
+        this._notificationService.error('Formulário inválido, nenhuma condição informada.')
+      }
+      else if (form.email_notification_mode !== 'NOT_SEND' && this.emails?.length == 0) {
+        isValid = false;
+        this._notificationService.error('Formulário inválido, nenhum e-mail informado.');
+      }
+    }
+    else {
+      isValid = false;
+      this._notificationService.error('Formulário inválido, consulte os campos.');
+    }
+
+    return isValid;
   }
 
   save(): void {
     this.form.markAllAsTouched();
 
-    this.form.get('email').setValue('');
+    const isValid = this._validateForm();
 
-    if (this.form.valid) {
+    if (isValid) {
       this._spinnerService.show();
 
       const form = this.form.getRawValue();
@@ -305,13 +392,15 @@ export class RuleComponent implements OnInit {
 
         const condition: MonitoringRuleConditionRequestModel = {
           comparison_operator: formCondition.get('comparison_op').value,
-          comparison_sequence: index.toString(),
-          createdAt: '', // TODO
+          created_at: '', // TODO
           id: 0, // TODO
           logical_operator: (index == formConditions.controls.length || formConditions.controls.length == 1) ? '' : formCondition.get('logic_op').value,
+          list_item_value: selectedVariable.data_type == VariableDataTypeEnum.LIST_OF_VALUE ? selectedVariable.selected_options_condition_type_list.map(m => m.id).join(',') : null,
           monetary_value: selectedVariable.data_type == VariableDataTypeEnum.MONETARY ? formCondition.get('value').value : null,
-          numeric_without_decimal_places_value: selectedVariable.data_type == VariableDataTypeEnum.LIST_OF_VALUE ? formCondition.get('value').value : null,
-          updatedAt: '', // TODO
+          numeric_without_decimal_places_value: null,
+          updated_at: '', // TODO
+          number_per_hour: null,
+          value: null, // TODO
           variable_name: formCondition.get('variable').value
         }
 
@@ -321,7 +410,7 @@ export class RuleComponent implements OnInit {
       const request: MonitoringRuleRequestModel = {
         active: false,
         block_merchant_transactions: form.block_merchant_transactions,
-        createdAt: '', // TODO
+        created_at: '', // TODO
         critical_level: form.critical_level,
         description: form.description,
         email_notification_mode: form.email_notification_mode,
@@ -329,7 +418,7 @@ export class RuleComponent implements OnInit {
         id: 0, // TODO
         id_user_of_activation: 0, // TODO
         monitoring_rule_condition: conditions,
-        updatedAt: '', // TODO
+        updated_at: '', // TODO
         rule_type: RuleTypeEnum.NORMAL // TODO
       }
 
@@ -342,24 +431,56 @@ export class RuleComponent implements OnInit {
         this._spinnerService.hide();
       });
     }
-    else {
-      this._notificationService.error('Formulário inválido.');
-    }
   }
 
   update(): void {
     this.form.markAllAsTouched();
 
-    if (this.form.valid) {
+    const isValid = this._validateForm();
+
+    if (isValid) {
       this._spinnerService.show();
 
       const form = this.form.getRawValue();
+      const formConditions = (this.form.get('conditions') as FormArray);
 
-      const request: MonitoringRuleUpdateRequestModel = {
+      const conditions: MonitoringRuleConditionRequestModel[] = [];
+
+      for (let index = 0; index < formConditions.controls.length; index++) {
+        const formCondition = formConditions.at(index);
+        const selectedVariable = this.selectedVariables[index];
+
+        const condition: MonitoringRuleConditionRequestModel = {
+          comparison_operator: formCondition.get('comparison_op').value,
+          created_at: '', // TODO
+          id: 0, // TODO
+          logical_operator: (index == formConditions.controls.length || formConditions.controls.length == 1) ? '' : formCondition.get('logic_op').value,
+          list_item_value: selectedVariable.data_type == VariableDataTypeEnum.LIST_OF_VALUE ? selectedVariable.selected_options_condition_type_list.map(m => m.id).join(',') : null,
+          monetary_value: selectedVariable.data_type == VariableDataTypeEnum.MONETARY ? formCondition.get('value').value : null,
+          numeric_without_decimal_places_value: null,
+          updated_at: '', // TODO
+          number_per_hour: null,
+          value: null, // TODO
+          variable_name: formCondition.get('variable').value
+        }
+
+        conditions.push(condition);
+      }
+
+      const request: MonitoringRuleRequestModel = {
+        active: this.model.active,
+        block_merchant_transactions: form.block_merchant_transactions,
+        created_at: this.model.created_at,
+        critical_level: form.critical_level,
         description: form.description,
         email_notification_mode: form.email_notification_mode,
-        id: this.id
-      };
+        email_notification_recipients: this.emails || [],
+        id: this.model.id,
+        id_user_of_activation: this.model.id_user_of_activation,
+        monitoring_rule_condition: conditions,
+        updated_at: '', // TODO
+        rule_type: RuleTypeEnum.NORMAL // TODO
+      }
 
       this._monitoringRuleService.update(request).then(() => {
         this.back();
@@ -369,9 +490,6 @@ export class RuleComponent implements OnInit {
       }).finally(() => {
         this._spinnerService.hide();
       });
-    }
-    else {
-      this._notificationService.error('Formulário inválido.');
     }
   }
 
@@ -472,8 +590,14 @@ export class RuleComponent implements OnInit {
   onKeyupValue(event, index: number): void {
     const selectedVariable = this.selectedVariables[index];
 
-    selectedVariable.filtered_options_condition_type_list =
-      selectedVariable.options_condition_type_list.filter(f => f.description.toLowerCase().includes(event.target.value));
+    if (selectedVariable.variable_name == RuleConditionTypeListEnum.CNAE || selectedVariable.variable_name == RuleConditionTypeListEnum.MCC) {
+      selectedVariable.filtered_options_condition_type_list =
+        selectedVariable.options_condition_type_list.filter(f => f.description.toLowerCase().includes(event.target.value) || f.code.includes(event.target.value));
+    }
+    else {
+      selectedVariable.filtered_options_condition_type_list =
+        selectedVariable.options_condition_type_list.filter(f => f.description.toLowerCase().includes(event.target.value));
+    }
   }
 
   disableValueInput(index: number): boolean {
@@ -483,7 +607,7 @@ export class RuleComponent implements OnInit {
     const comparisonOpForm = conditionsForm.controls[index].get('comparison_op');
     const valueForm = conditionsForm.controls[index].get('value');
 
-    if (this.isPageEdit() || this.isPageView()) {
+    if (this.isPageView() || this.ruleAlreadyActivated) {
       valueForm.disable();
       return true;
     }
@@ -567,5 +691,46 @@ export class RuleComponent implements OnInit {
       });
     }, () => {
     }, 'Inativar Regra');
+  }
+
+  removeCondition(index: number, showConfirmDialog: boolean, deleteControl: boolean): void {
+    const deleteFn = () => {
+      let conditionsForm = this.form.get('conditions') as FormArray;
+
+      if (deleteControl) {
+        this.selectedVariables.splice(index, 1);
+        conditionsForm.removeAt(index);
+      }
+      else {
+        this.selectedVariables[index] = new MonitoringRuleVariableResponseModel();
+
+        const valueForm = conditionsForm.controls[index].get('value');
+        const variableForm = conditionsForm.controls[index].get('variable');
+        const comparisonOpForm = conditionsForm.controls[index].get('comparison_op');
+        const logicOpForm = conditionsForm.controls[index].get('logic_op');
+
+        variableForm.setValue('');
+
+        valueForm.setValue('');
+        valueForm.disable();
+
+        comparisonOpForm.setValue('');
+        comparisonOpForm.disable();
+
+        logicOpForm.setValue('');
+        logicOpForm.disable();
+      }
+    };
+
+    if (showConfirmDialog) {
+      this._generalService.openConfirmDialog('Tem certeza que deseja excluir a condição?', () => {
+        deleteFn()
+      }, () => {
+        // no
+      }, 'Excluir Condição');
+    }
+    else {
+      deleteFn();
+    }
   }
 }

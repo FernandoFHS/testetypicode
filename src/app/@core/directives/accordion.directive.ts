@@ -19,6 +19,7 @@ export class AccordionDirective implements AfterContentChecked {
     this._navlinks.forEach((link: AccordionLinkDirective) => {
       if (link !== selectedLink) {
         link.selected = false;
+        link.menuItem.open = false;
       }
     });
   }
@@ -38,10 +39,14 @@ export class AccordionDirective implements AfterContentChecked {
     this._navlinks.forEach((link: AccordionLinkDirective) => {
       if (link.group) {
         const routeUrl = this._router.url;
-        const currentUrl = routeUrl.split('/');
+        const currentUrl: string[] = routeUrl.split('/');
+        const groupUrl: string[] = link.group.split('/');
 
-        if (currentUrl.indexOf(link.group) > 0) {
+        const urlFounds = groupUrl.filter(g => currentUrl.includes(g));
+
+        if (urlFounds.length == groupUrl.length) {
           link.selected = true;
+          link.menuItem.open = true;
           this.closeOtherLinks(link);
         }
       }
