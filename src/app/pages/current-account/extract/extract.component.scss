@@ -1,0 +1,72 @@
+@import "src/app/@core/styles/variables";
+
+.tab-type {
+  mat-button-toggle {
+    width: 50px;
+  }
+}
+
+.custom-card {
+  border: solid 1px rgba(0, 0, 0, 0.12) !important;
+}
+
+.filter-days {
+  mat-button-toggle-group {
+    height: 37px;
+
+    mat-button-toggle {
+      height: 37px;
+
+      ::ng-deep button {
+        height: 37px;
+
+        span {
+          height: 37px;
+          line-height: 37px !important;
+        }
+      }
+    }
+  }
+}
+
+.div-filter-days {
+  &:not(:last-child) {
+    margin-right: 8px;
+  }
+}
+
+.timeline-icon {
+  color: white;
+}
+
+.timeline-header {
+  // text-align: left;
+  // margin-left: 15px;
+  table {
+    width: 100%;
+
+    th {
+      font-weight: normal;
+    }
+  }
+}
+
+.timeline {
+  mgl-timeline-entry-header {
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  ::ng-deep .mgl-timeline-entry-card {
+    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14),
+      0px 0px 0px 0px rgba(0, 0, 0, 0.12) !important;
+    border: solid 1px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+// mgl-timeline-entry.expanded mgl-timeline-entry-dot .timeline-icon {
+//   display: none;
+// }

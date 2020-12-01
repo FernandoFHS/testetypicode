@@ -1,0 +1,318 @@
+<div fxFlexFill>
+
+  <core-breadcrumb [model]="breadcrumbModel"></core-breadcrumb>
+
+  <div class="m-b-25">
+    <label class="mat-display-1 page-title">
+      Conta Corrente
+    </label>
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="1% grid">
+
+    <div fxFlex="20%">
+
+      <mat-expansion-panel class="mat-elevation-z0 custom-card">
+        <mat-expansion-panel-header>
+          Saldo disponível
+        </mat-expansion-panel-header>
+        <div>
+          <strong>
+            R$ 1.000,00
+          </strong>
+        </div>
+      </mat-expansion-panel>
+
+    </div>
+
+
+    <div fxFlex="80%" fxLayoutAlign="center center">
+
+      <div fxFlex="40%">
+        <mat-button-toggle-group class="tab-type" fxLayout="row wrap" fxFlex="100%" value="primary">
+          <mat-button-toggle value="primary" fxFlex="50%">
+            Extrato
+          </mat-button-toggle>
+          <mat-button-toggle value="accent" fxFlex="50%">
+            Lançamentos Futuros
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="1% grid" class="m-t-25" fxLayoutAlign="end center">
+
+    <div fxFlex="30%">
+
+
+    </div>
+
+    <div fxFlex="70%" class="filter-days">
+
+      <!-- <mat-button-toggle-group fxLayout="row wrap" fxFlex="100%" value="7">
+        <mat-button-toggle [value]="filterDay.value" *ngFor="let filterDay of filterDays" fxFlex>
+          {{filterDay.text}}
+        </mat-button-toggle>
+      </mat-button-toggle-group> -->
+
+      <div fxFlex="100%" class="text-right" fxLayout="row wrap" fxLayoutAlign="end center">
+
+        <div *ngFor="let filterDay of filterDays; let first = first" class="div-filter-days">
+
+          <button mat-flat-button color="primary" *ngIf="first == true">
+            {{filterDay.text}}
+          </button>
+
+          <button mat-stroked-button color="primary" *ngIf="first == false">
+            {{filterDay.text}}
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- <div fxFlex="20%" fxLayout="row">
+      <button mat-flat-button color="primary" class="w-100-p" fxFlex="100%" [matMenuTriggerFor]="menu">
+        <mat-icon [inline]="true" class="m-r-5">
+          add
+        </mat-icon>
+        Filtros
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Item 1</button>
+        <button mat-menu-item>Item 2</button>
+      </mat-menu>
+
+    </div> -->
+
+    <div fxFlex="100%">
+
+      <mat-expansion-panel class="mb-16 mat-elevation-z0 custom-card" [expanded]="false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <!-- +  -->
+            Filtros
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+      </mat-expansion-panel>
+
+    </div>
+
+    <div fxFlex="100%" fxLayoutAlign="start start" fxLayout="row wrap">
+
+      <mgl-timeline [side]="'right'" [alternate]="false" fxFlex="100%" [mobileWidthThreshold]="90000" [toggle]="true" class="timeline">
+
+        <mgl-timeline-entry>
+
+          <mgl-timeline-entry-header (click)="onHeaderClick($event)" class="timeline-header">
+
+            <table>
+
+              <tr>
+                <th>
+                  Data Liquidação
+                </th>
+                <th>
+                  Tipo de Transação
+                </th>
+                <th>
+                  Data Transação
+                </th>
+                <th>
+                  Valor Liquido
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  20/11/2020 14:31
+                </td>
+                <td>
+                  Crédito
+                </td>
+                <td>
+                  20/11/2020 14:30
+                </td>
+                <td>
+                  R$ 10.000,00
+                </td>
+              </tr>
+
+            </table>
+
+            <!-- <div class="timeline-header" fxFlex="100%" fxLayout="row wrap">
+              Data Liquidação
+            </div> -->
+
+          </mgl-timeline-entry-header>
+
+          <mgl-timeline-entry-content>
+
+          </mgl-timeline-entry-content>
+
+          <mgl-timeline-entry-dot (click)="onDotClick($event)">
+            <div fxLayout="row wrap" fxLayoutAlign="center center" class="h-100-p">
+              <mat-icon class="timeline-icon">
+                credit_card
+              </mat-icon>
+            </div>
+          </mgl-timeline-entry-dot>
+
+          <!-- <mgl-timeline-entry-side>2020</mgl-timeline-entry-side> -->
+
+        </mgl-timeline-entry>
+
+        <mgl-timeline-entry>
+
+          <mgl-timeline-entry-header (click)="onHeaderClick($event)" class="timeline-header">
+
+            <table>
+
+              <tr>
+                <th>
+                  Data Liquidação
+                </th>
+                <th>
+                  Tipo de Transação
+                </th>
+                <th>
+                  Data Transação
+                </th>
+                <th>
+                  Valor Liquido
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  20/11/2020 14:31
+                </td>
+                <td>
+                  Crédito
+                </td>
+                <td>
+                  20/11/2020 14:30
+                </td>
+                <td>
+                  R$ 10.000,00
+                </td>
+              </tr>
+
+            </table>
+
+            <!-- <div class="timeline-header" fxFlex="100%" fxLayout="row wrap">
+              Data Liquidação
+            </div> -->
+
+          </mgl-timeline-entry-header>
+
+          <mgl-timeline-entry-content>
+
+          </mgl-timeline-entry-content>
+
+          <mgl-timeline-entry-dot (click)="onDotClick($event)">
+            <div fxLayout="row wrap" fxLayoutAlign="center center" class="h-100-p">
+              <mat-icon class="timeline-icon">
+                credit_card
+              </mat-icon>
+            </div>
+          </mgl-timeline-entry-dot>
+
+          <mgl-timeline-entry-side>2020</mgl-timeline-entry-side>
+
+        </mgl-timeline-entry>
+
+        <mgl-timeline-entry>
+
+          <mgl-timeline-entry-header (click)="onHeaderClick($event)" class="timeline-header">
+
+            <table>
+
+              <tr>
+                <th>
+                  Data Liquidação
+                </th>
+                <th>
+                  Tipo de Transação
+                </th>
+                <th>
+                  Data Transação
+                </th>
+                <th>
+                  Valor Liquido
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  20/11/2020 14:31
+                </td>
+                <td>
+                  Crédito
+                </td>
+                <td>
+                  20/11/2020 14:30
+                </td>
+                <td>
+                  R$ 10.000,00
+                </td>
+              </tr>
+
+            </table>
+
+            <!-- <div class="timeline-header" fxFlex="100%" fxLayout="row wrap">
+              Data Liquidação
+            </div> -->
+
+          </mgl-timeline-entry-header>
+
+          <mgl-timeline-entry-content>
+
+          </mgl-timeline-entry-content>
+
+          <mgl-timeline-entry-dot (click)="onDotClick($event)">
+            <div fxLayout="row wrap" fxLayoutAlign="center center" class="h-100-p">
+              <mat-icon class="timeline-icon">
+                credit_card
+              </mat-icon>
+            </div>
+          </mgl-timeline-entry-dot>
+
+          <mgl-timeline-entry-side>2020</mgl-timeline-entry-side>
+
+        </mgl-timeline-entry>
+      </mgl-timeline>
+
+      <!-- <mat-vertical-stepper [linear]="false" #stepper>
+
+        <mat-step>
+          <ng-template matStepLabel>
+            Fill out your name
+          </ng-template>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>
+            Fill out your address
+          </ng-template>
+
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>
+            Done
+          </ng-template>
+
+        </mat-step>
+
+      </mat-vertical-stepper> -->
+
+    </div>
+
+  </div>
+
+</div>

@@ -379,6 +379,10 @@ html body {
         margin-top: 20px;
     }
 
+    .m-t-25 {
+        margin-top: 25px !important;
+    }
+
     .m-t-30 {
         margin-top: 30px;
     }
@@ -520,6 +524,14 @@ html body {
     .b-all {
         border: 1px solid $border;
     }
+}
+
+.w-100-p {
+    width: 100%;
+}
+
+.h-100-p {
+    height: 100%;
 }
 
 /*******************
@@ -970,5 +982,13 @@ mat-table {
         &:hover {
             background-color: #EEEEEE;
         }
+    }
+}
+
+.mat-default.mat-flat-button {
+    border: 1px solid;
+    
+    &:hover {
+        opacity: 0.7;
     }
 }

@@ -25,6 +25,9 @@ import { RuleComponent } from '../pages/rules/rule/rule.component';
 import { AgreementListComponent } from '../pages/agreement-area/agreement-list/agreement-list.component';
 import { ContainerGuard } from '../@core/components/container/container.guard';
 import { Error404Component } from '../pages/errors/404/error-404.component';
+import { CurrentAccountComponent } from '../pages/current-account/current-account.component';
+import { ExtractComponent } from '../pages/current-account/extract/extract.component';
+import { TransactionsComponent } from '../pages/transactions/transactions.component';
 
 export const routes: Routes = [
   {
@@ -45,6 +48,10 @@ export const routes: Routes = [
       {
         path: 'home',
         component: HomeComponent,
+      },
+      {
+        path: 'transactions',
+        component: TransactionsComponent
       },
       {
         path: 'rules',
@@ -135,6 +142,21 @@ export const routes: Routes = [
       {
         path: 'edit-partner/:index',
         component: EditPartnerComponent,
+      },
+      {
+        path: 'current-account',
+        component: CurrentAccountComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'extract',
+            pathMatch: 'full'
+          },
+          {
+            path: 'extract',
+            component: ExtractComponent,
+          }
+        ]
       },
       {
         path: 'agreements',

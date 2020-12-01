@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { CoreModule } from './@core/core.module';
@@ -41,6 +40,13 @@ import { RulesComponent } from './pages/rules/rules.component';
 import { RuleComponent } from './pages/rules/rule/rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
 import { Error404Module } from './pages/errors/404/error-404.module';
+import { CurrentAccountComponent } from './pages/current-account/current-account.component';
+import { ExtractComponent } from './pages/current-account/extract/extract.component';
+import { TransactionsComponent } from './pages/transactions/transactions.component';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MglTimelineModule } from 'angular-mgl-timeline';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -93,6 +99,9 @@ export const customCurrencyMaskConfig = {
     AddAgreementComponent,
     PlansComponent,
     DeleteTaxComponent,
+    CurrentAccountComponent,
+    ExtractComponent,
+    TransactionsComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,9 +113,25 @@ export const customCurrencyMaskConfig = {
     CoreModule,
     NgxSpinnerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-    Error404Module
+    Error404Module,
+    MglTimelineModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'pt-BR',
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
