@@ -1002,46 +1002,47 @@ export class AddCompanyComponent implements OnInit {
           idMcc: this.identificationFormGroup.get('mcccode').value
         }
       },
-      companyPartner: [
-        {
-          idCompanyPartner: 0,
-          idCompany: 0,
-          partnerSequentialNumber: 1,
-          partnerName: this.partnerFormGroup.get('partnerName').value,
-          cpf: this.partnerFormGroup.get('cpf').value,
-          dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
-          partnerAddress: [
-            {
-              idPartnerAddress: 0,
-              number: this.partnerFormGroup.get('number').value,
-              complement: this.partnerFormGroup.get('complement').value,
-              street: {
-                idStreet: 0,
-                zipCode: this.partnerFormGroup.get('zipCode').value,
-                streetName: this.partnerFormGroup.get('streetName').value,
-                city: {
-                  idCity: 0,
-                  cityName: this.partnerFormGroup.get('cityName').value
-                },
-                neighborhood: {
-                  idNeighborhood: 0,
-                  neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value
-                },
-                state: {
-                  idState: 0,
-                  uf: this.partnerFormGroup.get('uf').value,
-                }
-              }
-            }
-          ],
-          partnerContact: [
-            {
-              idPartnerContact: 0,
-              phone: this.partnerFormGroup.get('phone').value
-            }
-          ]
-        }
-      ]
+      companyPartner: this.localStorageService.get('partnerFormGroup'),
+      // companyPartner: [
+      //   {
+      //     idCompanyPartner: 0,
+      //     idCompany: 0,
+      //     partnerSequentialNumber: 1,
+      //     partnerName: this.partnerFormGroup.get('partnerName').value,
+      //     cpf: this.partnerFormGroup.get('cpf').value,
+      //     dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
+      //     partnerAddress: [
+      //       {
+      //         idPartnerAddress: 0,
+      //         number: this.partnerFormGroup.get('number').value,
+      //         complement: this.partnerFormGroup.get('complement').value,
+      //         street: {
+      //           idStreet: 0,
+      //           zipCode: this.partnerFormGroup.get('zipCode').value,
+      //           streetName: this.partnerFormGroup.get('streetName').value,
+      //           city: {
+      //             idCity: 0,
+      //             cityName: this.partnerFormGroup.get('cityName').value
+      //           },
+      //           neighborhood: {
+      //             idNeighborhood: 0,
+      //             neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value
+      //           },
+      //           state: {
+      //             idState: 0,
+      //             uf: this.partnerFormGroup.get('uf').value,
+      //           }
+      //         }
+      //       }
+      //     ],
+      //     partnerContact: [
+      //       {
+      //         idPartnerContact: 0,
+      //         phone: this.partnerFormGroup.get('phone').value
+      //       }
+      //     ]
+      //   }
+      // ]
     }
     console.log(form);
 
