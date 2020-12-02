@@ -10,7 +10,7 @@ export const menuItems: Menu[] = [
   },
   { route: 'transactions', display_name: 'Transações', icon_name: 'local_atm', children: [], open: false },
   { route: 'profiles', display_name: 'Grupo de Usuários', icon_name: 'group', children: [], open: false },
-  { route: 'companies', display_name: 'Estabelecimentos', icon_name: 'store_mall_directory', children: [], open: false },
+  { route: 'companies', display_name: 'Empresas', icon_name: 'store_mall_directory', children: [], open: false },
   { route: 'password-transaction', display_name: 'Senha Transação', icon_name: 'vpn_key', children: [], open: false },
   { route: 'rules', display_name: 'Regras', icon_name: 'rule', children: [], open: false },
   { route: 'login', display_name: 'Login', icon_name: 'lock', children: [], open: false },

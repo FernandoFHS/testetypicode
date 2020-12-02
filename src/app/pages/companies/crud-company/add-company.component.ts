@@ -96,9 +96,10 @@ export class AddCompanyComponent implements OnInit {
   companyAdressFormGroup: FormGroup;
 
   endereco: any;
+  formulariocompleto: any;
 
 
-  plus:any;
+  plus: any;
   pageType: PageTypeEnum;
   isLoading: boolean;
   id: number;
@@ -115,8 +116,8 @@ export class AddCompanyComponent implements OnInit {
   adress: any = this.localStorageService.get('adressFormGroup');
   condition: any = this.localStorageService.get('conditionFormGroup');
   complement: any = this.localStorageService.get('complementFormGroup');
-  partner: any = this.localStorageService.get('partner');
-  companyadress:any = [];  
+  partner: any = this.localStorageService.get('editPartner');
+  companyadress: any = [];
   partnerSource$: any = [];
   apiPartnerSource$: any = [];
   bankAccount$: any = [];
@@ -131,7 +132,7 @@ export class AddCompanyComponent implements OnInit {
   gpSendDateNullValue: boolean;
   registrationDateNullValue: boolean;
   gpAffiliationDateNullValue: boolean;
-  seRegistrationDateNullValue: boolean; 
+  seRegistrationDateNullValue: boolean;
   discreditationDateNullValue: boolean;
 
   testesocio: any = this.localStorageService.get('partnerFormGroup');
@@ -152,7 +153,7 @@ export class AddCompanyComponent implements OnInit {
       { title: 'Lista de Empresa', route: 'companies/list' }
     ]
   };
-  
+
   editBreadcrumbModel: BreadcrumbModel = {
     active: {
       title: 'Editar Empresa',
@@ -232,8 +233,6 @@ export class AddCompanyComponent implements OnInit {
       this.loadAddModel();
     }
 
-    console.log(this.isPageEdit());
-
     if (this.localStorageService.get('bankAccount') == null) {
       this.bankAccount$ = []
     } else {
@@ -269,9 +268,9 @@ export class AddCompanyComponent implements OnInit {
     this.bankingFormGroup = this._formBuilder.group({
       externalBankAccount: this._formBuilder.array(this.bankAccount$),
     });
-    
+
     this.gelAllCnaes();
-    
+
     this.plus = {
       antecipationTaxPercent: 0,
       anticipationByAssignmentIndicator: true,
@@ -289,7 +288,7 @@ export class AddCompanyComponent implements OnInit {
       equipmentIdentifier: 0,
       gpReturnDate: "string",
       // idCompanyOwner:1008,
-      idCompanyLevelItem:1,
+      idCompanyLevelItem: 1,
       idPlan: 0,
       inclusionRegistrationDateTime: "string",
       mcccode: 0,
@@ -438,30 +437,31 @@ export class AddCompanyComponent implements OnInit {
   private loadEditModel() {
     this.addPage = false;
 
-      this.companyService.readById(this.id).subscribe((company) => {
-        this.apiPhoneNumber$ = company.companyContact;
-        this.apiBankAccount$ = company.externalBankAccount;
-        this.apiPartnerSource$ = company.companyPartner;
-        this.changeDetectorRefs.detectChanges();       
-        
-        this.loadEditForm();
-        this.editValues(company);
-      });
+    this.companyService.readById(this.id).subscribe((company) => {
+      this.apiPhoneNumber$ = company.companyContact;
+      this.apiBankAccount$ = company.externalBankAccount;
+      this.apiPartnerSource$ = company.companyPartner;
+      this.changeDetectorRefs.detectChanges();
+      console.log(company)
+
+      this.loadEditForm();
+      this.editValues(company);
+    });
   }
 
   private loadViewModel() {
     this.addPage = false;
 
-      this.companyService.readById(this.id).subscribe((company) => {
-        this.apiPhoneNumber$ = company.companyContact;
-        this.apiBankAccount$ = company.externalBankAccount;
-        this.apiPartnerSource$ = company.companyPartner;
-        console.log(this.apiPartnerSource$);
-        this.changeDetectorRefs.detectChanges();       
-        
-        this.loadViewForm();
-        this.editValues(company);
-      });
+    this.companyService.readById(this.id).subscribe((company) => {
+      this.apiPhoneNumber$ = company.companyContact;
+      this.apiBankAccount$ = company.externalBankAccount;
+      this.apiPartnerSource$ = company.companyPartner;
+      console.log(this.apiPartnerSource$);
+      this.changeDetectorRefs.detectChanges();
+
+      this.loadViewForm();
+      this.editValues(company);
+    });
   }
 
   private loadEditForm() {
@@ -533,104 +533,76 @@ export class AddCompanyComponent implements OnInit {
       seRegistrationDate: [this.complement?.seRegistrationDate || ''],
       discreditationDate: [this.complement?.discreditationDate || '']
     });
-    this.partnerFormGroup = this._formBuilder.group({
-      partnerSequentialNumber: [{ value: '', disabled: true }],
-      name: [''],
-      cpf: [''],
-      dateOfBirth: [''],
-      cep: [''],
-      street: [''],
-      number: [''],
-      complement: [''],
-      neighborhood: [''],
-      county: [''],
-      state: [''],
-      contact: ['']
-    });
   }
 
   private loadViewForm() {
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
-      companyResponsibleName: [{value: this.identification?.companyResponsibleName || '', disabled: true}],
-      companyType: [{value: this.identification?.companyType || '', disabled: true}],
-      situation: [{value: this.identification?.situation || '', disabled: true}],
-      documentNumberCompany: [{value: this.identification?.documentNumberCompany || '', disabled: true}],
-      gpEstablishmentNumber: [{value: this.identification?.gpEstablishmentNumber || '', disabled: true }],
-      stateRegistration: [{value: this.identification?.stateRegistration || '', disabled: true}],
-      companyName: [{value: this.identification?.companyName || '', disabled: true}],
-      fancyName: [{value: this.identification?.fancyName || '', disabled: true }],
-      companyShortName: [{value: this.identification?.companyShortName || '', disabled: true }],
-      mcccode: [{value: this.identification?.mcccode || '', disabled: true }],
-      idDepartament: [{value: this.identification?.idDepartament || '', disabled: true }],
-      cnae: [{value: this.identification?.cnae || '', disabled: true }],
-      idCnae: [{value: this.identification?.idCnae || '', disabled: true }],
-      businessActivity: [{value: this.identification?.businessActivity || '', disabled: true }],
-      openingDate: [{value: this.identification?.openingDate || '', disabled: true }],
+      companyResponsibleName: [{ value: this.identification?.companyResponsibleName || '', disabled: true }],
+      companyType: [{ value: this.identification?.companyType || '', disabled: true }],
+      situation: [{ value: this.identification?.situation || '', disabled: true }],
+      documentNumberCompany: [{ value: this.identification?.documentNumberCompany || '', disabled: true }],
+      gpEstablishmentNumber: [{ value: this.identification?.gpEstablishmentNumber || '', disabled: true }],
+      stateRegistration: [{ value: this.identification?.stateRegistration || '', disabled: true }],
+      companyName: [{ value: this.identification?.companyName || '', disabled: true }],
+      fancyName: [{ value: this.identification?.fancyName || '', disabled: true }],
+      companyShortName: [{ value: this.identification?.companyShortName || '', disabled: true }],
+      mcccode: [{ value: this.identification?.mcccode || '', disabled: true }],
+      idDepartament: [{ value: this.identification?.idDepartament || '', disabled: true }],
+      cnae: [{ value: this.identification?.cnae || '', disabled: true }],
+      idCnae: [{ value: this.identification?.idCnae || '', disabled: true }],
+      businessActivity: [{ value: this.identification?.businessActivity || '', disabled: true }],
+      openingDate: [{ value: this.identification?.openingDate || '', disabled: true }],
     });
     this.adressFormGroup = this._formBuilder.group({
-      streetName: [{value: this.adress?.streetName || '', disabled: true}],
-      number: [{value: this.adress?.number || '', disabled: true}],
-      complement: [{value:this.adress?.complement || '', disabled: true}],
-      neighborhoodName: [{value: this.adress?.neighborhoodName || '', disabled: true}],
-      cityName: [{value: this.adress?.cityName || '', disabled: true}],
-      stateName: [{value: this.adress?.stateName || '', disabled: true}],
-      responsibleNameCtrl: [{value: this.adress?.responsibleNameCtrl || '', disabled: true}],
-      referencePoint: [{value: this.adress?.referencePoint || '', disabled: true}],
-      zipCode: [{value: this.adress?.zipCode || '', disabled: true}],
-      checkboxAdress: [{value: this.adress?.checkboxAdress || '', disabled: true}],
-      subordinateZipCode: [{value: '', disabled: true }],
-      subordinateNeighborhoodCtrl: [{value: '', disabled: true}],
-      subordinateCityCtrl: [{value: '', disabled: true}],
-      subordinateStreetCtrl: [{value: '', disabled: true}],
-      subordinateNumberCtrl: [{value: '', disabled: true}],
-      subordinateComplementCtrl: [{value: '', disabled: true}],
-      subordinateStateCtrl: [{value: '', disabled: true}],
-      subordinateResponsibleNameCtrl: [{value: '', disabled: true}],
-      subordinateReferencePointCtrl: [{value: '', disabled: true}],
+      streetName: [{ value: this.adress?.streetName || '', disabled: true }],
+      number: [{ value: this.adress?.number || '', disabled: true }],
+      complement: [{ value: this.adress?.complement || '', disabled: true }],
+      neighborhoodName: [{ value: this.adress?.neighborhoodName || '', disabled: true }],
+      cityName: [{ value: this.adress?.cityName || '', disabled: true }],
+      stateName: [{ value: this.adress?.stateName || '', disabled: true }],
+      responsibleNameCtrl: [{ value: this.adress?.responsibleNameCtrl || '', disabled: true }],
+      referencePoint: [{ value: this.adress?.referencePoint || '', disabled: true }],
+      zipCode: [{ value: this.adress?.zipCode || '', disabled: true }],
+      checkboxAdress: [{ value: this.adress?.checkboxAdress || '', disabled: true }],
+      subordinateZipCode: [{ value: '', disabled: true }],
+      subordinateNeighborhoodCtrl: [{ value: '', disabled: true }],
+      subordinateCityCtrl: [{ value: '', disabled: true }],
+      subordinateStreetCtrl: [{ value: '', disabled: true }],
+      subordinateNumberCtrl: [{ value: '', disabled: true }],
+      subordinateComplementCtrl: [{ value: '', disabled: true }],
+      subordinateStateCtrl: [{ value: '', disabled: true }],
+      subordinateResponsibleNameCtrl: [{ value: '', disabled: true }],
+      subordinateReferencePointCtrl: [{ value: '', disabled: true }],
     });
     this.conditionFormGroup = this._formBuilder.group({
-      tableSaleCtrl: [{value: this.condition?.tableSaleCtrl || '', disabled: true}],
-      automaticCreditIndicator: [{value: this.condition?.automaticCreditIndicator || '', disabled: true}],
-      transactionAmount: [{value: this.condition?.transactionAmount || '', disabled: true}],
-      tedAmount: [{value: this.condition?.tedAmount || '', disabled: true}],
-      referentialTransacionAmount: [{value: this.condition?.referentialTransacionAmount || '', disabled: true}],
-      anticipationFee: [{value: this.condition?.anticipationFee || '', disabled: true}],
-      ignoreLiberationAJManual: [{value: this.condition?.ignoreLiberationAJManual || '', disabled: true}],
-      ajtype: [{value: this.condition?.ajtype || '', disabled: true}],
-      beneficiaryType: [{value: this.condition?.beneficiaryType || '', disabled: true}],
-      beneficiaryName: [{value: this.condition?.beneficiaryName || '', disabled: true}],
-      beneficiaryDocumentNumber: [{value: this.condition?.beneficiaryDocumentNumber || '', disabled: true}],
+      tableSaleCtrl: [{ value: this.condition?.tableSaleCtrl || '', disabled: true }],
+      automaticCreditIndicator: [{ value: this.condition?.automaticCreditIndicator || '', disabled: true }],
+      transactionAmount: [{ value: this.condition?.transactionAmount || '', disabled: true }],
+      tedAmount: [{ value: this.condition?.tedAmount || '', disabled: true }],
+      referentialTransacionAmount: [{ value: this.condition?.referentialTransacionAmount || '', disabled: true }],
+      anticipationFee: [{ value: this.condition?.anticipationFee || '', disabled: true }],
+      ignoreLiberationAJManual: [{ value: this.condition?.ignoreLiberationAJManual || '', disabled: true }],
+      ajtype: [{ value: this.condition?.ajtype || '', disabled: true }],
+      beneficiaryType: [{ value: this.condition?.beneficiaryType || '', disabled: true }],
+      beneficiaryName: [{ value: this.condition?.beneficiaryName || '', disabled: true }],
+      beneficiaryDocumentNumber: [{ value: this.condition?.beneficiaryDocumentNumber || '', disabled: true }],
     });
     this.complementFormGroup = this._formBuilder.group({
-      openingHours: [{value: this.complement?.openingHours || '', disabled: true}],
-      ecommerceURL: [{value: this.complement?.ecommerceURL || '', disabled: true}],
-      estUrl: [{value: this.complement?.estUrl || '', disabled: true}],
-      email: [{value: this.complement?.email || '', disabled: true}],
-      posQuantity: [{value: this.complement?.posQuantity || '', disabled: true}],
-      logicalNumber: [{value: this.complement?.logicalNumber || '', disabled: true}],
-      idTerminal: [{value: this.complement?.idTerminal || '', disabled: true}],
-      registerCode: [{value: this.complement?.registerCode || '', disabled: true}],
-      registrationDate: [{value: this.complement?.registrationDate || '', disabled: true}],
-      gpSendDate: [{value: this.complement?.gpSendDate || '', disabled: true}],
-      accreditationDate: [{value: this.complement?.accreditationDate || '', disabled: true}],
-      gpAffiliationDate: [{value: this.complement?.gpAffiliationDate || '', disabled: true}],
-      seRegistrationDate: [{value: this.complement?.seRegistrationDate || '', disabled: true}],
-      discreditationDate: [{value: this.complement?.discreditationDate || '', disabled: true}],
-    });
-    this.partnerFormGroup = this._formBuilder.group({
-      partnerSequentialNumber: [{ value: '', disabled: true }],
-      name: [''],
-      cpf: [''],
-      dateOfBirth: [''],
-      cep: [''],
-      street: [''],
-      number: [''],
-      complement: [''],
-      neighborhood: [''],
-      county: [''],
-      state: [''],
-      contact: ['']
+      openingHours: [{ value: this.complement?.openingHours || '', disabled: true }],
+      ecommerceURL: [{ value: this.complement?.ecommerceURL || '', disabled: true }],
+      estUrl: [{ value: this.complement?.estUrl || '', disabled: true }],
+      email: [{ value: this.complement?.email || '', disabled: true }],
+      posQuantity: [{ value: this.complement?.posQuantity || '', disabled: true }],
+      logicalNumber: [{ value: this.complement?.logicalNumber || '', disabled: true }],
+      idTerminal: [{ value: this.complement?.idTerminal || '', disabled: true }],
+      registerCode: [{ value: this.complement?.registerCode || '', disabled: true }],
+      registrationDate: [{ value: this.complement?.registrationDate || '', disabled: true }],
+      gpSendDate: [{ value: this.complement?.gpSendDate || '', disabled: true }],
+      accreditationDate: [{ value: this.complement?.accreditationDate || '', disabled: true }],
+      gpAffiliationDate: [{ value: this.complement?.gpAffiliationDate || '', disabled: true }],
+      seRegistrationDate: [{ value: this.complement?.seRegistrationDate || '', disabled: true }],
+      discreditationDate: [{ value: this.complement?.discreditationDate || '', disabled: true }],
     });
   }
 
@@ -722,7 +694,7 @@ export class AddCompanyComponent implements OnInit {
         subordinateComplementCtrl: company.companyAddress[1].complement,
         subordinateStateCtrl: company.companyAddress[1].street.state.uf,
         subordinateReferencePointCtrl: company.referencePoint
-      }); 
+      });
 
     } else {
       this.adressFormGroup.patchValue({
@@ -742,7 +714,7 @@ export class AddCompanyComponent implements OnInit {
         subordinateComplementCtrl: company.companyAddress[1].complement,
         subordinateStateCtrl: company.companyAddress[1].street.state.uf,
         subordinateReferencePointCtrl: company.referencePoint
-      }); 
+      });
       console.log(company.companyAddress[0])
     }
     this.conditionFormGroup.patchValue({
@@ -782,15 +754,15 @@ export class AddCompanyComponent implements OnInit {
     if (company.referencePoint == "") {
       this.referencePointNullValue = true;
       console.log(this.referencePointNullValue)
-    } 
+    }
 
     if (company.accreditationDate == '0000-00-00T00:00:00') {
       this.accreditationDateNullValue = true;
-    } 
+    }
 
     if (company.gpSendDate == '0000-00-00T00:00:00') {
       this.gpSendDateNullValue = true;
-    } 
+    }
 
     if (!company.registrationDate) {
       this.registrationDateNullValue = true;
@@ -798,15 +770,15 @@ export class AddCompanyComponent implements OnInit {
 
     if (company.gpAffiliationDate == '0000-00-00T00:00:00') {
       this.gpAffiliationDateNullValue = true;
-    } 
+    }
 
     if (!company.seRegistrationDate) {
       this.seRegistrationDateNullValue = true;
-    } 
+    }
 
     if (company.discreditationDate == '0000-00-00T00:00:00') {
       this.discreditationDateNullValue = true;
-    } 
+    }
   }
 
   private loadParams(): Promise<void> {
@@ -841,42 +813,396 @@ export class AddCompanyComponent implements OnInit {
   }
 
   createCompany() {
-    let formulariocompleto = Object.assign({},
-      this.identificationFormGroup.value,
-      this.adressFormGroup.value,
-      this.conditionFormGroup.value,
-      this.complementFormGroup.value,
-      this.companyPartnerFormGroup.value,
-      this.endereco,
-      this.plus,
-      // this.companyAdressFormGroup.value,
-      this.contactFormGroup.value,
-      this.bankingFormGroup.value);
-    console.log(formulariocompleto);
-   
+ 
+    const form = {
+      accreditationDate:this.complementFormGroup.get('accreditationDate').value,
+      ajtype: this.conditionFormGroup.get('ajtype').value,
+      antecipationTaxPercent: 0,
+      anticipationByAssignmentIndicator: true,
+      anticipationFee: this.conditionFormGroup.get('anticipationFee').value,
+      automaticAnticipationIndicator: "string",
+      automaticCreditIndicator: this.conditionFormGroup.get('automaticCreditIndicator').value,
+      beneficiaryApartBankAddress: "string",
+      beneficiaryDocumentNumber: this.conditionFormGroup.get('beneficiaryDocumentNumber').value,
+      beneficiaryName: this.conditionFormGroup.get('beneficiaryName').value,
+      beneficiaryOperationType: "string",
+      beneficiaryType: this.conditionFormGroup.get('beneficiaryType').value,
+      beneficiaryTypeAcount: "string",
+      businessActivity: this.identificationFormGroup.get('businessActivity').value,
+      companyAddress: [
+        {
+          complement: this.adressFormGroup.get('complement').value,
+          idCompany: 0,
+          idCompanyAddress: 0,
+          maxDistanceDelivery: "string",
+          number: this.adressFormGroup.get('number').value,
+          street: {
+            city: {
+              cityName: this.adressFormGroup.get('cityName').value,
+              idCity: 0
+            },
+            idStreet: 0,
+            neighborhood: {
+              idNeighborhood: 0,
+              neighborhoodName: this.adressFormGroup.get('neighborhoodName').value,
+            },
+            state: {
+              idState: 0,
+              uf: this.adressFormGroup.get('uf').value,
+            },
+            streetName: this.adressFormGroup.get('streetName').value,
+            zipCode: this.adressFormGroup.get('zipCode').value,
+          },
+          type: "Comercial",
+        }, {
+          complement: this.adressFormGroup.get('subordinateComplementCtrl').value,
+          idCompany: 0,
+          idCompanyAddress: 0,
+          maxDistanceDelivery: "string",
+          number: this.adressFormGroup.get('subordinateNumberCtrl').value,
+          street: {
+            city: {
+              cityName: this.adressFormGroup.get('subordinateCityCtrl').value,
+              idCity: 0
+            },
+            idStreet: 0,
+            neighborhood: {
+              idNeighborhood: 0,
+              neighborhoodName: this.adressFormGroup.get('subordinateNeighborhoodCtrl').value,
+            },
+            state: {
+              idState: 0,
+              uf: this.adressFormGroup.get('subordinateStateCtrl').value,
+            },
+            streetName: this.adressFormGroup.get('subordinateStreetCtrl').value,
+            zipCode: this.adressFormGroup.get('subordinateZipCode').value,
+          },
+          type: "Correspondência",
+        }
+      ],
 
-    this.companyService.create(formulariocompleto).subscribe((response: any) => {
+      companyContact:this.localStorageService.get('phoneNumber'),
+
+      companyLevel: [
+        {
+          description: "string",
+          idCompany: 0,
+          idCompanyLevel: 0,
+          level: 0
+        }
+      ],
+      companyLevelItem: {
+        idCompanyLevel: 1,
+        description: "Subadquirente",
+        level: 30
+      },
+      companyName: this.identificationFormGroup.get('companyName').value,
+      companyResponsibleName: this.identificationFormGroup.get('companyResponsibleName').value,
+      companyShortName: this.identificationFormGroup.get('companyShortName').value,
+      companyStatus: 0,
+      companyType: this.identificationFormGroup.get('companyType').value,
+      discreditationDate: this.complementFormGroup.get('discreditationDate').value,
+      documentNumberCompany: this.identificationFormGroup.get('documentNumberCompany').value,
+      ecommerceURL: this.complementFormGroup.get('ecommerceURL').value,
+      email: this.complementFormGroup.get('email').value,
+      equipmentIdentifier: 0,
+      estUrl: this.complementFormGroup.get('estUrl').value,
+      externalBankAccount:this.localStorageService.get('bankAccount'),
+      fancyName: this.identificationFormGroup.get('fancyName').value,
+      gpAffiliationDate: this.complementFormGroup.get('gpAffiliationDate').value,
+      gpEstablishmentNumber: this.identificationFormGroup.get('gpEstablishmentNumber').value,
+      gpReturnDate: "string",
+      gpSendDate: this.complementFormGroup.get('gpSendDate').value,
+      idCompany: 0,
+      idCompanyGroup: 1008,
+      idCompanyOwner: 1008,
+      idDepartament: this.identificationFormGroup.get('idDepartament').value,
+      idPlan: 0,
+      idTerminal: this.complementFormGroup.get('idTerminal').value,
+      ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
+      inclusionRegistrationDateTime: "string",
+      logicalNumber: this.complementFormGroup.get('logicalNumber').value,
+      mcccode: this.identificationFormGroup.get('mcccode').value,
+      openingDate: this.identificationFormGroup.get('openingDate').value,
+      openingHours: this.complementFormGroup.get('openingHours').value,
+      orderType: 0,
+      posBillingTypeRental: "string",
+      posChargeAmountRental: 0,
+      posPercentageRateValue: 0,
+      posQuantity: this.complementFormGroup.get('posQuantity').value,
+      recordChangeDateTime: "string",
+      referencePoint: this.adressFormGroup.get('referencePoint').value,
+      referentialTransactionAmount: 0,
+      registerCode: this.complementFormGroup.get('registerCode').value,
+      registrationDate: this.complementFormGroup.get('registrationDate').value,
+      rentalExemptionDays: 0,
+      seRegistrationDate: this.complementFormGroup.get('seRegistrationDate').value,
+      searchNickname: "string",
+      shopping: "string",
+      situation: this.identificationFormGroup.get('situation').value,
+      stateRegistration: this.identificationFormGroup.get('stateRegistration').value,
+      tedAmount: this.conditionFormGroup.get('tedAmount').value,
+      tedBillingIdentifier: "string",
+      tradingPartnerCode: 0,
+      tradingPartnerParticipationPercent: 0,
+      transactionAmount: this.conditionFormGroup.get('transactionAmount').value,
+      userChangeCode: "string",
+      userInclusionCode: "string",
+      cnae: {
+        code: "string",
+        descGroup: "string",
+        description: "string",
+        idCnae: this.identificationFormGroup.get('idCnae').value,
+        mcc: {
+          code: "string",
+          description: "string",
+          idMcc: this.identificationFormGroup.get('mcccode').value
+        }
+      },
+      companyPartner: this.localStorageService.get('partnerFormGroup'),
+      // companyPartner: [
+      //   {
+      //     idCompanyPartner: 0,
+      //     idCompany: 0,
+      //     partnerSequentialNumber: 1,
+      //     partnerName: this.partnerFormGroup.get('partnerName').value,
+      //     cpf: this.partnerFormGroup.get('cpf').value,
+      //     dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
+      //     partnerAddress: [
+      //       {
+      //         idPartnerAddress: 0,
+      //         number: this.partnerFormGroup.get('number').value,
+      //         complement: this.partnerFormGroup.get('complement').value,
+      //         street: {
+      //           idStreet: 0,
+      //           zipCode: this.partnerFormGroup.get('zipCode').value,
+      //           streetName: this.partnerFormGroup.get('streetName').value,
+      //           city: {
+      //             idCity: 0,
+      //             cityName: this.partnerFormGroup.get('cityName').value
+      //           },
+      //           neighborhood: {
+      //             idNeighborhood: 0,
+      //             neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value
+      //           },
+      //           state: {
+      //             idState: 0,
+      //             uf: this.partnerFormGroup.get('uf').value,
+      //           }
+      //         }
+      //       }
+      //     ],
+      //     partnerContact: [
+      //       {
+      //         idPartnerContact: 0,
+      //         phone: this.partnerFormGroup.get('phone').value
+      //       }
+      //     ]
+      //   }
+      // ]
+    }
+    console.log(form);
+
+    this.companyService.create(form).subscribe((response: any) => {
       console.log(response);
       this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
       this.router.navigate(['/companies/list']);
     });
 
-    console.log(formulariocompleto);
-
   }
 
   updateCompany() {
-    let editCompleteForm = Object.assign({},
-      this.identificationFormGroup.value,
-      this.adressFormGroup.value,
-      this.conditionFormGroup.value,
-      this.complementFormGroup.value,
-      this.contactFormGroup.value);
-    console.log(editCompleteForm);
+    const editForm = {
+      accreditationDate:this.complementFormGroup.get('accreditationDate').value,
+      ajtype: this.conditionFormGroup.get('ajtype').value,
+      antecipationTaxPercent: 0,
+      anticipationByAssignmentIndicator: true,
+      anticipationFee: this.conditionFormGroup.get('anticipationFee').value,
+      automaticAnticipationIndicator: "string",
+      automaticCreditIndicator: this.conditionFormGroup.get('automaticCreditIndicator').value,
+      beneficiaryApartBankAddress: "string",
+      beneficiaryDocumentNumber: this.conditionFormGroup.get('beneficiaryDocumentNumber').value,
+      beneficiaryName: this.conditionFormGroup.get('beneficiaryName').value,
+      beneficiaryOperationType: "string",
+      beneficiaryType: this.conditionFormGroup.get('beneficiaryType').value,
+      beneficiaryTypeAcount: "string",
+      businessActivity: this.identificationFormGroup.get('businessActivity').value,
+      companyAddress: [
+        {
+          complement: this.adressFormGroup.get('complement').value,
+          idCompany: this.id,
+          idCompanyAddress: 0,
+          maxDistanceDelivery: "string",
+          number: this.adressFormGroup.get('number').value,
+          street: {
+            city: {
+              cityName: this.adressFormGroup.get('cityName').value,
+              idCity: 0
+            },
+            idStreet: 0,
+            neighborhood: {
+              idNeighborhood: 0,
+              neighborhoodName: this.adressFormGroup.get('neighborhoodName').value,
+            },
+            state: {
+              idState: 0,
+              uf: this.adressFormGroup.get('uf').value,
+            },
+            streetName: this.adressFormGroup.get('streetName').value,
+            zipCode: this.adressFormGroup.get('zipCode').value,
+          },
+          type: "Comercial",
+        }, {
+          complement: this.adressFormGroup.get('subordinateComplementCtrl').value,
+          idCompany: this.id,
+          idCompanyAddress: 0,
+          maxDistanceDelivery: "string",
+          number: this.adressFormGroup.get('subordinateNumberCtrl').value,
+          street: {
+            city: {
+              cityName: this.adressFormGroup.get('subordinateCityCtrl').value,
+              idCity: 0
+            },
+            idStreet: 0,
+            neighborhood: {
+              idNeighborhood: 0,
+              neighborhoodName: this.adressFormGroup.get('subordinateNeighborhoodCtrl').value,
+            },
+            state: {
+              idState: 0,
+              uf: this.adressFormGroup.get('subordinateStateCtrl').value,
+            },
+            streetName: this.adressFormGroup.get('subordinateStreetCtrl').value,
+            zipCode: this.adressFormGroup.get('subordinateZipCode').value,
+          },
+          type: "Correspondência",
+        }
+      ],
 
-    this.companyService.update(editCompleteForm).subscribe((response: any) => {
+      companyContact:this.localStorageService.get('phoneNumber'),
+
+      companyLevel: [
+        {
+          description: "string",
+          idCompany: this.id,
+          idCompanyLevel: 0,
+          level: 0
+        }
+      ],
+      companyLevelItem: {
+        idCompanyLevel: 1,
+        description: "Subadquirente",
+        level: 30
+      },
+      companyName: this.identificationFormGroup.get('companyName').value,
+      companyResponsibleName: this.identificationFormGroup.get('companyResponsibleName').value,
+      companyShortName: this.identificationFormGroup.get('companyShortName').value,
+      companyStatus: 0,
+      companyType: this.identificationFormGroup.get('companyType').value,
+      discreditationDate: this.complementFormGroup.get('discreditationDate').value,
+      documentNumberCompany: this.identificationFormGroup.get('documentNumberCompany').value,
+      ecommerceURL: this.complementFormGroup.get('ecommerceURL').value,
+      email: this.complementFormGroup.get('email').value,
+      equipmentIdentifier: 0,
+      estUrl: this.complementFormGroup.get('estUrl').value,
+      externalBankAccount:this.localStorageService.get('bankAccount'),
+      fancyName: this.identificationFormGroup.get('fancyName').value,
+      gpAffiliationDate: this.complementFormGroup.get('gpAffiliationDate').value,
+      gpEstablishmentNumber: this.identificationFormGroup.get('gpEstablishmentNumber').value,
+      gpReturnDate: "string",
+      gpSendDate: this.complementFormGroup.get('gpSendDate').value,
+      idCompany: this.id,
+      idCompanyGroup: 1008,
+      idCompanyOwner: 1008,
+      idDepartament: this.identificationFormGroup.get('idDepartament').value,
+      idPlan: 0,
+      idTerminal: this.complementFormGroup.get('idTerminal').value,
+      ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
+      inclusionRegistrationDateTime: "string",
+      logicalNumber: this.complementFormGroup.get('logicalNumber').value,
+      mcccode: this.identificationFormGroup.get('mcccode').value,
+      openingDate: this.identificationFormGroup.get('openingDate').value,
+      openingHours: this.complementFormGroup.get('openingHours').value,
+      orderType: 0,
+      posBillingTypeRental: "string",
+      posChargeAmountRental: 0,
+      posPercentageRateValue: 0,
+      posQuantity: this.complementFormGroup.get('posQuantity').value,
+      recordChangeDateTime: "string",
+      referencePoint: this.adressFormGroup.get('referencePoint').value,
+      referentialTransactionAmount: 0,
+      registerCode: this.complementFormGroup.get('registerCode').value,
+      registrationDate: this.complementFormGroup.get('registrationDate').value,
+      rentalExemptionDays: 0,
+      seRegistrationDate: this.complementFormGroup.get('seRegistrationDate').value,
+      searchNickname: "string",
+      shopping: "string",
+      situation: this.identificationFormGroup.get('situation').value,
+      stateRegistration: this.identificationFormGroup.get('stateRegistration').value,
+      tedAmount: this.conditionFormGroup.get('tedAmount').value,
+      tedBillingIdentifier: "string",
+      tradingPartnerCode: 0,
+      tradingPartnerParticipationPercent: 0,
+      transactionAmount: this.conditionFormGroup.get('transactionAmount').value,
+      userChangeCode: "string",
+      userInclusionCode: "string",
+      cnae: {
+        code: "string",
+        descGroup: "string",
+        description: "string",
+        idCnae: this.identificationFormGroup.get('idCnae').value,
+        mcc: {
+          code: "string",
+          description: "string",
+          idMcc: this.identificationFormGroup.get('mcccode').value
+        }
+      },
+      companyPartner: [
+        {
+          idCompanyPartner: 0,
+          idCompany: this.id,
+          partnerSequentialNumber: 1,
+          partnerName: this.partnerFormGroup.get('partnerName').value,
+          cpf: this.partnerFormGroup.get('cpf').value,
+          dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
+          partnerAddress: [
+            {
+              idPartnerAddress: 0,
+              number: this.partnerFormGroup.get('number').value,
+              complement: this.partnerFormGroup.get('complement').value,
+              street: {
+                idStreet: 0,
+                zipCode: this.partnerFormGroup.get('zipCode').value,
+                streetName: this.partnerFormGroup.get('streetName').value,
+                city: {
+                  idCity: 0,
+                  cityName: this.partnerFormGroup.get('cityName').value
+                },
+                neighborhood: {
+                  idNeighborhood: 0,
+                  neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value
+                },
+                state: {
+                  idState: 0,
+                  uf: this.partnerFormGroup.get('uf').value,
+                }
+              }
+            }
+          ],
+          partnerContact: [
+            {
+              idPartnerContact: 0,
+              phone: this.partnerFormGroup.get('phone').value
+            }
+          ]
+        }
+      ]
+    }
+    console.log(editForm);
+
+    this.companyService.update(editForm).subscribe((response: any) => {
       console.log(response);
-      this.dataService.openSnackBar('Estabelecimento alterado com sucesso', 'X');
+      this.dataService.openSnackBar('Empresa alterado com sucesso', 'X');
       this.router.navigate(['/company-list/company']);
     });
 
@@ -1237,8 +1563,8 @@ export class AddCompanyComponent implements OnInit {
           streetName: this.adressFormGroup.get('streetName').value,
           zipCode: this.adressFormGroup.get('zipCode').value,
         },
-        type:"Comercial",
-      },{
+        type: "Comercial",
+      }, {
         complement: this.adressFormGroup.get('subordinateComplementCtrl').value,
         maxDistanceDelivery: "string",
         number: this.adressFormGroup.get('subordinateNumberCtrl').value,
@@ -1256,7 +1582,7 @@ export class AddCompanyComponent implements OnInit {
           streetName: this.adressFormGroup.get('subordinateStreetCtrl').value,
           zipCode: this.adressFormGroup.get('subordinateZipCode').value,
         },
-        type:"Correspondência",
+        type: "Correspondência",
       }]
     };
     

@@ -6,7 +6,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class PasswordService {
-  // url = "http://password-maintenance.qa.appmobbuy.tech:8080/";
 
   private readonly url = `${environment.baseUrlPassword}`
 
@@ -27,7 +26,4 @@ export class PasswordService {
   createPassword(password){
     return this.http.post(`${this.url}registrationPass`,password)
   }
-
-  
-
 }

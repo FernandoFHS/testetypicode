@@ -7,7 +7,7 @@
   <div *ngIf="isPageAdd()">
     <div class="m-b-25">
       <label class="mat-display-1 page-title">
-        Incluir Estabelecimento
+        Incluir Empresa
       </label>
     </div>
   </div>
@@ -15,7 +15,7 @@
   <div *ngIf="isPageEdit()">
     <div class="m-b-25">
       <label class="mat-display-1 page-title">
-        Editar Estabelecimento
+        Editar Empresa
       </label>
     </div>
   </div>
@@ -23,7 +23,7 @@
   <div *ngIf="isPageView()">
     <div class="m-b-25">
       <label class="mat-display-1 page-title">
-        Visualizar Estabelecimento
+        Visualizar Empresa
       </label>
     </div>
   </div>
@@ -97,8 +97,8 @@
         <div class="line-form">
 
           <mat-form-field appearance="outline">
-            <mat-label>Estabelecimento Adquirente</mat-label>
-            <input matInput placeholder="Estabelecimento Adquirente" formControlName="gpEstablishmentNumber"
+            <mat-label>Empresa Adquirente</mat-label>
+            <input matInput placeholder="Empresa Adquirente" formControlName="gpEstablishmentNumber"
                />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>home_work</mat-icon>
@@ -603,7 +603,7 @@
         <div class="space-bottom">
           <mat-checkbox class="example-margin" 
             (change)="checkValueBankAdress($event)">
-            Desassociar Domicílio Bancário do Estabelecimento?
+            Desassociar Domicílio Bancário da Empresa?
           </mat-checkbox>
 
         </div>

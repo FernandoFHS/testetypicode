@@ -85,7 +85,7 @@ export class CompanyService {
     return data;
   }
 
-  create(company: CompanyContent): Observable<CompanyContent> {
+  create(company): Observable<CompanyContent> {
     return this.httpClient.post<CompanyContent>(this.API_URL + 'company', company);
   }
 
@@ -94,7 +94,7 @@ export class CompanyService {
     return this.httpClient.get<CompanyContent>(url);
   }
 
-  update(company: CompanyContent): Observable<CompanyContent> {
+  update(company): Observable<CompanyContent> {
     return this.httpClient.put<CompanyContent>(this.API_URL + 'company', company);
   }
 

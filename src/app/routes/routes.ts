@@ -40,6 +40,10 @@ export const routes: Routes = [
     canActivate: [LoginGuard]
   },
   {
+    path: 'password-recover-validation',
+    component: RecoverPasswordAfterValidationComponent          
+  },
+  {
     path: '',
     component: ContainerComponent,
     // canActivateChild: [ContainerGuard],
@@ -152,11 +156,11 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'initial',
+            redirectTo: 'initial/12',
             pathMatch: 'full'
           },
           {
-            path: 'initial',
+            path: 'initial/12',
             component: InitialPasswordTransactionComponent
           },
           {
@@ -229,13 +233,5 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [LoginGuard]
-  },
-  {
-    path: 'password-recover-validation',
-    component: RecoverPasswordAfterValidationComponent          
-  },
+
 ];

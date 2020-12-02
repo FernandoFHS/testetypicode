@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
+import { GeneralService } from 'src/app/services/general.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
@@ -40,6 +41,7 @@ export class RecoverPasswordTransactionComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private router: Router,
     private _notificationService: NotificationService,
+    private _generalService: GeneralService
   ) { }
 
   ngOnInit(): void {
@@ -49,12 +51,14 @@ export class RecoverPasswordTransactionComponent implements OnInit {
   }
 
   navigateToInitialPassword(): void {
-    this.router.navigate(['/password-transaction/initial'])
+    this.router.navigate(['/password-transaction/initial/12'])
   }
 
   submit(): void {
     if (this.recoverPasswordForm.valid) {
-    this._notificationService.success('Foi enviado para o seu e-mail cadastrado um link para redefinição de senha!');
+    const message = 'Foi enviado para o seu e-mail cadastrado um link para redefinição de senha!';
+
+    this._generalService.openOkDialog(message, () => {}, 'Link enviado');
     }
   }
 
