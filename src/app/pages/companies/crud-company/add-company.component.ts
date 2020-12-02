@@ -233,8 +233,6 @@ export class AddCompanyComponent implements OnInit {
       this.loadAddModel();
     }
 
-    console.log(this.isPageEdit());
-
     if (this.localStorageService.get('bankAccount') == null) {
       this.bankAccount$ = []
     } else {
@@ -391,20 +389,6 @@ export class AddCompanyComponent implements OnInit {
       seRegistrationDate: [this.complement?.seRegistrationDate || ''],
       discreditationDate: [this.complement?.discreditationDate || '']
     });
-    this.partnerFormGroup = this._formBuilder.group({
-      partnerSequentialNumber: [{ value: '', disabled: true }],
-      partnerName: [this.partner[0]?.partnerName || ''],
-      cpf: [this.partner[0]?.cpf || ''],
-      dateOfBirth: [this.partner[0]?.dateOfBirth || ''],
-      zipCode: [this.partner[0]?.zipCode || ''],
-      streetName: [this.partner[0]?.streetName || ''],
-      number: [this.partner[0]?.number || ''],
-      complement: [this.partner[0]?.complement || ''],
-      neighborhoodName: [this.partner[0]?.neighborhoodName || ''],
-      cityName: [this.partner[0]?.cityName || ''],
-      uf: [this.partner[0]?.uf || ''],
-      phone: [this.partner[0]?.phone || '']
-    });
 
     this.companyPartnerFormGroup = this._formBuilder.group({
 
@@ -548,20 +532,6 @@ export class AddCompanyComponent implements OnInit {
       seRegistrationDate: [this.complement?.seRegistrationDate || ''],
       discreditationDate: [this.complement?.discreditationDate || '']
     });
-    this.partnerFormGroup = this._formBuilder.group({
-      partnerSequentialNumber: [{ value: '', disabled: true }],
-      partnerName: [{ value: this.partner?.partnerName || ''}],
-      cpf: [{ value: this.partner?.cpf || ''}],
-      dateOfBirth: [{ value: this.partner?.dateOfBirth || ''}],
-      zipCode: [{ value: this.partner?.zipCode || ''}],
-      streetName: [{ value: this.partner?.streetName || ''}],
-      number: [{ value: this.partner?.number || ''}],
-      complement: [{ value: this.partner?.complement || ''}],
-      neighborhoodName: [{ value: this.partner?.neighborhoodName || ''}],
-      cityName: [{ value: this.partner?.cityName || ''}],
-      uf: [{ value: this.partner?.uf || ''}],
-      phone: [{ value: this.partner?.phone || ''}]
-    });
   }
 
   private loadViewForm() {
@@ -632,20 +602,6 @@ export class AddCompanyComponent implements OnInit {
       gpAffiliationDate: [{ value: this.complement?.gpAffiliationDate || '', disabled: true }],
       seRegistrationDate: [{ value: this.complement?.seRegistrationDate || '', disabled: true }],
       discreditationDate: [{ value: this.complement?.discreditationDate || '', disabled: true }],
-    });
-    this.partnerFormGroup = this._formBuilder.group({
-      partnerSequentialNumber: [{ value: '', disabled: true }],
-      partnerName: [{ value: this.partner?.partnerName || ''}],
-      cpf: [{ value: this.partner?.cpf || ''}],
-      dateOfBirth: [{ value: this.partner?.dateOfBirth || ''}],
-      zipCode: [{ value: this.partner?.zipCode || ''}],
-      streetName: [{ value: this.partner?.streetName || ''}],
-      number: [{ value: this.partner?.number || ''}],
-      complement: [{ value: this.partner?.complement || ''}],
-      neighborhoodName: [{ value: this.partner?.neighborhoodName || ''}],
-      cityName: [{ value: this.partner?.cityName || ''}],
-      uf: [{ value: this.partner?.uf || ''}],
-      phone: [{ value: this.partner?.phone || ''}]
     });
   }
 
