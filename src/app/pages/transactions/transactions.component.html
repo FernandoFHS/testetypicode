@@ -29,7 +29,7 @@
     </a>
   </div>
 
-  <mat-expansion-panel class="mb-16" [expanded]="true">
+  <mat-expansion-panel class="m-b-25" [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title> Filtros </mat-panel-title>
     </mat-expansion-panel-header>
@@ -125,5 +125,9 @@
     </form>
 
   </mat-expansion-panel>
+
+  <core-data-table [headers]="headers" [actions]="actions" [filterFunc]="loadDataByFilter" [loadFunc]="loadData"
+    [clearFilterFunc]="clearFilter">
+  </core-data-table>
 
 </div>

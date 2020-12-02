@@ -182,11 +182,15 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'extract',
+            redirectTo: 'extract/:id_company',
             pathMatch: 'full'
           },
           {
             path: 'extract',
+            component: ExtractComponent
+          },
+          {
+            path: 'extract/:id_company',
             component: ExtractComponent,
           }
         ]

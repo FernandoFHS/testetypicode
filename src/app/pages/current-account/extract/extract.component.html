@@ -17,8 +17,12 @@
           Saldo disponível
         </mat-expansion-panel-header>
         <div>
-          <strong>
-            R$ 1.000,00
+          <strong *ngIf="balance">
+            {{balance.reserveBalance | currency : 'R$ '}}
+          </strong>
+
+          <strong *ngIf="!balance">
+            Nenhum saldo encontrado.
           </strong>
         </div>
       </mat-expansion-panel>
@@ -33,7 +37,7 @@
           <mat-button-toggle value="primary" fxFlex="50%">
             Extrato
           </mat-button-toggle>
-          <mat-button-toggle value="accent" fxFlex="50%">
+          <mat-button-toggle value="accent" fxFlex="50%" [disabled]="true">
             Lançamentos Futuros
           </mat-button-toggle>
         </mat-button-toggle-group>
@@ -47,26 +51,20 @@
 
     <div fxFlex="30%">
 
-
     </div>
 
     <div fxFlex="70%" class="filter-days">
-
-      <!-- <mat-button-toggle-group fxLayout="row wrap" fxFlex="100%" value="7">
-        <mat-button-toggle [value]="filterDay.value" *ngFor="let filterDay of filterDays" fxFlex>
-          {{filterDay.text}}
-        </mat-button-toggle>
-      </mat-button-toggle-group> -->
 
       <div fxFlex="100%" class="text-right" fxLayout="row wrap" fxLayoutAlign="end center">
 
         <div *ngFor="let filterDay of filterDays; let first = first" class="div-filter-days">
 
-          <button mat-flat-button color="primary" *ngIf="first == true">
+          <button mat-flat-button color="primary" *ngIf="filterDay.active == true">
             {{filterDay.text}}
           </button>
 
-          <button mat-stroked-button color="primary" *ngIf="first == false">
+          <button mat-stroked-button color="primary" *ngIf="filterDay.active == false"
+            (click)="changeFilterDays(filterDay)">
             {{filterDay.text}}
           </button>
 
@@ -76,40 +74,181 @@
 
     </div>
 
-    <!-- <div fxFlex="20%" fxLayout="row">
-      <button mat-flat-button color="primary" class="w-100-p" fxFlex="100%" [matMenuTriggerFor]="menu">
-        <mat-icon [inline]="true" class="m-r-5">
-          add
-        </mat-icon>
-        Filtros
-      </button>
-
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item>Item 1</button>
-        <button mat-menu-item>Item 2</button>
-      </mat-menu>
-
-    </div> -->
-
     <div fxFlex="100%">
 
-      <mat-expansion-panel class="mb-16 mat-elevation-z0 custom-card" [expanded]="false">
+      <mat-expansion-panel class="mb-16 mat-elevation-z0 custom-card filter-panel" [expanded]="false">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <!-- +  -->
             Filtros
           </mat-panel-title>
         </mat-expansion-panel-header>
+
+        <form [formGroup]="form" *ngIf="form">
+
+          <div fxLayout="row wrap" fxLayoutGap="1% grid">
+
+            <div fxFlex="100%" fxLayoutGap="1%">
+
+              <div fxLayoutAlign="center center" class="height-form-field m-l-10"
+                [ngClass]="filterType == 0 ? 'no-pointer-events' : ''">
+                <mat-checkbox color="primary" [checked]="filterType == 0" (change)="changeFilterType(0)">
+                  Data Transação
+                </mat-checkbox>
+              </div>
+
+              <div fxLayoutAlign="center center" class="height-form-field">
+                <label>
+                  Período
+                </label>
+              </div>
+
+              <mat-form-field appearance="outline" fxFlex.sm="30%" fxFlex.gt-sm="15%" fxFlex.xs="100%"
+                floatLabel="always" [ngClass.xs]="'no-padding'" class="text-center">
+                <mat-label>
+                </mat-label>
+
+                <input matInput [matDatepicker]="picker1" formControlName="transaction_date_start"
+                  placeholder="__/__/____">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+
+                <mat-error *ngIf="form.get('transaction_date_start').hasError('required')">
+                  Data inválida
+                </mat-error>
+              </mat-form-field>
+
+              <div fxLayoutAlign="center center" class="height-form-field">
+                <label>
+                  Até
+                </label>
+              </div>
+
+              <mat-form-field appearance="outline" fxFlex.sm="30%" fxFlex.gt-sm="15%" fxFlex.xs="100%"
+                floatLabel="always" [ngClass.lt-md]="'no-padding'" class="text-center">
+                <mat-label>
+                </mat-label>
+
+                <input matInput [matDatepicker]="picker2" formControlName="transaction_date_end"
+                  placeholder="__/__/____">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+
+                <mat-error *ngIf="form.get('transaction_date_end').hasError('required')">
+                  Data inválida
+                </mat-error>
+                <mat-error *ngIf="form.get('transaction_date_end').hasError('invalidEndDate')">
+                  Data Final menor que Inicial
+                </mat-error>
+              </mat-form-field>
+
+              <div fxLayoutAlign="center center" class="height-form-field">
+                <mat-checkbox formControlName="transaction_desc" color="primary">
+                  Decrescente
+                </mat-checkbox>
+              </div>
+
+            </div>
+
+            <div fxFlex="100%" fxLayoutGap="1%">
+
+              <div fxLayoutAlign="center center" class="height-form-field m-l-10"
+                [ngClass]="filterType == 1 ? 'no-pointer-events' : ''">
+                <mat-checkbox color="primary" [checked]="filterType == 1" (change)="changeFilterType(1)">
+                  Data Liquidação
+                </mat-checkbox>
+              </div>
+
+              <div fxLayoutAlign="center center" class="height-form-field">
+                <label>
+                  Período
+                </label>
+              </div>
+
+              <mat-form-field appearance="outline" fxFlex.sm="30%" fxFlex.gt-sm="15%" fxFlex.xs="100%"
+                floatLabel="always" [ngClass.xs]="'no-padding'" class="text-center">
+                <mat-label>
+                </mat-label>
+
+                <input matInput [matDatepicker]="picker3" formControlName="liquidation_date_start"
+                  placeholder="__/__/____">
+                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+
+                <mat-error *ngIf="form.get('liquidation_date_start').hasError('required')">
+                  Data inválida
+                </mat-error>
+              </mat-form-field>
+
+              <div fxLayoutAlign="center center" class="height-form-field">
+                <label>
+                  Até
+                </label>
+              </div>
+
+              <mat-form-field appearance="outline" fxFlex.sm="30%" fxFlex.gt-sm="15%" fxFlex.xs="100%"
+                floatLabel="always" [ngClass.lt-md]="'no-padding'" class="text-center">
+                <mat-label>
+                </mat-label>
+
+                <input matInput [matDatepicker]="picker4" formControlName="liquidation_date_end"
+                  placeholder="__/__/____">
+                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                <mat-datepicker #picker4></mat-datepicker>
+
+                <mat-error *ngIf="form.get('liquidation_date_end').hasError('required')">
+                  Data inválida
+                </mat-error>
+                <mat-error *ngIf="form.get('liquidation_date_end').hasError('invalidEndDate')">
+                  Data Final menor que Inicial
+                </mat-error>
+              </mat-form-field>
+
+              <div fxLayoutAlign="center center" class="height-form-field">
+                <mat-checkbox formControlName="liquidation_desc" color="primary">
+                  Decrescente
+                </mat-checkbox>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div fxLayout="row" class="mt-16 mb-16">
+            <button mat-flat-button color="primary" class="m-r-10" fxFlex.gt-sm="15%" fxFlex.xs="50%" fxFlex.sm="30%"
+              (click)="filter()">
+              FILTRAR
+            </button>
+            <button mat-flat-button color="default" class="submit-button" fxFlex.gt-sm="10%" fxFlex.xs="35%"
+              fxFlex.sm="20%" (click)="clearFilter()">
+              LIMPAR
+            </button>
+          </div>
+
+        </form>
 
       </mat-expansion-panel>
 
     </div>
 
-    <div fxFlex="100%" fxLayoutAlign="start start" fxLayout="row wrap">
+    <div fxFlex="100%" *ngIf="isLoading">
+      <div class="h-200 loading-data m-t-25" *ngIf="isLoading">
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </div>
+    </div>
 
-      <mgl-timeline [side]="'right'" [alternate]="false" fxFlex="100%" [mobileWidthThreshold]="90000" [toggle]="true" class="timeline">
+    <div fxFlex="100%" fxLayoutAlign="center center" fxLayout="row wrap"
+      *ngIf="!model || !model?.content || model?.content?.length == 0">
+      <label class="m-t-20">
+        Nenhuma transação encontrada
+      </label>
+    </div>
 
-        <mgl-timeline-entry>
+    <div fxFlex="100%" fxLayoutAlign="start start" fxLayout="row wrap" *ngIf="model?.content?.length > 0 && !isLoading">
+
+      <mgl-timeline [side]="'right'" [alternate]="false" fxFlex="100%" [mobileWidthThreshold]="90000" [toggle]="true"
+        class="timeline">
+
+        <mgl-timeline-entry *ngFor="let item of model?.content">
 
           <mgl-timeline-entry-header (click)="onHeaderClick($event)" class="timeline-header">
 
@@ -131,16 +270,16 @@
               </tr>
               <tr>
                 <td>
-                  20/11/2020 14:31
+                  {{item.dateTransaction | date : 'dd/MM/yyyy'}}
                 </td>
                 <td>
-                  Crédito
+                  {{item.transactionType}}
                 </td>
                 <td>
-                  20/11/2020 14:30
+                  {{item.dueDate | date : 'dd/MM/yyyy'}}
                 </td>
                 <td>
-                  R$ 10.000,00
+                  {{item.valueLiquid | currency : 'R$ '}}
                 </td>
               </tr>
 
@@ -168,123 +307,6 @@
 
         </mgl-timeline-entry>
 
-        <mgl-timeline-entry>
-
-          <mgl-timeline-entry-header (click)="onHeaderClick($event)" class="timeline-header">
-
-            <table>
-
-              <tr>
-                <th>
-                  Data Liquidação
-                </th>
-                <th>
-                  Tipo de Transação
-                </th>
-                <th>
-                  Data Transação
-                </th>
-                <th>
-                  Valor Liquido
-                </th>
-              </tr>
-              <tr>
-                <td>
-                  20/11/2020 14:31
-                </td>
-                <td>
-                  Crédito
-                </td>
-                <td>
-                  20/11/2020 14:30
-                </td>
-                <td>
-                  R$ 10.000,00
-                </td>
-              </tr>
-
-            </table>
-
-            <!-- <div class="timeline-header" fxFlex="100%" fxLayout="row wrap">
-              Data Liquidação
-            </div> -->
-
-          </mgl-timeline-entry-header>
-
-          <mgl-timeline-entry-content>
-
-          </mgl-timeline-entry-content>
-
-          <mgl-timeline-entry-dot (click)="onDotClick($event)">
-            <div fxLayout="row wrap" fxLayoutAlign="center center" class="h-100-p">
-              <mat-icon class="timeline-icon">
-                credit_card
-              </mat-icon>
-            </div>
-          </mgl-timeline-entry-dot>
-
-          <mgl-timeline-entry-side>2020</mgl-timeline-entry-side>
-
-        </mgl-timeline-entry>
-
-        <mgl-timeline-entry>
-
-          <mgl-timeline-entry-header (click)="onHeaderClick($event)" class="timeline-header">
-
-            <table>
-
-              <tr>
-                <th>
-                  Data Liquidação
-                </th>
-                <th>
-                  Tipo de Transação
-                </th>
-                <th>
-                  Data Transação
-                </th>
-                <th>
-                  Valor Liquido
-                </th>
-              </tr>
-              <tr>
-                <td>
-                  20/11/2020 14:31
-                </td>
-                <td>
-                  Crédito
-                </td>
-                <td>
-                  20/11/2020 14:30
-                </td>
-                <td>
-                  R$ 10.000,00
-                </td>
-              </tr>
-
-            </table>
-
-            <!-- <div class="timeline-header" fxFlex="100%" fxLayout="row wrap">
-              Data Liquidação
-            </div> -->
-
-          </mgl-timeline-entry-header>
-
-          <mgl-timeline-entry-content>
-
-          </mgl-timeline-entry-content>
-
-          <mgl-timeline-entry-dot (click)="onDotClick($event)">
-            <div fxLayout="row wrap" fxLayoutAlign="center center" class="h-100-p">
-              <mat-icon class="timeline-icon">
-                credit_card
-              </mat-icon>
-            </div>
-          </mgl-timeline-entry-dot>
-
-          <mgl-timeline-entry-side>2020</mgl-timeline-entry-side>
-
-        </mgl-timeline-entry>
       </mgl-timeline>
 
       <!-- <mat-vertical-stepper [linear]="false" #stepper>

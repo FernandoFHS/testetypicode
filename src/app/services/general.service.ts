@@ -53,4 +53,10 @@ export class GeneralService {
   copyWithoutReferences<T>(objToCopy): T {
     return JSON.parse(JSON.stringify(objToCopy));
   }
+
+  addDaysToDateNow(days: number): Date {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    return date;
+  }
 }

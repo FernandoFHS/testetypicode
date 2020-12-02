@@ -52,7 +52,10 @@ export class DataTableComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.displayedColumns = this.headers.map((e) => e.value);
-    this.displayedColumns.push('actions');
+
+    if (this.actions.add || this.actions.delete || this.actions.edit || this.actions.view) {
+      this.displayedColumns.push('actions');
+    }
 
     if (!this.async) {
       this._loadSyncDataTable();

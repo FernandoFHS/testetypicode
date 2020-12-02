@@ -1,6 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DataTableService } from 'src/app/@core/components/data-table/data-table.service';
+import { ActionModel } from 'src/app/@core/models/action.model';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
+import { HeaderModelCompany } from 'src/app/@core/models/header.model';
+import { TransactionService } from 'src/app/services/transaction.service';
 
 @Component({
   selector: 'app-transactions',
@@ -22,13 +26,34 @@ export class TransactionsComponent implements OnInit {
     ]
   };
 
+  headers: HeaderModelCompany[] = [
+    { text: 'Data/Hora Envio', value: 'created_at', subValue: null, deepValue: null },
+    { text: 'Origem', value: 'origin', subValue: null, deepValue: null },
+    { text: 'Data/Hora Início Processamento', value: 'start_date_processing', subValue: null, deepValue: null },
+    { text: 'Data/Hora Fim Processamento', value: 'end_date_processing', subValue: null, deepValue: null },
+    { text: 'Status Processamento', value: 'status', subValue: null, deepValue: null },
+  ];
+
+  actions: ActionModel = {
+    add: false,
+    edit: false,
+    delete: false,
+    view: false
+  };
+
   form: FormGroup;
 
   constructor(
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _transactionService: TransactionService,
+    private _dataTableService: DataTableService
   ) { }
 
   ngOnInit(): void {
+    this._loadForm();
+  }
+
+  private _loadForm(): void {
     this.form = this._formBuilder.group({
       start: ['', []],
       end: ['', []],
@@ -46,11 +71,22 @@ export class TransactionsComponent implements OnInit {
   }
 
   clearFilter(): void {
-
+    this._loadForm();
   }
 
-  loadModel(): void {
+  loadDataByFilter = (sort: string, order: string, page: number, size: number) => {
+    // TODO
+    const form = this.form.getRawValue();
 
+    return this._transactionService.getTransactionsBatches(page, size);
+  }
+
+  loadData = (sort: string, order: string, page: number, size: number) => {
+    return this._transactionService.getTransactionsBatches(page, 10);
+  };
+
+  loadModel(): void {
+    this._dataTableService.refreshDataTable();
   }
 
   uploadFileEvt(fileEl: { target: { files: [] } }) {
@@ -69,8 +105,11 @@ export class TransactionsComponent implements OnInit {
         if (index == fileEl.target.files.length) {
           this.fileInput.nativeElement.value = '';
         }
+
       });
+
     }
+
   }
 
 }
