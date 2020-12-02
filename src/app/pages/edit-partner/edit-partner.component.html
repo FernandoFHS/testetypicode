@@ -14,151 +14,143 @@
         <!-- <div class="text-center m-b-20 font-light-bold title-size">
           <label> Editar Sócio </label>
         </div> -->
-        <form *ngIf="partnerFormGroup" [formGroup]="partnerFormGroup">
-          <div class="line-form">
-            <div class="short-line-form">
+        <div *ngIf='this.partnerFormGroup'>
+          <form [formGroup]="partnerFormGroup">
+            <div class="line-form">
+              <div class="short-line-form">
+                <mat-form-field appearance="outline">
+                  <mat-label>Número Sequência</mat-label>
+                  <input matInput placeholder="Número Sequência" formControlName="partnerSequentialNumber" />
+                  <mat-icon matSuffix>fast_forward</mat-icon>
+                  <mat-error *ngIf="partnerFormGroup.get('partnerSequentialNumber').invalid">
+                    {{getErrorMessage('partnerSequentialNumber')}}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="line-form">
               <mat-form-field appearance="outline">
-                <mat-label>Número Sequência</mat-label>
-                <input matInput placeholder="Número Sequência" formControlName="partnerSequentialNumber" />
-                <mat-icon matSuffix>fast_forward</mat-icon>
-                <mat-error *ngIf="partnerFormGroup.get('partnerSequentialNumber').invalid">{{getErrorMessage('partnerSequentialNumber')}}
+                <mat-label>Nome</mat-label>
+                <input matInput placeholder="Nome" formControlName="partnerName" />
+                <mat-icon matSuffix>account_box</mat-icon>
+                <mat-error *ngIf="partnerFormGroup.get('partnerName').invalid">{{getErrorMessage('partnerName')}}
                 </mat-error>
               </mat-form-field>
-            </div>
-          </div>
 
-          <div class="line-form">
-            <mat-form-field appearance="outline">
-              <mat-label>Nome</mat-label>
-              <input matInput placeholder="Nome" formControlName="partnerName" />
-              <mat-icon matSuffix>account_box</mat-icon>
-              <mat-error *ngIf="partnerFormGroup.get('partnerName').invalid">{{getErrorMessage('partnerName')}}</mat-error>
-            </mat-form-field>
+              <div class="short-line-form">
+                <mat-form-field appearance="outline">
+                  <mat-label>CPF</mat-label>
+                  <input matInput placeholder="000.000.000-00" formControlName="cpf" mask="000.000.000-00" />
+                  <mat-icon matSuffix>assignment_ind</mat-icon>
+                  <mat-error *ngIf="partnerFormGroup.get('cpf').invalid">{{getErrorMessage('cpf')}}</mat-error>
+                </mat-form-field>
 
-            <div class="short-line-form">
-              <mat-form-field appearance="outline">
-                <mat-label>CPF</mat-label>
-                <input matInput placeholder="000.000.000-00" formControlName="cpf" mask="000.000.000-00" />
-                <mat-icon matSuffix>assignment_ind</mat-icon>
-                <mat-error *ngIf="partnerFormGroup.get('cpf').invalid">{{getErrorMessage('cpf')}}</mat-error>
-              </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Data de nascimento</mat-label>
+                  <input matInput [matDatepicker]="dp" formControlName="dateOfBirth" placeholder="00/00/0000"
+                    required />
+                  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                  <mat-datepicker #dp></mat-datepicker>
 
-              <!-- <mat-form-field appearance="outline">
-                <mat-label>Data de nascimento</mat-label>
-                <input matInput placeholder="00/00/0000" formControlName="dateOfBirth" mask="00/00/0000" />
-                <mat-icon matSuffix>today</mat-icon>
+                </mat-form-field>
                 <mat-error *ngIf="partnerFormGroup.get('dateOfBirth').invalid">{{getErrorMessage('dateOfBirth')}}
                 </mat-error>
-              </mat-form-field> -->
-
-              
-              <mat-form-field appearance="outline">
-                <mat-label>Data de nascimento</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="dp"
-                  formControlName="dateOfBirth"
-                  placeholder="00/00/0000"
-                  required
-                />
-                <mat-datepicker-toggle
-                  matSuffix
-                  [for]="dp"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #dp></mat-datepicker>
-              
-              </mat-form-field>
-              <mat-error *ngIf="partnerFormGroup.get('dateOfBirth').invalid">{{getErrorMessage('dateOfBirth')}}</mat-error>
+              </div>
             </div>
-          </div>
 
 
-          <mat-divider></mat-divider>
-          <h3>Endereço</h3>
+            <mat-divider></mat-divider>
+            <h3>Endereço</h3>
 
-          <div class="line-form">
-            <div class="short-line-form">
-              <mat-form-field appearance="outline">
-                <mat-label>CEP</mat-label>
-                <input matInput placeholder="CEP" formControlName="zipCode" #cep (blur)="getAdressByCep(cep.value)"
-                  mask="00000-000" [showMaskTyped]="true" />
-                <mat-icon matSuffix>place</mat-icon>
-                <mat-error *ngIf="partnerFormGroup.get('zipCode').invalid">{{getErrorMessage('zipCode')}}</mat-error>
-              </mat-form-field>
+            <div class="line-form">
+              <div class="short-line-form">
+                <mat-form-field appearance="outline">
+                  <mat-label>CEP</mat-label>
+                  <input matInput placeholder="CEP" formControlName="zipCode" #cep (blur)="getAdressByCep(cep.value)"
+                    mask="00000-000" [showMaskTyped]="true" />
+                  <mat-icon matSuffix>place</mat-icon>
+                  <mat-error *ngIf="partnerFormGroup.get('zipCode').invalid">{{getErrorMessage('zipCode')}}</mat-error>
+                </mat-form-field>
+              </div>
             </div>
-          </div>
 
 
-          <div class="line-form">
-            <mat-form-field appearance="outline">
-              <mat-label>Logradouro</mat-label>
-              <input matInput placeholder="Logradouro" formControlName="streetName" />
-              <mat-icon matSuffix>add_road</mat-icon>
-              <mat-error *ngIf="partnerFormGroup.get('streetName').invalid">{{getErrorMessage('streetName')}}</mat-error>
-            </mat-form-field>
-
-            <div class="short-line-form">
+            <div class="line-form">
               <mat-form-field appearance="outline">
-                <mat-label>Número</mat-label>
-                <input matInput placeholder="Número" formControlName="number" />
-                <mat-icon matSuffix>looks_one</mat-icon>
-                <mat-error *ngIf="partnerFormGroup.get('number').invalid">{{getErrorMessage('number')}}</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Complemento</mat-label>
-                <input matInput placeholder="Complemento" formControlName="complement" />
-                <mat-icon matSuffix>note_add</mat-icon>
-                <mat-error *ngIf="partnerFormGroup.get('complement').invalid">{{getErrorMessage('complement')}}
+                <mat-label>Logradouro</mat-label>
+                <input matInput placeholder="Logradouro" formControlName="streetName" />
+                <mat-icon matSuffix>add_road</mat-icon>
+                <mat-error *ngIf="partnerFormGroup.get('streetName').invalid">{{getErrorMessage('streetName')}}
                 </mat-error>
               </mat-form-field>
+
+              <div class="short-line-form">
+                <mat-form-field appearance="outline">
+                  <mat-label>Número</mat-label>
+                  <input matInput placeholder="Número" formControlName="number" />
+                  <mat-icon matSuffix>looks_one</mat-icon>
+                  <mat-error *ngIf="partnerFormGroup.get('number').invalid">{{getErrorMessage('number')}}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Complemento</mat-label>
+                  <input matInput placeholder="Complemento" formControlName="complement" />
+                  <mat-icon matSuffix>note_add</mat-icon>
+                  <mat-error *ngIf="partnerFormGroup.get('complement').invalid">{{getErrorMessage('complement')}}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
             </div>
 
-          </div>
-
-          <div class="line-form">
-            <mat-form-field appearance="outline">
-              <mat-label>Bairro</mat-label>
-              <input matInput placeholder="Bairro" formControlName="neighborhoodName" />
-              <mat-icon matSuffix>map</mat-icon>
-              <mat-error *ngIf="partnerFormGroup.get('neighborhoodName').invalid">{{getErrorMessage('neighborhoodName')}}
-              </mat-error>
-            </mat-form-field>
-
-            <div class="short-line-form">
+            <div class="line-form">
               <mat-form-field appearance="outline">
-                <mat-label>Município</mat-label>
-                <input matInput placeholder="Bairro" formControlName="cityName" />
+                <mat-label>Bairro</mat-label>
+                <input matInput placeholder="Bairro" formControlName="neighborhoodName" />
                 <mat-icon matSuffix>map</mat-icon>
-                <mat-error *ngIf="partnerFormGroup.get('cityName').invalid">{{getErrorMessage('cityName')}}</mat-error>
+                <mat-error *ngIf="partnerFormGroup.get('neighborhoodName').invalid">
+                  {{getErrorMessage('neighborhoodName')}}
+                </mat-error>
               </mat-form-field>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Estado</mat-label>
-                <input matInput placeholder="Estado" formControlName="stateName" />
-                <mat-icon matSuffix>map</mat-icon>
-                <mat-error *ngIf="partnerFormGroup.get('stateName').invalid">{{getErrorMessage('stateName')}}</mat-error>
-              </mat-form-field>
+              <div class="short-line-form">
+                <mat-form-field appearance="outline">
+                  <mat-label>Município</mat-label>
+                  <input matInput placeholder="Bairro" formControlName="cityName" />
+                  <mat-icon matSuffix>map</mat-icon>
+                  <mat-error *ngIf="partnerFormGroup.get('cityName').invalid">{{getErrorMessage('cityName')}}
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Estado</mat-label>
+                  <input matInput placeholder="Estado" formControlName="stateName" />
+                  <mat-icon matSuffix>map</mat-icon>
+                  <mat-error *ngIf="partnerFormGroup.get('stateName').invalid">{{getErrorMessage('stateName')}}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
             </div>
 
-          </div>
+            <mat-divider></mat-divider>
+            <h3>Contato</h3>
 
-          <mat-divider></mat-divider>
-          <h3>Contato</h3>
-
-          <div class="line-form">
-            <div class="short-line-form">
-              <mat-form-field appearance="outline">
-                <mat-label>Telefone/Celular</mat-label>
-                <input matInput placeholder="(00) 0000-0000" formControlName="phone" [showMaskTyped]="true"
-                  mask="(00) 00000-0000||(00) 0000-0000" />
-                <mat-icon matSuffix>call</mat-icon>
-                <mat-error *ngIf="partnerFormGroup.get('phone').invalid">{{getErrorMessage('phone')}}</mat-error>
-              </mat-form-field>
+            <div class="line-form">
+              <div class="short-line-form">
+                <mat-form-field appearance="outline">
+                  <mat-label>Telefone/Celular</mat-label>
+                  <input matInput placeholder="(00) 0000-0000" formControlName="phone" [showMaskTyped]="true"
+                    mask="(00) 00000-0000||(00) 0000-0000" />
+                  <mat-icon matSuffix>call</mat-icon>
+                  <mat-error *ngIf="partnerFormGroup.get('phone').invalid">{{getErrorMessage('phone')}}</mat-error>
+                </mat-form-field>
+              </div>
             </div>
-          </div>
 
-        </form>
+          </form>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

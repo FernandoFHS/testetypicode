@@ -1,14 +1,10 @@
 <div fxFlexFill>
 
-  <div *ngIf="addPage">
-    <core-breadcrumb [model]="addPageBreadcrumbModel"></core-breadcrumb>
-  </div>
+  <core-breadcrumb [model]="addBreadcrumbModel" *ngIf="isPageAdd()"></core-breadcrumb>
+  <core-breadcrumb [model]="editBreadcrumbModel" *ngIf="isPageEdit()"></core-breadcrumb>
+  <core-breadcrumb [model]="viewBreadcrumbModel" *ngIf="isPageView()"></core-breadcrumb>
 
-  <div *ngIf="!addPage">
-    <core-breadcrumb [model]="editPageBreadcrumbModel"></core-breadcrumb>
-  </div>
-
-  <div *ngIf="addPage">
+  <div *ngIf="isPageAdd()">
     <div class="m-b-25">
       <label class="mat-display-1 page-title">
         Incluir Estabelecimento
@@ -16,10 +12,18 @@
     </div>
   </div>
 
-  <div *ngIf="!addPage">
+  <div *ngIf="isPageEdit()">
     <div class="m-b-25">
       <label class="mat-display-1 page-title">
         Editar Estabelecimento
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="isPageView()">
+    <div class="m-b-25">
+      <label class="mat-display-1 page-title">
+        Visualizar Estabelecimento
       </label>
     </div>
   </div>
@@ -57,7 +61,7 @@
         <div class="initial-data">
           <div class="status-container">
             <h2><span>Status: </span>Credenciado</h2>
-            <mat-checkbox class="example-margin" formControlName="situation">Ativo</mat-checkbox>
+            <mat-checkbox class="example-margin" formControlName="situation" (change)="CheckCompany($event)">Ativo</mat-checkbox>
 
           </div>
 
@@ -278,7 +282,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Estado</mat-label>
-              <input matInput placeholder="Digite o seu estado" formControlName="stateName" required />
+              <input matInput placeholder="Digite o seu estado" formControlName="uf" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>map</mat-icon>
             </mat-form-field>
@@ -558,8 +562,8 @@
             <mat-form-field appearance="outline">
               <mat-label>Ignora Regra de Liberação de AJ Manualmente</mat-label>
               <mat-select name="type" formControlName="ignoreLiberationAJManual" >
-                <mat-option value="true"> Sim </mat-option>
-                <mat-option value="false"> Não </mat-option>
+                <mat-option [value]="true"> Sim </mat-option>
+                <mat-option [value]="false"> Não </mat-option>
               </mat-select>
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             </mat-form-field>

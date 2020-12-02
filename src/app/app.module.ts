@@ -47,8 +47,9 @@ import { CdkStepper } from '@angular/cdk/stepper';
 import { ListProfilesComponent } from './pages/profiles/list-profiles/list-profiles.component';
 import { ProfileComponent } from './pages/profiles/profiles.component';
 import { InitialPasswordTransactionComponent } from './pages/password-transaction/initial-password-transaction/initial-password-transaction.component';
-import { RecoverPasswordTransactionComponent } from './pages/password-transaction/recover-password-transaction/recover-password-transaction.component';
+import { RecoverPasswordTransactionComponent } from './pages/password-transaction/recover/recover-password-transaction/recover-password-transaction.component';
 import { ChangePasswordTransactionComponent } from './pages/password-transaction/change-password-transaction/change-password-transaction.component';
+import { RecoverPasswordAfterValidationComponent } from './pages/recover-password-after-validation/recover-password-after-validation.component';
 
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -105,7 +106,8 @@ export const customCurrencyMaskConfig = {
     TransactionsComponent,
     InitialPasswordTransactionComponent,
     RecoverPasswordTransactionComponent,
-    ChangePasswordTransactionComponent
+    ChangePasswordTransactionComponent,
+    RecoverPasswordAfterValidationComponent
   ],
   imports: [
     BrowserModule,

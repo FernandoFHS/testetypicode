@@ -95,7 +95,7 @@ export class CompanyListComponent implements OnInit {
     { text: 'Razão Social', value: 'companyName', subValue: null, deepValue: null },
     { text: 'MCC', value: 'cnae', subValue: 'mcc', deepValue: 'code' },
     { text: 'Parceiro', value: 'userChangeCode', subValue: null, deepValue: null },
-    { text: 'Status', value: 'companyStatus', subValue: null, deepValue: null },
+    // { text: 'Status', value: 'companyStatus', subValue: null, deepValue: null },
     { text: 'Tab.Vendas', value: 'salesTableNumber', subValue: null, deepValue: null },
     { text: 'Situação', value: 'situation', subValue: null, deepValue: null },
   ];
@@ -104,7 +104,7 @@ export class CompanyListComponent implements OnInit {
     add: true,
     edit: true,
     delete: false,
-    view: false
+    view: true
   };
 
   dinamicAddRouter = "/company-list/add-company";
@@ -152,5 +152,10 @@ export class CompanyListComponent implements OnInit {
 
   onAdd(index: number) {
     this.router.navigate(['/companies/add']);
+  }
+
+  onView(row: any) {
+    const { idCompany } = row;
+    this.router.navigate([`/companies/view/${idCompany}`]);
   }
 }

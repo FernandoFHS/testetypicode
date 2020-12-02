@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-change-password-transaction',
@@ -16,7 +17,8 @@ export class ChangePasswordTransactionComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private _notificationService: NotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -44,6 +46,7 @@ export class ChangePasswordTransactionComponent implements OnInit {
       const passwordconfirm = this.changePasswordForm.get('confirmNewPassword').value;
 
       console.log(this.changePasswordForm);
+      this._notificationService.success('Senha alterada com sucesso!');
     }
   }
 
