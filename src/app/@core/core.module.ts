@@ -25,6 +25,10 @@ import { SaveButtonComponent } from './components/save-button/save-button.compon
 import { BackButtonComponent } from './components/back-button/back-button.component';
 import { NextButtonComponent } from './components/next-button/next-button.component';
 import { CancelButtonComponent } from './components/cancel-button/cancel-button.component';
+import { RecoverButtonComponent } from './components/recover-button/recover-button.component';
+import { RefuseButtonComponent } from './components/refuse-button/refuse-button.component';
+import { AcceptButtonComponent } from './components/accept-button/accept-button.component';
+import { ChangeButtonComponent } from './components/change-button/change-button.component';
 
 
 @NgModule({
@@ -50,7 +54,11 @@ import { CancelButtonComponent } from './components/cancel-button/cancel-button.
     ConfirmDialogComponent,
     DeleteButtonComponent,
     NextButtonComponent,
-    CancelButtonComponent
+    CancelButtonComponent,
+    RecoverButtonComponent,
+    RefuseButtonComponent,
+    AcceptButtonComponent,
+    ChangeButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -78,6 +86,10 @@ import { CancelButtonComponent } from './components/cancel-button/cancel-button.
     DeleteButtonComponent,
     NextButtonComponent,
     CancelButtonComponent,
+    RecoverButtonComponent,
+    RefuseButtonComponent,
+    AcceptButtonComponent,
+    ChangeButtonComponent,
 
     AccordionDirective,
     AccordionLinkDirective,

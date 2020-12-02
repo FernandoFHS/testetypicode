@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
 import { PasswordService } from '../../../services/password/password.service';
@@ -15,8 +15,8 @@ export class InitialPasswordTransactionComponent implements OnInit {
   passwordForm: FormGroup;
   hide1 = true;
   hide2 = true;
-  hasPassword: boolean = false;
-  passwordform:any;
+  hasPassword: boolean = true;
+  createPasswordForm:any;
 
   //RASCUNHOS PARA O FUTURO
 
@@ -41,10 +41,18 @@ export class InitialPasswordTransactionComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private router: Router,
-    private PasswordService:PasswordService,
+    private route: ActivatedRoute,
+    private _passwordService:PasswordService,
   ) { }
 
   ngOnInit(): void {
+    const id = 1;
+    // const id = +this.route.snapshot.paramMap.get('id');
+    // this.dataService.readById(id).subscribe((profile) => {
+    //   this.profile = profile;
+    // });
+
+
     this.passwordForm = this._formBuilder.group({
       password: ['', [Validators.required]],
       passwordconfirm: ['', [Validators.required]]
@@ -75,22 +83,22 @@ export class InitialPasswordTransactionComponent implements OnInit {
   }
 
   checkPassword() {
-    this.PasswordService.checkLoginPassword().subscribe((response: any) => {
+    this._passwordService.checkLoginPassword().subscribe((response: any) => {
       console.log(response);
     });
   }
 
-  submit(){
-    this.passwordform = {
+  hasNotPasswordSubmit(){
+    this.createPasswordForm = {
       documentNumberCompany: "string",
       idCompany: 2,
       localTransaction: "P",
       passSale: this.passwordForm.get('password').value
     }
-    this.PasswordService.createPassword(this.passwordform).subscribe((response:any) =>{
+    this._passwordService.createPassword(this.createPasswordForm).subscribe((response:any) =>{
       console.log(response);
     })
-    console.log(this.passwordform);
+    console.log(this.createPasswordForm);
   }
 
 }

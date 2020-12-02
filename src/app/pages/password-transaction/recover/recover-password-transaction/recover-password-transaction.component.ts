@@ -51,7 +51,7 @@ export class RecoverPasswordTransactionComponent implements OnInit {
   }
 
   navigateToInitialPassword(): void {
-    this.router.navigate(['/password-transaction/initial'])
+    this.router.navigate(['/password-transaction/initial/12'])
   }
 
   submit(): void {
