@@ -233,8 +233,6 @@ export class AddCompanyComponent implements OnInit {
       this.loadAddModel();
     }
 
-    console.log(this.isPageEdit());
-
     if (this.localStorageService.get('bankAccount') == null) {
       this.bankAccount$ = []
     } else {
@@ -391,20 +389,6 @@ export class AddCompanyComponent implements OnInit {
       seRegistrationDate: [this.complement?.seRegistrationDate || ''],
       discreditationDate: [this.complement?.discreditationDate || '']
     });
-    this.partnerFormGroup = this._formBuilder.group({
-      partnerSequentialNumber: [{ value: '', disabled: true }],
-      partnerName: [this.partner[0]?.partnerName || ''],
-      cpf: [this.partner[0]?.cpf || ''],
-      dateOfBirth: [this.partner[0]?.dateOfBirth || ''],
-      zipCode: [this.partner[0]?.zipCode || ''],
-      streetName: [this.partner[0]?.streetName || ''],
-      number: [this.partner[0]?.number || ''],
-      complement: [this.partner[0]?.complement || ''],
-      neighborhoodName: [this.partner[0]?.neighborhoodName || ''],
-      cityName: [this.partner[0]?.cityName || ''],
-      uf: [this.partner[0]?.uf || ''],
-      phone: [this.partner[0]?.phone || '']
-    });
 
     this.companyPartnerFormGroup = this._formBuilder.group({
 
@@ -549,20 +533,6 @@ export class AddCompanyComponent implements OnInit {
       seRegistrationDate: [this.complement?.seRegistrationDate || ''],
       discreditationDate: [this.complement?.discreditationDate || '']
     });
-    this.partnerFormGroup = this._formBuilder.group({
-      partnerSequentialNumber: [{ value: '', disabled: true }],
-      partnerName: [{ value: this.partner?.partnerName || ''}],
-      cpf: [{ value: this.partner?.cpf || ''}],
-      dateOfBirth: [{ value: this.partner?.dateOfBirth || ''}],
-      zipCode: [{ value: this.partner?.zipCode || ''}],
-      streetName: [{ value: this.partner?.streetName || ''}],
-      number: [{ value: this.partner?.number || ''}],
-      complement: [{ value: this.partner?.complement || ''}],
-      neighborhoodName: [{ value: this.partner?.neighborhoodName || ''}],
-      cityName: [{ value: this.partner?.cityName || ''}],
-      uf: [{ value: this.partner?.uf || ''}],
-      phone: [{ value: this.partner?.phone || ''}]
-    });
   }
 
   private loadViewForm() {
@@ -633,20 +603,6 @@ export class AddCompanyComponent implements OnInit {
       gpAffiliationDate: [{ value: this.complement?.gpAffiliationDate || '', disabled: true }],
       seRegistrationDate: [{ value: this.complement?.seRegistrationDate || '', disabled: true }],
       discreditationDate: [{ value: this.complement?.discreditationDate || '', disabled: true }],
-    });
-    this.partnerFormGroup = this._formBuilder.group({
-      partnerSequentialNumber: [{ value: '', disabled: true }],
-      partnerName: [{ value: this.partner?.partnerName || ''}],
-      cpf: [{ value: this.partner?.cpf || ''}],
-      dateOfBirth: [{ value: this.partner?.dateOfBirth || ''}],
-      zipCode: [{ value: this.partner?.zipCode || ''}],
-      streetName: [{ value: this.partner?.streetName || ''}],
-      number: [{ value: this.partner?.number || ''}],
-      complement: [{ value: this.partner?.complement || ''}],
-      neighborhoodName: [{ value: this.partner?.neighborhoodName || ''}],
-      cityName: [{ value: this.partner?.cityName || ''}],
-      uf: [{ value: this.partner?.uf || ''}],
-      phone: [{ value: this.partner?.phone || ''}]
     });
   }
 
@@ -1003,46 +959,47 @@ export class AddCompanyComponent implements OnInit {
           idMcc: this.identificationFormGroup.get('mcccode').value
         }
       },
-      companyPartner: [
-        {
-          idCompanyPartner: 0,
-          idCompany: 0,
-          partnerSequentialNumber: 1,
-          partnerName: this.partnerFormGroup.get('partnerName').value,
-          cpf: this.partnerFormGroup.get('cpf').value,
-          dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
-          partnerAddress: [
-            {
-              idPartnerAddress: 0,
-              number: this.partnerFormGroup.get('number').value,
-              complement: this.partnerFormGroup.get('complement').value,
-              street: {
-                idStreet: 0,
-                zipCode: this.partnerFormGroup.get('zipCode').value,
-                streetName: this.partnerFormGroup.get('streetName').value,
-                city: {
-                  idCity: 0,
-                  cityName: this.partnerFormGroup.get('cityName').value
-                },
-                neighborhood: {
-                  idNeighborhood: 0,
-                  neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value
-                },
-                state: {
-                  idState: 0,
-                  uf: this.partnerFormGroup.get('uf').value,
-                }
-              }
-            }
-          ],
-          partnerContact: [
-            {
-              idPartnerContact: 0,
-              phone: this.partnerFormGroup.get('phone').value
-            }
-          ]
-        }
-      ]
+      companyPartner: this.localStorageService.get('partnerFormGroup'),
+      // companyPartner: [
+      //   {
+      //     idCompanyPartner: 0,
+      //     idCompany: 0,
+      //     partnerSequentialNumber: 1,
+      //     partnerName: this.partnerFormGroup.get('partnerName').value,
+      //     cpf: this.partnerFormGroup.get('cpf').value,
+      //     dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
+      //     partnerAddress: [
+      //       {
+      //         idPartnerAddress: 0,
+      //         number: this.partnerFormGroup.get('number').value,
+      //         complement: this.partnerFormGroup.get('complement').value,
+      //         street: {
+      //           idStreet: 0,
+      //           zipCode: this.partnerFormGroup.get('zipCode').value,
+      //           streetName: this.partnerFormGroup.get('streetName').value,
+      //           city: {
+      //             idCity: 0,
+      //             cityName: this.partnerFormGroup.get('cityName').value
+      //           },
+      //           neighborhood: {
+      //             idNeighborhood: 0,
+      //             neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value
+      //           },
+      //           state: {
+      //             idState: 0,
+      //             uf: this.partnerFormGroup.get('uf').value,
+      //           }
+      //         }
+      //       }
+      //     ],
+      //     partnerContact: [
+      //       {
+      //         idPartnerContact: 0,
+      //         phone: this.partnerFormGroup.get('phone').value
+      //       }
+      //     ]
+      //   }
+      // ]
     }
     console.log(form);
 
