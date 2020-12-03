@@ -4,6 +4,28 @@ import { PaymentDeadLineRequest } from './PaymentDeadLine';
 import { CreditCardFlagRequest } from './CreditCardFlag';
 import { AgreementRequest } from './Agreement';
 
+export interface PlanResponse {
+  tax: TaxResponse[],
+  creditCardFlag: any,
+  remuneration: any,
+  acquirer: any,
+  numberOfInstallments: number,
+  id: number
+}
+
+export interface TaxResponse {
+  id: number,
+  installment: number,
+  percentAdmTax: number,
+  percentFinancialTax: number,
+  percentCreditTariff: number,
+  transactionCostAmount: number,
+  antecipationTax: number,
+  value: number,
+  paymentDeadLine: PaymentDeadLineRequest,
+  paymentMethod: PaymentMethodRequest,
+}
+
 export interface PlanRequest {
   sequentialRegistries: number,
   installment: number,
@@ -20,22 +42,22 @@ export interface PlanRequest {
   idPaymentMethod: number,
   idService: number
 }
-export interface PlanResponse {
-  sequentialRegistries: number,
-  installment: number,
-  percentAdmTax: number,
-  percentFinancialTax: number,
-  percentCreditTariff: number,
-  transactionCostAmount: number,
-  description: string,
-  antecipationTax: number,
-  value: number,
-  agreement: AgreementRequest,
-  creditCardFlag: CreditCardFlagRequest,
-  paymentDeadLine: PaymentDeadLineRequest,
-  paymentMethod: PaymentMethodRequest,
-  service: ServiceEntityRequest
-}
+// export interface PlanResponse {
+//   sequentialRegistries: number,
+//   installment: number,
+//   percentAdmTax: number,
+//   percentFinancialTax: number,
+//   percentCreditTariff: number,
+//   transactionCostAmount: number,
+//   description: string,
+//   antecipationTax: number,
+//   value: number,
+//   agreement: AgreementRequest,
+//   creditCardFlag: CreditCardFlagRequest,
+//   paymentDeadLine: PaymentDeadLineRequest,
+//   paymentMethod: PaymentMethodRequest,
+//   service: ServiceEntityRequest
+// }
 
 export interface RootPlan {
   content: PlanResponse[],

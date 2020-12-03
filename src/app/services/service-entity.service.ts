@@ -8,7 +8,7 @@ import { ServiceEntityResponse } from '../models/response/ServiceEntityResponse'
   providedIn: 'root'
 })
 export class ServiceEntityService {
-  private readonly url = `${environment.baseUrl}service`;
+  private readonly url = `${environment.baseUrlPlans}service`;
   
   constructor(private http: HttpClient) { }
 

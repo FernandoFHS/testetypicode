@@ -1,0 +1,66 @@
+<form [formGroup]="userTable">
+  <table class="table table-border">
+    <thead class="text-nowrap">
+      <th *ngFor="let item of headersTax">{{item.header}}</th>
+      <th>Ações</th>
+    </thead>
+    <tbody>
+      <ng-container
+        formArrayName="tax"
+        *ngFor="let group of getFormControls.controls ; let i=index"
+      >
+        <tr *ngIf="group.get('isEditable').value" [formGroupName]="i">
+          <td *ngFor="let item of headersTax">
+            <mat-form-field *ngIf="!item.select" class="tax-field">
+              <input
+                matInput
+                type="number"
+                [formControlName]="item.formControlName"
+              />
+            </mat-form-field>
+            <mat-form-field *ngIf="item.select">
+              <mat-select [formControlName]="item.formControlName">
+                <mat-option
+                  *ngFor="let option of item.select"
+                  [value]="option.value"
+                  >{{option.text}}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-icon class="delete" (click)="deleteRow(i)"
+              >delete_forever</mat-icon
+            >
+            <mat-icon class="done" (click)="doneRow(group)">done</mat-icon>
+          </td>
+        </tr>
+        <tr *ngIf="!group.get('isEditable').value">
+          <td *ngFor="let item of headersTax">
+            {{group.get(item.formControlName).value}}
+          </td>
+          <td>
+            <mat-icon class="edit" (click)="editRow(group)">edit</mat-icon>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <div class="action-container">
+    <button mat-raised-button type="submit" (click)="addRow()">
+      Adicionar taxa
+    </button>
+    <!-- <button
+      mat-raised-button
+      [disabled]="userTable.invalid"
+      type="submit"
+      (click)="submitForm()"
+    >
+      Enviar
+    </button> -->
+  </div>
+</form>
+<!-- <div class="output">
+  <p>Form Data: {{userTable.value | json}}</p>
+  <p>Is Valid: {{userTable.valid}}</p>
+</div> -->

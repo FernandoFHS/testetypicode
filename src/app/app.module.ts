@@ -44,6 +44,7 @@ import { RulesComponent } from './pages/rules/rules.component';
 import { RuleComponent } from './pages/rules/rule/rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
 import { Error404Module } from './pages/errors/404/error-404.module';
+import { TaxTableComponent } from './pages/agreement-area/components/tax-table/tax-table.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -96,7 +97,8 @@ export const customCurrencyMaskConfig = {
     AddAgreementComponent,
     PlansComponent,
     DeleteTaxComponent,
-    AddPlanComponent    
+    AddPlanComponent,
+    TaxTableComponent    
   ],
   imports: [
     BrowserModule,

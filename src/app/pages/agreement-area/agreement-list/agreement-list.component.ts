@@ -37,13 +37,14 @@ export class AgreementListComponent implements OnInit {
   }
 
   loadData = (sort: string, order: string, page: number, size: number) => {    
-    this.agreementService.getAll().subscribe(data => {
-      console.log(data);
-    })
+    // this.agreementService.getAll().subscribe(data => {
+    //   console.log(data);
+    // })
     //return this.planService.getAll();
     return this.agreementService.getAll();
     
   };
+  
 
 headers: HeaderModel[] = [
   { text: 'Código', value: 'id' },

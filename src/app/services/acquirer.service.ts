@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AcquirerService {
-  private readonly url = `${environment.baseUrl}acquirer`;
+  private readonly url = `${environment.baseUrlPlans}acquirer`;
 
   constructor(private http: HttpClient) { }
 
