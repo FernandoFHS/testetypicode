@@ -13,7 +13,7 @@ export class CompanyService {
 
   private _refreshTable = new Subject<void>();
 
-  private readonly API_URL = 'http://company.qa.appmobbuy.tech:8080/';
+  private readonly API_URL = 'http://company.qa.appmobbuy.tech/';
 
   constructor(private httpClient: HttpClient, public _snackBar: MatSnackBar) { }
 
