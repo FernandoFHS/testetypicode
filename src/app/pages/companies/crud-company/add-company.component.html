@@ -558,7 +558,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Transação Referencial</mat-label>
-              <input matInput currencyMask [options]="customCurrencyMaskConfig" placeholder="R$ 0,00" formControlName="referentialTransacionAmount" required />
+              <input matInput currencyMask [options]="customCurrencyMaskConfig" placeholder="R$ 0,00" formControlName="referentialTransactionAmount" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>swap_horizontal_circle</mat-icon>
             </mat-form-field>

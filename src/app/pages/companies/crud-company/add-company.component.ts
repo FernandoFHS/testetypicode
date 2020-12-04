@@ -96,6 +96,7 @@ export class AddCompanyComponent implements OnInit {
   bankingFormGroup: FormGroup;
   companyPartnerFormGroup: FormGroup;
   companyAdressFormGroup: FormGroup;
+  
 
   endereco: any;
   formulariocompleto: any;
@@ -285,43 +286,6 @@ export class AddCompanyComponent implements OnInit {
     this.gelAllCnaes();
     this.getCompanyLevel();
 
-    this.plus = {
-      antecipationTaxPercent: 0,
-      anticipationByAssignmentIndicator: true,
-      automaticAnticipationIndicator: "string",
-      beneficiaryApartBankAddress: "string",
-      beneficiaryOperationType: "string",
-      beneficiaryTypeAcount: "string",
-      companyLevel: [
-        {
-          description: "string",
-          level: 0
-        }
-      ],
-      companyStatus: 0,
-      equipmentIdentifier: 0,
-      gpReturnDate: "string",
-      // idCompanyOwner:1008,
-      idCompanyLevelItem: 1,
-      idPlan: 0,
-      inclusionRegistrationDateTime: "string",
-      mcccode: 0,
-      orderType: 0,
-      posBillingTypeRental: "string",
-      posChargeAmountRental: 0,
-      posPercentageRateValue: 0,
-      recordChangeDateTime: "string",
-      referentialTransactionAmount: 0,
-      rentalExemptionDays: 0,
-      searchNickname: "string",
-      shopping: "string",
-      tedBillingIdentifier: "string",
-      tradingPartnerCode: 0,
-      tradingPartnerParticipationPercent: 0,
-      userChangeCode: "string",
-      userInclusionCode: "string"
-    };
-
   }
 
   private loadAddModel() {
@@ -382,7 +346,7 @@ export class AddCompanyComponent implements OnInit {
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || '', Validators.required],
       transactionAmount: [this.condition?.transactionAmount || '', Validators.required],
       tedAmount: [this.condition?.tedAmount || '', Validators.required],
-      referentialTransacionAmount: [this.condition?.referentialTransacionAmount || '', Validators.required],
+      referentialTransactionAmount: [this.condition?.referentialTransactionAmount || '', Validators.required],
       anticipationFee: [this.condition?.anticipationFee || '', Validators.required],
       ignoreLiberationAJManual: [this.condition?.ignoreLiberationAJManual || '', Validators.required],
       ajtype: [this.condition?.ajtype || '', Validators.required],
@@ -392,7 +356,7 @@ export class AddCompanyComponent implements OnInit {
       beneficiaryDocumentNumber: [this.condition?.beneficiaryDocumentNumber || '', Validators.required],
     });
     this.complementFormGroup = this._formBuilder.group({
-      openingHours: [parseInt(this.complement?.openingHours) || '', Validators.required],
+      openingHours: [this.complement?.openingHours || '', Validators.required],
       ecommerceURL: [this.complement?.ecommerceURL || '', Validators.required],
       estUrl: [this.complement?.estUrl || '', Validators.required],
       email: [this.complement?.email || '', Validators.required],
@@ -497,10 +461,11 @@ export class AddCompanyComponent implements OnInit {
       companyShortName: [this.identification?.companyShortName || ''],
       mcccode: [this.identification?.mcccode || ''],
       idDepartament: [this.identification?.idDepartament || ''],
+      idCompanyOwner: [''],
       cnae: [this.identification?.cnae || ''],
       idCnae: [this.identification?.idCnae || ''],
       businessActivity: [this.identification?.businessActivity || ''],
-      openingDate: [this.identification?.openingDate || ''], 
+      openingDate: [this.identification?.openingDate || ''],
     });
     console.log(this.id)
     this.adressFormGroup = this._formBuilder.group({
@@ -529,7 +494,7 @@ export class AddCompanyComponent implements OnInit {
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || ''],
       transactionAmount: [this.condition?.transactionAmount || ''],
       tedAmount: [this.condition?.tedAmount || ''],
-      referentialTransacionAmount: [this.condition?.referentialTransacionAmount || ''],
+      referentialTransactionAmount: [this.condition?.referentialTransactionAmount || ''],
       anticipationFee: [this.condition?.anticipationFee || ''],
       ignoreLiberationAJManual: [this.condition?.ignoreLiberationAJManual || ''],
       ajtype: [this.condition?.ajtype || ''],
@@ -538,7 +503,7 @@ export class AddCompanyComponent implements OnInit {
       beneficiaryDocumentNumber: [this.condition?.beneficiaryDocumentNumber || ''],
     });
     this.complementFormGroup = this._formBuilder.group({
-      openingHours: [parseInt(this.complement?.openingHours) || ''],
+      openingHours: [this.complement?.openingHours || ''],
       ecommerceURL: [this.complement?.ecommerceURL || ''],
       estUrl: [this.complement?.estUrl || ''],
       email: [this.complement?.email || ''],
@@ -564,6 +529,10 @@ export class AddCompanyComponent implements OnInit {
 
     this.bankingFormGroup = this._formBuilder.group({
       externalBankAccount: this._formBuilder.array(this.apiBankAccount$),
+    });
+
+    this.partnerFormGroup = this._formBuilder.group({
+      companyPartner: this._formBuilder.array(company.companyPartner),
     });
 
     console.log(this.bankingFormGroup);
@@ -613,7 +582,7 @@ export class AddCompanyComponent implements OnInit {
       automaticCreditIndicator: [{ value: this.condition?.automaticCreditIndicator || '', disabled: true }],
       transactionAmount: [{ value: this.condition?.transactionAmount || '', disabled: true }],
       tedAmount: [{ value: this.condition?.tedAmount || '', disabled: true }],
-      referentialTransacionAmount: [{ value: this.condition?.referentialTransacionAmount || '', disabled: true }],
+      referentialTransactionAmount: [{ value: this.condition?.referentialTransactionAmount || '', disabled: true }],
       anticipationFee: [{ value: this.condition?.anticipationFee || '', disabled: true }],
       ignoreLiberationAJManual: [{ value: this.condition?.ignoreLiberationAJManual || '', disabled: true }],
       ajtype: [{ value: this.condition?.ajtype || '', disabled: true }],
@@ -751,10 +720,10 @@ export class AddCompanyComponent implements OnInit {
       console.log(company.companyAddress[0])
     }
     this.conditionFormGroup.patchValue({
-      automaticCreditIndicator: company.automaticAnticipationIndicator,
+      automaticCreditIndicator: company.automaticCreditIndicator,
       transactionAmount: company.transactionAmount,
       tedAmount: company.tedAmount,
-      referentialTransacionAmount: company.referentialTransactionAmount,
+      referentialTransactionAmount: company.referentialTransactionAmount,
       anticipationFee: company.anticipationFee,
       ignoreLiberationAJManual: company.ignoreLiberationAJManual,
       ajtype: company.ajtype,
@@ -965,7 +934,7 @@ export class AddCompanyComponent implements OnInit {
       posQuantity: this.complementFormGroup.get('posQuantity').value,
       recordChangeDateTime: "string",
       referencePoint: this.adressFormGroup.get('referencePoint').value,
-      referentialTransactionAmount: 0,
+      referentialTransactionAmount: this.conditionFormGroup.get('referentialTransactionAmount').value,
       registerCode: this.complementFormGroup.get('registerCode').value,
       registrationDate: this.complementFormGroup.get('registrationDate').value,
       rentalExemptionDays: 0,
@@ -1072,15 +1041,15 @@ export class AddCompanyComponent implements OnInit {
         this.optionscnae = data.content;
 
         this.identificationFormGroup.get('cnae').valueChanges
-        .pipe(
-          startWith(''),
-        ).subscribe((value) => {
-          if (typeof (value) == 'string') {
-            this.filteredCnaes = this.optionscnae.filter((cnae) => {
-              return cnae.description.toLowerCase().includes(value.toLowerCase())
-            })
-          }
-        });
+          .pipe(
+            startWith(''),
+          ).subscribe((value) => {
+            if (typeof (value) == 'string') {
+              this.filteredCnaes = this.optionscnae.filter((cnae) => {
+                return cnae.description.toLowerCase().includes(value.toLowerCase())
+              })
+            }
+          });
       });
   }
 
@@ -1105,6 +1074,8 @@ export class AddCompanyComponent implements OnInit {
       console.log(externalContact);
 
       const externalAdress = this.companyAdressFormGroup;
+
+      const externalPartner = this.partnerFormGroup;
 
       const editForm = {
         idCompany: company.idCompany,
@@ -1204,7 +1175,7 @@ export class AddCompanyComponent implements OnInit {
         gpReturnDate: 0,
         gpSendDate: this.complementFormGroup.get('gpSendDate').value,
         idCompanyGroup: company.companyGroup.idCompany,
-        // idCompanyOwner: company.companyOwner.idCompany,
+        idCompanyOwner: company.companyOwner.idCompany,
         idDepartament: this.identificationFormGroup.get('idDepartament').value,
         idPlan: 0,
         idTerminal: this.complementFormGroup.get('idTerminal').value,
@@ -1221,7 +1192,7 @@ export class AddCompanyComponent implements OnInit {
         posQuantity: this.complementFormGroup.get('posQuantity').value,
         recordChangeDateTime: '',
         referencePoint: this.adressFormGroup.get('referencePoint').value,
-        referentialTransactionAmount: 0,
+        referentialTransactionAmount: this.conditionFormGroup.get('referentialTransactionAmount').value,
         registerCode: this.complementFormGroup.get('registerCode').value,
         registrationDate: this.complementFormGroup.get('registrationDate').value,
         rentalExemptionDays: 0,
@@ -1248,54 +1219,57 @@ export class AddCompanyComponent implements OnInit {
             idMcc: company.cnae.mcc.id
           }
         },
-        companyPartner: [
-          {
-            idCompanyPartner: 0,
-            idCompany: this.id,
-            partnerSequentialNumber: 1,
-            partnerName: this.partnerFormGroup?.get('partnerName').value || '',
-            cpf: this.partnerFormGroup?.get('cpf').value || '',
-            dateOfBirth: this.partnerFormGroup?.get('dateOfBirth').value || '',
-            partnerAddress: [
-              {
-                idPartnerAddress: 0,
-                number: this.partnerFormGroup?.get('number').value || '',
-                complement: this.partnerFormGroup?.get('complement').value || '',
-                street: {
-                  idStreet: 0,
-                  zipCode: this.partnerFormGroup?.get('zipCode').value || '',
-                  streetName: this.partnerFormGroup?.get('streetName').value || '',
-                  city: {
-                    idCity: 0,
-                    cityName: this.partnerFormGroup?.get('cityName').value || ''
-                  },
-                  neighborhood: {
-                    idNeighborhood: 0,
-                    neighborhoodName: this.partnerFormGroup?.get('neighborhoodName').value || ''
-                  },
-                  state: {
-                    idState: 0,
-                    uf: this.partnerFormGroup?.get('uf').value || '',
-                  }
-                }
-              }
-            ],
-            partnerContact: [
-              {
-                idPartnerContact: 0,
-                phone: this.partnerFormGroup?.get('phone').value || ''
-              }
-            ]
-          }
-        ]
+        companyPartner: externalPartner.value.companyPartner,
+
+
+        // companyPartner: [
+        //   {
+            // idCompanyPartner: 0,
+            // idCompany: this.id,
+            // partnerSequentialNumber: 1,
+            // partnerName: this.partnerFormGroup?.get('partnerName').value || '',
+            // cpf: this.partnerFormGroup?.get('cpf').value || '',
+            // dateOfBirth: this.partnerFormGroup?.get('dateOfBirth').value || '',
+            // partnerAddress: [
+            //   {
+            //     idPartnerAddress: 0,
+            //     number: this.partnerFormGroup?.get('number').value || '',
+            //     complement: this.partnerFormGroup?.get('complement').value || '',
+            //     street: {
+            //       idStreet: 0,
+            //       zipCode: this.partnerFormGroup?.get('zipCode').value || '',
+            //       streetName: this.partnerFormGroup?.get('streetName').value || '',
+            //       city: {
+            //         idCity: 0,
+            //         cityName: this.partnerFormGroup?.get('cityName').value || ''
+            //       },
+            //       neighborhood: {
+            //         idNeighborhood: 0,
+            //         neighborhoodName: this.partnerFormGroup?.get('neighborhoodName').value || ''
+            //       },
+            //       state: {
+            //         idState: 0,
+            //         uf: this.partnerFormGroup?.get('uf').value || '',
+            //       }
+            //     }
+            //   }
+            // ],
+            // partnerContact: [
+            //   {
+            //     idPartnerContact: 0,
+            //     phone: this.partnerFormGroup?.get('phone').value || ''
+            //   }
+            // ]
+          
+        
       }
-    console.log(editForm);
-      
-    // this.companyService.update(editForm).subscribe((response: any) => {
-    //   console.log(response);
-    //   this.dataService.openSnackBar('Empresa alterado com sucesso', 'X');
-    //   this.router.navigate(['/companies/list']);
-    // });
+      console.log(editForm);
+
+      this.companyService.update(editForm).subscribe((response: any) => {
+        console.log(response);
+        this.dataService.openSnackBar('Empresa alterado com sucesso', 'X');
+        this.router.navigate(['/companies/list']);
+      });
     })
 
   }
@@ -1419,7 +1393,7 @@ export class AddCompanyComponent implements OnInit {
     const apiIndex = this.apiBankAccount$.indexOf(row)
     console.log(apiIndex);
     const dialogRef = this.dialog.open(EditBankAccountComponent, {
-      data: {localIndex, apiIndex}
+      data: { localIndex, apiIndex }
     });
     dialogRef.afterClosed().subscribe((item) => {
       Object.assign(this.bankAccount$, item);;
@@ -1429,7 +1403,7 @@ export class AddCompanyComponent implements OnInit {
 
   onEditPartner(row: object) {
     const index = this.partnerSource$.findIndex((c) => c == row);
-
+    console.log(index);
     this.router.navigate([`/companies/partners/edit/${index}`]);
   }
 
