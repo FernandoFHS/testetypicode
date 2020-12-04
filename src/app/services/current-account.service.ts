@@ -62,7 +62,7 @@ export class CurrentAccountService {
         params = params.append('pageSize', size.toString());
         params = params.append('paged', `${false}`); // TODO
 
-        return this._http.get<ExtractResponseModel>(`${environment.bff.url_financial}/transactions`, {
+        return this._http.get<ExtractResponseModel>(`${environment.bff.url_financial}/transaction/test`, {
           params: params,
           headers: headers
         }).pipe(

@@ -1,6 +1,6 @@
 import { PlansComponent } from './pages/plans/plans.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -50,7 +50,11 @@ import { InitialPasswordTransactionComponent } from './pages/password-transactio
 import { RecoverPasswordTransactionComponent } from './pages/password-transaction/recover/recover-password-transaction/recover-password-transaction.component';
 import { ChangePasswordTransactionComponent } from './pages/password-transaction/change-password-transaction/change-password-transaction.component';
 import { RecoverPasswordAfterValidationComponent } from './pages/recover-password-after-validation/recover-password-after-validation.component';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+import { FuturePostingsComponent } from './pages/current-account/future-postings/future-postings.component';
 
+registerLocaleData(localePt, 'pt-BR');
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -107,7 +111,8 @@ export const customCurrencyMaskConfig = {
     InitialPasswordTransactionComponent,
     RecoverPasswordTransactionComponent,
     ChangePasswordTransactionComponent,
-    RecoverPasswordAfterValidationComponent
+    RecoverPasswordAfterValidationComponent,
+    FuturePostingsComponent
   ],
   imports: [
     BrowserModule,
@@ -131,6 +136,10 @@ export const customCurrencyMaskConfig = {
     {
       provide: MAT_DATE_LOCALE,
       useValue: 'pt-BR',
+    },
+    {
+      provide: LOCALE_ID, 
+      useValue: 'pt-BR'
     },
     {
       provide: DateAdapter,

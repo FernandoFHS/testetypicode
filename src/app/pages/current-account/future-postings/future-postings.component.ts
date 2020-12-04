@@ -14,20 +14,20 @@ import { GeneralService } from 'src/app/services/general.service';
 import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
-  selector: 'app-extract',
-  templateUrl: './extract.component.html',
-  styleUrls: ['./extract.component.scss']
+  selector: 'app-future-postings',
+  templateUrl: './future-postings.component.html',
+  styleUrls: ['./future-postings.component.scss']
 })
-export class ExtractComponent implements OnInit {
+export class FuturePostingsComponent implements OnInit {
 
   breadcrumbModel: BreadcrumbModel = {
     active: {
-      title: 'Extrato',
+      title: 'Lançamentos Futuros',
       route: ''
     },
     items: [
       { title: 'Home', route: '' },
-      { title: 'Conta Corrente', route: ''}
+      { title: 'Conta Corrente', route: '' }
     ]
   };
 
@@ -42,7 +42,7 @@ export class ExtractComponent implements OnInit {
 
   idCompany: number;
 
-  pageType: CurrentAccountPageTypeEnum | string = CurrentAccountPageTypeEnum.EXTRACT;
+  pageType: CurrentAccountPageTypeEnum | string = CurrentAccountPageTypeEnum.FUTURE_POSTINGS;
   filterType: CurrentAccountFilterTypeEnum = CurrentAccountFilterTypeEnum.TRANSACTION;
 
   balance: BalanceResponseModel;
@@ -263,7 +263,7 @@ export class ExtractComponent implements OnInit {
   changePageType(pageType: CurrentAccountPageTypeEnum | string): void {
     if (this.pageType != pageType) {
       this.pageType = pageType;
-      this._router.navigate(['current-account/future-postings/1']);
+      this._router.navigate(['current-account/extract/1']);
     }
   }
 

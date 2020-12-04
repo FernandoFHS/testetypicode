@@ -32,6 +32,7 @@ import { RecoverPasswordAfterValidationComponent } from '../pages/recover-passwo
 import { CurrentAccountComponent } from '../pages/current-account/current-account.component';
 import { ExtractComponent } from '../pages/current-account/extract/extract.component';
 import { TransactionsComponent } from '../pages/transactions/transactions.component';
+import { FuturePostingsComponent } from '../pages/current-account/future-postings/future-postings.component';
 
 export const routes: Routes = [
   {
@@ -197,6 +198,14 @@ export const routes: Routes = [
           {
             path: 'extract/:id_company',
             component: ExtractComponent,
+          },
+          {
+            path: 'future-postings',
+            component: FuturePostingsComponent
+          },
+          {
+            path: 'future-postings/:id_company',
+            component: FuturePostingsComponent
           }
         ]
       },
