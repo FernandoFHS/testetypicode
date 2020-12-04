@@ -48,7 +48,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Dígito Agência</mat-label>
-        <input matInput placeholder="Dígito Agência" formControlName="agencyDigit" required />
+        <input matInput placeholder="Dígito Agência" formControlName="agencyDigit" maxlength="1" required />
         <mat-icon matSuffix>looks_one</mat-icon>
         <mat-error>Campo obrigatório</mat-error>
       </mat-form-field>
@@ -64,14 +64,14 @@
     <div class="line-form">
       <mat-form-field appearance="outline">
         <mat-label>Dígito Conta</mat-label>
-        <input matInput placeholder="Dígito Conta" formControlName="digit" required />
+        <input matInput placeholder="Dígito Conta" formControlName="digit" maxlength="1" required />
         <mat-icon matSuffix>looks_3</mat-icon>
         <mat-error>Campo obrigatório</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Dígito Agência/Conta</mat-label>
-        <input matInput placeholder="Dígito Agência/Conta" formControlName="accountDigit" required />
+        <input matInput placeholder="Dígito Agência/Conta" formControlName="accountDigit" maxlength="1"required />
         <mat-icon matSuffix>looks_3</mat-icon>
         <mat-error>Campo obrigatório</mat-error>
       </mat-form-field>

@@ -38,10 +38,12 @@ import { Observable, of } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { SimpleDataTableService } from 'src/app/@core/components/simple-data-table/simple-data-table.service';
 import { CompanyService } from '../../../services/company.service';
+import { CompanyByLevelService } from '../../../services/company/company-by-level.service';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { CompanyContent } from 'src/app/models/Company';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 import { PageTypeEnum } from 'src/app/enums/page-type.enum';
+import { autoCompleteValidator } from 'src/app/app.validators';
 
 @Component({
   selector: 'app-add-company',
@@ -83,7 +85,7 @@ export class AddCompanyComponent implements OnInit {
 
 
   cnaeForm = new FormControl();
-  isLinear = false;
+  isLinear = true;
   identificationFormGroup: FormGroup;
   adressFormGroup: FormGroup;
   conditionFormGroup: FormGroup;
@@ -97,6 +99,9 @@ export class AddCompanyComponent implements OnInit {
 
   endereco: any;
   formulariocompleto: any;
+
+  optionscompany: any;
+  optionscnae: any;
 
 
   plus: any;
@@ -126,6 +131,7 @@ export class AddCompanyComponent implements OnInit {
   apiPhoneNumber$: any = []
 
   addPage: boolean;
+  companyValidatorError = false;
 
   referencePointNullValue: boolean;
   accreditationDateNullValue: boolean;
@@ -138,10 +144,12 @@ export class AddCompanyComponent implements OnInit {
   testesocio: any = this.localStorageService.get('partnerFormGroup');
 
   mcc: any;
+  companySelect: any;
 
   cnae: Array<Cnae>;
   cnae$: Observable<Array<Cnae>>;
-  filteredCnaes: Observable<Cnae[]>;
+  filteredCnaes: Observable<any[]>;
+  filteredCompanies: Observable<any[]>;
 
   addBreadcrumbModel: BreadcrumbModel = {
     active: {
@@ -189,7 +197,8 @@ export class AddCompanyComponent implements OnInit {
     private route: ActivatedRoute,
     private localStorageService: LocalStorageService,
     public phoneService: SimpleDataTableService,
-    public changeDetectorRefs: ChangeDetectorRef
+    public changeDetectorRefs: ChangeDetectorRef,
+    public CompanyByLevelService: CompanyByLevelService
   ) { }
 
   private _filterCnaes(value: string): Cnae[] {
@@ -218,6 +227,8 @@ export class AddCompanyComponent implements OnInit {
     // } else {
     //   this.loadEditModel(id);
     // }
+
+
 
     this.isLoading = true;
 
@@ -270,6 +281,7 @@ export class AddCompanyComponent implements OnInit {
     });
 
     this.gelAllCnaes();
+    this.getCompanyLevel();
 
     this.plus = {
       antecipationTaxPercent: 0,
@@ -323,6 +335,7 @@ export class AddCompanyComponent implements OnInit {
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
       companyResponsibleName: [this.identification?.companyResponsibleName || ''],
+      companyResponsible: [this.identification?.companyResponsible || ''],
       companyType: [this.identification?.companyType || '', Validators.required],
       situation: [this.identification?.situation || '', Validators.required],
       documentNumberCompany: [this.identification?.documentNumberCompany || '', Validators.required],
@@ -333,11 +346,14 @@ export class AddCompanyComponent implements OnInit {
       companyShortName: [this.identification?.companyShortName || '', Validators.required],
       mcccode: [this.identification?.mcccode || '', Validators.required],
       idDepartament: [parseInt(this.identification?.idDepartament) || '', Validators.required],
+      idCompanyOwner: [''],
       cnae: [this.identification?.cnae || '', Validators.required],
       idCnae: [this.identification?.idCnae || ''],
       businessActivity: [this.identification?.businessActivity || '', Validators.required],
       openingDate: [this.identification?.openingDate || '', Validators.required]
-    });
+    },
+      { validator: autoCompleteValidator('companyResponsible')});
+
     this.adressFormGroup = this._formBuilder.group({
       streetName: [this.adress?.streetName || '', Validators.required],
       number: [this.adress?.number || '', Validators.required],
@@ -813,9 +829,9 @@ export class AddCompanyComponent implements OnInit {
   }
 
   createCompany() {
- 
+
     const form = {
-      accreditationDate:this.complementFormGroup.get('accreditationDate').value,
+      accreditationDate: this.complementFormGroup.get('accreditationDate').value,
       ajtype: this.conditionFormGroup.get('ajtype').value,
       antecipationTaxPercent: 0,
       anticipationByAssignmentIndicator: true,
@@ -881,7 +897,7 @@ export class AddCompanyComponent implements OnInit {
         }
       ],
 
-      companyContact:this.localStorageService.get('phoneNumber'),
+      companyContact: this.localStorageService.get('phoneNumber'),
 
       companyLevel: [
         {
@@ -907,7 +923,7 @@ export class AddCompanyComponent implements OnInit {
       email: this.complementFormGroup.get('email').value,
       equipmentIdentifier: 0,
       estUrl: this.complementFormGroup.get('estUrl').value,
-      externalBankAccount:this.localStorageService.get('bankAccount'),
+      externalBankAccount: this.localStorageService.get('bankAccount'),
       fancyName: this.identificationFormGroup.get('fancyName').value,
       gpAffiliationDate: this.complementFormGroup.get('gpAffiliationDate').value,
       gpEstablishmentNumber: this.identificationFormGroup.get('gpEstablishmentNumber').value,
@@ -915,7 +931,7 @@ export class AddCompanyComponent implements OnInit {
       gpSendDate: this.complementFormGroup.get('gpSendDate').value,
       idCompany: 0,
       idCompanyGroup: 1008,
-      idCompanyOwner: 1008,
+      idCompanyOwner: this.identificationFormGroup.get('idCompanyOwner').value,
       idDepartament: this.identificationFormGroup.get('idDepartament').value,
       idPlan: 0,
       idTerminal: this.complementFormGroup.get('idTerminal').value,
@@ -1011,9 +1027,60 @@ export class AddCompanyComponent implements OnInit {
 
   }
 
+  getCompanyLevel() {
+    this.CompanyByLevelService.getByLevel()
+      // .pipe(take(1))
+      .subscribe((response) => {
+        this.optionscompany = response['content'];
+
+        this.identificationFormGroup.get('companyResponsible').valueChanges
+          .pipe(
+            startWith(''),
+          ).subscribe((value) => {
+            if (typeof (value) == 'string') {
+              this.filteredCompanies = this.optionscompany.filter((company) => {
+                return company.companyName.toLowerCase().includes(value.toLowerCase())
+              })
+            }
+          });
+      });
+  }
+
+  gelAllCnaes() {
+    this.cnaeService.getAllCnae()
+      // .pipe(take(1))
+      .subscribe((data) => {
+        //console.log(data.content);
+        // this.cnae$ = of(data.content);
+        this.optionscnae = data.content;
+
+        this.identificationFormGroup.get('cnae').valueChanges
+        .pipe(
+          startWith(''),
+        ).subscribe((value) => {
+          if (typeof (value) == 'string') {
+            this.filteredCnaes = this.optionscnae.filter((cnae) => {
+              return cnae.description.toLowerCase().includes(value.toLowerCase())
+            })
+          }
+        });
+      });
+  }
+
+  nextStep() {
+
+    if (this.identificationFormGroup.valid) {
+      const selectedCompany = this.identificationFormGroup.get('companyResponsible');
+      this.identificationFormGroup.get('idCompanyOwner').setValue(selectedCompany?.value.idCompany);
+      this.identificationFormGroup.get('companyResponsibleName').setValue(selectedCompany?.value.companyName);
+      this.saveForm(this.identificationFormGroup, 'identificationFormGroup');
+      this.checkValueBankAdress(false)
+    }
+  }
+
   updateCompany() {
     const editForm = {
-      accreditationDate:this.complementFormGroup.get('accreditationDate').value,
+      accreditationDate: this.complementFormGroup.get('accreditationDate').value,
       ajtype: this.conditionFormGroup.get('ajtype').value,
       antecipationTaxPercent: 0,
       anticipationByAssignmentIndicator: true,
@@ -1079,7 +1146,7 @@ export class AddCompanyComponent implements OnInit {
         }
       ],
 
-      companyContact:this.localStorageService.get('phoneNumber'),
+      companyContact: this.localStorageService.get('phoneNumber'),
 
       companyLevel: [
         {
@@ -1095,7 +1162,7 @@ export class AddCompanyComponent implements OnInit {
         level: 30
       },
       companyName: this.identificationFormGroup.get('companyName').value,
-      companyResponsibleName: this.identificationFormGroup.get('companyResponsibleName').value,
+      // companyResponsibleName: this.identificationFormGroup.get('companyResponsibleName').value,
       companyShortName: this.identificationFormGroup.get('companyShortName').value,
       companyStatus: 0,
       companyType: this.identificationFormGroup.get('companyType').value,
@@ -1105,7 +1172,7 @@ export class AddCompanyComponent implements OnInit {
       email: this.complementFormGroup.get('email').value,
       equipmentIdentifier: 0,
       estUrl: this.complementFormGroup.get('estUrl').value,
-      externalBankAccount:this.localStorageService.get('bankAccount'),
+      externalBankAccount: this.localStorageService.get('bankAccount'),
       fancyName: this.identificationFormGroup.get('fancyName').value,
       gpAffiliationDate: this.complementFormGroup.get('gpAffiliationDate').value,
       gpEstablishmentNumber: this.identificationFormGroup.get('gpEstablishmentNumber').value,
@@ -1113,7 +1180,7 @@ export class AddCompanyComponent implements OnInit {
       gpSendDate: this.complementFormGroup.get('gpSendDate').value,
       idCompany: this.id,
       idCompanyGroup: 1008,
-      idCompanyOwner: 1008,
+      idCompanyOwner: this.companySelect,
       idDepartament: this.identificationFormGroup.get('idDepartament').value,
       idPlan: 0,
       idTerminal: this.complementFormGroup.get('idTerminal').value,
@@ -1210,21 +1277,21 @@ export class AddCompanyComponent implements OnInit {
 
   //View
 
-  gelAllCnaes() {
-    this.cnaeService.getAllCnae()
-      // .pipe(take(1))
-      .subscribe((data) => {
-        //console.log(data.content);
-        this.cnae$ = of(data.content);
+  // gelAllCnaes() {
+  //   this.cnaeService.getAllCnae()
+  //     // .pipe(take(1))
+  //     .subscribe((data) => {
+  //       //console.log(data.content);
+  //       this.cnae$ = of(data.content);
 
-        this.filteredCnaes = this.cnaeForm.valueChanges
-          .pipe(
-            startWith(''),
-            map(cnae => this._filterCnaes(cnae))
-            //map(cnae => cnae ? this._filterCnaes(cnae) : this.cnae$.subscribe(cnaes => {return cnaes.slice()}))
-          );
-      });
-  }
+  //       this.filteredCnaes = this.cnaeForm.valueChanges
+  //         .pipe(
+  //           startWith(''),
+  //           map(cnae => this._filterCnaes(cnae))
+  //           //map(cnae => cnae ? this._filterCnaes(cnae) : this.cnae$.subscribe(cnaes => {return cnaes.slice()}))
+  //         );
+  //     });
+  // }
 
   headers: HeaderModel[] = [
     { text: 'Código', value: 'id' },
@@ -1423,15 +1490,21 @@ export class AddCompanyComponent implements OnInit {
     }
   }
 
+  displayFnCompany = (item): string => {
+    if (item) {
+      return item.companyName;
+    } else {
+      return '';
+    }
+  }
+
   getMccByCnae() {
     let a = this.mcc
-    console.log(a);
     let obj = {
       mcccode: a.mcc.code,
       idCnae: a.idCnae
     }
     this.identificationFormGroup.patchValue(obj);
-    console.log(obj);
   }
 
   getSecondCep(cep) {
@@ -1540,10 +1613,10 @@ export class AddCompanyComponent implements OnInit {
     this.localStorageService.set(text, form.value);
     this.localStorageService.set('cep', this.response);
 
-   
+
   }
 
-  saveAdress(){
+  saveAdress() {
     let obj = {
       companyAddress: [{
         complement: this.adressFormGroup.get('complement').value,
@@ -1585,8 +1658,8 @@ export class AddCompanyComponent implements OnInit {
         type: "Correspondência",
       }]
     };
-    
-    this.endereco = Object.assign({},obj);
+
+    this.endereco = Object.assign({}, obj);
   }
 
   getLocalStorage(item) {
