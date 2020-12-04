@@ -34,6 +34,12 @@
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
       </mat-form-field>
 
+      <mat-form-field appearance="outline">
+        <mat-label>Conta Corrente</mat-label>
+        <input matInput placeholder="Conta Corrente" formControlName="account" required />
+        <mat-icon matSuffix>payment</mat-icon>
+        <mat-error>Campo obrigatório</mat-error>
+      </mat-form-field>
      
       <!-- <mat-checkbox class="example-margin" formControlName="masterAccount" (change)="CheckCompany($event)">Ativo</mat-checkbox> -->
     </div>
@@ -53,13 +59,6 @@
         <mat-error>Campo obrigatório</mat-error>
       </mat-form-field>
     </div>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Conta Corrente</mat-label>
-      <input matInput placeholder="Conta Corrente" formControlName="account" required />
-      <mat-icon matSuffix>payment</mat-icon>
-      <mat-error>Campo obrigatório</mat-error>
-    </mat-form-field>
 
     <div class="line-form">
       <mat-form-field appearance="outline">
