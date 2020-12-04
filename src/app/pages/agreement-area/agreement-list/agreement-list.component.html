@@ -12,9 +12,21 @@
     (addEvent)="onAdd($event)" 
     (deleteEvent)="onDelete($event)"
     (editEvent)="onEdit($event)" 
+    (viewEvent)="onView($event)" 
     [loadFunc]="loadData" 
     [idItems]="'id'"
     >
   </core-data-table>
+
+  <!-- <app-simple-data-table 
+        [headers]="headers" 
+        [loadFunc]="loadData" 
+        [actions]="actions"
+        (addEvent)="onAdd($event)" 
+        (editEvent)="onEdit($event)"
+        (deleteEvent)="onDelete($event)"
+        [idItems]="'id'"
+        >
+  </app-simple-data-table> -->
 
 </div>

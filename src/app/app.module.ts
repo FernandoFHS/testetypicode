@@ -24,6 +24,9 @@ import { DeletePhoneComponent } from './pages/companies/crud-company/dialogs/del
 import { DeletePartnerComponent } from './pages/companies/crud-company/dialogs/delete-partner/delete-partner.component';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SimpleDataTableComponent } from './@core/components/simple-data-table/simple-data-table.component';
+import { AddPlanComponent } from './pages/dialogs/add-plan/add-plan.component';
+
 import { RulesComponent } from './pages/rules/rules.component';
 import { RuleComponent } from './pages/rules/rule/rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
@@ -55,6 +58,7 @@ import localePt from '@angular/common/locales/pt';
 import { FuturePostingsComponent } from './pages/current-account/future-postings/future-postings.component';
 
 registerLocaleData(localePt, 'pt-BR');
+import { TaxTableComponent } from './pages/agreement-area/components/tax-table/tax-table.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -112,7 +116,9 @@ export const customCurrencyMaskConfig = {
     RecoverPasswordTransactionComponent,
     ChangePasswordTransactionComponent,
     RecoverPasswordAfterValidationComponent,
-    FuturePostingsComponent
+    FuturePostingsComponent,
+    AddPlanComponent,
+    TaxTableComponent    
   ],
   imports: [
     BrowserModule,

@@ -13,5 +13,6 @@ export const menuItems: Menu[] = [
   { route: 'companies', display_name: 'Empresas', icon_name: 'store_mall_directory', children: [], open: false },
   { route: 'password-transaction', display_name: 'Senha Transação', icon_name: 'vpn_key', children: [], open: false },
   { route: 'rules', display_name: 'Regras', icon_name: 'rule', children: [], open: false },
+  { route: 'agreements', display_name: 'Contratos', icon_name: 'sticky_note_2', children: [], open: false },
   { route: 'login', display_name: 'Login', icon_name: 'lock', children: [], open: false },
 ]

@@ -227,8 +227,12 @@ export const routes: Routes = [
             component: AddAgreementComponent
           },
           {
-            path: 'edit/:index',
-            component: EditAgreementComponent
+            path: 'edit/:id',
+            component: AddAgreementComponent
+          },
+          {
+            path: 'view/:id',
+            component: AddAgreementComponent
           }
         ]
       },
