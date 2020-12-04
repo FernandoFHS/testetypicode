@@ -486,6 +486,7 @@ export class AddCompanyComponent implements OnInit {
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
       companyResponsibleName: [this.identification?.companyResponsibleName || ''],
+      companyResponsible: [this.identification?.companyResponsible || ''],
       companyType: [this.identification?.companyType || ''],
       situation: [this.identification?.situation || ''],
       documentNumberCompany: [this.identification?.documentNumberCompany || ''],
