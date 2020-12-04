@@ -1,7 +1,9 @@
-import { AgreementRequest } from './../models/Agreement';
+import { AgreementContent, AgreementRequest, AgreementResponse } from './../models/Agreement';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +17,19 @@ export class AgreementService {
   getAll() {
     return this.http.get<AgreementRequest>(this.url)
   }
-  getById(id:number) {
-    return this.http.get<AgreementRequest>(`${this.url}/${id}`)
+  getAllPaged(sort: string, order: string, page: number, size: number): Observable<{ content: AgreementContent[] }> {
+    const requestUrl =
+      `${this.url}?sort=${sort},${order}&page=${page}&size=${size}`;
+    return this.http.get<{ content: AgreementContent[] }>(requestUrl)
   }
-  postOrPut(agreement: AgreementRequest) {
-    return this.http.post<AgreementRequest>(this.url, agreement)
+  getById(id:number) {
+    return this.http.get<AgreementResponse>(`${this.url}/${id}`)
+  }
+  post(agreement: AgreementRequest) {
+    return this.http.post<AgreementRequest>(`${this.url}/api`, agreement)
+  }
+  put(agreement: AgreementRequest) {
+    return this.http.put<AgreementRequest>(`${this.url}`, agreement)
   }
   delete(id:number) {
     return this.http.get<boolean>(`${this.url}/${id}`)

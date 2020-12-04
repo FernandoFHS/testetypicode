@@ -1,51 +1,77 @@
 <h3 mat-dialog-title class="text-center m-b-20 font-light-bold title-size">
   Adicionar Plano
 </h3>
+
 <div mat-dialog-content>
   <form [formGroup]="planFormGroup">
-    <mat-form-field appearance="outline" >
+    <mat-form-field appearance="outline" *ngIf="acquirer$ | async as acquirer;">
       <mat-label>Adquirente</mat-label>
-      <mat-select  [(ngModel)]="selectedAcquirer" formControlName="acquirer" required *ngIf="acquirer$ | async as acquirer;">
+      <mat-select [compareWith]="compareFn" formControlName="acquirer" required>
         <mat-option>Selecione um Adquirente</mat-option>
         <mat-option *ngFor="let item of acquirer" [value]="item">{{item.description}}</mat-option>
       </mat-select>
       <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Código de Serviço</mat-label>
-      <mat-select formControlName="serviceEntity" required *ngIf="serviceEntity$ | async as serviceEntity;">
-        <mat-option>Selecione um serviço</mat-option>
-        <mat-option *ngFor="let item of serviceEntity" [value]="item" ([noFlag])="item.noFlag">{{item.description}}</mat-option>
-      </mat-select>
-      <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" *ngIf="creditCardFlag$ | async as creditCardFlag;">
       <mat-label>Bandeira Cartão de Crédito</mat-label>
-      <mat-select formControlName="creditCardFlag" required *ngIf="creditCardFlag$ | async as creditCardFlag;" disable>
+      <mat-select [compareWith]="compareFn"  formControlName="creditCardFlag"  required disable>
         <mat-option>Selecione uma bandeira de cartão</mat-option>
-        <mat-option *ngFor="let item of creditCardFlag" [value]="item">{{item.flagName}}</mat-option>
+        <mat-option *ngFor="let item of creditCardFlag" [value]="item">{{item.flagName}} </mat-option>
       </mat-select>
       <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Tipo de Remuneração</mat-label>
-      <mat-select formControlName="remunerationType" required  *ngIf="remunerationType$ | async as remunetationType;">
-        <mat-option>Selecione o tipo de remuneração</mat-option>
-        <mat-option *ngFor="let item of remunetationType" [value]="item">{{item.description}}</mat-option>
+    <!-- <mat-expansion-panel class="m-b-25" [expanded]="true" formGroupName="remuneration">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Remuneração
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-form-field appearance="outline" *ngIf="serviceEntity$ | async as serviceEntity;">
+        <mat-label>Código de Serviço</mat-label>
+        <mat-select [compareWith]="compareFn" formControlName="serviceEntity" required>
+          <mat-option>Selecione um serviço</mat-option>
+          <mat-option *ngFor="let item of serviceEntity" [value]="item">{{item.description}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="remunerationType$ | async as remunetationType;">
+        <mat-label>Tipo de Remuneração</mat-label>
+        <mat-select [compareWith]="compareFn" formControlName="remunerationType" required>
+          <mat-option>Selecione o tipo de remuneração</mat-option>
+          <mat-option *ngFor="let item of remunetationType" [value]="item">{{item.description}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Taxa Mínima</mat-label>
+        <input matInput placeholder="Taxa Mínima" formControlName="minimalFee" required />
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        <mat-icon [inline]="true" matSuffix>%</mat-icon>
+      </mat-form-field>  
+
+      <mat-form-field appearance="outline">
+        <mat-label>Valor da Remuneração</mat-label>
+        <input matInput placeholder="Valor da Remuneração" formControlName="remunerationValue" required />
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        <mat-icon matSuffix>attach_money</mat-icon>
+      </mat-form-field>
+      
+    </mat-expansion-panel> -->
+
+    <mat-form-field appearance="outline" *ngIf="remuneration$ | async as remunetation;">
+      <mat-label>Remuneração</mat-label>
+      <mat-select [compareWith]="compareFn" formControlName="remuneration" required>
+        <mat-option>Selecione a remuneração</mat-option>
+        <mat-option *ngFor="let item of remunetation" [value]="item">Entidade de Serviço: {{item.serviceEntity.description}} - Tipo: {{item.remunerationType.description}}</mat-option>
       </mat-select>
       <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
     </mat-form-field>
     
-    <mat-form-field appearance="outline">
-      <mat-label>Valor da Remuneração</mat-label>
-      <input matInput placeholder="Valor da Remuneração" formControlName="value" required
-        />
-      <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-      <mat-icon matSuffix>attach_money</mat-icon>
-    </mat-form-field>
 
     <mat-expansion-panel class="m-b-25" [expanded]="true">
       <mat-expansion-panel-header>
@@ -54,7 +80,7 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div style="width: 100%; overflow: scroll;">
-        <app-tax-table (onFormGroupChange)="onFormGroupChangeEvent($event)"></app-tax-table>
+        <app-tax-table (onFormGroupChange)="onFormGroupChangeEvent($event)" [data]="data.tax"></app-tax-table>
       </div>
     </mat-expansion-panel>
     

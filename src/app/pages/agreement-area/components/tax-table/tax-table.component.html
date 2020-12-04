@@ -1,7 +1,10 @@
 <form [formGroup]="userTable">
+  <div style="width: 100%; overflow: scroll;">
   <table class="table table-border">
     <thead class="text-nowrap">
       <th *ngFor="let item of headersTax">{{item.header}}</th>
+      <th>Prazo Pagamento</th>
+      <th>Método Pagamento</th>
       <th>Ações</th>
     </thead>
     <tbody>
@@ -9,7 +12,7 @@
         formArrayName="tax"
         *ngFor="let group of getFormControls.controls ; let i=index"
       >
-        <tr *ngIf="group.get('isEditable').value" [formGroupName]="i">
+        <tr *ngIf="true" [formGroupName]="i">
           <td *ngFor="let item of headersTax">
             <mat-form-field *ngIf="!item.select" class="tax-field">
               <input
@@ -18,15 +21,33 @@
                 [formControlName]="item.formControlName"
               />
             </mat-form-field>
-            <mat-form-field *ngIf="item.select">
-              <mat-select [formControlName]="item.formControlName">
+
+
+          </td>
+          <td>
+            <mat-form-field *ngIf="paymentDeadLine$ | async as pdl">
+              <mat-select [compareWith]="compareFn" formControlName="paymentDeadLine">
                 <mat-option
-                  *ngFor="let option of item.select"
-                  [value]="option.value"
-                  >{{option.text}}</mat-option
+                  *ngFor="let option of pdl"
+                  [value]="option"
+                  >{{option.description}}</mat-option
                 >
               </mat-select>
             </mat-form-field>
+
+            
+          </td>
+          <td>
+            <mat-form-field *ngIf="paymentMethod$ | async as pm">
+            <mat-select [compareWith]="compareFn" formControlName="paymentMethod">
+              <mat-option
+                *ngFor="let option of pm"
+                [value]="option"
+                >{{option.description}}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+
           </td>
           <td>
             <mat-icon class="delete" (click)="deleteRow(i)"
@@ -35,7 +56,7 @@
             <mat-icon class="done" (click)="doneRow(group)">done</mat-icon>
           </td>
         </tr>
-        <tr *ngIf="!group.get('isEditable').value">
+        <tr *ngIf="false">
           <td *ngFor="let item of headersTax">
             {{group.get(item.formControlName).value}}
           </td>
@@ -46,6 +67,7 @@
       </ng-container>
     </tbody>
   </table>
+</div>
   <div class="action-container">
     <button mat-raised-button type="submit" (click)="addRow()">
       Adicionar taxa

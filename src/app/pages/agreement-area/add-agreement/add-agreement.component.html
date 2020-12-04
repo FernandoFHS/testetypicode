@@ -1,8 +1,12 @@
 <div>
-  <core-breadcrumb [model]="breadcrumb_model"></core-breadcrumb>
+  <core-breadcrumb [model]="addBreadcrumbModel" *ngIf="isPageAdd()"></core-breadcrumb>
+  <core-breadcrumb [model]="editBreadcrumbModel" *ngIf="isPageEdit()"></core-breadcrumb>
+
   <div class="m-b-25">
     <label class="mat-display-1 page-title">
-      Inserir Contrato 
+      {{isPageAdd() ? 'Inserir Contrato' : ''}}
+      {{isPageEdit() ? 'Editar Contrato' : ''}}
+      {{isPageView() ? 'Visualizar Contrato' : ''}}
     </label>
   </div>
   <form name="form" [formGroup]="form" novalidate *ngIf="form" class="m-b-15" autocomplete="off">
@@ -42,8 +46,8 @@
         <mat-label>Parcelado Acelerado</mat-label>
         <mat-select formControlName="isFastInstallments" required>
           <mat-option></mat-option>
-          <mat-option value="true"> Sim </mat-option>
-          <mat-option value="false"> Não </mat-option>
+          <mat-option [value]="true"> Sim </mat-option>
+          <mat-option [value]="false"> Não </mat-option>
         </mat-select>
         <!-- <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error> -->
       </mat-form-field>
@@ -58,7 +62,7 @@
           Planos
         </mat-panel-title>
       </mat-expansion-panel-header>
-    
+    <!-- *ngIf="model.plans[0].acquirer"  -->
       <app-simple-data-table 
         [headers]="headersPlan" 
         [data]="form.controls.plans.value" 
@@ -83,7 +87,7 @@
       </div>
   
       <div fxFlex>
-        <button mat-raised-button color="primary" class="m-t-15 float-right" (click)="save()">
+        <button mat-raised-button color="primary" class="m-t-15 float-right" (click)="isPageAdd() ? save() : update()" *ngIf="!isPageView()">
           <mat-icon [inline]="true" class="m-r-5">
             save
           </mat-icon>

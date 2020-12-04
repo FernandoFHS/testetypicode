@@ -7,12 +7,12 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class RemunerationService {
-  private readonly url = `${environment.baseUrl}remuneration`;
+  private readonly url = `${environment.baseUrlPlans}remuneration`;
 
   constructor(private http: HttpClient) { }
 
   getAll() {
-    return this.http.get<RemunerationResponse>(this.url)
+    return this.http.get<any>(this.url)
   }
   getById(id:number) {
     return this.http.get<RemunerationResponse>(`${this.url}/${id}`)

@@ -41,7 +41,7 @@ export class AgreementListComponent implements OnInit {
     //   console.log(data);
     // })
     //return this.planService.getAll();
-    return this.agreementService.getAll();
+    return this.agreementService.getAllPaged(sort, order, page, size);
     
   };
   
@@ -54,7 +54,7 @@ headers: HeaderModel[] = [
 actions: ActionModel = {
   add: true,
   edit: true,
-  delete: false,
+  delete: true,
   view: false
 };
 
@@ -69,15 +69,16 @@ onDelete(row: any) {
 }
 
 
-onEdit(agreement) {
-  //console.log('esse é o meu index para editar ' + index);
-  console.log(agreement.id);
-  
+onEdit(agreement) {  
   this.router.navigate(['/agreements/edit/'+agreement.id]);
 }
 
 onAdd(index: number) {
   this.router.navigate(['/agreements/add']);
+}
+
+onView(agreement) {
+  this.router.navigate(['/agreements/view/'+agreement.id]);
 }
 
 }

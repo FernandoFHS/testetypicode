@@ -1,6 +1,7 @@
+import { RemunerationService } from './../../../services/remuneration.service';
 import { PlanResponse } from './../../../models/Plan';
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -30,52 +31,72 @@ export class AddPlanComponent implements OnInit {
 
   plan: PlanResponse;
 
-
   serviceEntity$: Observable<Array<ServiceEntityRequest>>;
   creditCardFlag$: Observable<Array<CreditCardFlagRequest>>;
   remunerationType$: Observable<Array<RemunerationTypeRequest>>;
+  remuneration$: Observable<Array<any>>;
   acquirer$: Observable<Array<AcquirerRequest>>;
 
-  formTax :any  = ''
+  formTax: any = ''
+  isEdit: boolean = false;
+  isAdd: boolean = false;
+  isView: boolean = false;
+  
 
   agreementForm: FormGroup
 
   constructor(public dialogRef: MatDialogRef<AddPlanComponent>,
-    @Inject(MAT_DIALOG_DATA) 
-    public data: any, 
+    @Inject(MAT_DIALOG_DATA)
+    public data: any,
     public dataService: DataService,
     private _formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
-    
     private creditCardFlagService: CreditCardFlagService,
     private remunerationTypeService: RemunerationTypeService,
     private serviceEntityService: ServiceEntityService,
     private acquirerService: AcquirerService,
+    private remunerationService: RemunerationService,
     private router: Router
-    ) { }
+  ) { }
 
-    formControl = new FormControl('', [
-      Validators.required,
-    ]);
+  formControl = new FormControl('', [
+    Validators.required,
+  ]);
 
   ngOnInit(): void {
+    
+    
+    if(this.data.id){
+      this.isEdit = true;            
+      this.planFormGroup = this._formBuilder.group({
+        id: [this.data.id],
+        saleType: [0],
+        acquirer: [this.data.acquirer, Validators.required],
+        creditCardFlag: [this.data.creditCardFlag, Validators.required],
+        remuneration:  [this.data.remuneration, Validators.required],
+        numberOfInstallments: [this.data.numberOfInstallments]
+      })
+
+    }else{
 
     this.planFormGroup = this._formBuilder.group({
+      id: [0],
+      saleType: [0],
       acquirer: ['', Validators.required],
-      serviceEntity: ['', Validators.required],
       creditCardFlag: ['', Validators.required],
-      remunerationType: ['', Validators.required],
-      value: ['', Validators.required],
+      remuneration: ['', Validators.required],
       numberOfInstallments: ['']
     })
+    }
+
     this.getAllServices();
-    this.getAllRemunetarionType();
+    this.getAllRemunetarion();
     this.getAllCreditCardFlag();
     this.getAllAcquirer();
   }
-  
+
   public onFormGroupChangeEvent(_event) {
-    this.formTax = _event;    
+    this.formTax = _event;
   }
 
   getErrorMessage() {
@@ -90,78 +111,89 @@ export class AddPlanComponent implements OnInit {
       : '';
   }
 
-  saveAccount(form){
-
-        
+  saveAccount(form) {
     // let planArray: PlanResponse[] = this.localStorageService.get('plan');
     // if(!planArray){
     //   planArray = [];
     // }
-
+    //console.log('formTax.length - ', this.formTax.value.tax.length);
+    form.controls['numberOfInstallments'].setValue(12);
+    // form.controls['idServiceEntity'].setValue(form.value.serviceEntity.id); 
+    // form.controls['idCreditCardFlag'].setValue(form.value.creditCardFlag.id); 
+    // form.controls['idRemunerationType'].setValue(form.value.remunerationType.id);
     let planAndTax = {
-          ...form.value,
-          ...this.formTax.value
+      ...form.value,
+      ...this.formTax.value
     };
-    // planArray.push(planAndTax);
-    
-    
-    //this.agreementForm.controls.plans = this._formBuilder.array(planArray);
-
     let planValidator = form.value;
-    if (typeof planValidator === 'object') {  
+    if (typeof planValidator === 'object') {
       this.planArray.push(this._formBuilder.control(planAndTax))
       this.dataService.openSnackBar('Plano adicionado com sucesso', 'X');
       this.dialogRef.close(form);
     } else {
       this.planValidatorError = true;
     }
-
-    // let planValidator = form.value;
-    // if (typeof planValidator === 'object') {  
-    //   this.localStorageService.set('plan', planArray);
-    //   this.dataService.openSnackBar('Plano adicionado com sucesso', 'X');
-    //   this.dialogRef.close(form);
-    // } else {
-    //   this.planValidatorError = true;
-    // }
   }
 
-  get planArray() {
+  get planArray() {    
     return this.agreementForm.get('plans') as FormArray;
   }
-
-  closeDialog(): void{
-    this.dialogRef.close();
+  get taxArray() {    
+    return this.formTax.get('tax') as FormArray;
   }
 
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
 
   getAllServices() {
     this.serviceEntityService.getAll()
       .pipe(take(1))
       .subscribe((data) => {
         this.serviceEntity$ = of(data.content);
+        // console.log(this.planFormGroup.controls.remuneration.controls.serviceEntity);
+        // this.planFormGroup.controls.get('remuneration.serviceEntity').setValue('1300');
+        this.planFormGroup.patchValue({
+          remuneration: ({
+            serviceEntity: data.content
+          })
+        })
+
+        // this.planFormGroup.controls['remuneration'].controls['serviceEntity'].setValue(data.content); 
+
       });
-    }
-  getAllCreditCardFlag(){
+  }
+  getAllCreditCardFlag() {
     this.creditCardFlagService.getAll()
       .pipe(take(1))
       .subscribe((data) => {
-        this.creditCardFlag$ = of(data.content)
+        this.creditCardFlag$ = of(data.content);
       });
   }
-  getAllAcquirer(){
+  getAllAcquirer() {
     this.acquirerService.getAll()
       .pipe(take(1))
       .subscribe((data) => {
         this.acquirer$ = of(data.content);
       });
   }
-  getAllRemunetarionType(){
+  getAllRemunetarionType() {
     this.remunerationTypeService.getAll()
       .pipe(take(1))
       .subscribe((data) => {
         this.remunerationType$ = of(data.content);
       });
+  }
+
+  getAllRemunetarion() {
+    this.remunerationService.getAll()
+      .pipe(take(1))
+      .subscribe((data) => {
+        this.remuneration$ = of(data.content);
+      });
+  }
+  compareFn(c1:any, c2:any): boolean {  
+    return c1 && c2 ? c1.id === c2.id : c1 === c2; 
   }
 
 }
