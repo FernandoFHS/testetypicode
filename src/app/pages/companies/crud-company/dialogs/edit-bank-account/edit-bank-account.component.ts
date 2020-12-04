@@ -101,7 +101,8 @@ export class EditBankAccountComponent implements OnInit {
   }
 
   editAccount(form) {
-    let index = this.data;
+    let localIndex = this.data.localIndex;
+
 
     let editableItem = {
       bank: this.accountFormGroup.get('bank').value,
@@ -118,8 +119,8 @@ export class EditBankAccountComponent implements OnInit {
     console.log(bankValidator);
 
     if (typeof bankValidator === 'object') {
-      if (index > -1) {
-        Object.assign(this.bankAccount[index], editableItem);
+      if (localIndex > -1) {
+        Object.assign(this.bankAccount[localIndex], editableItem);
         localStorage.setItem('bankAccount', JSON.stringify(this.bankAccount));
         this.dialogRef.close(this.bankAccount);
       } else {

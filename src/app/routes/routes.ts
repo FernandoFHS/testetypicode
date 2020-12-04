@@ -157,11 +157,11 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'initial/12',
+            redirectTo: 'initial/100800001',
             pathMatch: 'full'
           },
           {
-            path: 'initial/12',
+            path: 'initial/100800001',
             component: InitialPasswordTransactionComponent
           },
           {
