@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
+import { PasswordService } from 'src/app/services/password/password.service';
 
 @Component({
   selector: 'app-recover-password-after-validation',
@@ -13,7 +14,10 @@ export class RecoverPasswordAfterValidationComponent implements OnInit {
   hide1 = true;
   hide2 = true;
 
-  constructor(private _formBuilder: FormBuilder, private router: Router) {}
+  constructor(private _formBuilder: FormBuilder, 
+    private router: Router, 
+    private passwordService: PasswordService
+    ) {}
 
   ngOnInit(): void {
     this.validationRecoverPasswordForm = this._formBuilder.group(
@@ -28,7 +32,11 @@ export class RecoverPasswordAfterValidationComponent implements OnInit {
   }
 
   recoverValidatePassword(): void {
-    console.log('Uhul');
+    // let objectRecoverPassword = {
+    //   password:  this.validationRecoverPasswordForm.get('confirmNewPassword').value
+    // }
+
+    // this.passwordService.
   }
 
   navigateToRecoverPassword(): void {
