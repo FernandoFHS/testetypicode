@@ -48,10 +48,21 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Empresa Administradora</mat-label>
-            <input matInput placeholder="Empresa Administradora" formControlName="companyResponsibleName"  />
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-            <mat-icon matSuffix>admin_panel_settings</mat-icon>
+            <input type="text"
+                   placeholder="Empresa Administradora"
+                   aria-label="Number"
+                   matInput
+                   formControlName="companyResponsible"
+                   [matAutocomplete]="autocompany">
+            <mat-autocomplete #autocompany="matAutocomplete" [displayWith]="displayFnCompany">
+              <mat-option *ngFor="let option of filteredCompanies" [value]="option">
+                {{option.companyName}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="identificationFormGroup.get('companyResponsible').hasError('invalidAutoComplete')">Selecione uma empresa da lista</mat-error>
           </mat-form-field>
+          
+          
         </div>
 
         <mat-divider></mat-divider>
@@ -122,7 +133,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Razão Social</mat-label>
-            <input matInput placeholder="Razão Social" formControlName="companyName"  />
+            <input matInput placeholder="Razão Social" formControlName="companyName" #input (input)="input.value=$event.target.value.toUpperCase()" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>assignment</mat-icon>
           </mat-form-field>
@@ -180,13 +191,18 @@
 
             <mat-form-field appearance="outline">
               <mat-label>CNAE</mat-label>
-              <input matInput aria-label="Cnae" formControlName="cnae" [matAutocomplete]="auto" [formControl]="cnaeForm"
-                (blur)="getMccByCnae()">
+              <input 
+              matInput 
+              aria-label="Cnae" 
+              formControlName="cnae" 
+              [matAutocomplete]="auto"
+              (blur)="getMccByCnae()">
               <mat-autocomplete #auto="matAutocomplete"  [displayWith]="displayFn">
-                <mat-option *ngFor="let item of filteredCnaes | async" [value]="item">
+                <mat-option *ngFor="let item of filteredCnaes" [value]="item">
                   <span>{{item.description}}</span>
                 </mat-option>
               </mat-autocomplete>
+              <mat-error *ngIf="identificationFormGroup.get('cnae').hasError('invalidAutoComplete')">Selecione um cnae</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
@@ -201,8 +217,10 @@
         </div>
 
         <div class="group-actions-buttons">
+
           <core-back-button class="back-button" (click)="navigateToCompanyList()" color="accent" fxFlex>Voltar </core-back-button>
-          <core-next-button  class="back-button" (click)="saveForm(identificationFormGroup,'identificationFormGroup');checkValueBankAdress(false)" fxFlex>Avançar </core-next-button>
+
+          <core-next-button class="back-button" (click)="nextStep()" fxFlex>Avançar </core-next-button>
         </div>
 
       </form>

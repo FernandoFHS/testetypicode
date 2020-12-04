@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: "company-front"
-        image: "gcr.io/mobbuy-qa-microservices/company-front:0.0.7"
+        image: "gcr.io/mobbuy-qa-microservices/company-front:0.0.8"
 
 
 ---
