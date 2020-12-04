@@ -5,6 +5,7 @@ import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
 import { GeneralService } from 'src/app/services/general.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { PasswordService } from 'src/app/services/password/password.service';
 
 @Component({
   selector: 'app-recover-password-transaction',
@@ -41,12 +42,14 @@ export class RecoverPasswordTransactionComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private router: Router,
     private _notificationService: NotificationService,
-    private _generalService: GeneralService
+    private _generalService: GeneralService,
+    private passwordService: PasswordService
   ) { }
 
   ngOnInit(): void {
     this.recoverPasswordForm = this._formBuilder.group({
-      Password: ['', [Validators.required]],
+      email: ['', [Validators.required]],
+      password: ['', [Validators.required]],
     })
   }
 
@@ -54,11 +57,21 @@ export class RecoverPasswordTransactionComponent implements OnInit {
     this.router.navigate(['/password-transaction/initial/12'])
   }
 
-  submit(): void {
+  sendEmailToRecover(): void {
     if (this.recoverPasswordForm.valid) {
-    const message = 'Foi enviado para o seu e-mail cadastrado um link para redefinição de senha!';
+      
+      let objectSendEmail = {
+        email: this.recoverPasswordForm.get('email').value,
+        idCompany: 100800001,
+        password: this.recoverPasswordForm.get('password').value
+      }
+      const message = 'Foi enviado para o seu e-mail cadastrado um link para redefinição de senha!';
 
-    this._generalService.openOkDialog(message, () => {}, 'Link enviado');
+      this._generalService.openOkDialog(message, () => {}, 'Link enviado');
+
+      this.passwordService.alterPassword(objectSendEmail).subscribe((response) => {
+        console.log(response)
+      })
     }
   }
 

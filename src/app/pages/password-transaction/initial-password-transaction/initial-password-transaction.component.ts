@@ -15,8 +15,8 @@ export class InitialPasswordTransactionComponent implements OnInit {
   passwordForm: FormGroup;
   hide1 = true;
   hide2 = true;
-  hasPassword: boolean = true;
-  createPasswordForm:any;
+  hasPassword: boolean = false;
+  createPasswordForm: any;
 
   //RASCUNHOS PARA O FUTURO
 
@@ -54,6 +54,7 @@ export class InitialPasswordTransactionComponent implements OnInit {
 
 
     this.passwordForm = this._formBuilder.group({
+      documentNumberCompany: ['', [Validators.required]],
       password: ['', [Validators.required]],
       passwordconfirm: ['', [Validators.required]]
     }, {
@@ -85,15 +86,19 @@ export class InitialPasswordTransactionComponent implements OnInit {
   checkPassword() {
     this._passwordService.checkLoginPassword().subscribe((response: any) => {
       console.log(response);
+
+      if (response == null) {
+        this.hasPassword = true;
+      }   
     });
   }
 
   hasNotPasswordSubmit(){
     this.createPasswordForm = {
-      documentNumberCompany: "string",
-      idCompany: 2,
+      documentNumberCompany: this.passwordForm.get('documentNumberCompany').value,
+      idCompany: 100815773,
       localTransaction: "P",
-      passSale: this.passwordForm.get('password').value
+      passSale: this.passwordForm.get('passwordconfirm').value
     }
     this._passwordService.createPassword(this.createPasswordForm).subscribe((response:any) =>{
       console.log(response);
