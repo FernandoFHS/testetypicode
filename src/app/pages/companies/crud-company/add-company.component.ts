@@ -261,11 +261,11 @@ export class AddCompanyComponent implements OnInit {
     //   companyContact: this._formBuilder.array(this.phoneNumber$),
     // });
 
-    this.companyPartnerFormGroup = this._formBuilder.group({
+    // this.companyPartnerFormGroup = this._formBuilder.group({
 
-      companyPartner: this._formBuilder.array(this.partnerSource$),
+    //   companyPartner: this._formBuilder.array(this.partnerSource$),
 
-    });
+    // });
 
     // this.companyAdressFormGroup = this._formBuilder.group({
 
