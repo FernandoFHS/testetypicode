@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { DataTableService } from 'src/app/@core/components/data-table/data-table.service';
 import { ActionModel } from 'src/app/@core/models/action.model';
@@ -44,14 +44,18 @@ export class CompanyListComponent implements OnInit {
     private companyService: CompanyService,
     private router: Router,
     private _formBuilder: FormBuilder,
-    private dataTableService: DataTableService
+    private dataTableService: DataTableService,
+    private route: ActivatedRoute
   ) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit() {
-    this.loadForm();
+    const firstParam: string = this.route.snapshot.queryParamMap.get('idCompanyGroup');
+    console.log(firstParam); 
+     
+    this.loadForm();  
   }
 
   loadForm() {

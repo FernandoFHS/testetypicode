@@ -898,9 +898,9 @@
     </mat-step>
 
     <!--socio Step-->
-    <mat-step #partnerStep label="Sócio" state="partner" [stepControl]="partnerFormGroup">
+    <mat-step #partnerStep label="Sócio" state="partner" [stepControl]="companyPartnerFormGroup">
 
-      <form *ngIf="partnerFormGroup" [formGroup]="partnerFormGroup">
+      <form *ngIf="companyPartnerFormGroup" [formGroup]="companyPartnerFormGroup">
 
         <h3>Cadastro de sócios</h3>
 

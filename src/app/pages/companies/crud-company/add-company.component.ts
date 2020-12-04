@@ -85,7 +85,7 @@ export class AddCompanyComponent implements OnInit {
 
 
   cnaeForm = new FormControl();
-  isLinear = true;
+  isLinear = false;
   identificationFormGroup: FormGroup;
   adressFormGroup: FormGroup;
   conditionFormGroup: FormGroup;
