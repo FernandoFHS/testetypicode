@@ -531,7 +531,7 @@ export class AddCompanyComponent implements OnInit {
       externalBankAccount: this._formBuilder.array(this.apiBankAccount$),
     });
 
-    this.partnerFormGroup = this._formBuilder.group({
+    this.companyPartnerFormGroup = this._formBuilder.group({
       companyPartner: this._formBuilder.array(company.companyPartner),
     });
 
