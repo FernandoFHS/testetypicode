@@ -104,6 +104,8 @@ export class AddCompanyComponent implements OnInit {
   optionscompany: any;
   optionscnae: any;
 
+  dateformated:any;
+
 
   plus: any;
   pageType: PageTypeEnum;
@@ -288,6 +290,12 @@ export class AddCompanyComponent implements OnInit {
 
   }
 
+  first(v: string) {
+    console.log(v);
+    this.dateformated = v;
+    console.log()
+  }
+
   private loadAddModel() {
 
     this.addPage = true;
@@ -305,13 +313,13 @@ export class AddCompanyComponent implements OnInit {
       companyType: [this.identification?.companyType || '', Validators.required],
       situation: [this.identification?.situation || '', Validators.required],
       documentNumberCompany: [this.identification?.documentNumberCompany || '', Validators.required],
-      gpEstablishmentNumber: [parseInt(this.identification?.gpEstablishmentNumber) || '', Validators.required],
+      gpEstablishmentNumber: [parseInt(this.identification?.gpEstablishmentNumber) || ''],
       stateRegistration: [parseInt(this.identification?.stateRegistration) || '', Validators.required],
       companyName: [this.identification?.companyName || '', Validators.required],
       fancyName: [this.identification?.fancyName || '', Validators.required],
       companyShortName: [this.identification?.companyShortName || '', Validators.required],
       mcccode: [this.identification?.mcccode || '', Validators.required],
-      idDepartament: [parseInt(this.identification?.idDepartament) || '', Validators.required],
+      idDepartament: [parseInt(this.identification?.idDepartament) || ''],
       idCompanyOwner: [''],
       cnae: [this.identification?.cnae || '', Validators.required],
       idCnae: [this.identification?.idCnae || ''],
@@ -1326,7 +1334,6 @@ export class AddCompanyComponent implements OnInit {
     { text: 'Nome', value: 'partnerName' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
-    { text: 'Telefone', value: 'phone' },
     // { text: 'Ações', value: 'action' }
   ];
 
