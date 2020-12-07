@@ -42,7 +42,7 @@ export const routes: Routes = [
   },
   {
     path: 'password-recover-validation',
-    component: RecoverPasswordAfterValidationComponent          
+    component: RecoverPasswordAfterValidationComponent
   },
   {
     path: '',
@@ -170,7 +170,7 @@ export const routes: Routes = [
           },
           {
             path: 'recover',
-            component: RecoverPasswordTransactionComponent          
+            component: RecoverPasswordTransactionComponent
           },
         ],
       },

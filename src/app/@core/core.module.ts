@@ -30,7 +30,6 @@ import { RefuseButtonComponent } from './components/refuse-button/refuse-button.
 import { AcceptButtonComponent } from './components/accept-button/accept-button.component';
 import { ChangeButtonComponent } from './components/change-button/change-button.component';
 
-
 @NgModule({
   declarations: [
     ContainerComponent,
@@ -58,7 +57,7 @@ import { ChangeButtonComponent } from './components/change-button/change-button.
     RecoverButtonComponent,
     RefuseButtonComponent,
     AcceptButtonComponent,
-    ChangeButtonComponent
+    ChangeButtonComponent,
   ],
   imports: [
     BrowserModule,

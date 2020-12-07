@@ -5,7 +5,7 @@ export const environment = {
   baseUrlPassword:'http://password-maintenance.qa.appmobbuy.tech:8080/',
   production: false,
   api: {
-    url: 'http://localhost:8080',
+    url: 'https://mobbuy-monitoring.azurewebsites.net',
     mock: false
   },
   bff: {
@@ -13,6 +13,10 @@ export const environment = {
     url: 'http://company.qa.appmobbuy.tech:8080',
     url_2: 'http://register-plans.qa.appmobbuy.tech:8080',
     url_login: 'http://bffauthentication.qa.appmobbuy.tech:8080/users/login',
-    url_financial: 'http://bfffinancial.qa.appmobbuy.tech:8080'
+    url_financial: 'http://transaction.qa.appmobbuy.tech'
+  },
+  login_mobbuy: {
+    email: 'angular@mobbuy.com.br',
+    password: '4321'
   }
 };

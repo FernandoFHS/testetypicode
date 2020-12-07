@@ -112,7 +112,7 @@ export const customCurrencyMaskConfig = {
     RecoverPasswordTransactionComponent,
     ChangePasswordTransactionComponent,
     RecoverPasswordAfterValidationComponent,
-    FuturePostingsComponent
+    FuturePostingsComponent,
   ],
   imports: [
     BrowserModule,

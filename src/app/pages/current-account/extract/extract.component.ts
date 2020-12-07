@@ -7,11 +7,14 @@ import { CurrentAccountFilterTypeEnum } from 'src/app/enums/current-account-filt
 import { CurrentAccountPageTypeEnum } from 'src/app/enums/current-account-page-type.enum';
 import { CurrentAccountFilterDaysModel } from 'src/app/models/current-account-filter-days.model';
 import { GetExtractFilterModel } from 'src/app/models/filters/get-extract.filter.model';
+import { AuthRequestModel } from 'src/app/models/requests/auth.request.model';
 import { BalanceResponseModel } from 'src/app/models/responses/balance.response.model';
 import { ExtractResponseModel } from 'src/app/models/responses/extract.response.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { CurrentAccountService } from 'src/app/services/current-account.service';
 import { GeneralService } from 'src/app/services/general.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-extract',
@@ -27,7 +30,7 @@ export class ExtractComponent implements OnInit {
     },
     items: [
       { title: 'Home', route: '' },
-      { title: 'Conta Corrente', route: ''}
+      { title: 'Conta Corrente', route: '' }
     ]
   };
 
@@ -66,7 +69,8 @@ export class ExtractComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
     private _currentAccountService: CurrentAccountService,
-    private _notificationService: NotificationService
+    private _notificationService: NotificationService,
+    private _authService: AuthService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -86,18 +90,27 @@ export class ExtractComponent implements OnInit {
   }
 
   private _loadModel(): void {
-    const filter: GetExtractFilterModel = {
-      dateTransactionFinish: '',
-      dateTransactionStart: '',
-      idCompany: this.idCompany.toString()
+    const loginRequest: AuthRequestModel = {
+      email: environment.login_mobbuy.email,
+      password: environment.login_mobbuy.password
     };
 
-    this._currentAccountService.getExtractByFilter(filter, 0, 15).subscribe((data) => {
-      this.model = data;
-    });
+    this._authService.login(loginRequest).then(() => {
+      const filter: GetExtractFilterModel = {
+        dateTransactionFinish: '',
+        dateTransactionStart: '',
+        idCompany: this.idCompany.toString()
+      };
 
-    this._currentAccountService.getBalanceByIdCompany(this.idCompany).subscribe((data) => {
-      this.balance = data;
+      this._currentAccountService.getExtractByFilter(filter, 0, 15).subscribe((data) => {
+        this.model = data;
+      });
+
+      this._currentAccountService.getBalanceByIdCompany(this.idCompany).subscribe((data) => {
+        this.balance = data;
+      });
+    }, (error) => {
+      this._notificationService.error(error);
     });
   }
 
