@@ -92,7 +92,8 @@ export class DataTableComponent implements AfterViewInit, OnInit {
         this.idItems,
         this.sort.direction,
         this.paginator.pageIndex,
-        10
+        10,
+        2
       ).subscribe((data) => {
         this.isLoadingResults = false;
         this.resultsLength = data['totalElements'];
@@ -104,7 +105,8 @@ export class DataTableComponent implements AfterViewInit, OnInit {
       this.idItems,
       this.sort.direction,
       this.paginator.pageIndex,
-      10
+      10,
+      2
     ).subscribe((data) => {
       this.isLoadingResults = false;
       this.resultsLength = data['totalElements'];

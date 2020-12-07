@@ -12,6 +12,7 @@ import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { HeaderModelCompany } from 'src/app/@core/models/header.model';
 import { CompanyContent } from 'src/app/models/Company';
 import { CompanyService } from 'src/app/services/company.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { DeleteProfileComponent } from '../../delete-profile/delete-profile.component';
 
 @Component({
@@ -28,6 +29,7 @@ export class CompanyListComponent implements OnInit {
   isLoadingResults = true;
   cardFilterOpened = false;
   companyFormGroup: FormGroup;
+  idCompanyGroup:any;
 
   breadcrumbModel: BreadcrumbModel = {
     active: {
@@ -45,15 +47,17 @@ export class CompanyListComponent implements OnInit {
     private router: Router,
     private _formBuilder: FormBuilder,
     private dataTableService: DataTableService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private localStorageService: LocalStorageService,
   ) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit() {
-    const firstParam: string = this.route.snapshot.queryParamMap.get('idCompanyGroup');
-    console.log(firstParam); 
+    this.idCompanyGroup = this.route.snapshot.queryParamMap.get('idCompanyGroup');
+    this.localStorageService.set('idCompanyGroup',this.idCompanyGroup);
+    console.log(this.idCompanyGroup); 
      
     this.loadForm();  
   }
@@ -79,7 +83,9 @@ export class CompanyListComponent implements OnInit {
   }
 
   loadData = (sort: string, order: string, page: number, size: number) => {
-    return this.companyService.getAllCompanies(sort, order, page, size);
+
+    return this.companyService.getAllCompanies(sort, order, page, size, this.idCompanyGroup);
+    
   };
 
   loadDataByFilter = (sort: string, order: string, page: number, size: number) => {
