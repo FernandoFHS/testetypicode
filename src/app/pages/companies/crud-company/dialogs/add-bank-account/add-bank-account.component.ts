@@ -116,7 +116,6 @@ export class AddBankAccountComponent implements OnInit {
     bankAccountArray.push(form.value);
 
     let bankValidator = form.value.bank;
-    console.log(bankValidator);
 
     if (typeof bankValidator === 'object') {  
 

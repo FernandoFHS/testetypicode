@@ -21,23 +21,23 @@ export class CompanyService {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   /** CRUD METHODS */
-  getAllCompanies(sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {
+  getAllCompanies(sort: string, order: string, page: number, size: number,companyGroup: number): Observable<{ content: CompanyContent[] }> {
     const requestUrl =
-      `${this.API_URL}company?sort=${sort},${order}&page=${page}&size=${size}`;
+      `${this.API_URL}company/companyGroup?sort=${sort},${order}&page=${page}&size=${size}&idCompanyGroup=${companyGroup}`;
 
     return this.httpClient.get<{ content: CompanyContent[] }>(requestUrl).pipe(
       map((data) => this._mapCompanyResponse(data)),
     );
   }
 
-  getCompaniesByName(name: string, page: number, size: number) {
+  getCompaniesByName(name: string, page: number, size: number,companyGroup: number) {
     const requestUrl =
-      `${this.API_URL}company/filters?companyName=${name}&page=${page}&size=${size}`;
+      `${this.API_URL}company/filters?companyName=${name}&page=${page}&size=${size}&idCompanyGroup=${companyGroup}`;
 
     return this.httpClient.get<CompanyContent[]>(requestUrl);
   }
   getAll(): Observable<RootObject> {  
-    return this.httpClient.get<RootObject>(`${this.API_URL}company`);
+    return this.httpClient.get<RootObject>(`${this.API_URL}company/companyGroup`);
   }
 
   getAllCompaniesByFilter(filter: { idCompany: number, documentNumberCompany: number, companyName: string }, sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {
