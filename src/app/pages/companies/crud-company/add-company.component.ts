@@ -135,6 +135,7 @@ export class AddCompanyComponent implements OnInit {
 
   addPage: boolean;
   companyValidatorError = false;
+  idCompanyGroup:any;
 
   referencePointNullValue: boolean;
   accreditationDateNullValue: boolean;
@@ -232,7 +233,7 @@ export class AddCompanyComponent implements OnInit {
     // }
 
 
-
+    this.idCompanyGroup =this.localStorageService.get('idCompanyGroup');
     this.isLoading = true;
 
     this.loadParams();
@@ -288,12 +289,6 @@ export class AddCompanyComponent implements OnInit {
     this.gelAllCnaes();
     this.getCompanyLevel();
 
-  }
-
-  first(v: string) {
-    console.log(v);
-    this.dateformated = v;
-    console.log()
   }
 
   private loadAddModel() {
@@ -924,8 +919,12 @@ export class AddCompanyComponent implements OnInit {
       gpReturnDate: "string",
       gpSendDate: this.complementFormGroup.get('gpSendDate').value,
       idCompany: 0,
-      idCompanyGroup: 1008,
-      idCompanyOwner: this.identificationFormGroup.get('idCompanyOwner').value,
+      companyGroup: {
+        idCompany:parseInt(this.idCompanyGroup)
+      },
+      companyOwner: {
+        idCompany:this.identificationFormGroup.get('idCompanyOwner').value,
+      },
       idDepartament: this.identificationFormGroup.get('idDepartament').value,
       idPlan: 0,
       idTerminal: this.complementFormGroup.get('idTerminal').value,
@@ -970,55 +969,29 @@ export class AddCompanyComponent implements OnInit {
         }
       },
       companyPartner: this.localStorageService.get('partnerFormGroup'),
-      // companyPartner: [
-      //   {
-      //     idCompanyPartner: 0,
-      //     idCompany: 0,
-      //     partnerSequentialNumber: 1,
-      //     partnerName: this.partnerFormGroup.get('partnerName').value,
-      //     cpf: this.partnerFormGroup.get('cpf').value,
-      //     dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
-      //     partnerAddress: [
-      //       {
-      //         idPartnerAddress: 0,
-      //         number: this.partnerFormGroup.get('number').value,
-      //         complement: this.partnerFormGroup.get('complement').value,
-      //         street: {
-      //           idStreet: 0,
-      //           zipCode: this.partnerFormGroup.get('zipCode').value,
-      //           streetName: this.partnerFormGroup.get('streetName').value,
-      //           city: {
-      //             idCity: 0,
-      //             cityName: this.partnerFormGroup.get('cityName').value
-      //           },
-      //           neighborhood: {
-      //             idNeighborhood: 0,
-      //             neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value
-      //           },
-      //           state: {
-      //             idState: 0,
-      //             uf: this.partnerFormGroup.get('uf').value,
-      //           }
-      //         }
-      //       }
-      //     ],
-      //     partnerContact: [
-      //       {
-      //         idPartnerContact: 0,
-      //         phone: this.partnerFormGroup.get('phone').value
-      //       }
-      //     ]
-      //   }
-      // ]
+
     }
     console.log(form);
 
     this.companyService.create(form).subscribe((response: any) => {
       console.log(response);
       this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
-      this.router.navigate(['/companies/list']);
+      this.router.navigate(['/companies/list'],{ queryParams: {idCompanyGroup :this.idCompanyGroup}});
+      this.deleteLocalStorage();
     });
 
+  }
+
+  deleteLocalStorage(){
+    this.localStorageService.deleteItem('conditionFormGroup');
+    this.localStorageService.deleteItem('phoneNumber');
+    this.localStorageService.deleteItem('bankAccount');
+    this.localStorageService.deleteItem('complementFormGroup');
+    this.localStorageService.deleteItem('partnerFormGroup');
+    this.localStorageService.deleteItem('identificationFormGroup');
+    this.localStorageService.deleteItem('cep');
+    this.localStorageService.deleteItem('editPartner');
+    this.localStorageService.deleteItem('adressFormGroup');
   }
 
   getCompanyLevel() {
@@ -1276,7 +1249,7 @@ export class AddCompanyComponent implements OnInit {
       this.companyService.update(editForm).subscribe((response: any) => {
         console.log(response);
         this.dataService.openSnackBar('Empresa alterado com sucesso', 'X');
-        this.router.navigate(['/companies/list']);
+        this.router.navigate(['/companies/list'],{ queryParams: {idCompanyGroup :this.idCompanyGroup}});
       });
     })
 
@@ -1457,7 +1430,7 @@ export class AddCompanyComponent implements OnInit {
 
   //Navigation Functions
   navigateToCompanyList() {
-    this.router.navigate(['/companies/list'])
+    this.router.navigate(["/companies/list"],{ queryParams: {idCompanyGroup :this.idCompanyGroup}})
   }
 
   //submit form

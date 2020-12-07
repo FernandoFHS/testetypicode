@@ -22,6 +22,13 @@ export class LocalStorageService {
       console.error('Error deleting to localStorage', e);
     }
   }
+  clear(): void{
+    try {
+      localStorage.clear();
+    } catch (e) {
+      console.error('Error deleting to localStorage', e);
+    }
+  }
 
   get(key: string) {
     try {
