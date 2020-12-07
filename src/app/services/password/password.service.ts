@@ -7,23 +7,28 @@ import { environment } from 'src/environments/environment';
 })
 export class PasswordService {
 
-  private readonly url = `${environment.baseUrlPassword}`
+  private readonly url = `${environment.baseUrlPassword}`;
+  private readonly recoverPasswordUrl = `${environment.baseUrlRecoverPassword}`
 
   constructor(private http: HttpClient) { } 
 
-  checkPassword(password){
+  checkPassword(password) {
     return this.http.get(`${this.url}registrationPass/checkExistence`,password)
   }
 
-  checkLoginPassword(){
-    return this.http.get(`${this.url}registrationPass/checkExistence?idCompany=${12}`)
+  checkLoginPassword() {
+    return this.http.get(`${this.url}registrationPass/checkExistence?idCompany=${100815773}`)
   }
 
-  alterPassword(password){
+  alterPassword(password) {
     return this.http.put(`${this.url}registrationPass`,password)
   }
   
-  createPassword(password){
+  createPassword(password) {
     return this.http.post(`${this.url}registrationPass`,password)
   }
+
+  // recoverPassword() {
+  //   return this.http.put(`${this.url}registrationPass/${this.recoverPasswordUrl}?idCompany=${100815773}`)
+  // }
 }

@@ -157,11 +157,11 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'initial/12',
+            redirectTo: 'initial/100800001',
             pathMatch: 'full'
           },
           {
-            path: 'initial/12',
+            path: 'initial/100800001',
             component: InitialPasswordTransactionComponent
           },
           {
@@ -227,8 +227,12 @@ export const routes: Routes = [
             component: AddAgreementComponent
           },
           {
-            path: 'edit/:index',
-            component: EditAgreementComponent
+            path: 'edit/:id',
+            component: AddAgreementComponent
+          },
+          {
+            path: 'view/:id',
+            component: AddAgreementComponent
           }
         ]
       },

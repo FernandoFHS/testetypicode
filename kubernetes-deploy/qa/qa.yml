@@ -2,23 +2,23 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  name: "company-front"
-  namespace: "company-front"
+  name: "angular"
+  namespace: "angular"
   labels:
-    app: "company-front"
+    app: "angular"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "company-front"
+      app: "angular"
   template:
     metadata:
       labels:
-        app: "company-front"
+        app: "angular"
     spec:
       containers:
-      - name: "company-front"
-        image: "gcr.io/mobbuy-qa-microservices/company-front:0.0.7"
+      - name: "angular"
+        image: "gcr.io/mobbuy-qa-microservices/angular:0.0.1"
 
 
 ---
@@ -26,11 +26,11 @@ apiVersion: "v1"
 kind: "Service"
 metadata:
   annotations:
-        external-dns.alpha.kubernetes.io/hostname: "company-front.qa.appmobbuy.tech"
+        external-dns.alpha.kubernetes.io/hostname: "angular.qa.appmobbuy.tech"
   labels:
-    app: "company-front"
-  name: "company-front"
-  namespace: "company-front"
+    app: "angular"
+  name: "angular"
+  namespace: "angular"
 spec:
   externalTrafficPolicy: "Local"
   ports:
@@ -39,5 +39,5 @@ spec:
     protocol: "TCP"
     targetPort: 80
   selector:
-   app: "company-front"
+   app: "angular"
   type: "LoadBalancer"

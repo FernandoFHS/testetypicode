@@ -49,7 +49,7 @@ export class ChangePasswordTransactionComponent implements OnInit {
       documentNumberCompany: 'string',
       idCompany: 2,
       localTransaction: 'P',
-      passSale: this.changePasswordForm.get('password').value,
+      passSale: this.changePasswordForm.get('actualPassword').value,
     };
 
     if (this.changePasswordForm.valid) {

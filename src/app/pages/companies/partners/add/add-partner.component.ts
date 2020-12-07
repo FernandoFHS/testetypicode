@@ -172,7 +172,7 @@ export class AddPartnerComponent implements OnInit {
       try {
         this.activatedRoute.params.subscribe((params) => {
           const index = params['index'];
-
+          console.log(index);
           if (typeof (index) == 'string') {
 
             const partnerArray = this.localStorageService.get('editPartner');
@@ -332,7 +332,7 @@ export class AddPartnerComponent implements OnInit {
     } else {
       console.log(editableItem);
     }
-    this.router.navigate(['/companies/add']);
+    this.router.navigate(['/companies/edit/']);
   }
 
  

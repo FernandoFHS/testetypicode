@@ -38,10 +38,12 @@ import { Observable, of } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { SimpleDataTableService } from 'src/app/@core/components/simple-data-table/simple-data-table.service';
 import { CompanyService } from '../../../services/company.service';
+import { CompanyByLevelService } from '../../../services/company/company-by-level.service';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { CompanyContent } from 'src/app/models/Company';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 import { PageTypeEnum } from 'src/app/enums/page-type.enum';
+import { autoCompleteValidator } from 'src/app/app.validators';
 
 @Component({
   selector: 'app-add-company',
@@ -94,9 +96,15 @@ export class AddCompanyComponent implements OnInit {
   bankingFormGroup: FormGroup;
   companyPartnerFormGroup: FormGroup;
   companyAdressFormGroup: FormGroup;
+  
 
   endereco: any;
   formulariocompleto: any;
+
+  optionscompany: any;
+  optionscnae: any;
+
+  dateformated:any;
 
 
   plus: any;
@@ -126,6 +134,7 @@ export class AddCompanyComponent implements OnInit {
   apiPhoneNumber$: any = []
 
   addPage: boolean;
+  companyValidatorError = false;
 
   referencePointNullValue: boolean;
   accreditationDateNullValue: boolean;
@@ -138,10 +147,12 @@ export class AddCompanyComponent implements OnInit {
   testesocio: any = this.localStorageService.get('partnerFormGroup');
 
   mcc: any;
+  companySelect: any;
 
   cnae: Array<Cnae>;
   cnae$: Observable<Array<Cnae>>;
-  filteredCnaes: Observable<Cnae[]>;
+  filteredCnaes: Observable<any[]>;
+  filteredCompanies: Observable<any[]>;
 
   addBreadcrumbModel: BreadcrumbModel = {
     active: {
@@ -189,7 +200,8 @@ export class AddCompanyComponent implements OnInit {
     private route: ActivatedRoute,
     private localStorageService: LocalStorageService,
     public phoneService: SimpleDataTableService,
-    public changeDetectorRefs: ChangeDetectorRef
+    public changeDetectorRefs: ChangeDetectorRef,
+    public CompanyByLevelService: CompanyByLevelService
   ) { }
 
   private _filterCnaes(value: string): Cnae[] {
@@ -219,6 +231,8 @@ export class AddCompanyComponent implements OnInit {
     //   this.loadEditModel(id);
     // }
 
+
+
     this.isLoading = true;
 
     this.loadParams();
@@ -245,15 +259,15 @@ export class AddCompanyComponent implements OnInit {
       this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
     }
 
-    this.contactFormGroup = this._formBuilder.group({
-      companyContact: this._formBuilder.array(this.phoneNumber$),
-    });
+    // this.contactFormGroup = this._formBuilder.group({
+    //   companyContact: this._formBuilder.array(this.phoneNumber$),
+    // });
 
-    this.companyPartnerFormGroup = this._formBuilder.group({
+    // this.companyPartnerFormGroup = this._formBuilder.group({
 
-      companyPartner: this._formBuilder.array(this.partnerSource$),
+    //   companyPartner: this._formBuilder.array(this.partnerSource$),
 
-    });
+    // });
 
     // this.companyAdressFormGroup = this._formBuilder.group({
 
@@ -261,53 +275,25 @@ export class AddCompanyComponent implements OnInit {
 
     // });
 
-    this.contactFormGroup = this._formBuilder.group({
-      companyContact: this._formBuilder.array(this.phoneNumber$),
-    });
+    // this.contactFormGroup = this._formBuilder.group({
+    //   companyContact: this._formBuilder.array(this.isPageEdit() ? this.apiPhoneNumber$ : this.phoneNumber$),
+    // });
 
-    this.bankingFormGroup = this._formBuilder.group({
-      externalBankAccount: this._formBuilder.array(this.bankAccount$),
-    });
+    // this.bankingFormGroup = this._formBuilder.group({
+    //   externalBankAccount: this._formBuilder.array(this.isPageEdit() ? this.apiBankAccount$ : this.bankAccount$),
+    // });
+
+    console.log(this.bankingFormGroup);
 
     this.gelAllCnaes();
+    this.getCompanyLevel();
 
-    this.plus = {
-      antecipationTaxPercent: 0,
-      anticipationByAssignmentIndicator: true,
-      automaticAnticipationIndicator: "string",
-      beneficiaryApartBankAddress: "string",
-      beneficiaryOperationType: "string",
-      beneficiaryTypeAcount: "string",
-      companyLevel: [
-        {
-          description: "string",
-          level: 0
-        }
-      ],
-      companyStatus: 0,
-      equipmentIdentifier: 0,
-      gpReturnDate: "string",
-      // idCompanyOwner:1008,
-      idCompanyLevelItem: 1,
-      idPlan: 0,
-      inclusionRegistrationDateTime: "string",
-      mcccode: 0,
-      orderType: 0,
-      posBillingTypeRental: "string",
-      posChargeAmountRental: 0,
-      posPercentageRateValue: 0,
-      recordChangeDateTime: "string",
-      referentialTransactionAmount: 0,
-      rentalExemptionDays: 0,
-      searchNickname: "string",
-      shopping: "string",
-      tedBillingIdentifier: "string",
-      tradingPartnerCode: 0,
-      tradingPartnerParticipationPercent: 0,
-      userChangeCode: "string",
-      userInclusionCode: "string"
-    };
+  }
 
+  first(v: string) {
+    console.log(v);
+    this.dateformated = v;
+    console.log()
   }
 
   private loadAddModel() {
@@ -323,21 +309,25 @@ export class AddCompanyComponent implements OnInit {
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
       companyResponsibleName: [this.identification?.companyResponsibleName || ''],
+      companyResponsible: [this.identification?.companyResponsible || ''],
       companyType: [this.identification?.companyType || '', Validators.required],
       situation: [this.identification?.situation || '', Validators.required],
       documentNumberCompany: [this.identification?.documentNumberCompany || '', Validators.required],
-      gpEstablishmentNumber: [parseInt(this.identification?.gpEstablishmentNumber) || '', Validators.required],
+      gpEstablishmentNumber: [parseInt(this.identification?.gpEstablishmentNumber) || ''],
       stateRegistration: [parseInt(this.identification?.stateRegistration) || '', Validators.required],
       companyName: [this.identification?.companyName || '', Validators.required],
       fancyName: [this.identification?.fancyName || '', Validators.required],
       companyShortName: [this.identification?.companyShortName || '', Validators.required],
       mcccode: [this.identification?.mcccode || '', Validators.required],
-      idDepartament: [parseInt(this.identification?.idDepartament) || '', Validators.required],
+      idDepartament: [parseInt(this.identification?.idDepartament) || ''],
+      idCompanyOwner: [''],
       cnae: [this.identification?.cnae || '', Validators.required],
       idCnae: [this.identification?.idCnae || ''],
       businessActivity: [this.identification?.businessActivity || '', Validators.required],
       openingDate: [this.identification?.openingDate || '', Validators.required]
-    });
+    },
+      { validator: autoCompleteValidator('companyResponsible')});
+
     this.adressFormGroup = this._formBuilder.group({
       streetName: [this.adress?.streetName || '', Validators.required],
       number: [this.adress?.number || '', Validators.required],
@@ -364,7 +354,7 @@ export class AddCompanyComponent implements OnInit {
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || '', Validators.required],
       transactionAmount: [this.condition?.transactionAmount || '', Validators.required],
       tedAmount: [this.condition?.tedAmount || '', Validators.required],
-      referentialTransacionAmount: [this.condition?.referentialTransacionAmount || '', Validators.required],
+      referentialTransactionAmount: [this.condition?.referentialTransactionAmount || '', Validators.required],
       anticipationFee: [this.condition?.anticipationFee || '', Validators.required],
       ignoreLiberationAJManual: [this.condition?.ignoreLiberationAJManual || '', Validators.required],
       ajtype: [this.condition?.ajtype || '', Validators.required],
@@ -374,7 +364,7 @@ export class AddCompanyComponent implements OnInit {
       beneficiaryDocumentNumber: [this.condition?.beneficiaryDocumentNumber || '', Validators.required],
     });
     this.complementFormGroup = this._formBuilder.group({
-      openingHours: [parseInt(this.complement?.openingHours) || '', Validators.required],
+      openingHours: [this.complement?.openingHours || '', Validators.required],
       ecommerceURL: [this.complement?.ecommerceURL || '', Validators.required],
       estUrl: [this.complement?.estUrl || '', Validators.required],
       email: [this.complement?.email || '', Validators.required],
@@ -411,12 +401,12 @@ export class AddCompanyComponent implements OnInit {
     });
 
 
-    this.dataService.refreshTable().subscribe(() => {
-      this.dataSource = this.phoneNumber$;
-      //this.loadData
-    });
-    //this.loadData
-    this.dataSource = this.phoneNumber$;
+    // this.dataService.refreshTable().subscribe(() => {
+    //   this.dataSource = this.phoneNumber$;
+    //   //this.loadData
+    // });
+    // //this.loadData
+    // this.dataSource = this.phoneNumber$;
     this.gelAllCnaes();
 
     if (this.adress != undefined) {
@@ -444,7 +434,7 @@ export class AddCompanyComponent implements OnInit {
       this.changeDetectorRefs.detectChanges();
       console.log(company)
 
-      this.loadEditForm();
+      this.loadEditForm(company);
       this.editValues(company);
     });
   }
@@ -464,10 +454,11 @@ export class AddCompanyComponent implements OnInit {
     });
   }
 
-  private loadEditForm() {
+  private loadEditForm(company) {
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
       companyResponsibleName: [this.identification?.companyResponsibleName || ''],
+      companyResponsible: [this.identification?.companyResponsible || ''],
       companyType: [this.identification?.companyType || ''],
       situation: [this.identification?.situation || ''],
       documentNumberCompany: [this.identification?.documentNumberCompany || ''],
@@ -478,11 +469,13 @@ export class AddCompanyComponent implements OnInit {
       companyShortName: [this.identification?.companyShortName || ''],
       mcccode: [this.identification?.mcccode || ''],
       idDepartament: [this.identification?.idDepartament || ''],
+      idCompanyOwner: [''],
       cnae: [this.identification?.cnae || ''],
       idCnae: [this.identification?.idCnae || ''],
       businessActivity: [this.identification?.businessActivity || ''],
-      openingDate: [this.identification?.openingDate || '']
+      openingDate: [this.identification?.openingDate || ''],
     });
+    console.log(this.id)
     this.adressFormGroup = this._formBuilder.group({
       streetName: [this.adress?.streetName || ''],
       number: [this.adress?.number || ''],
@@ -509,7 +502,7 @@ export class AddCompanyComponent implements OnInit {
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || ''],
       transactionAmount: [this.condition?.transactionAmount || ''],
       tedAmount: [this.condition?.tedAmount || ''],
-      referentialTransacionAmount: [this.condition?.referentialTransacionAmount || ''],
+      referentialTransactionAmount: [this.condition?.referentialTransactionAmount || ''],
       anticipationFee: [this.condition?.anticipationFee || ''],
       ignoreLiberationAJManual: [this.condition?.ignoreLiberationAJManual || ''],
       ajtype: [this.condition?.ajtype || ''],
@@ -518,7 +511,7 @@ export class AddCompanyComponent implements OnInit {
       beneficiaryDocumentNumber: [this.condition?.beneficiaryDocumentNumber || ''],
     });
     this.complementFormGroup = this._formBuilder.group({
-      openingHours: [parseInt(this.complement?.openingHours) || ''],
+      openingHours: [this.complement?.openingHours || ''],
       ecommerceURL: [this.complement?.ecommerceURL || ''],
       estUrl: [this.complement?.estUrl || ''],
       email: [this.complement?.email || ''],
@@ -533,8 +526,25 @@ export class AddCompanyComponent implements OnInit {
       seRegistrationDate: [this.complement?.seRegistrationDate || ''],
       discreditationDate: [this.complement?.discreditationDate || '']
     });
-  }
 
+    this.companyAdressFormGroup = this._formBuilder.group({
+      companyAddress: this._formBuilder.array(company.companyAddress),
+    });
+
+    this.contactFormGroup = this._formBuilder.group({
+      companyContact: this._formBuilder.array(this.apiPhoneNumber$),
+    });
+
+    this.bankingFormGroup = this._formBuilder.group({
+      externalBankAccount: this._formBuilder.array(this.apiBankAccount$),
+    });
+
+    this.companyPartnerFormGroup = this._formBuilder.group({
+      companyPartner: this._formBuilder.array(company.companyPartner),
+    });
+
+    console.log(this.bankingFormGroup);
+  }
   private loadViewForm() {
     this.identificationFormGroup = this._formBuilder.group({
       registerTarget: [{ value: 'Estabelecimento', disabled: true }],
@@ -580,7 +590,7 @@ export class AddCompanyComponent implements OnInit {
       automaticCreditIndicator: [{ value: this.condition?.automaticCreditIndicator || '', disabled: true }],
       transactionAmount: [{ value: this.condition?.transactionAmount || '', disabled: true }],
       tedAmount: [{ value: this.condition?.tedAmount || '', disabled: true }],
-      referentialTransacionAmount: [{ value: this.condition?.referentialTransacionAmount || '', disabled: true }],
+      referentialTransactionAmount: [{ value: this.condition?.referentialTransactionAmount || '', disabled: true }],
       anticipationFee: [{ value: this.condition?.anticipationFee || '', disabled: true }],
       ignoreLiberationAJManual: [{ value: this.condition?.ignoreLiberationAJManual || '', disabled: true }],
       ajtype: [{ value: this.condition?.ajtype || '', disabled: true }],
@@ -718,10 +728,10 @@ export class AddCompanyComponent implements OnInit {
       console.log(company.companyAddress[0])
     }
     this.conditionFormGroup.patchValue({
-      automaticCreditIndicator: company.automaticAnticipationIndicator,
+      automaticCreditIndicator: company.automaticCreditIndicator,
       transactionAmount: company.transactionAmount,
       tedAmount: company.tedAmount,
-      referentialTransacionAmount: company.referentialTransactionAmount,
+      referentialTransactionAmount: company.referentialTransactionAmount,
       anticipationFee: company.anticipationFee,
       ignoreLiberationAJManual: company.ignoreLiberationAJManual,
       ajtype: company.ajtype,
@@ -813,9 +823,9 @@ export class AddCompanyComponent implements OnInit {
   }
 
   createCompany() {
- 
+
     const form = {
-      accreditationDate:this.complementFormGroup.get('accreditationDate').value,
+      accreditationDate: this.complementFormGroup.get('accreditationDate').value,
       ajtype: this.conditionFormGroup.get('ajtype').value,
       antecipationTaxPercent: 0,
       anticipationByAssignmentIndicator: true,
@@ -881,7 +891,7 @@ export class AddCompanyComponent implements OnInit {
         }
       ],
 
-      companyContact:this.localStorageService.get('phoneNumber'),
+      companyContact: this.localStorageService.get('phoneNumber'),
 
       companyLevel: [
         {
@@ -907,7 +917,7 @@ export class AddCompanyComponent implements OnInit {
       email: this.complementFormGroup.get('email').value,
       equipmentIdentifier: 0,
       estUrl: this.complementFormGroup.get('estUrl').value,
-      externalBankAccount:this.localStorageService.get('bankAccount'),
+      externalBankAccount: this.localStorageService.get('bankAccount'),
       fancyName: this.identificationFormGroup.get('fancyName').value,
       gpAffiliationDate: this.complementFormGroup.get('gpAffiliationDate').value,
       gpEstablishmentNumber: this.identificationFormGroup.get('gpEstablishmentNumber').value,
@@ -915,7 +925,7 @@ export class AddCompanyComponent implements OnInit {
       gpSendDate: this.complementFormGroup.get('gpSendDate').value,
       idCompany: 0,
       idCompanyGroup: 1008,
-      idCompanyOwner: 1008,
+      idCompanyOwner: this.identificationFormGroup.get('idCompanyOwner').value,
       idDepartament: this.identificationFormGroup.get('idDepartament').value,
       idPlan: 0,
       idTerminal: this.complementFormGroup.get('idTerminal').value,
@@ -932,7 +942,7 @@ export class AddCompanyComponent implements OnInit {
       posQuantity: this.complementFormGroup.get('posQuantity').value,
       recordChangeDateTime: "string",
       referencePoint: this.adressFormGroup.get('referencePoint').value,
-      referentialTransactionAmount: 0,
+      referentialTransactionAmount: this.conditionFormGroup.get('referentialTransactionAmount').value,
       registerCode: this.complementFormGroup.get('registerCode').value,
       registrationDate: this.complementFormGroup.get('registrationDate').value,
       rentalExemptionDays: 0,
@@ -1011,220 +1021,284 @@ export class AddCompanyComponent implements OnInit {
 
   }
 
-  updateCompany() {
-    const editForm = {
-      accreditationDate:this.complementFormGroup.get('accreditationDate').value,
-      ajtype: this.conditionFormGroup.get('ajtype').value,
-      antecipationTaxPercent: 0,
-      anticipationByAssignmentIndicator: true,
-      anticipationFee: this.conditionFormGroup.get('anticipationFee').value,
-      automaticAnticipationIndicator: "string",
-      automaticCreditIndicator: this.conditionFormGroup.get('automaticCreditIndicator').value,
-      beneficiaryApartBankAddress: "string",
-      beneficiaryDocumentNumber: this.conditionFormGroup.get('beneficiaryDocumentNumber').value,
-      beneficiaryName: this.conditionFormGroup.get('beneficiaryName').value,
-      beneficiaryOperationType: "string",
-      beneficiaryType: this.conditionFormGroup.get('beneficiaryType').value,
-      beneficiaryTypeAcount: "string",
-      businessActivity: this.identificationFormGroup.get('businessActivity').value,
-      companyAddress: [
-        {
-          complement: this.adressFormGroup.get('complement').value,
-          idCompany: this.id,
-          idCompanyAddress: 0,
-          maxDistanceDelivery: "string",
-          number: this.adressFormGroup.get('number').value,
-          street: {
-            city: {
-              cityName: this.adressFormGroup.get('cityName').value,
-              idCity: 0
-            },
-            idStreet: 0,
-            neighborhood: {
-              idNeighborhood: 0,
-              neighborhoodName: this.adressFormGroup.get('neighborhoodName').value,
-            },
-            state: {
-              idState: 0,
-              uf: this.adressFormGroup.get('uf').value,
-            },
-            streetName: this.adressFormGroup.get('streetName').value,
-            zipCode: this.adressFormGroup.get('zipCode').value,
-          },
-          type: "Comercial",
-        }, {
-          complement: this.adressFormGroup.get('subordinateComplementCtrl').value,
-          idCompany: this.id,
-          idCompanyAddress: 0,
-          maxDistanceDelivery: "string",
-          number: this.adressFormGroup.get('subordinateNumberCtrl').value,
-          street: {
-            city: {
-              cityName: this.adressFormGroup.get('subordinateCityCtrl').value,
-              idCity: 0
-            },
-            idStreet: 0,
-            neighborhood: {
-              idNeighborhood: 0,
-              neighborhoodName: this.adressFormGroup.get('subordinateNeighborhoodCtrl').value,
-            },
-            state: {
-              idState: 0,
-              uf: this.adressFormGroup.get('subordinateStateCtrl').value,
-            },
-            streetName: this.adressFormGroup.get('subordinateStreetCtrl').value,
-            zipCode: this.adressFormGroup.get('subordinateZipCode').value,
-          },
-          type: "Correspondência",
-        }
-      ],
+  getCompanyLevel() {
+    this.CompanyByLevelService.getByLevel()
+      // .pipe(take(1))
+      .subscribe((response) => {
+        this.optionscompany = response['content'];
 
-      companyContact:this.localStorageService.get('phoneNumber'),
-
-      companyLevel: [
-        {
-          description: "string",
-          idCompany: this.id,
-          idCompanyLevel: 0,
-          level: 0
-        }
-      ],
-      companyLevelItem: {
-        idCompanyLevel: 1,
-        description: "Subadquirente",
-        level: 30
-      },
-      companyName: this.identificationFormGroup.get('companyName').value,
-      companyResponsibleName: this.identificationFormGroup.get('companyResponsibleName').value,
-      companyShortName: this.identificationFormGroup.get('companyShortName').value,
-      companyStatus: 0,
-      companyType: this.identificationFormGroup.get('companyType').value,
-      discreditationDate: this.complementFormGroup.get('discreditationDate').value,
-      documentNumberCompany: this.identificationFormGroup.get('documentNumberCompany').value,
-      ecommerceURL: this.complementFormGroup.get('ecommerceURL').value,
-      email: this.complementFormGroup.get('email').value,
-      equipmentIdentifier: 0,
-      estUrl: this.complementFormGroup.get('estUrl').value,
-      externalBankAccount:this.localStorageService.get('bankAccount'),
-      fancyName: this.identificationFormGroup.get('fancyName').value,
-      gpAffiliationDate: this.complementFormGroup.get('gpAffiliationDate').value,
-      gpEstablishmentNumber: this.identificationFormGroup.get('gpEstablishmentNumber').value,
-      gpReturnDate: "string",
-      gpSendDate: this.complementFormGroup.get('gpSendDate').value,
-      idCompany: this.id,
-      idCompanyGroup: 1008,
-      idCompanyOwner: 1008,
-      idDepartament: this.identificationFormGroup.get('idDepartament').value,
-      idPlan: 0,
-      idTerminal: this.complementFormGroup.get('idTerminal').value,
-      ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
-      inclusionRegistrationDateTime: "string",
-      logicalNumber: this.complementFormGroup.get('logicalNumber').value,
-      mcccode: this.identificationFormGroup.get('mcccode').value,
-      openingDate: this.identificationFormGroup.get('openingDate').value,
-      openingHours: this.complementFormGroup.get('openingHours').value,
-      orderType: 0,
-      posBillingTypeRental: "string",
-      posChargeAmountRental: 0,
-      posPercentageRateValue: 0,
-      posQuantity: this.complementFormGroup.get('posQuantity').value,
-      recordChangeDateTime: "string",
-      referencePoint: this.adressFormGroup.get('referencePoint').value,
-      referentialTransactionAmount: 0,
-      registerCode: this.complementFormGroup.get('registerCode').value,
-      registrationDate: this.complementFormGroup.get('registrationDate').value,
-      rentalExemptionDays: 0,
-      seRegistrationDate: this.complementFormGroup.get('seRegistrationDate').value,
-      searchNickname: "string",
-      shopping: "string",
-      situation: this.identificationFormGroup.get('situation').value,
-      stateRegistration: this.identificationFormGroup.get('stateRegistration').value,
-      tedAmount: this.conditionFormGroup.get('tedAmount').value,
-      tedBillingIdentifier: "string",
-      tradingPartnerCode: 0,
-      tradingPartnerParticipationPercent: 0,
-      transactionAmount: this.conditionFormGroup.get('transactionAmount').value,
-      userChangeCode: "string",
-      userInclusionCode: "string",
-      cnae: {
-        code: "string",
-        descGroup: "string",
-        description: "string",
-        idCnae: this.identificationFormGroup.get('idCnae').value,
-        mcc: {
-          code: "string",
-          description: "string",
-          idMcc: this.identificationFormGroup.get('mcccode').value
-        }
-      },
-      companyPartner: [
-        {
-          idCompanyPartner: 0,
-          idCompany: this.id,
-          partnerSequentialNumber: 1,
-          partnerName: this.partnerFormGroup.get('partnerName').value,
-          cpf: this.partnerFormGroup.get('cpf').value,
-          dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
-          partnerAddress: [
-            {
-              idPartnerAddress: 0,
-              number: this.partnerFormGroup.get('number').value,
-              complement: this.partnerFormGroup.get('complement').value,
-              street: {
-                idStreet: 0,
-                zipCode: this.partnerFormGroup.get('zipCode').value,
-                streetName: this.partnerFormGroup.get('streetName').value,
-                city: {
-                  idCity: 0,
-                  cityName: this.partnerFormGroup.get('cityName').value
-                },
-                neighborhood: {
-                  idNeighborhood: 0,
-                  neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value
-                },
-                state: {
-                  idState: 0,
-                  uf: this.partnerFormGroup.get('uf').value,
-                }
-              }
+        this.identificationFormGroup.get('companyResponsible').valueChanges
+          .pipe(
+            startWith(''),
+          ).subscribe((value) => {
+            if (typeof (value) == 'string') {
+              this.filteredCompanies = this.optionscompany.filter((company) => {
+                return company.companyName.toLowerCase().includes(value.toLowerCase())
+              })
             }
-          ],
-          partnerContact: [
-            {
-              idPartnerContact: 0,
-              phone: this.partnerFormGroup.get('phone').value
-            }
-          ]
-        }
-      ]
-    }
-    console.log(editForm);
-
-    this.companyService.update(editForm).subscribe((response: any) => {
-      console.log(response);
-      this.dataService.openSnackBar('Empresa alterado com sucesso', 'X');
-      this.router.navigate(['/company-list/company']);
-    });
-
+          });
+      });
   }
-
-  //View
 
   gelAllCnaes() {
     this.cnaeService.getAllCnae()
       // .pipe(take(1))
       .subscribe((data) => {
         //console.log(data.content);
-        this.cnae$ = of(data.content);
+        // this.cnae$ = of(data.content);
+        this.optionscnae = data.content;
 
-        this.filteredCnaes = this.cnaeForm.valueChanges
+        this.identificationFormGroup.get('cnae').valueChanges
           .pipe(
             startWith(''),
-            map(cnae => this._filterCnaes(cnae))
-            //map(cnae => cnae ? this._filterCnaes(cnae) : this.cnae$.subscribe(cnaes => {return cnaes.slice()}))
-          );
+          ).subscribe((value) => {
+            if (typeof (value) == 'string') {
+              this.filteredCnaes = this.optionscnae.filter((cnae) => {
+                return cnae.description.toLowerCase().includes(value.toLowerCase())
+              })
+            }
+          });
       });
   }
+
+  nextStep() {
+
+    if (this.identificationFormGroup.valid) {
+      const selectedCompany = this.identificationFormGroup.get('companyResponsible');
+      this.identificationFormGroup.get('idCompanyOwner').setValue(selectedCompany?.value.idCompany);
+      this.identificationFormGroup.get('companyResponsibleName').setValue(selectedCompany?.value.companyName);
+      this.saveForm(this.identificationFormGroup, 'identificationFormGroup');
+      this.checkValueBankAdress(false)
+    }
+  }
+
+  updateCompany() {
+    this.companyService.readById(this.id).subscribe((company) => {
+
+      const externalBank = this.bankingFormGroup;
+      console.log(externalBank);  
+
+      const externalContact = this.contactFormGroup;
+      console.log(externalContact);
+
+      const externalAdress = this.companyAdressFormGroup;
+
+      const externalPartner = this.partnerFormGroup;
+
+      const editForm = {
+        idCompany: company.idCompany,
+        documentNumberCompany: this.identificationFormGroup.get('documentNumberCompany').value,
+        accreditationDate: this.complementFormGroup.get('accreditationDate').value,
+        ajtype: this.conditionFormGroup.get('ajtype').value,
+        antecipationTaxPercent: 0,
+        anticipationByAssignmentIndicator: true,
+        anticipationFee: this.conditionFormGroup.get('anticipationFee').value,
+        automaticAnticipationIndicator: "string",
+        automaticCreditIndicator: this.conditionFormGroup.get('automaticCreditIndicator').value,
+        beneficiaryApartBankAddress: "string",
+        beneficiaryDocumentNumber: this.conditionFormGroup.get('beneficiaryDocumentNumber').value,
+        beneficiaryName: this.conditionFormGroup.get('beneficiaryName').value,
+        beneficiaryOperationType: "string",
+        beneficiaryType: this.conditionFormGroup.get('beneficiaryType').value,
+        beneficiaryTypeAcount: "string",
+        businessActivity: this.identificationFormGroup.get('businessActivity').value,
+        // companyAddress: [
+        //   {
+        //     complement: this.adressFormGroup.get('complement').value,
+        //     idCompany: company.idCompany,
+        //     idCompanyAddress: company.companyAddress[0].idCompanyAddress,
+        //     maxDistanceDelivery: "string",
+        //     number: this.adressFormGroup.get('number').value,
+        //     street: {
+        //       city: {
+        //         cityName: this.adressFormGroup.get('cityName').value,
+        //         idCity: company.companyAddress[0].street.city.idCity
+        //       },
+        //       idStreet: 0,
+        //       neighborhood: {
+        //         idNeighborhood: company.companyAddress[0].street.neighborhood.idNeighborhood,
+        //         neighborhoodName: this.adressFormGroup.get('neighborhoodName').value,
+        //       },
+        //       state: {
+        //         idState: company.companyAddress[0].street.state.idState,
+        //         uf: this.adressFormGroup.get('uf').value,
+        //       },
+        //       streetName: this.adressFormGroup.get('streetName').value,
+        //       zipCode: this.adressFormGroup.get('zipCode').value,
+        //     },
+        //     type: "Comercial",
+        //   }, {
+        //     complement: this.adressFormGroup.get('subordinateComplementCtrl').value,
+        //     idCompany: company.idCompany,
+        //     idCompanyAddress: company.companyAddress[1].idCompanyAddress,
+        //     maxDistanceDelivery: "string",
+        //     number: this.adressFormGroup.get('subordinateNumberCtrl').value,
+        //     street: {
+        //       city: {
+        //         cityName: this.adressFormGroup.get('subordinateCityCtrl').value,
+        //         idCity: company.companyAddress[1].street.city.idCity
+        //       },
+        //       idStreet: company.companyAddress[1].street.idStreet,
+        //       neighborhood: {
+        //         idNeighborhood: company.companyAddress[1].street.neighborhood.idNeighborhood,
+        //         neighborhoodName: this.adressFormGroup.get('subordinateNeighborhoodCtrl').value,
+        //       },
+        //       state: {
+        //         idState: company.companyAddress[1].street.state.idState,
+        //         uf: this.adressFormGroup.get('subordinateStateCtrl').value,
+        //       },
+        //       streetName: this.adressFormGroup.get('subordinateStreetCtrl').value,
+        //       zipCode: this.adressFormGroup.get('subordinateZipCode').value,
+        //     },
+        //     type: "Correspondência",
+        //   }
+        // ],
+
+        companyContact: externalContact.value.companyContact,
+
+        // companyLevel: company.companyLevel,
+        
+        // companyLevelItem: {
+        //   idCompanyLevel: company.companyLevelItem.idCompanyLevel,
+        //   description: "Subadquirente",
+        //   level: 30
+        // },
+
+        companyAddress: externalAdress.value.companyAddress,
+        companyName: this.identificationFormGroup.get('companyName').value,
+        companyResponsibleName: this.identificationFormGroup.get('companyResponsibleName').value,
+        companyShortName: this.identificationFormGroup.get('companyShortName').value,
+        companyStatus: company.companyStatus,
+        companyType: this.identificationFormGroup.get('companyType').value,
+        discreditationDate: this.complementFormGroup.get('discreditationDate').value,
+        ecommerceURL: this.complementFormGroup.get('ecommerceURL').value,
+        email: this.complementFormGroup.get('email').value,
+        equipmentIdentifier: company.equipmentIdentifier,
+        estUrl: this.complementFormGroup.get('estUrl').value,
+        externalBankAccount: externalBank.value.externalBankAccount,
+        fancyName: this.identificationFormGroup.get('fancyName').value,
+        gpAffiliationDate: this.complementFormGroup.get('gpAffiliationDate').value,
+        gpEstablishmentNumber: this.identificationFormGroup.get('gpEstablishmentNumber').value,
+        // gpReturnDate: this.complementFormGroup.get('gpReturnDate').value,
+        gpReturnDate: 0,
+        gpSendDate: this.complementFormGroup.get('gpSendDate').value,
+        idCompanyGroup: company.companyGroup.idCompany,
+        idCompanyOwner: company.companyOwner.idCompany,
+        idDepartament: this.identificationFormGroup.get('idDepartament').value,
+        idPlan: 0,
+        idTerminal: this.complementFormGroup.get('idTerminal').value,
+        ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
+        inclusionRegistrationDateTime: 0,
+        logicalNumber: this.complementFormGroup.get('logicalNumber').value,
+        mcccode: this.identificationFormGroup.get('mcccode').value,
+        openingDate: this.identificationFormGroup.get('openingDate').value,
+        openingHours: this.complementFormGroup.get('openingHours').value,
+        orderType: company.orderType,
+        posBillingTypeRental: "string",
+        posChargeAmountRental: 0,
+        posPercentageRateValue: 0,
+        posQuantity: this.complementFormGroup.get('posQuantity').value,
+        recordChangeDateTime: '',
+        referencePoint: this.adressFormGroup.get('referencePoint').value,
+        referentialTransactionAmount: this.conditionFormGroup.get('referentialTransactionAmount').value,
+        registerCode: this.complementFormGroup.get('registerCode').value,
+        registrationDate: this.complementFormGroup.get('registrationDate').value,
+        rentalExemptionDays: 0,
+        seRegistrationDate: this.complementFormGroup.get('seRegistrationDate').value,
+        searchNickname: "string",
+        shopping: "string",
+        situation: this.identificationFormGroup.get('situation').value,
+        stateRegistration: this.identificationFormGroup.get('stateRegistration').value,
+        tedAmount: this.conditionFormGroup.get('tedAmount').value,
+        tedBillingIdentifier: "string",
+        tradingPartnerCode: 0,
+        tradingPartnerParticipationPercent: 0,
+        transactionAmount: this.conditionFormGroup.get('transactionAmount').value,
+        userChangeCode: company.userChangeCode,
+        userInclusionCode: company.userInclusionCode,
+        cnae: {
+          code: "string",
+          descGroup: "string",
+          description: "string",
+          idCnae: company.cnae.idCnae,
+          mcc: {
+            code: "string",
+            description: "string",
+            idMcc: company.cnae.mcc.id
+          }
+        },
+        companyPartner: externalPartner.value.companyPartner,
+
+
+        // companyPartner: [
+        //   {
+            // idCompanyPartner: 0,
+            // idCompany: this.id,
+            // partnerSequentialNumber: 1,
+            // partnerName: this.partnerFormGroup?.get('partnerName').value || '',
+            // cpf: this.partnerFormGroup?.get('cpf').value || '',
+            // dateOfBirth: this.partnerFormGroup?.get('dateOfBirth').value || '',
+            // partnerAddress: [
+            //   {
+            //     idPartnerAddress: 0,
+            //     number: this.partnerFormGroup?.get('number').value || '',
+            //     complement: this.partnerFormGroup?.get('complement').value || '',
+            //     street: {
+            //       idStreet: 0,
+            //       zipCode: this.partnerFormGroup?.get('zipCode').value || '',
+            //       streetName: this.partnerFormGroup?.get('streetName').value || '',
+            //       city: {
+            //         idCity: 0,
+            //         cityName: this.partnerFormGroup?.get('cityName').value || ''
+            //       },
+            //       neighborhood: {
+            //         idNeighborhood: 0,
+            //         neighborhoodName: this.partnerFormGroup?.get('neighborhoodName').value || ''
+            //       },
+            //       state: {
+            //         idState: 0,
+            //         uf: this.partnerFormGroup?.get('uf').value || '',
+            //       }
+            //     }
+            //   }
+            // ],
+            // partnerContact: [
+            //   {
+            //     idPartnerContact: 0,
+            //     phone: this.partnerFormGroup?.get('phone').value || ''
+            //   }
+            // ]
+          
+        
+      }
+      console.log(editForm);
+
+      this.companyService.update(editForm).subscribe((response: any) => {
+        console.log(response);
+        this.dataService.openSnackBar('Empresa alterado com sucesso', 'X');
+        this.router.navigate(['/companies/list']);
+      });
+    })
+
+  }
+
+  //View
+
+  // gelAllCnaes() {
+  //   this.cnaeService.getAllCnae()
+  //     // .pipe(take(1))
+  //     .subscribe((data) => {
+  //       //console.log(data.content);
+  //       this.cnae$ = of(data.content);
+
+  //       this.filteredCnaes = this.cnaeForm.valueChanges
+  //         .pipe(
+  //           startWith(''),
+  //           map(cnae => this._filterCnaes(cnae))
+  //           //map(cnae => cnae ? this._filterCnaes(cnae) : this.cnae$.subscribe(cnaes => {return cnaes.slice()}))
+  //         );
+  //     });
+  // }
 
   headers: HeaderModel[] = [
     { text: 'Código', value: 'id' },
@@ -1260,7 +1334,6 @@ export class AddCompanyComponent implements OnInit {
     { text: 'Nome', value: 'partnerName' },
     { text: 'Data de Nascimento', value: 'dateOfBirth' },
     { text: 'CPF', value: 'cpf' },
-    { text: 'Telefone', value: 'phone' },
     // { text: 'Ações', value: 'action' }
   ];
 
@@ -1286,7 +1359,9 @@ export class AddCompanyComponent implements OnInit {
     dialogRef.afterClosed().subscribe((item) => {
       // this.phoneNumber$ = this.localStorageService.get('phoneNumber');
       this.phoneNumber$.push(item.value);
+      this.apiPhoneNumber$.push(item.value);
       this.phoneNumber$ = [...this.phoneNumber$];
+      this.apiPhoneNumber$ = [...this.apiPhoneNumber$]
       this.phoneService.refreshDataTable();
     })
   }
@@ -1297,7 +1372,9 @@ export class AddCompanyComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((item) => {
       this.bankAccount$.push(item.value);
+      this.apiBankAccount$.push(item.value);
       this.bankAccount$ = [...this.bankAccount$];
+      this.apiBankAccount$ = [...this.apiBankAccount$];
       this.phoneService.refreshDataTable();
     })
   }
@@ -1319,9 +1396,11 @@ export class AddCompanyComponent implements OnInit {
   }
 
   onEditBankAccount(row: object) {
-    const index = this.bankAccount$.indexOf(row)
+    const localIndex = this.bankAccount$.indexOf(row)
+    const apiIndex = this.apiBankAccount$.indexOf(row)
+    console.log(apiIndex);
     const dialogRef = this.dialog.open(EditBankAccountComponent, {
-      data: index
+      data: { localIndex, apiIndex }
     });
     dialogRef.afterClosed().subscribe((item) => {
       Object.assign(this.bankAccount$, item);;
@@ -1331,7 +1410,7 @@ export class AddCompanyComponent implements OnInit {
 
   onEditPartner(row: object) {
     const index = this.partnerSource$.findIndex((c) => c == row);
-
+    console.log(index);
     this.router.navigate([`/companies/partners/edit/${index}`]);
   }
 
@@ -1423,15 +1502,21 @@ export class AddCompanyComponent implements OnInit {
     }
   }
 
+  displayFnCompany = (item): string => {
+    if (item) {
+      return item.companyName;
+    } else {
+      return '';
+    }
+  }
+
   getMccByCnae() {
     let a = this.mcc
-    console.log(a);
     let obj = {
       mcccode: a.mcc.code,
       idCnae: a.idCnae
     }
     this.identificationFormGroup.patchValue(obj);
-    console.log(obj);
   }
 
   getSecondCep(cep) {
@@ -1540,10 +1625,10 @@ export class AddCompanyComponent implements OnInit {
     this.localStorageService.set(text, form.value);
     this.localStorageService.set('cep', this.response);
 
-   
+
   }
 
-  saveAdress(){
+  saveAdress() {
     let obj = {
       companyAddress: [{
         complement: this.adressFormGroup.get('complement').value,
@@ -1585,8 +1670,8 @@ export class AddCompanyComponent implements OnInit {
         type: "Correspondência",
       }]
     };
-    
-    this.endereco = Object.assign({},obj);
+
+    this.endereco = Object.assign({}, obj);
   }
 
   getLocalStorage(item) {

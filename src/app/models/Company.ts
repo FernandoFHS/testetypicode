@@ -189,11 +189,11 @@ export interface CompanyLevelItem {
   description: string;
 }
 
-export interface ParentCompany {
+export interface CompanyOwner {
   idCompany: number;
 }
 
-export interface ParentCompanyGroup {
+export interface CompanyGroup {
   idCompany: number;
 }
 
@@ -210,8 +210,8 @@ export interface CompanyContent {
   migration: Migration;
   cnae: Cnae;
   companyLevelItem: CompanyLevelItem;
-  parentCompany: ParentCompany;
-  parentCompanyGroup: ParentCompanyGroup;
+  companyOwner: CompanyOwner;
+  companyGroup: CompanyGroup;
   email: string;
   beneficiaryType: string;
   beneficiaryDocumentNumber: string;

@@ -29,6 +29,7 @@ import { RecoverButtonComponent } from './components/recover-button/recover-butt
 import { RefuseButtonComponent } from './components/refuse-button/refuse-button.component';
 import { AcceptButtonComponent } from './components/accept-button/accept-button.component';
 import { ChangeButtonComponent } from './components/change-button/change-button.component';
+import { OnlyNumbersDirective } from './directives/only-numbers.directive';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { ChangeButtonComponent } from './components/change-button/change-button.
     AccordionLinkDirective,
     AccordionAnchorDirective,
     InputHelperDirective,
+    OnlyNumbersDirective,
 
     DataTableComponent,
     BreadcrumbComponent,
@@ -94,6 +96,7 @@ import { ChangeButtonComponent } from './components/change-button/change-button.
     AccordionLinkDirective,
     AccordionAnchorDirective,
     InputHelperDirective,
+    OnlyNumbersDirective,
 
     AngularMaterialModule,
     ReactiveFormsModule,

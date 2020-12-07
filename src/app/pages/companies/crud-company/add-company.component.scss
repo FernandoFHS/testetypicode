@@ -10,6 +10,14 @@ form .initial-data h2 {
   font-size: 16px;
 }
 
+core-back-button {
+  flex: 0 0 0!important;
+}
+
+core-next-button {
+  flex: 0 0 0!important;
+}
+
 form .initial-data .establishment-container{
   display: flex;
   flex-direction: row;
