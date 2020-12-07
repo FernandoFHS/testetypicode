@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Profile, Content } from '../models/Profile';
+import { Profile, Content } from '../models/profile';
 import {
   HttpClient,
   HttpHeaders,
