@@ -1,3 +1,4 @@
+import { AgreementByCompanygroupService } from './../../../services/company/agreement-by-companygroup.service';
 import { map, take, startWith, filter } from 'rxjs/operators';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -107,6 +108,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
   optionscompany: any;
   optionscnae: any;
+  optionsplans: any;
 
   dateformated: any;
 
@@ -162,6 +164,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   cnae$: Observable<Array<Cnae>>;
   filteredCnaes: Observable<any[]>;
   filteredCompanies: Observable<any[]>;
+  filteredPlans: Observable<any[]>;
+
 
   addBreadcrumbModel: BreadcrumbModel = {
     active: {
@@ -212,6 +216,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     public phoneService: SimpleDataTableService,
     public changeDetectorRefs: ChangeDetectorRef,
     public CompanyByLevelService: CompanyByLevelService,
+    public AgreementByCompanygroupService: AgreementByCompanygroupService,
     private _generalService: GeneralService,
     private partnerService: PartnerService,
     @Inject(DOCUMENT) private document: Document
@@ -294,6 +299,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
     this.gelAllCnaes();
     this.getCompanyLevel();
+    this.getPlans();
 
   }
 
@@ -893,7 +899,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
       },
       idDepartament: this.identificationFormGroup.get('idDepartament').value,
-      idPlan: 0,
+      idPlan: 0, //campo para ser o tabela de vendas
       idTerminal: this.complementFormGroup.get('idTerminal').value,
       ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
       inclusionRegistrationDateTime: "string",
@@ -974,6 +980,26 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
             if (typeof (value) == 'string') {
               this.filteredCompanies = this.optionscompany.filter((company) => {
                 return company.companyName.toLowerCase().includes(value.toLowerCase())
+              })
+            }
+          });
+      });
+  }
+  getPlans() {
+    this.AgreementByCompanygroupService.getAgreementByIdCompanyGroup(this.idCompanyGroup)
+      // .pipe(take(1))
+      .subscribe((response) => {
+        console.log(response)
+        this.optionsplans = response['content'];
+        console.log(this.optionsplans);
+        this.conditionFormGroup.get('tableSaleCtrl').valueChanges
+          .pipe(
+            startWith(''),
+          ).subscribe((value) => {
+            if (typeof (value) == 'string') {
+              this.filteredPlans = this.optionsplans.filter((company) => {
+                console.log(company)
+                return company.description.toLowerCase().includes(value.toLowerCase())
               })
             }
           });
@@ -1385,6 +1411,14 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   displayFnCompany = (item): string => {
     if (item) {
       return item.companyName;
+    } else {
+      return '';
+    }
+  }
+
+  displayFnPlans = (item): string => {
+    if (item) {
+      return item.description;
     } else {
       return '';
     }

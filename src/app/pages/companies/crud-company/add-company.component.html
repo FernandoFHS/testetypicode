@@ -535,11 +535,23 @@
 
           <div class="short-line-2-form">
 
-            <mat-form-field appearance="outline">
+            <!-- <mat-form-field appearance="outline">
               <mat-label>Tabela de Vendas</mat-label>
               <input matInput placeholder="Tabela de Vendas" formControlName="tableSaleCtrl" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>table_view</mat-icon>
+            </mat-form-field> -->
+            <mat-form-field appearance="outline">
+              <mat-label>Tabela de Vendas</mat-label>
+              <input matInput placeholder="Tabela de Vendas" aria-label="Number" 
+                formControlName="tableSaleCtrl" [matAutocomplete]="autoplan">
+              <mat-autocomplete #autoplan="matAutocomplete" [displayWith]="displayFnPlans">
+                <mat-option *ngFor="let option of filteredPlans" [value]="option">
+                  cod. {{option.id }} {{ option.description}}
+                </mat-option>
+              </mat-autocomplete>
+              <!-- <mat-error *ngIf="identificationFormGroup.get('companyResponsible').hasError('invalidAutoComplete')">
+                Selecione uma empresa da lista</mat-error> -->
             </mat-form-field>
 
             <mat-form-field appearance="outline">
