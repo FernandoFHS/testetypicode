@@ -530,6 +530,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [this.condition?.tableSaleCtrl || ''],
+      tableSaleId:[''],
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || ''],
       transactionAmount: [this.condition?.transactionAmount || ''],
       tedAmount: [this.condition?.tedAmount || ''],
@@ -629,6 +630,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [{ value: this.condition?.tableSaleCtrl || '', disabled: true }],
+      tableSaleId:[''],
       automaticCreditIndicator: [{ value: this.condition?.automaticCreditIndicator || '', disabled: true }],
       transactionAmount: [{ value: this.condition?.transactionAmount || '', disabled: true }],
       tedAmount: [{ value: this.condition?.tedAmount || '', disabled: true }],
@@ -704,6 +706,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     console.log(company.companyAddress)
 
     this.conditionFormGroup.patchValue({
+      tableSaleCtrl: company.idPlan,
       automaticCreditIndicator: company.automaticCreditIndicator,
       transactionAmount: company.transactionAmount,
       tedAmount: company.tedAmount,
@@ -1116,7 +1119,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
           idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
         },
         idDepartament: this.identificationFormGroup.get('idDepartament').value,
-        idPlan: this.conditionFormGroup.get('idPlan').value,
+        idPlan: this.conditionFormGroup.get('tableSaleId').value,
         idTerminal: this.complementFormGroup.get('idTerminal').value,
         ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
         inclusionRegistrationDateTime: 0,
