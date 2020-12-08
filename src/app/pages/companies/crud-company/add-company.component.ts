@@ -358,6 +358,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [this.condition?.tableSaleCtrl || '', Validators.required],
+      tableSaleId:[''],
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || '', Validators.required],
       transactionAmount: [this.condition?.transactionAmount || '', Validators.required],
       tedAmount: [this.condition?.tedAmount || '', Validators.required],
@@ -899,7 +900,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
       },
       idDepartament: this.identificationFormGroup.get('idDepartament').value,
-      idPlan: this.conditionFormGroup.get('tableSaleCtrl').value,
+      idPlan: this.conditionFormGroup.get('tableSaleId').value,
       idTerminal: this.complementFormGroup.get('idTerminal').value,
       ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
       inclusionRegistrationDateTime: "string",
@@ -1036,6 +1037,11 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.saveForm(this.identificationFormGroup, 'identificationFormGroup');
       this.checkValueBankAdress(false)
     }
+  }
+
+  saveStep(){
+    const selectedSales = this.conditionFormGroup.get('tableSaleCtrl');
+    this.conditionFormGroup.get('tableSaleId').setValue(selectedSales?.value.id);
   }
 
   updateCompany() {
@@ -1612,8 +1618,6 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   saveForm(form, text) {
     this.localStorageService.set(text, form.value);
     this.localStorageService.set('cep', this.response);
-
-
   }
 
   saveAdress() {
