@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { TransactionCsvRequestModel } from '../models/requests/transaction-csv.request.model';
 import { TransactionBatchResponseModel } from '../models/responses/transaction-batch.response.model';
 
 @Injectable({
@@ -39,5 +40,24 @@ export class TransactionService {
       console.log(error);
       of([]);
     }
+  }
+
+  postTransactionCSV(request: TransactionCsvRequestModel): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        this._http.post(`${environment.api.url}/monitoring-rules/transactions/csv`, request).subscribe((data) => {
+          console.log('data', data);
+          resolve();
+        }, (error) => {
+          console.log('error', error);
+          reject();
+        });
+      }
+      catch (error) {
+        console.log('Error in transaction.service.ts função postTransactionCSV');
+        console.log(error);
+        reject();
+      }
+    });
   }
 }

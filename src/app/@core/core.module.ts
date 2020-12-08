@@ -31,7 +31,6 @@ import { AcceptButtonComponent } from './components/accept-button/accept-button.
 import { ChangeButtonComponent } from './components/change-button/change-button.component';
 import { OnlyNumbersDirective } from './directives/only-numbers.directive';
 
-
 @NgModule({
   declarations: [
     ContainerComponent,

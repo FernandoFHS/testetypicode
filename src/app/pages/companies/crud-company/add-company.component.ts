@@ -408,9 +408,9 @@ export class AddCompanyComponent implements OnInit {
       this.getLocalStorage('adress');
     }
 
-    // if (this.response == null) {
-    //   this.response = this.localStorageService.get('cep');
-    // }
+    if (this.response == null) {
+      this.response = this.localStorageService.get('cep');
+    }
 
     if (this.mask == undefined) {
       this.getCpfCnpjMask(this.identificationFormGroup.get('companyType').value);

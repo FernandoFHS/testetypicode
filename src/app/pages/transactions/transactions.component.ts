@@ -1,9 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { DataTableService } from 'src/app/@core/components/data-table/data-table.service';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { HeaderModelCompany } from 'src/app/@core/models/header.model';
+import { TransactionCsvRequestModel } from 'src/app/models/requests/transaction-csv.request.model';
+import { NotificationService } from 'src/app/services/notification.service';
 import { TransactionService } from 'src/app/services/transaction.service';
 
 @Component({
@@ -46,7 +49,9 @@ export class TransactionsComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _transactionService: TransactionService,
-    private _dataTableService: DataTableService
+    private _dataTableService: DataTableService,
+    private _spinnerService: NgxSpinnerService,
+    private _notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -97,7 +102,28 @@ export class TransactionsComponent implements OnInit {
         const reader = new FileReader();
 
         reader.onload = (e: any) => {
+          this._spinnerService.show();
+
           console.log(e.target.result);
+
+          const csvSplited: string[] = e.target.result.split(',');;
+
+          console.log(csvSplited);
+
+          const request: TransactionCsvRequestModel = {
+            id_requesting_user: 1, // TODO
+            monitoring_transactions: null, // TODO
+            requesting_credential: 1234, // TODO
+            transactions: csvSplited[csvSplited.length - 1]
+          };
+
+          this._transactionService.postTransactionCSV(request).then(() => {
+            this._notificationService.success('Transações importadas com sucesso!');
+          }, (error) => {
+            this._notificationService.error('Erro ao importar transações, verifique se o arquivo importado está correto.');
+          }).finally(() => {
+            this._spinnerService.hide();
+          })
         }
 
         reader.readAsDataURL(file);

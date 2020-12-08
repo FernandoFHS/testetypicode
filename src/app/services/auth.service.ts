@@ -34,8 +34,11 @@ export class AuthService {
 
         resolve(data);
       }, (error: HttpErrorResponse) => {
-        if (error.status !== HttpCodeEnum.UNKNOWN) {
+        if (error.status === HttpCodeEnum.UNKNOWN) {
           reject('Erro inesperado, tente novamente mais tarde.');
+        }
+        else if (error.status == HttpCodeEnum.UNAUTHORIZED) {
+          reject('Erro com as credenciais de login, consulte o Setor Técnico.');
         }
         else {
           reject('Credenciais inválidas.');
