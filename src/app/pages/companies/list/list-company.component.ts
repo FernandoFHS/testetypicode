@@ -71,9 +71,6 @@ export class CompanyListComponent implements OnInit {
 
     this.companyFormGroup.get('filter').valueChanges.pipe(
       debounceTime(1500),
-      // switchMap((filter) => {
-
-      // })
     ).subscribe(() => {
       this.companyFormGroup.get('id').setValue('');
       this.companyFormGroup.get('documentNumberCompany').setValue('');
@@ -83,9 +80,7 @@ export class CompanyListComponent implements OnInit {
   }
 
   loadData = (sort: string, order: string, page: number, size: number) => {
-
-    return this.companyService.getAllCompanies(sort, order, page, size, this.idCompanyGroup);
-    
+    return this.companyService.getAllCompanies(sort, order, page, size, this.idCompanyGroup);   
   };
 
   loadDataByFilter = (sort: string, order: string, page: number, size: number) => {
@@ -94,7 +89,7 @@ export class CompanyListComponent implements OnInit {
       idCompany: form.id,
       documentNumberCompany: form.documentNumberCompany,
       companyName: form.filter,
-      idCompanyGroup:this.idCompanyGroup
+      idCompanyGroup: this.idCompanyGroup
     }
     return this.companyService.getAllCompaniesByFilter(filter, sort, order, page, size)
   }
@@ -127,7 +122,7 @@ export class CompanyListComponent implements OnInit {
     this.companyFormGroup.get('id').setValue('');
     this.companyFormGroup.get('documentNumberCompany').setValue('');
 
-    this.loadData
+    this.dataTableService.refreshDataTable();
   }
 
   onDelete(row: any) {

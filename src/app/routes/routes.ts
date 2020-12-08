@@ -41,7 +41,7 @@ export const routes: Routes = [
     canActivate: [LoginGuard]
   },
   {
-    path: 'password-recover-validation',
+    path: 'password-recover-validation/:token',
     component: RecoverPasswordAfterValidationComponent
   },
   {
@@ -152,7 +152,7 @@ export const routes: Routes = [
             component: AddPartnerComponent,
           },
           {
-            path: 'partners/local-edit/:index',
+            path: 'partners/local-edit/:index/',
             component: AddPartnerComponent,
           },
         ]
@@ -167,11 +167,11 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'initial/100800001',
+            redirectTo: 'initial',
             pathMatch: 'full'
           },
           {
-            path: 'initial/100800001',
+            path: 'initial',
             component: InitialPasswordTransactionComponent
           },
           {

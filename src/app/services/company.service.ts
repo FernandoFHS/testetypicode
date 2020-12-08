@@ -25,7 +25,7 @@ export class CompanyService {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   /** CRUD METHODS */
-  getAllCompanies(sort: string, order: string, page: number, size: number,companyGroup: number): Observable<{ content: CompanyContent[] }> {
+  getAllCompanies(sort: string, order: string, page: number, size: number, companyGroup: number): Observable<{ content: CompanyContent[] }> {
     const requestUrl =
       `${this.API_URL}company/companyGroup?sort=${sort},${order}&page=${page}&size=${size}&idCompanyGroup=${companyGroup}`;
 
@@ -36,7 +36,7 @@ export class CompanyService {
 
   getCompaniesByName(name: string, page: number, size: number,companyGroup: number) {
     const requestUrl =
-      `${this.API_URL}company/filters?companyName=${name}&page=${page}&size=${size}&idCompanyGroup=${companyGroup}`;
+      `${this.API_URL}company/companyGroup/filters?companyName=${name}&page=${page}&size=${size}&idCompanyGroup=${companyGroup}`;
 
     return this.httpClient.get<CompanyContent[]>(requestUrl);
   }
@@ -46,7 +46,8 @@ export class CompanyService {
 
   getAllCompaniesByFilter(filter: { idCompany: number, documentNumberCompany: number, companyName: string, idCompanyGroup:number }, sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {
 
-    let requestUrl = `${this.API_URL}company/`;
+    console.log(filter.idCompanyGroup)
+    let requestUrl = `${this.API_URL}company/companyGroup`;
 
     let params = new HttpParams();
 
@@ -65,6 +66,10 @@ export class CompanyService {
     if (filter.companyName) {
       params = params.append('companyName', filter.companyName.toString());
       requestUrl += '/filters';
+    }
+
+    if (filter.idCompanyGroup) {
+      params = params.append('idCompanyGroup', filter.idCompanyGroup.toString());
     }
 
     return this.httpClient.get<{ content: CompanyContent[] }>(requestUrl, {
@@ -93,7 +98,7 @@ export class CompanyService {
     return this.httpClient.post<CompanyContent>(this.API_URL + 'company', company);
   }
 
-  readById(idCompany: number,companyGroup:number): Observable<CompanyContent> {
+  readById(idCompany: number, companyGroup: number): Observable<CompanyContent> {
     const url = `${this.API_URL}company/byid?&idCompanyGroup=${companyGroup}&idCompany=${idCompany}`;
     return this.httpClient.get<CompanyContent>(url);
   }

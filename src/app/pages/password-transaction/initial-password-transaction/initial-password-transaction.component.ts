@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
+import { NotificationService } from 'src/app/services/notification.service';
 import { PasswordService } from '../../../services/password/password.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class InitialPasswordTransactionComponent implements OnInit {
   hide2 = true;
   hasPassword: boolean = false;
   createPasswordForm: any;
+  idCompany: any;
 
   //RASCUNHOS PARA O FUTURO
 
@@ -43,10 +45,14 @@ export class InitialPasswordTransactionComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private _passwordService:PasswordService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
-    const id = 1;
+    // const id = 1;
+
+    this.idCompany = this.route.snapshot.queryParamMap.get('idCompany');
+    console.log(this.idCompany);
     // const id = +this.route.snapshot.paramMap.get('id');
     // this.dataService.readById(id).subscribe((profile) => {
     //   this.profile = profile;
@@ -84,7 +90,7 @@ export class InitialPasswordTransactionComponent implements OnInit {
   }
 
   checkPassword() {
-    this._passwordService.checkLoginPassword().subscribe((response: any) => {
+    this._passwordService.checkLoginPassword(this.idCompany).subscribe((response: any) => {
       console.log(response);
 
       if (response == null) {
@@ -102,6 +108,8 @@ export class InitialPasswordTransactionComponent implements OnInit {
     }
     this._passwordService.createPassword(this.createPasswordForm).subscribe((response:any) =>{
       console.log(response);
+      this.notificationService.success('Senha criada com sucesso!');
+      this.router.navigate(['/password-transaction']);
     })
     console.log(this.createPasswordForm);
   }
