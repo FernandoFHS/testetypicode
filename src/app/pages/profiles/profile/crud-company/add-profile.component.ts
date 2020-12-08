@@ -7,7 +7,7 @@ import {
 } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
-import { Content, Profile } from 'src/app/models/profile';
+import { Content, Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({

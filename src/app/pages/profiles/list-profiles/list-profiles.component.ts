@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { HeaderModel } from 'src/app/@core/models/header.model';
-import { Profile } from 'src/app/models/profile';
+import { Profile } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 import { DeleteProfileComponent } from '../../delete-profile/delete-profile.component';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';

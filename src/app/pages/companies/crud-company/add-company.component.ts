@@ -995,7 +995,7 @@ export class AddCompanyComponent implements OnInit {
   }
 
   getCompanyLevel() {
-    this.CompanyByLevelService.getByLevel()
+    this.CompanyByLevelService.getByLevel(this.idCompanyGroup)
       // .pipe(take(1))
       .subscribe((response) => {
         this.optionscompany = response['content'];

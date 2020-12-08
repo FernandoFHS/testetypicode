@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Content } from 'src/app/models/profile';
+import { Content } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 

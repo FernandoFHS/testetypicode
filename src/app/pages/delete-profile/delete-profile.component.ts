@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SimpleDataTableService } from 'src/app/@core/components/simple-data-table/simple-data-table.service';
-import { Content } from 'src/app/models/profile';
+import { Content } from 'src/app/models/Profile';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
