@@ -22,7 +22,7 @@
           </strong>
 
           <strong *ngIf="!balance">
-            Nenhum saldo encontrado.
+            Nenhum saldo encontrado
           </strong>
         </div>
       </mat-expansion-panel>
@@ -151,7 +151,7 @@
               </mat-form-field>
 
               <div fxLayoutAlign="center center" class="height-form-field">
-                <mat-checkbox formControlName="transaction_desc" color="primary">
+                <mat-checkbox formControlName="transaction_desc" color="primary" [disabled]="true">
                   Decrescente
                 </mat-checkbox>
               </div>
@@ -162,7 +162,7 @@
 
               <div fxLayoutAlign="center center" class="height-form-field m-l-10"
                 [ngClass]="filterType == 1 ? 'no-pointer-events' : ''">
-                <mat-checkbox color="primary" [checked]="filterType == 1" (change)="changeFilterType(1)">
+                <mat-checkbox color="primary" [checked]="filterType == 1" (change)="changeFilterType(1)" [disabled]="true">
                   Data Liquidação
                 </mat-checkbox>
               </div>

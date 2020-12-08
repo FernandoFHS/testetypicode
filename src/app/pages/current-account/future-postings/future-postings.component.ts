@@ -87,8 +87,8 @@ export class FuturePostingsComponent implements OnInit {
 
   private _loadModel(): void {
     const filter: GetExtractFilterModel = {
-      dateTransactionFinish: '',
-      dateTransactionStart: '',
+      dateTransactionFinish: new Date(),
+      dateTransactionStart: new Date(),
       idCompany: this.idCompany.toString()
     };
 

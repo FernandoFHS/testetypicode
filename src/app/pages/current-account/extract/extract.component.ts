@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -70,47 +71,71 @@ export class ExtractComponent implements OnInit {
     private _router: Router,
     private _currentAccountService: CurrentAccountService,
     private _notificationService: NotificationService,
-    private _authService: AuthService
+    private _authService: AuthService,
+    // private _datePipe: DatePipe
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.isLoading = true;
+    // this.isLoading = true;
 
     this.todayDate = new Date();
 
     await this._loadParams();
 
-    this._loadModel();
-
     this._loadForm();
 
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 1500);
+    await this._loadModel();
+
+    // setTimeout(() => {
+    //   this.isLoading = false;
+    // }, 1500);
   }
 
-  private _loadModel(): void {
-    const loginRequest: AuthRequestModel = {
-      email: environment.login_mobbuy.email,
-      password: environment.login_mobbuy.password
-    };
+  // TODO
+  private _loadModel(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        this.isLoading = true;
 
-    this._authService.login(loginRequest).then(() => {
-      const filter: GetExtractFilterModel = {
-        dateTransactionFinish: '',
-        dateTransactionStart: '',
-        idCompany: this.idCompany.toString()
-      };
+        // const loginRequest: AuthRequestModel = {
+        //   email: environment.login_mobbuy.email,
+        //   password: environment.login_mobbuy.password
+        // };
 
-      this._currentAccountService.getExtractByFilter(filter, 0, 15).subscribe((data) => {
-        this.model = data;
-      });
+        // this._authService.login(loginRequest).then(() => {
 
-      this._currentAccountService.getBalanceByIdCompany(this.idCompany).subscribe((data) => {
-        this.balance = data;
-      });
-    }, (error) => {
-      this._notificationService.error(error);
+        this._loadBalance();
+
+        const form = this.form.getRawValue();
+
+        const filter: GetExtractFilterModel = {
+          dateTransactionFinish: new Date(form.transaction_date_end),
+          dateTransactionStart: new Date(form.transaction_date_start),
+          idCompany: this.idCompany.toString()
+        };
+
+        this._currentAccountService.getExtractByFilter(filter, 0, 15).subscribe((data) => {
+          this.model = data;
+        }, (error) => {
+          console.log(error);
+        }, () => {
+          this.isLoading = false;
+          resolve();
+        });
+
+        // }, (error) => {
+        //   this._notificationService.error(error);
+        // });
+      }
+      catch (error) {
+        resolve();
+      }
+    });
+  }
+
+  private _loadBalance(): void {
+    this._currentAccountService.getBalanceByIdCompany(this.idCompany).subscribe((data) => {
+      this.balance = data;
     });
   }
 
@@ -118,9 +143,12 @@ export class ExtractComponent implements OnInit {
     const dateNow = new Date();
 
     this.form = this._formBuilder.group({
-      transaction_desc: [true, []],
+      transaction_desc: [{
+        value: false,
+        disabled: true
+      }, []],
       liquidation_desc: [{
-        value: true,
+        value: false,
         disabled: true
       }, []],
 
@@ -148,14 +176,9 @@ export class ExtractComponent implements OnInit {
     const end: Date = (this.filterType == CurrentAccountFilterTypeEnum.TRANSACTION) ?
       new Date(this.form.get('transaction_date_end').value) : new Date(this.form.get('liquidation_date_end').value);
 
-    console.log(start);
-    console.log(end);
-
     const diffInTime = end.getTime() - start.getTime();
 
     const diffInDays = Math.trunc(diffInTime / (1000 * 3600 * 24));
-
-    console.log('diff in days', diffInDays);
 
     this.filterDays.forEach((filterDay) => {
       if (filterDay.value == diffInDays) {
@@ -198,12 +221,9 @@ export class ExtractComponent implements OnInit {
   }
 
   filter(): void {
-    this.isLoading = true;
-
-    setTimeout(() => {
-      this.isLoading = false;
+    this._loadModel().then(() => {
       this._notificationService.success('Filtro atualizado!');
-    }, 1500);
+    });
   }
 
   clearFilter(): void {
@@ -238,7 +258,7 @@ export class ExtractComponent implements OnInit {
       // Enable fields transaction
       this.form.get('transaction_date_start').enable();
       this.form.get('transaction_date_end').enable();
-      this.form.get('transaction_desc').enable();
+      this.form.get('transaction_desc').disable();
 
       // Disable fields liquidation
       this.form.get('liquidation_date_start').disable();
