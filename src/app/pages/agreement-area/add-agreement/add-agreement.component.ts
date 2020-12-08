@@ -46,6 +46,14 @@ export class AddAgreementComponent implements OnInit {
     items: this._breadcrumbItems
   };
 
+  viewBreadcrumbModel: BreadcrumbModel = {
+    active: {
+      title: 'Visualizar Contrato',
+      route: ''
+    },
+    items: this._breadcrumbItems
+  };
+
   form: FormGroup;
   form_conditions;
   companys: any[];
@@ -72,6 +80,8 @@ export class AddAgreementComponent implements OnInit {
   isLoading: boolean;
   id: number;
 
+  formData$: Observable<any>
+
   constructor(
     private _formBuilder: FormBuilder, 
     private _spinnerService: NgxSpinnerService,
@@ -85,6 +95,7 @@ export class AddAgreementComponent implements OnInit {
     private _router: Router,
     private _planService: PlanService,
     private route: ActivatedRoute
+    
     ) { }
 
     async ngOnInit(): Promise<void> {
@@ -101,13 +112,24 @@ export class AddAgreementComponent implements OnInit {
     if (this.isPageEdit()) {
       await this._loadModel();
       this._loadFormEdit();
+    }else if(this.isPageView()) {
+      this.actions = {
+        add: false,
+        edit: false,
+        delete: false,
+        view: false
+      };
+      await this._loadModel();
+      this._loadFormEdit();
     }else {
       this._loadFormAdd();
     }
 
    
 
-    this.form.valueChanges.subscribe(newValue=>console.log('Form Parent - ',newValue));
+    // this.form.valueChanges.subscribe(newValue=>{
+    //   this.formData$ = newValue;
+    // });
     
     //this.companyService.getAll().subscribe(companys => {
     // this._agreementService.getCompany(+this.idCompanyGroup).subscribe(companys => {
@@ -119,6 +141,8 @@ export class AddAgreementComponent implements OnInit {
   private _loadModel(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._agreementService.getById(this.id).subscribe((model) => {
+        console.log('model',model);
+        
         this.model = model;
         resolve();
       }, (error) => {
@@ -192,8 +216,8 @@ export class AddAgreementComponent implements OnInit {
         data: array[index]
       });
       let instance = dialogRef.componentInstance;
-    instance.agreementForm = this.form;
-    instance.isPageEdit = true;
+      instance.agreementForm = this.form;
+      instance.isPageEdit = true;
     // }else{
     //   dialogRef = this.dialog.open(AddPlanComponent, {
     //     data: this.model.plans.filter(e => e === row)[0]
@@ -236,7 +260,8 @@ export class AddAgreementComponent implements OnInit {
   }
 
   loadData = () => {
-    return this.companyService.getAll()
+    //return this.companyService.getAll()
+    return this.form.controls.plans.value
   };
 
   private _loadFormAdd(): void {
@@ -251,11 +276,12 @@ export class AddAgreementComponent implements OnInit {
   private _loadFormEdit(): void {
     this.form = this._formBuilder.group({
       id: [this.model.id],
-      description: [this.model.description, [Validators.required]],
-      isFastInstallments: [this.model.isFastInstallments, [Validators.required]],
+      description: [{value: this.model.description, disabled: this.isPageView()}, [Validators.required]],
+      isFastInstallments: [{value: this.model.isFastInstallments, disabled: this.isPageView()}, [Validators.required]],
       idCompany: [this.model.idCompany],
       plans: this._formBuilder.array(this.model.plans),
     });
+
   }
 
   save(): void {

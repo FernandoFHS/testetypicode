@@ -58,8 +58,8 @@ export class AgreementListComponent implements OnInit {
   actions: ActionModel = {
     add: true,
     edit: true,
-    delete: true,
-    view: false
+    delete: false,
+    view: true
   };
 
   dinamicAddRouter = "/company-list/add-company";
