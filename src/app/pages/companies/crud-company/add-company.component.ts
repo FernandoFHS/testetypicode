@@ -1070,8 +1070,14 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         // gpReturnDate: this.complementFormGroup.get('gpReturnDate').value,
         gpReturnDate: 0,
         gpSendDate: this.complementFormGroup.get('gpSendDate').value,
-        idCompanyGroup: company.companyGroup.idCompany,
+        // idCompanyGroup: company.companyGroup.idCompany,
         // idCompanyOwner: company.companyOwner.idCompany,
+        companyGroup: {
+          idCompany:company.companyGroup.idCompany,
+        },
+        companyOwner: {
+          idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
+        },
         idDepartament: this.identificationFormGroup.get('idDepartament').value,
         idPlan: 0,
         idTerminal: this.complementFormGroup.get('idTerminal').value,
