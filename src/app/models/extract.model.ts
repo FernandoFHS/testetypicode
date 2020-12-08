@@ -3,5 +3,5 @@ export class ExtractModel {
   dueDate: string;
   installmentNumber: number;
   valueLiquid: number;
-  transactionType: string;
+  typeTransaction: string;
 }

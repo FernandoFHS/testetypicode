@@ -22,7 +22,7 @@
           </strong>
 
           <strong *ngIf="!balance">
-            Nenhum saldo encontrado.
+            Nenhum saldo encontrado
           </strong>
         </div>
       </mat-expansion-panel>
@@ -52,7 +52,7 @@
 
     </div>
 
-    <div fxFlex.gt-xs="70%" fxFlex.xs="100%" class="filter-days">
+    <!-- <div fxFlex.gt-xs="70%" fxFlex.xs="100%" class="filter-days">
 
       <div fxFlex="100%" class="text-right" fxLayout="row wrap" fxLayoutAlign="end center">
 
@@ -71,9 +71,9 @@
 
       </div>
 
-    </div>
+    </div> -->
 
-    <div fxFlex="100%">
+    <!-- <div fxFlex="100%">
 
       <mat-expansion-panel class="mb-16 mat-elevation-z0 custom-card filter-panel" [expanded]="false">
         <mat-expansion-panel-header>
@@ -242,7 +242,7 @@
 
       </mat-expansion-panel>
 
-    </div>
+    </div> -->
 
     <div fxFlex="100%" *ngIf="isLoading">
       <div class="h-200 loading-data m-t-25" *ngIf="isLoading">
@@ -253,7 +253,7 @@
     <div fxFlex="100%" fxLayoutAlign="center center" fxLayout="row wrap"
       *ngIf="(!model || !model?.content || model?.content?.length == 0) && !isLoading">
       <label class="m-t-20">
-        Nenhuma transação encontrada
+        Nenhum Lançamento Futuro encontrado
       </label>
     </div>
 
@@ -287,7 +287,7 @@
                   {{item.dateTransaction | date : 'dd/MM/yyyy'}}
                 </td>
                 <td>
-                  {{item.transactionType}}
+                  {{item.typeTransaction}}
                 </td>
                 <td>
                   {{item.dueDate | date : 'dd/MM/yyyy'}}

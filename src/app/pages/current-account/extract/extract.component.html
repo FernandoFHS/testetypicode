@@ -18,11 +18,11 @@
         </mat-expansion-panel-header>
         <div>
           <strong *ngIf="balance">
-            {{balance.reserveBalance | currency : 'R$ '}}
+            {{balance.balanceCompany | currency : 'R$ '}}
           </strong>
 
           <strong *ngIf="!balance">
-            Nenhum saldo encontrado.
+            Nenhum saldo encontrado
           </strong>
         </div>
       </mat-expansion-panel>
@@ -33,10 +33,12 @@
 
       <div fxFlex.gt-sm="40%" fxFlex.sm="100%" fxFlex.xs="100%">
         <mat-button-toggle-group class="tab-type" fxLayout="row wrap" fxFlex="100%" value="primary">
-          <mat-button-toggle value="primary" fxFlex="50%" [checked]="pageType == 'EXTRACT'" (change)="changePageType('EXTRACT')">
+          <mat-button-toggle value="primary" fxFlex="50%" [checked]="pageType == 'EXTRACT'"
+            (change)="changePageType('EXTRACT')">
             Extrato
           </mat-button-toggle>
-          <mat-button-toggle value="accent" fxFlex="50%" [checked]="pageType == 'FUTURE_POSTINGS'" (change)="changePageType('FUTURE_POSTINGS')">
+          <mat-button-toggle value="accent" fxFlex="50%" [checked]="pageType == 'FUTURE_POSTINGS'"
+            (change)="changePageType('FUTURE_POSTINGS')">
             Lançamentos Futuros
           </mat-button-toggle>
         </mat-button-toggle-group>
@@ -158,11 +160,12 @@
 
             </div>
 
-            <div fxFlex="100%" fxLayoutGap="1%">
+            <!-- <div fxFlex="100%" fxLayoutGap="1%">
 
               <div fxLayoutAlign="center center" class="height-form-field m-l-10"
                 [ngClass]="filterType == 1 ? 'no-pointer-events' : ''">
-                <mat-checkbox color="primary" [checked]="filterType == 1" (change)="changeFilterType(1)">
+                <mat-checkbox color="primary" [checked]="filterType == 1" (change)="changeFilterType(1)"
+                  [disabled]="true">
                   Data Liquidação
                 </mat-checkbox>
               </div>
@@ -227,7 +230,7 @@
                 </mat-checkbox>
               </div>
 
-            </div>
+            </div> -->
 
           </div>
 
@@ -260,7 +263,8 @@
     <div fxFlex="100%" fxLayoutAlign="start start" fxLayout="row wrap" *ngIf="model?.content?.length > 0 && !isLoading">
 
       <mgl-timeline [side]="'right'" [alternate]="false" fxFlex="100%" [mobileWidthThreshold]="90000" [toggle]="true"
-        class="timeline">
+        class="timeline" infiniteScroll [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="50" (scrolled)="onScroll()" [scrollWindow]="false" #divTimeline>
 
         <mgl-timeline-entry *ngFor="let item of model?.content">
 
@@ -287,7 +291,7 @@
                   {{item.dateTransaction | date : 'dd/MM/yyyy'}}
                 </td>
                 <td>
-                  {{item.transactionType}}
+                  {{item.typeTransaction}}
                 </td>
                 <td>
                   {{item.dueDate | date : 'dd/MM/yyyy'}}

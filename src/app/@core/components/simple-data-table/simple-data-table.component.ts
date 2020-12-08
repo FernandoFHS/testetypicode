@@ -56,6 +56,9 @@ export class SimpleDataTableComponent implements OnInit {
   @Output()
   loadEvent: EventEmitter<Object> = new EventEmitter();
 
+  @Output()
+  viewEvent: EventEmitter<Object> = new EventEmitter();
+
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   // @ViewChild('filter',  {static: true}) filter: ElementRef;
@@ -112,5 +115,9 @@ export class SimpleDataTableComponent implements OnInit {
 
   editItem(row: object) {
     this.editEvent.emit(row);
+  }
+
+  viewItem(row) {
+    this.viewEvent.emit(row);
   }
 }

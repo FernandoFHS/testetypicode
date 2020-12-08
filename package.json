@@ -28,6 +28,7 @@
     "crypto-js": "^4.0.0",
     "moment": "^2.29.1",
     "ngx-currency": "^2.5.2",
+    "ngx-infinite-scroll": "^9.1.0",
     "ngx-mask": "^10.0.4",
     "ngx-spinner": "^10.0.1",
     "rxjs": "~6.6.0",
