@@ -1,14 +1,14 @@
+import { LocalStorageService } from './../../../services/local-storage.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, Routes, ActivatedRoute } from '@angular/router';
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
-import { HeaderModel} from 'src/app/@core/models/header.model';
+import { HeaderModel } from 'src/app/@core/models/header.model';
 import { DeleteProfileComponent } from '../../delete-profile/delete-profile.component';
 import { AgreementService } from 'src/app/services/agreement.service';
-
 
 @Component({
   selector: 'app-agreement-list',
@@ -16,6 +16,8 @@ import { AgreementService } from 'src/app/services/agreement.service';
   styleUrls: ['./agreement-list.component.scss']
 })
 export class AgreementListComponent implements OnInit {
+
+  idCompanyGroup: string;
 
   breadcrumb_model: BreadcrumbModel = {
     active: {
@@ -27,58 +29,60 @@ export class AgreementListComponent implements OnInit {
     ]
   };
 
-
   constructor(public httpClient: HttpClient,
     public dialog: MatDialog,
     private agreementService: AgreementService,
-    private router: Router) { }
+    private router: Router,
+    private route: ActivatedRoute,
+    private localStorageService: LocalStorageService
+  ) { }
 
   ngOnInit(): void {
+    this.idCompanyGroup = this.route.snapshot.queryParamMap.get('idCompanyGroup');
+    if (this.idCompanyGroup) {
+      this.localStorageService.set('idCompanyGroup', this.idCompanyGroup);
+    } else {
+      this.idCompanyGroup = this.localStorageService.get('idCompanyGroup');
+    }
   }
 
-  loadData = (sort: string, order: string, page: number, size: number) => {    
-    // this.agreementService.getAll().subscribe(data => {
-    //   console.log(data);
-    // })
-    //return this.planService.getAll();
-    return this.agreementService.getAllPaged(sort, order, page, size);
-    
+  loadData = (sort: string, order: string, page: number, size: number) => {
+    return this.agreementService.getAllPaged(sort, order, page, size, +this.idCompanyGroup);
   };
-  
 
-headers: HeaderModel[] = [
-  { text: 'Código', value: 'id' },
-  { text: 'Descrição', value: 'description'  },
-];
+  headers: HeaderModel[] = [
+    { text: 'Código', value: 'id' },
+    { text: 'Descrição', value: 'description' },
+  ];
 
-actions: ActionModel = {
-  add: true,
-  edit: true,
-  delete: true,
-  view: false
-};
+  actions: ActionModel = {
+    add: true,
+    edit: true,
+    delete: true,
+    view: false
+  };
 
-dinamicAddRouter = "/company-list/add-company";
-
-
-onDelete(row: any) {
-  const {idProfile} = row;
-  const dialogRef = this.dialog.open(DeleteProfileComponent, {
-    data: { id: idProfile },
-  });
-}
+  dinamicAddRouter = "/company-list/add-company";
 
 
-onEdit(agreement) {  
-  this.router.navigate(['/agreements/edit/'+agreement.id]);
-}
+  onDelete(row: any) {
+    const { idProfile } = row;
+    const dialogRef = this.dialog.open(DeleteProfileComponent, {
+      data: { id: idProfile },
+    });
+  }
 
-onAdd(index: number) {
-  this.router.navigate(['/agreements/add']);
-}
 
-onView(agreement) {
-  this.router.navigate(['/agreements/view/'+agreement.id]);
-}
+  onEdit(agreement) {
+    this.router.navigate(['/agreements/edit/' + agreement.id]);
+  }
+
+  onAdd(index: number) {
+    this.router.navigate(['/agreements/add']);
+  }
+
+  onView(agreement) {
+    this.router.navigate(['/agreements/view/' + agreement.id]);
+  }
 
 }

@@ -1,88 +1,109 @@
 <form [formGroup]="userTable">
   <div style="width: 100%; overflow: scroll;">
-  <table class="table table-border">
-    <thead class="text-nowrap">
-      <th *ngFor="let item of headersTax">{{item.header}}</th>
-      <th>Prazo Pagamento</th>
-      <th>Método Pagamento</th>
-      <th>Ações</th>
-    </thead>
-    <tbody>
-      <ng-container
-        formArrayName="tax"
-        *ngFor="let group of getFormControls.controls ; let i=index"
-      >
-        <tr *ngIf="true" [formGroupName]="i">
-          <td *ngFor="let item of headersTax">
-            <mat-form-field *ngIf="!item.select" class="tax-field">
-              <input
-                matInput
-                type="number"
-                [formControlName]="item.formControlName"
-              />
-            </mat-form-field>
+    <table class="table table-border">
+      <thead class="text-nowrap">
+        <th>Método Pagamento</th>
+        <th>Parcela</th>
+        <th>Taxa de Antecipação</th>
+        <th>Taxa de administração</th>
+        <th>Tarifa Crédito</th>
+        <th>Taxa de Financiamento</th>
+        <th>Custo da Transação</th>
+        <th>Valor</th>
+        <th>Prazo Pagamento</th>
+        <th>Ações</th>
+      </thead>
+      <tbody>
+        <ng-container formArrayName="tax" *ngFor="let group of getFormControls.controls; let i=index; let first=first">
+          <tr *ngIf="group.get('isEditable').value" [formGroupName]="i">
+            <td>
+              <mat-form-field *ngIf="paymentMethod$ | async as pm">
+                <mat-select [compareWith]="compareFn" formControlName="paymentMethod">
+                  <mat-option *ngFor="let option of pm" [value]="option">
+                    {{option.description ? (option.acronym + ' - ' + option.description) : option.acronym}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
 
+            <td>
+              <mat-form-field class="tax-field">
+                <input matInput type="number" min="1" max="12" formControlName="installment" />
+              </mat-form-field>
+            </td>
 
-          </td>
-          <td>
-            <mat-form-field *ngIf="paymentDeadLine$ | async as pdl">
-              <mat-select [compareWith]="compareFn" formControlName="paymentDeadLine">
-                <mat-option
-                  *ngFor="let option of pdl"
-                  [value]="option"
-                  >{{option.description}}</mat-option
-                >
-              </mat-select>
-            </mat-form-field>
+            <td>
+              <mat-form-field class="tax-field">
+                <input matInput type="text" mask="separator.2" thousandSeparator="." suffix="%"
+                  formControlName="antecipationTax" />
+              </mat-form-field>
+            </td>
 
-            
-          </td>
-          <td>
-            <mat-form-field *ngIf="paymentMethod$ | async as pm">
-            <mat-select [compareWith]="compareFn" formControlName="paymentMethod">
-              <mat-option
-                *ngFor="let option of pm"
-                [value]="option"
-                >{{option.description}}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
+            <td>
+              <mat-form-field class="tax-field">
+                <input matInput type="text" mask="separator.2" thousandSeparator="." suffix="%"
+                  formControlName="percentAdmTax" />
+              </mat-form-field>
+            </td>
 
-          </td>
-          <td>
-            <mat-icon class="delete" (click)="deleteRow(i)"
-              >delete_forever</mat-icon
-            >
-            <mat-icon class="done" (click)="doneRow(group)">done</mat-icon>
-          </td>
-        </tr>
-        <tr *ngIf="false">
-          <td *ngFor="let item of headersTax">
-            {{group.get(item.formControlName).value}}
-          </td>
-          <td>
-            <mat-icon class="edit" (click)="editRow(group)">edit</mat-icon>
-          </td>
-        </tr>
-      </ng-container>
-    </tbody>
-  </table>
-</div>
+            <td>
+              <mat-form-field class="tax-field">
+                <input matInput type="text" mask="separator.2" thousandSeparator="." suffix="%"
+                  formControlName="percentCreditTariff" />
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-form-field class="tax-field">
+                <input matInput type="text" mask="separator.2" thousandSeparator="." suffix="%"
+                  formControlName="percentFinancialTax" />
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-form-field class="tax-field">
+                <input matInput type="text" mask="separator.2" thousandSeparator="." prefix="R$ "
+                  formControlName="transactionCostAmount" />
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-form-field class="tax-field">
+                <input matInput type="text" mask="separator.2" thousandSeparator="." prefix="R$ "
+                  formControlName="value" />
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field *ngIf="paymentDeadLine$ | async as pdl">
+                <mat-select [compareWith]="compareFn" formControlName="paymentDeadLine">
+                  <mat-option *ngFor="let option of pdl" [value]="option">{{option.description}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-icon class="delete" *ngIf="!first" (click)="deleteRow(i)">delete_forever</mat-icon>
+              <mat-icon class="done" (click)="doneRow(group)">done</mat-icon>
+            </td>
+          </tr>
+          <tr *ngIf="!group.get('isEditable').value">
+            <td>{{group.get('paymentMethod').value.acronym}}</td>
+            <td>{{group.get('installment').value}}</td>
+            <td>{{group.get('antecipationTax').value}}%</td>
+            <td>{{group.get('percentAdmTax').value}}%</td>
+            <td>{{group.get('percentCreditTariff').value}}%</td>
+            <td>{{group.get('percentFinancialTax').value}}%</td>
+            <td>R$ {{group.get('transactionCostAmount').value}}</td>
+            <td>R$ {{group.get('value').value}}</td>
+            <td>{{group.get('paymentDeadLine').value.description}}</td>
+            <td><mat-icon class="edit" (click)="editRow(group)">edit</mat-icon></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
   <div class="action-container">
     <button mat-raised-button type="submit" (click)="addRow()">
       Adicionar taxa
     </button>
-    <!-- <button
-      mat-raised-button
-      [disabled]="userTable.invalid"
-      type="submit"
-      (click)="submitForm()"
-    >
-      Enviar
-    </button> -->
   </div>
 </form>
-<!-- <div class="output">
-  <p>Form Data: {{userTable.value | json}}</p>
-  <p>Is Valid: {{userTable.valid}}</p>
-</div> -->

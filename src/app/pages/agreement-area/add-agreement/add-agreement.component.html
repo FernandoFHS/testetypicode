@@ -10,16 +10,12 @@
     </label>
   </div>
   <form name="form" [formGroup]="form" novalidate *ngIf="form" class="m-b-15" autocomplete="off">
-
   <mat-expansion-panel class="m-b-25" [expanded]="true">
-
     <mat-expansion-panel-header>
       <mat-panel-title>
         Detalhes e Condições
       </mat-panel-title>
     </mat-expansion-panel-header>
-
-
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>
           Descrição
@@ -33,14 +29,14 @@
           Obrigatório
         </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="outline" floatLabel="always">
+      <!-- <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>Empresa</mat-label>
         <mat-select formControlName="idCompany">
           <mat-option *ngFor="let company of companys" [value]="company.idCompany">
             Cod. {{company.idCompany}} - {{company.companyName}} 
           </mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
 
       <mat-form-field appearance="outline">
         <mat-label>Parcelado Acelerado</mat-label>
@@ -72,14 +68,12 @@
         (deleteEvent)="onDeletePlan($event)"
         >
       </app-simple-data-table>
-
-    
     </mat-expansion-panel>
 
     <div fxLayout="row wrap">
       <div fxFlex>
-        <button mat-raised-button class="m-t-15 float-left">
-          <mat-icon [inline]="true" class="m-r-5">
+        <button mat-raised-button class="m-t-15 float-left" (click)="back()">
+          <mat-icon [inline]="true" class="m-r-5" >
             arrow_back
           </mat-icon>
           Cancelar
@@ -96,7 +90,5 @@
   
       </div>
     </div>
-    
-  
 </form>
 </div>

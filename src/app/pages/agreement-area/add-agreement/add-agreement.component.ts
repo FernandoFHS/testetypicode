@@ -32,7 +32,7 @@ export class AddAgreementComponent implements OnInit {
   ];
   addBreadcrumbModel: BreadcrumbModel = {
     active: {
-      title: 'Incluir Regra',
+      title: 'Incluir Contrato',
       route: ''
     },
     items: this._breadcrumbItems
@@ -40,7 +40,7 @@ export class AddAgreementComponent implements OnInit {
 
   editBreadcrumbModel: BreadcrumbModel = {
     active: {
-      title: 'Editar Regra',
+      title: 'Editar Contrato',
       route: ''
     },
     items: this._breadcrumbItems
@@ -49,6 +49,8 @@ export class AddAgreementComponent implements OnInit {
   form: FormGroup;
   form_conditions;
   companys: any[];
+
+  idCompanyGroup: string;
 
   plan: any = [];
 
@@ -82,9 +84,18 @@ export class AddAgreementComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
     private _planService: PlanService,
+    private route: ActivatedRoute
     ) { }
 
     async ngOnInit(): Promise<void> {
+
+      if (this.localStorageService.get('idCompanyGroup') == null) {
+        this.idCompanyGroup = this.route.snapshot.queryParamMap.get('idCompanyGroup');
+        this.localStorageService.set('idCompanyGroup', this.idCompanyGroup);
+      } else {
+        this.idCompanyGroup = this.localStorageService.get('idCompanyGroup');
+      }
+
     await this._loadParams();
 
     if (this.isPageEdit()) {
@@ -94,43 +105,21 @@ export class AddAgreementComponent implements OnInit {
       this._loadFormAdd();
     }
 
-    if (this.localStorageService.get('plan') == null) {
-      this.plan = []
-    } else {
-      this.plan = this.localStorageService.get('plan');
-    }
-
-    //this._loadFormAdd();
+   
 
     this.form.valueChanges.subscribe(newValue=>console.log('Form Parent - ',newValue));
     
-    this.companyService.getAll().subscribe(companys => {
-      this.companys = companys.content;
-    });
-
-    // this.form.controls.plans = this._formBuilder.array(this.localStorageService.get('plan'));
+    //this.companyService.getAll().subscribe(companys => {
+    // this._agreementService.getCompany(+this.idCompanyGroup).subscribe(companys => {
+      
+    //   this.companys = companys.content;
+    // });
   }
 
   private _loadModel(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._agreementService.getById(this.id).subscribe((model) => {
         this.model = model;
-        console.log(model);
-        
-
-        // if (this.model) {
-        //   //this.emails = this.model.email_notification_recipients;
-
-        //   // TODO
-        //   // this.ruleAlreadyActivated = this.model.id_user_of_activation > 0 || this.isPageView();
-        //   //this.ruleAlreadyActivated = this.model.active || this.isPageView() ? true : false;
-
-        //   resolve();
-        // }
-        // else {
-        //   this._backWithError();
-        //   reject();
-        // }
         resolve();
       }, (error) => {
         this._backWithError();
@@ -164,7 +153,6 @@ export class AddAgreementComponent implements OnInit {
     return new Promise<void>((resolve, reject) => {
       this._activatedRoute.params.subscribe((params) => {
         this.id = params['id'];
-
         if (this.id || this.id == 0) {
           this.pageType = this._router.url.includes('view') ? PageTypeEnum.VIEW : PageTypeEnum.EDIT;
           resolve();
@@ -183,7 +171,7 @@ export class AddAgreementComponent implements OnInit {
     });
     let instance = dialogRef.componentInstance;
     instance.agreementForm = this.form;
-
+    instance.isPageEdit = false;
     dialogRef.afterClosed().subscribe((item) => {
       if(item.value){
         this.plan.push(item.value);
@@ -194,15 +182,24 @@ export class AddAgreementComponent implements OnInit {
   }
 
   onEditPlan(row: object) {
-    //const index = this.plan.indexOf(row)
     let array = [] = this.planArray.value;
     let index = array.indexOf(row)
-    console.log(array[index]);
-    return 0;
     
-    const dialogRef = this.dialog.open(AddPlanComponent, {
-      data: this.model ? this.model.plans.filter(e => e === row)[0] : array[index]
-    });
+    let dialogRef = null;
+
+    // if(this.isPageEdit()){
+      dialogRef = this.dialog.open(AddPlanComponent, {
+        data: array[index]
+      });
+      let instance = dialogRef.componentInstance;
+    instance.agreementForm = this.form;
+    instance.isPageEdit = true;
+    // }else{
+    //   dialogRef = this.dialog.open(AddPlanComponent, {
+    //     data: this.model.plans.filter(e => e === row)[0]
+    //   });
+    // }
+    
     dialogRef.afterClosed().subscribe((item) => {
       Object.assign(this.plan, item);
       this.simpleDataTableService.refreshDataTable();
@@ -222,10 +219,7 @@ export class AddAgreementComponent implements OnInit {
     let array = [] = this.planArray.value;
     let index = array.indexOf(row)
 
-      
-    if(!this.model.plans.includes(array[index])){
-      
-      
+    if(!this.model || !this.model.plans.includes(array[index])){
       if(index > -1){
         this.planArray.removeAt(this.planArray.value.findIndex(item => item === array[index]))
         setTimeout(_=>{ this.simpleDataTableService.refreshDataTable(); }, 50);
@@ -249,7 +243,7 @@ export class AddAgreementComponent implements OnInit {
     this.form = this._formBuilder.group({
       description: ['', [Validators.required]],
       isFastInstallments: ['', [Validators.required]],
-      idCompany: ['', [Validators.required]],
+      idCompany: [this.idCompanyGroup],
       plans: this._formBuilder.array([]),
     });
   }
@@ -259,12 +253,9 @@ export class AddAgreementComponent implements OnInit {
       id: [this.model.id],
       description: [this.model.description, [Validators.required]],
       isFastInstallments: [this.model.isFastInstallments, [Validators.required]],
-      idCompany: [this.model.idCompany, [Validators.required]],
+      idCompany: [this.model.idCompany],
       plans: this._formBuilder.array(this.model.plans),
     });
-    // this.form.controls['remunerationType'].setValue(this.form.value.remuneration.remunerationType);
-    // console.log(this.model.plans);
-    // this.form.controls['plans'].setValue(this._formBuilder.array(this.model.plans)); 
   }
 
   save(): void {
@@ -277,7 +268,7 @@ export class AddAgreementComponent implements OnInit {
     this._agreementService.post(this.form.value).subscribe((response) => {
       this._notificationService.success('Contrato criado com sucesso!');
       this._spinnerService.hide();
-      //this._router.navigate(['rules/list']);
+      this._router.navigate(['agreements/list']);
     }, (error) => {
       this._notificationService.error('Erro ao criar contrato, tente novamente.');
       this._spinnerService.hide();
@@ -296,7 +287,7 @@ export class AddAgreementComponent implements OnInit {
     this._agreementService.put(this.form.value).subscribe((response) => {
       this._notificationService.success('Contrato criado com sucesso!');
       this._spinnerService.hide();
-      //this._router.navigate(['rules/list']);
+      this._router.navigate(['agreements/list']);
     }, (error) => {
       this._notificationService.error('Erro ao criar contrato, tente novamente.');
       this._spinnerService.hide();
