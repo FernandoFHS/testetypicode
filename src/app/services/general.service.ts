@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { ConfirmDialogComponent } from '../@core/components/confirm-dialog/confirm-dialog.component';
 
 @Injectable({
@@ -7,7 +8,8 @@ import { ConfirmDialogComponent } from '../@core/components/confirm-dialog/confi
 })
 export class GeneralService {
   constructor(
-    private _matDialog: MatDialog
+    private _matDialog: MatDialog,
+    private _router: Router
   ) { }
 
   openConfirmDialog(message: string, yesCallback: Function, noCallback: Function, title: string = null): void {
@@ -52,5 +54,21 @@ export class GeneralService {
 
   copyWithoutReferences<T>(objToCopy): T {
     return JSON.parse(JSON.stringify(objToCopy));
+  }
+
+  addDaysToDateNow(days: number): Date {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    date.setMinutes(date.getMinutes() - 1);
+    return date;
+  }
+
+  showCompanyNotFoundError(): void {
+    const message = 'Estabelecimento não encontrado, consulte o Setor Técnico.';
+    const title = 'Parâmetros Inválidos';
+
+    this.openOkDialog(message, () => {
+      this._router.navigate(['/']);
+    }, title);
   }
 }

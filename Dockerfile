@@ -1,7 +1,7 @@
 FROM node:latest as angular
 WORKDIR /app
 COPY package.json /app
-RUN npm install --silent
+RUN npm install -force --silent
 COPY . .
 RUN npm run build
 

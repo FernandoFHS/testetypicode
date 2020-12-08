@@ -379,6 +379,10 @@ html body {
         margin-top: 20px;
     }
 
+    .m-t-25 {
+        margin-top: 25px !important;
+    }
+
     .m-t-30 {
         margin-top: 30px;
     }
@@ -417,6 +421,22 @@ html body {
 
     .m-b-40 {
         margin-bottom: 40px;
+    }
+}
+
+/*******************
+Steps
+*******************/
+
+.mat-step-text-label {
+    @media (max-width: 1100px) {
+        display: none;
+    }
+}
+
+.mat-stepper-horizontal-line {
+    @media (max-width: 1100px) {
+        margin: 0 -16px 0 -74px!important;
     }
 }
 
@@ -520,6 +540,14 @@ html body {
     .b-all {
         border: 1px solid $border;
     }
+}
+
+.w-100-p {
+    width: 100%;
+}
+
+.h-100-p {
+    height: 100%;
 }
 
 /*******************
@@ -816,7 +844,7 @@ html .page-wrapper {
 // }
 
 /*******************
-Heleprs
+Helpers
 *******************/
 html,
 body {
@@ -970,5 +998,13 @@ mat-table {
         &:hover {
             background-color: #EEEEEE;
         }
+    }
+}
+
+.mat-default.mat-flat-button {
+    border: 1px solid;
+    
+    &:hover {
+        opacity: 0.7;
     }
 }

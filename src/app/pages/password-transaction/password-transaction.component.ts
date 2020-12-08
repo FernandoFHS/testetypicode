@@ -12,6 +12,17 @@ export class PasswordTransactionComponent implements OnInit {
   passwordForm: FormGroup;
   hide1 = true;
   hide2 = true;
+  hasPassword: boolean = true;
+
+  //RASCUNHOS PARA O FUTURO
+
+  //password = sessionStorage....
+
+  // hasPassword: boolean;
+  // if (password) {
+    //hasPassowrd = true;
+  //}
+
 
   breadcrumbModel: BreadcrumbModel = {
     active: {

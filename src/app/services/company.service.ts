@@ -13,7 +13,7 @@ export class CompanyService {
 
   private _refreshTable = new Subject<void>();
 
-  private readonly API_URL = 'http://company.qa.appmobbuy.tech:8080/';
+  private readonly API_URL = 'http://company.qa.appmobbuy.tech/';
 
   constructor(private httpClient: HttpClient, public _snackBar: MatSnackBar) { }
 
@@ -21,23 +21,23 @@ export class CompanyService {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   /** CRUD METHODS */
-  getAllCompanies(sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {
+  getAllCompanies(sort: string, order: string, page: number, size: number,companyGroup: number): Observable<{ content: CompanyContent[] }> {
     const requestUrl =
-      `${this.API_URL}company?sort=${sort},${order}&page=${page}&size=${size}`;
+      `${this.API_URL}company/companyGroup?sort=${sort},${order}&page=${page}&size=${size}&idCompanyGroup=${companyGroup}`;
 
     return this.httpClient.get<{ content: CompanyContent[] }>(requestUrl).pipe(
       map((data) => this._mapCompanyResponse(data)),
     );
   }
 
-  getCompaniesByName(name: string, page: number, size: number) {
+  getCompaniesByName(name: string, page: number, size: number,companyGroup: number) {
     const requestUrl =
-      `${this.API_URL}company/filters?companyName=${name}&page=${page}&size=${size}`;
+      `${this.API_URL}company/filters?companyName=${name}&page=${page}&size=${size}&idCompanyGroup=${companyGroup}`;
 
     return this.httpClient.get<CompanyContent[]>(requestUrl);
   }
   getAll(): Observable<RootObject> {  
-    return this.httpClient.get<RootObject>(`${this.API_URL}company`);
+    return this.httpClient.get<RootObject>(`${this.API_URL}company/companyGroup`);
   }
 
   getAllCompaniesByFilter(filter: { idCompany: number, documentNumberCompany: number, companyName: string }, sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {
@@ -85,7 +85,7 @@ export class CompanyService {
     return data;
   }
 
-  create(company: CompanyContent): Observable<CompanyContent> {
+  create(company): Observable<CompanyContent> {
     return this.httpClient.post<CompanyContent>(this.API_URL + 'company', company);
   }
 
@@ -94,13 +94,8 @@ export class CompanyService {
     return this.httpClient.get<CompanyContent>(url);
   }
 
-  update(company: CompanyContent): Observable<CompanyContent> {
-    const url = `${this.API_URL}/${company.idCompany}`;
-    return this.httpClient.put<CompanyContent>(url, company).pipe(
-      tap(() => {
-        this._refreshTable.next();
-      })
-    );;
+  update(company): Observable<CompanyContent> {
+    return this.httpClient.put<CompanyContent>(this.API_URL + 'company', company);
   }
 
   delete(idCompany: number): Observable<CompanyContent> {
