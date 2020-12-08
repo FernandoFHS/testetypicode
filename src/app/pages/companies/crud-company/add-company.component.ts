@@ -899,7 +899,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
       },
       idDepartament: this.identificationFormGroup.get('idDepartament').value,
-      idPlan: 0, //campo para ser o tabela de vendas
+      idPlan: this.conditionFormGroup.get('tableSaleCtrl').value,
       idTerminal: this.complementFormGroup.get('idTerminal').value,
       ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
       inclusionRegistrationDateTime: "string",
@@ -1105,7 +1105,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
           idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
         },
         idDepartament: this.identificationFormGroup.get('idDepartament').value,
-        idPlan: 0,
+        idPlan: this.conditionFormGroup.get('idPlan').value,
         idTerminal: this.complementFormGroup.get('idTerminal').value,
         ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
         inclusionRegistrationDateTime: 0,
