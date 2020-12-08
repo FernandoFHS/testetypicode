@@ -1272,16 +1272,28 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   }
 
   onEditBankAccount(row: object) {
-    const localIndex = this.bankAccount$.indexOf(row)
-    const apiIndex = this.apiBankAccount$.indexOf(row)
-    console.log(apiIndex);
-    const dialogRef = this.dialog.open(EditBankAccountComponent, {
-      data: { localIndex, apiIndex }
-    });
-    dialogRef.afterClosed().subscribe((item) => {
-      Object.assign(this.bankAccount$, item);;
-      this.phoneService.refreshDataTable();
-    })
+    if (this.isPageAdd()) {
+      const localIndex = this.bankAccount$.indexOf(row);
+      console.log(localIndex);
+
+      const dialogRef = this.dialog.open(EditBankAccountComponent, {
+        data: localIndex 
+      });
+      dialogRef.afterClosed().subscribe((item) => {
+        Object.assign(this.bankAccount$, item);;
+        this.phoneService.refreshDataTable();
+      })
+    } else {
+      const apiIndex = this.apiBankAccount$.indexOf(row)
+      const dialogRef = this.dialog.open(EditBankAccountComponent, {
+        data: apiIndex 
+      });
+
+      dialogRef.afterClosed().subscribe((item) => {
+        Object.assign(this.apiBankAccount$, item);;
+        this.phoneService.refreshDataTable();
+      })
+    }
   }
 
   onEditPartner(row: object) {

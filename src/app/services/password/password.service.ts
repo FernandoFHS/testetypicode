@@ -17,11 +17,11 @@ export class PasswordService {
   }
 
   checkLoginPassword() {
-    return this.http.get(`${this.url}registrationPass/checkExistence?idCompany=${1190}`)
+    return this.http.get(`${this.url}registrationPass/checkExistence?idCompany=${1149}`)
   }
 
   alterPassword(password) {
-    return this.http.put(`${this.url}registrationPass?idCompany=${1190}&localTransaction=${'P'}&passSale=${123456}`, password)
+    return this.http.put(`${this.url}registrationPass?idCompany=${1149}&localTransaction=${'P'}&passSale=${123}`, password)
   }
   
   createPassword(password) {

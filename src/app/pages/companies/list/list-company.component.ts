@@ -113,14 +113,10 @@ export class CompanyListComponent implements OnInit {
   }
 
   clearFilter() {
-    // let allInputs = document.querySelectorAll('input');
-    // console.log(allInputs)
-    // allInputs.forEach((input) => input.value = '');
-
     this.companyFormGroup.get('id').setValue('');
     this.companyFormGroup.get('documentNumberCompany').setValue('');
 
-    this.dataTableService.refreshDataTable();
+    this.loadData
   }
 
   onDelete(row: any) {

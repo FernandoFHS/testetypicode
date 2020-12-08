@@ -14,7 +14,7 @@ export class CompanyService {
 
   private _refreshTable = new Subject<void>();
 
-  private readonly API_URL = 'http://company.qa.appmobbuy.tech:80/';
+  private readonly API_URL = 'http://company.qa.appmobbuy.tech/';
   private datePipe = new DatePipe('pt-BR');
 
   constructor(private httpClient: HttpClient, 
@@ -27,7 +27,7 @@ export class CompanyService {
   /** CRUD METHODS */
   getAllCompanies(sort: string, order: string, page: number, size: number, idCompanyGroup: number): Observable<{ content: CompanyContent[] }> {
     const requestUrl =
-      `${this.API_URL}company/companyGroup?sort=${sort},${order}&page=${page}&size=${size}&idCompanyGroup=1008`;
+      `${this.API_URL}company/companyGroup?sort=${sort},${order}&page=${page}&size=${size}&idCompanyGroup=3`;
 
     return this.httpClient.get<{ content: CompanyContent[] }>(requestUrl).pipe(
       map((data) => this._mapCompanyResponse(data)),
@@ -46,7 +46,7 @@ export class CompanyService {
 
   getAllCompaniesByFilter(filter: { idCompany: number, documentNumberCompany: number, companyName: string }, sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {
 
-    let requestUrl = `${this.API_URL}company`;
+    let requestUrl = `${this.API_URL}company/`;
 
     let params = new HttpParams();
 

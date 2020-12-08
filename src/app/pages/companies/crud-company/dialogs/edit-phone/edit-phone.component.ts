@@ -21,6 +21,7 @@ export class EditPhoneComponent implements OnInit {
     private _formBuilder: FormBuilder,) { }
 
   ngOnInit(): void {
+    console.log(this.phoneNumber);
     this.phoneFormGroup = this._formBuilder.group({
       contactName: [''],
       companyPhone: [''],
