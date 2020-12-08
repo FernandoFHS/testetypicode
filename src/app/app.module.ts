@@ -56,10 +56,12 @@ import { RecoverPasswordAfterValidationComponent } from './pages/recover-passwor
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { FuturePostingsComponent } from './pages/current-account/future-postings/future-postings.component';
+import { TaxTableComponent } from './pages/agreement-area/components/tax-table/tax-table.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+
+
 
 registerLocaleData(localePt, 'pt-BR');
-import { TaxTableComponent } from './pages/agreement-area/components/tax-table/tax-table.component';
-
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 export const customCurrencyMaskConfig = {
@@ -131,7 +133,8 @@ export const customCurrencyMaskConfig = {
     NgxSpinnerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     Error404Module,
-    MglTimelineModule
+    MglTimelineModule,
+    InfiniteScrollModule
   ],
   providers: [
     CdkStepper,

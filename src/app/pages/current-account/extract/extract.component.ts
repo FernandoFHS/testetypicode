@@ -1,8 +1,10 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MglTimelineComponent } from 'angular-mgl-timeline/src/timeline/timeline/timeline.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { CurrentAccountFilterTypeEnum } from 'src/app/enums/current-account-filter-type.enum';
 import { CurrentAccountPageTypeEnum } from 'src/app/enums/current-account-page-type.enum';
@@ -63,6 +65,10 @@ export class ExtractComponent implements OnInit {
   @ViewChild('picker2') datePicker2: MatDatepicker<string>;
   @ViewChild('picker3') datePicker3: MatDatepicker<string>;
   @ViewChild('picker4') datePicker4: MatDatepicker<string>;
+  @ViewChild('divTimeline') divTimeline: any;
+
+  page: number = 0;
+  itemsPerPage: number = 10;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -72,7 +78,7 @@ export class ExtractComponent implements OnInit {
     private _currentAccountService: CurrentAccountService,
     private _notificationService: NotificationService,
     private _authService: AuthService,
-    // private _datePipe: DatePipe
+    private _spinnerService: NgxSpinnerService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -92,7 +98,7 @@ export class ExtractComponent implements OnInit {
   }
 
   // TODO
-  private _loadModel(): Promise<void> {
+  private _loadModel(loadBalance: boolean = true): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       try {
         this.isLoading = true;
@@ -104,7 +110,9 @@ export class ExtractComponent implements OnInit {
 
         // this._authService.login(loginRequest).then(() => {
 
-        this._loadBalance();
+        if (loadBalance) {
+          this._loadBalance();
+        }
 
         const form = this.form.getRawValue();
 
@@ -114,7 +122,8 @@ export class ExtractComponent implements OnInit {
           idCompany: this.idCompany.toString()
         };
 
-        this._currentAccountService.getExtractByFilter(filter, 0, 15).subscribe((data) => {
+        this._currentAccountService.getExtractByFilter(filter, this.page, this.itemsPerPage).subscribe((data) => {
+          console.log(data);
           this.model = data;
         }, (error) => {
           console.log(error);
@@ -136,6 +145,9 @@ export class ExtractComponent implements OnInit {
   private _loadBalance(): void {
     this._currentAccountService.getBalanceByIdCompany(this.idCompany).subscribe((data) => {
       this.balance = data;
+      console.log(this.balance);
+    }, (error) => {
+      this._notificationService.error('Erro ao carregar Saldo.');
     });
   }
 
@@ -195,14 +207,10 @@ export class ExtractComponent implements OnInit {
       this._activatedRoute.params.subscribe((params) => {
         this.idCompany = params['id_company'];
 
+        console.log(this.idCompany);
+
         if (!this.idCompany || this.idCompany == 0) {
-          const message = 'Estabelecimento não encontrado, consulte o Setor Técnico.';
-          const title = 'Parâmetros Inválidos';
-
-          this._generalService.openOkDialog(message, () => {
-            this._router.navigate(['/']);
-          }, title)
-
+          this._generalService.showCompanyNotFoundError();
           resolve();
         }
         else {
@@ -221,7 +229,13 @@ export class ExtractComponent implements OnInit {
   }
 
   filter(): void {
-    this._loadModel().then(() => {
+    this.page = 0;
+
+    if (this.divTimeline && this.divTimeline.elementRef) {
+      this.divTimeline.elementRef.nativeElement.scrollTop = 0;
+    }
+
+    this._loadModel(false).then(() => {
       this._notificationService.success('Filtro atualizado!');
     });
   }
@@ -297,6 +311,31 @@ export class ExtractComponent implements OnInit {
     if (this.pageType != pageType) {
       this.pageType = pageType;
       this._router.navigate(['current-account/future-postings/1']);
+    }
+  }
+
+  onScroll(): void {
+    if (!this.model.last) {
+      this._spinnerService.show();
+
+      const form = this.form.getRawValue();
+
+      const filter: GetExtractFilterModel = {
+        dateTransactionFinish: new Date(form.transaction_date_end),
+        dateTransactionStart: new Date(form.transaction_date_start),
+        idCompany: this.idCompany.toString()
+      };
+
+      this.page++;
+
+      this._currentAccountService.getExtractByFilter(filter, this.page, this.itemsPerPage).subscribe((data) => {
+        this.model.content.push(...data.content);
+        this.model.last = data.last;
+      }, (error) => {
+        console.log(error);
+      }, () => {
+        this._spinnerService.hide();
+      });
     }
   }
 

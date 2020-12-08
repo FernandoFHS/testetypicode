@@ -30,10 +30,12 @@ export class CurrentAccountService {
         let params = new HttpParams();
         params = params.append('idCompany', idCompany.toString());
 
-        return this._http.get<BalanceResponseModel>(`${environment.bff.url_financial}/accounts`, {
+        return this._http.get<{ content: BalanceResponseModel }>(`${environment.bff.url_account}/accounts`, {
           params: params,
           // headers: headers
-        });
+        }).pipe(map((data) => {
+          return data.content[0];
+        }));
       }
     }
     catch (error) {
@@ -45,7 +47,11 @@ export class CurrentAccountService {
   getExtractByFilter(filter: GetExtractFilterModel, page: number, size: number): Observable<ExtractResponseModel> {
     try {
       if (environment.bff.mock) {
-        return of(ExtractResponseModel.mock());
+        const response = ExtractResponseModel.mock();
+
+        response.content = response.content.slice((size * page), (size * page) + size);
+
+        return of(response);
       }
       else {
         // let headers = new HttpHeaders();
@@ -59,9 +65,9 @@ export class CurrentAccountService {
         params = params.append('idCompany', filter.idCompany);
 
         // TODO
-        // params = params.append('pageNumber', page.toString());
-        // params = params.append('pageSize', size.toString());
-        params = params.append('paged', `${false}`); // TODO
+        params = params.append('pageNumber', page.toString());
+        params = params.append('pageSize', size.toString());
+        // params = params.append('paged', `${false}`); // TODO
 
         return this._http.get<ExtractResponseModel>(`${environment.bff.url_financial}/transaction`, {
           params: params,
@@ -79,12 +85,43 @@ export class CurrentAccountService {
       console.log(error);
       of([]);
     }
+  }
 
+  getFutureReleasesByIdCompany(idCompany: number, page: number, size: number): Observable<ExtractResponseModel> {
+    try {
+      if (environment.bff.mock) {
+        return of(ExtractResponseModel.mock());
+      }
+      else {
+        let params = new HttpParams();
+        params = params.append('idCompany', idCompany.toString());
+
+        // TODO
+        // params = params.append('pageNumber', page.toString());
+        // params = params.append('pageSize', size.toString());
+        params = params.append('paged', `${false}`); // TODO
+
+        return this._http.get<ExtractResponseModel>(`${environment.bff.url_financial}/transaction/accountSettlement`, {
+          params: params,
+          // headers: headers
+        }).pipe(
+          map((data) => {
+            // TODO
+
+            return data;
+          })
+        );
+      }
+    }
+    catch (error) {
+      console.log(error);
+      of([]);
+    }
   }
 
   private formatDateToAPI(date: Date, start: boolean): string {
     const year = date.getFullYear();
-    const month = date.getMonth() + 1;
+    const month = (date.getMonth() + 1).toString().length == 1 ? `0${date.getMonth() + 1}` : (date.getMonth() + 1);
     const day = date.getDate().toString().length == 1 ? `0${date.getDate()}` : date.getDate();
 
     let response = `${year}-${month}-${day}`;

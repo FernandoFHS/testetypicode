@@ -10,11 +10,12 @@ export const environment = {
     mock: false
   },
   bff: {
-    mock: true,
+    mock: false,
     url: 'http://company.qa.appmobbuy.tech:8080',
     url_2: 'http://register-plans.qa.appmobbuy.tech:8080',
     url_login: 'http://bffauthentication.qa.appmobbuy.tech:8080/users/login',
-    url_financial: 'http://transaction.qa.appmobbuy.tech'
+    url_financial: 'http://transaction.qa.appmobbuy.tech',
+    url_account: 'http://account.qa.appmobbuy.tech'
   },
   login_mobbuy: {
     email: 'angular@mobbuy.com.br',
