@@ -990,9 +990,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     this.AgreementByCompanygroupService.getAgreementByIdCompanyGroup(this.idCompanyGroup)
       // .pipe(take(1))
       .subscribe((response) => {
-        console.log(response)
         this.optionsplans = response['content'];
-        console.log(this.optionsplans);
         this.conditionFormGroup.get('tableSaleCtrl').valueChanges
           .pipe(
             startWith(''),
