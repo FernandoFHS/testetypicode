@@ -4,7 +4,7 @@ import { ActionModel } from 'src/app/@core/models/action.model';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { MonitoringRuleModel } from 'src/app/models/monitoring-rule.model';
-import { MonitoringRuleResponseModel } from 'src/app/models/response/monitoring-rule.response.model';
+import { MonitoringRuleResponseModel } from 'src/app/models/responses/monitoring-rule.response.model';
 import { MonitoringRuleService } from 'src/app/services/monitoring-rule.service';
 import { NotificationService } from 'src/app/services/notification.service';
 

@@ -4,3 +4,8 @@ export interface PaymentDeadLineRequest {
   deadLineType: string,
   days: number
 }
+
+export interface PaymentDeadLineRoot{
+  content:PaymentDeadLineRequest
+
+}

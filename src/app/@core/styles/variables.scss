@@ -1,5 +1,6 @@
-@import '~@angular/material/theming';
-@import 'palletes';
+@import "~@angular/material/theming";
+@import "palletes";
+@import "~angular-mgl-timeline/theme";
 
 @mixin get-primary-color() {
   .default-theme & {
@@ -45,7 +46,7 @@
 
 @mixin get-primary-background-color() {
   .default-theme & {
-    background-color: map-get($map: $core-default, $key: 500);
+    background-color: map-get($map: $core-default, $key: 500) !important;
   }
 
   .orange-theme & {
@@ -98,7 +99,9 @@
 }
 
 @mixin get-primary-footer-background-color() {
-  .dark-theme &, .pink-theme &, .purple-theme & {
+  .dark-theme &,
+  .pink-theme &,
+  .purple-theme & {
     background-color: map-get($map: $mat-custom-dark, $key: 500) !important;
     color: white;
   }
@@ -113,6 +116,7 @@
   $default-foreground: map-get($default-theme, foreground);
 
   @include angular-material-theme($default-theme);
+  @include mgl-timeline-theme($default-theme);
 }
 
 .orange-theme {
@@ -124,6 +128,7 @@
   $orange-foreground: map-get($orange-theme, foreground);
 
   @include angular-material-theme($orange-theme);
+  @include mgl-timeline-theme($orange-theme);
 }
 
 .blue-theme {
@@ -135,6 +140,7 @@
   $blue-foreground: map-get($blue-theme, foreground);
 
   @include angular-material-theme($blue-theme);
+  @include mgl-timeline-theme($blue-theme);
 }
 
 .grey-theme {
@@ -146,6 +152,7 @@
   $grey-foreground: map-get($grey-theme, foreground);
 
   @include angular-material-theme($grey-theme);
+  @include mgl-timeline-theme($grey-theme);
 }
 
 .dark-theme {
@@ -155,6 +162,7 @@
   $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
   @include angular-material-theme($dark-theme);
+  @include mgl-timeline-theme($dark-theme);
 }
 
 .gold-theme {
@@ -166,6 +174,7 @@
   $gold-foreground: map-get($gold-theme, foreground);
 
   @include angular-material-theme($gold-theme);
+  @include mgl-timeline-theme($gold-theme);
 }
 
 .green-theme {
@@ -177,6 +186,7 @@
   $green-foreground: map-get($green-theme, foreground);
 
   @include angular-material-theme($green-theme);
+  @include mgl-timeline-theme($green-theme);
 }
 
 .purple-theme {
@@ -186,6 +196,7 @@
   $purple-theme: mat-dark-theme($purple-primary, $purple-accent, $purple-warn);
 
   @include angular-material-theme($purple-theme);
+  @include mgl-timeline-theme($purple-theme);
 }
 
 .wine-theme {
@@ -197,6 +208,7 @@
   $wine-foreground: map-get($wine-theme, foreground);
 
   @include angular-material-theme($wine-theme);
+  @include mgl-timeline-theme($wine-theme);
 }
 
 .pink-theme {
@@ -206,15 +218,20 @@
   $pink-theme: mat-dark-theme($pink-primary, $pink-accent, $pink-warn);
 
   @include angular-material-theme($pink-theme);
+  @include mgl-timeline-theme($pink-theme);
 }
 
 @include mat-core();
 
 $custom-typography: mat-typography-config(
-  $font-family: 'Poppins, sans-serif',
+  $font-family: "Poppins, sans-serif",
 );
 
 @include mat-core($custom-typography);
+
+mgl-timeline {
+  font-family: Poppins, sans-serif !important;
+}
 
 /*Helper Colors*/
 $danger: darkred;
@@ -231,7 +248,7 @@ $secondary: #727b84;
 
 /*Utils*/
 $bodycolor: #eef5f9;
-$primary-font: 'Poppins', sans-serif;
+$primary-font: "Poppins", sans-serif;
 $icon-color: white;
 $radius: 4px;
 $border: rgba(120, 130, 140, 0.13);

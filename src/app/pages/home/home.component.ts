@@ -16,9 +16,6 @@ export class HomeComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this._monitoringRuleService.getRuleConditionListByEnum(RuleConditionTypeListEnum.ACQUIRER).then((data) => {
-      console.log(data);
-    });
   }
 
 }

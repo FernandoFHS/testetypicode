@@ -5,7 +5,7 @@
   <form [formGroup]="phoneFormGroup">
     <mat-form-field appearance="outline">
       <mat-label>Nome do contato</mat-label>
-      <input matInput placeholder="Nome do contato" formControlName="contactName" />
+      <input matInput placeholder="Nome do contato" formControlName="contactName" required maxlength="30" />
       <mat-icon matSuffix>account_box</mat-icon>
       <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
     </mat-form-field>

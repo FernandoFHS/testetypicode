@@ -1,0 +1,133 @@
+<div fxFlexFill>
+
+  <!-- <core-breadcrumb [model]="breadcrumbModel"></core-breadcrumb> -->
+
+  <div class="m-b-25">
+    <label class="mat-display-1 page-title">
+      Transações
+    </label>
+  </div>
+
+  <div fxLayout="row wrap" class="m-b-25 m-t-20" fxLayoutAlign="end end">
+    <button mat-flat-button color="accent" class="float-right btn-download" (click)="download()">
+      <mat-icon [inline]="true" class="m-r-5">
+        cloud_download
+      </mat-icon>
+      Obter Template
+    </button>
+
+    <button mat-flat-button color="primary" class="float-right" (click)="upload()">
+      <mat-icon [inline]="true" class="m-r-5">
+        cloud_upload
+      </mat-icon>
+      Importar Transações
+    </button>
+
+    <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" accept=".csv" />
+
+    <a href="assets/Template Transacoes.csv" #downloadTemplateLink id="downloadFile" download>
+    </a>
+  </div>
+
+  <mat-expansion-panel class="m-b-25" [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> Filtros </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <form [formGroup]="form">
+
+      <div fxLayout="row wrap" fxLayoutGap="1% grid">
+
+        <mat-form-field appearance="outline" fxFlex.sm="30%" fxFlex.gt-sm="25%" fxFlex.xs="100%" floatLabel="always"
+          [ngClass.xs]="'no-padding'">
+          <mat-label>
+            Início
+          </mat-label>
+
+          <input matInput [matDatepicker]="picker1" formControlName="start">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+
+          <mat-error *ngIf="form.get('start').hasError('required')">
+            Data inválida
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex.sm="30%" fxFlex.gt-sm="25%" fxFlex.xs="100%" floatLabel="always"
+          [ngClass.lt-md]="'no-padding'">
+          <mat-label>
+            Fim
+          </mat-label>
+
+          <input matInput [matDatepicker]="picker2" formControlName="end">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+
+          <mat-error *ngIf="form.get('end').hasError('required')">
+            Data inválida
+          </mat-error>
+          <mat-error *ngIf="form.get('end').hasError('invalidEndDate')">
+            Data Final menor que Inicial
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" fxFlex.sm="40%" fxFlex.gt-sm="25%" fxFlex.xs="100%">
+          <mat-label>
+            Origem
+          </mat-label>
+
+          <mat-select formControlName="origin">
+            <mat-option [value]="'ALL'">
+              Todas
+            </mat-option>
+            <mat-option [value]="'FILE'">
+              Arquivo
+            </mat-option>
+            <mat-option [value]="'API'">
+              API
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always" fxFlex.sm="40%" fxFlex.gt-sm="25%" fxFlex.xs="100%">
+          <mat-label>
+            Status
+          </mat-label>
+
+          <mat-select formControlName="status">
+            <mat-option [value]="'ALL'">
+              Todas
+            </mat-option>
+            <mat-option [value]="'PROCESSING'">
+              Em Processamento
+            </mat-option>
+            <mat-option [value]="'SUCCESS'">
+              Sucesso
+            </mat-option>
+            <mat-option [value]="'ERROR'">
+              Erro
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+      <div fxLayout="row" class="mt-16 mb-16">
+        <button mat-flat-button color="primary" class="m-r-10" fxFlex.gt-sm="15%" fxFlex.xs="50%" fxFlex.sm="30%"
+          (click)="loadModel()">
+          FILTRAR
+        </button>
+        <button mat-flat-button color="default" class="submit-button" fxFlex.gt-sm="10%" fxFlex.xs="35%" fxFlex.sm="20%"
+          (click)="clearFilter()">
+          LIMPAR
+        </button>
+      </div>
+
+    </form>
+
+  </mat-expansion-panel>
+
+  <core-data-table [headers]="headers" [actions]="actions" [filterFunc]="loadDataByFilter" [loadFunc]="loadData"
+    [clearFilterFunc]="clearFilter">
+  </core-data-table>
+
+</div>

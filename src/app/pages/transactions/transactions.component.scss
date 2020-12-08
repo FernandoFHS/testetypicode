@@ -1,0 +1,13 @@
+#uploadFile, #downloadFile {
+  display: none;
+}
+
+.btn-download {
+  @media (max-width: 419px) {
+    margin-bottom: 15px ;
+  }
+
+  @media (min-width: 420px) {
+    margin-right: 10px;
+  }
+}

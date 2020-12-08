@@ -1,8 +1,8 @@
 import { RootObject } from './../@core/models/Company';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { Observable, pipe, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { CompanyContent } from '../models/Company';
 import { DatePipe } from '@angular/common';
@@ -25,26 +25,26 @@ export class CompanyService {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   /** CRUD METHODS */
-  getAllCompanies(sort: string, order: string, page: number, size: number, idCompanyGroup: number): Observable<{ content: CompanyContent[] }> {
+  getAllCompanies(sort: string, order: string, page: number, size: number,companyGroup: number): Observable<{ content: CompanyContent[] }> {
     const requestUrl =
-      `${this.API_URL}company/companyGroup?sort=${sort},${order}&page=${page}&size=${size}&idCompanyGroup=3`;
+      `${this.API_URL}company/companyGroup?sort=${sort},${order}&page=${page}&size=${size}&idCompanyGroup=${companyGroup}`;
 
     return this.httpClient.get<{ content: CompanyContent[] }>(requestUrl).pipe(
       map((data) => this._mapCompanyResponse(data)),
     );
   }
 
-  getCompaniesByName(name: string, page: number, size: number) {
+  getCompaniesByName(name: string, page: number, size: number,companyGroup: number) {
     const requestUrl =
-      `${this.API_URL}company/filters?companyName=${name}&page=${page}&size=${size}`;
+      `${this.API_URL}company/filters?companyName=${name}&page=${page}&size=${size}&idCompanyGroup=${companyGroup}`;
 
     return this.httpClient.get<CompanyContent[]>(requestUrl);
   }
   getAll(): Observable<RootObject> {  
-    return this.httpClient.get<RootObject>(`${this.API_URL}company`);
+    return this.httpClient.get<RootObject>(`${this.API_URL}company/companyGroup`);
   }
 
-  getAllCompaniesByFilter(filter: { idCompany: number, documentNumberCompany: number, companyName: string }, sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {
+  getAllCompaniesByFilter(filter: { idCompany: number, documentNumberCompany: number, companyName: string, idCompanyGroup:number }, sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {
 
     let requestUrl = `${this.API_URL}company/`;
 
@@ -93,8 +93,8 @@ export class CompanyService {
     return this.httpClient.post<CompanyContent>(this.API_URL + 'company', company);
   }
 
-  readById(idCompany: number): Observable<CompanyContent> {
-    const url = `${this.API_URL}company/byid?idCompanyGroup=1008&idCompany=${idCompany}`;
+  readById(idCompany: number,companyGroup:number): Observable<CompanyContent> {
+    const url = `${this.API_URL}company/byid?&idCompanyGroup=${companyGroup}&idCompany=${idCompany}`;
     return this.httpClient.get<CompanyContent>(url);
   }
 

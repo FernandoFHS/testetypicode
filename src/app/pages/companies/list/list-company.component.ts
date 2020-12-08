@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { DataTableService } from 'src/app/@core/components/data-table/data-table.service';
 import { ActionModel } from 'src/app/@core/models/action.model';
@@ -12,6 +12,7 @@ import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { HeaderModelCompany } from 'src/app/@core/models/header.model';
 import { CompanyContent } from 'src/app/models/Company';
 import { CompanyService } from 'src/app/services/company.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { DeleteProfileComponent } from '../../delete-profile/delete-profile.component';
 
 @Component({
@@ -28,6 +29,7 @@ export class CompanyListComponent implements OnInit {
   isLoadingResults = true;
   cardFilterOpened = false;
   companyFormGroup: FormGroup;
+  idCompanyGroup:any;
 
   breadcrumbModel: BreadcrumbModel = {
     active: {
@@ -44,14 +46,20 @@ export class CompanyListComponent implements OnInit {
     private companyService: CompanyService,
     private router: Router,
     private _formBuilder: FormBuilder,
-    private dataTableService: DataTableService
+    private dataTableService: DataTableService,
+    private route: ActivatedRoute,
+    private localStorageService: LocalStorageService,
   ) { }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit() {
-    this.loadForm();
+    this.idCompanyGroup = this.route.snapshot.queryParamMap.get('idCompanyGroup');
+    this.localStorageService.set('idCompanyGroup',this.idCompanyGroup);
+    console.log(this.idCompanyGroup); 
+     
+    this.loadForm();  
   }
 
   loadForm() {
@@ -74,8 +82,10 @@ export class CompanyListComponent implements OnInit {
 
   }
 
-  loadData = (sort: string, order: string, page: number, size: number, idCompanyGroup: number) => {
-    return this.companyService.getAllCompanies(sort, order, page, size, idCompanyGroup);
+  loadData = (sort: string, order: string, page: number, size: number) => {
+
+    return this.companyService.getAllCompanies(sort, order, page, size, this.idCompanyGroup);
+    
   };
 
   loadDataByFilter = (sort: string, order: string, page: number, size: number) => {
@@ -83,7 +93,8 @@ export class CompanyListComponent implements OnInit {
     const filter = {
       idCompany: form.id,
       documentNumberCompany: form.documentNumberCompany,
-      companyName: form.filter
+      companyName: form.filter,
+      idCompanyGroup:this.idCompanyGroup
     }
     return this.companyService.getAllCompaniesByFilter(filter, sort, order, page, size)
   }

@@ -1,13 +1,11 @@
 
 import { EditAgreementComponent } from './../pages/agreement-area/edit-agreement/edit-agreement.component';
-
 import { Routes } from '@angular/router';
 import { ContainerComponent } from '../@core/components/container/container.component';
 import { ThemesComponent } from '../@core/components/themes/themes.component';
 import { CompanyComponent } from '../pages/companies/company.component';
 import { HomeComponent } from '../pages/home/home.component';
 import { LoginComponent } from '../pages/login/login.component';
-// import { UserComponent } from '../pages/user/user.component';
 import { PasswordTransactionComponent } from '../pages/password-transaction/password-transaction.component';
 import { LoginGuard } from '../pages/login/login.guard';
 import { ListProfilesComponent } from '../pages/profiles/list-profiles/list-profiles.component';
@@ -15,7 +13,6 @@ import { AddProfileComponent } from '../pages/profiles/profile/crud-company/add-
 import { CompanyListComponent } from '../pages/companies/list/list-company.component';
 import { AddCompanyComponent } from '../pages/companies/crud-company/add-company.component';
 import { AddPartnerComponent } from '../pages/companies/partners/local-partner/add-partner.component';
-
 import { RulesComponent } from '../pages/rules/rules.component';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 import { AgreementListComponent } from '../pages/agreement-area/agreement-list/agreement-list.component';
@@ -31,6 +28,10 @@ import { InitialPasswordTransactionComponent } from '../pages/password-transacti
 import { ChangePasswordTransactionComponent } from '../pages/password-transaction/change-password-transaction/change-password-transaction.component';
 import { RecoverPasswordTransactionComponent } from '../pages/password-transaction/recover/recover-password-transaction/recover-password-transaction.component';
 import { RecoverPasswordAfterValidationComponent } from '../pages/recover-password-after-validation/recover-password-after-validation.component';
+import { CurrentAccountComponent } from '../pages/current-account/current-account.component';
+import { ExtractComponent } from '../pages/current-account/extract/extract.component';
+import { TransactionsComponent } from '../pages/transactions/transactions.component';
+import { FuturePostingsComponent } from '../pages/current-account/future-postings/future-postings.component';
 import { EditApiDataComponent } from '../pages/companies/partners/dinamic-partner/dinamic-partner';
 
 export const routes: Routes = [
@@ -41,7 +42,7 @@ export const routes: Routes = [
   },
   {
     path: 'password-recover-validation',
-    component: RecoverPasswordAfterValidationComponent          
+    component: RecoverPasswordAfterValidationComponent
   },
   {
     path: '',
@@ -56,6 +57,10 @@ export const routes: Routes = [
       {
         path: 'home',
         component: HomeComponent,
+      },
+      {
+        path: 'transactions',
+        component: TransactionsComponent
       },
       {
         path: 'rules',
@@ -141,7 +146,7 @@ export const routes: Routes = [
           {
             path: 'view/:id',
             component: AddCompanyComponent
-          },          
+          },
           {
             path: 'partners/add',
             component: AddPartnerComponent,
@@ -150,10 +155,6 @@ export const routes: Routes = [
             path: 'partners/local-edit/:index',
             component: AddPartnerComponent,
           },
-          // {
-          //   path: 'edit/:id/partners/api-edit/:index',
-          //   component: EditApiDataComponent,
-          // },
         ]
       },
       {
@@ -179,11 +180,45 @@ export const routes: Routes = [
           },
           {
             path: 'recover',
-            component: RecoverPasswordTransactionComponent          
+            component: RecoverPasswordTransactionComponent
           },
         ],
       },
-
+      {
+        path: 'add-partner',
+        component: AddPartnerComponent,
+      },
+      {
+        path: 'edit-partner/:index',
+        component: EditPartnerComponent,
+      },
+      {
+        path: 'current-account',
+        component: CurrentAccountComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'extract/:id_company',
+            pathMatch: 'full'
+          },
+          {
+            path: 'extract',
+            component: ExtractComponent
+          },
+          {
+            path: 'extract/:id_company',
+            component: ExtractComponent,
+          },
+          {
+            path: 'future-postings',
+            component: FuturePostingsComponent
+          },
+          {
+            path: 'future-postings/:id_company',
+            component: FuturePostingsComponent
+          }
+        ]
+      },
       {
         path: 'agreements',
         component: AgreementAreaComponent,
@@ -202,8 +237,12 @@ export const routes: Routes = [
             component: AddAgreementComponent
           },
           {
-            path: 'edit/:index',
-            component: EditAgreementComponent
+            path: 'edit/:id',
+            component: AddAgreementComponent
+          },
+          {
+            path: 'view/:id',
+            component: AddAgreementComponent
           }
         ]
       },
