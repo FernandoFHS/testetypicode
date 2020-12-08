@@ -30,6 +30,9 @@ import { RefuseButtonComponent } from './components/refuse-button/refuse-button.
 import { AcceptButtonComponent } from './components/accept-button/accept-button.component';
 import { ChangeButtonComponent } from './components/change-button/change-button.component';
 import { OnlyNumbersDirective } from './directives/only-numbers.directive';
+import { NgxMaskModule, IConfig } from 'ngx-mask';
+
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 @NgModule({
   declarations: [
@@ -68,7 +71,8 @@ import { OnlyNumbersDirective } from './directives/only-numbers.directive';
     AngularMaterialModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxMaskModule
   ],
   exports: [
     ContainerComponent,

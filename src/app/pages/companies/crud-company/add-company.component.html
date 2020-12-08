@@ -1,4 +1,4 @@
-<div fxFlexFill>
+<div fxFlexFill [hidden]="router.url.includes('partners')">
 
   <!-- <core-breadcrumb [model]="addBreadcrumbModel" *ngIf="isPageAdd()"></core-breadcrumb>
   <core-breadcrumb [model]="editBreadcrumbModel" *ngIf="isPageEdit()"></core-breadcrumb>
@@ -68,7 +68,7 @@
 
         <div class="initial-data">
           <div class="status-container">
-            <h2><span>Status: </span>Credenciado</h2>
+            <h2><span>Status: </span>Pré - Credenciado</h2>
             <mat-checkbox class="example-margin" formControlName="situation" (change)="CheckCompany($event)">Ativo
             </mat-checkbox>
 
@@ -322,7 +322,7 @@
             <mat-icon matSuffix>contacts</mat-icon>
           </mat-form-field>
 
-          <div class="filled-or-empty-form-field">
+          <div *ngIf="isPageAdd()">
             <mat-form-field appearance="outline">
               <mat-label>Ponto de Referência</mat-label>
               <input matInput placeholder="Ponto de Referência" formControlName="referencePoint" maxlength="100" />
@@ -331,14 +331,23 @@
             </mat-form-field>
           </div>
 
-        </div>
-
-        <div *ngIf="!adressFormGroup.get('referencePoint').value">
-          <br>
-        </div>
-
-        <div *ngIf="!adressFormGroup.get('referencePoint').value">
-          <br>
+          <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Ponto de Referência</mat-label>
+              <input matInput placeholder="Ponto de Referência" formControlName="referencePoint" />
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+              <mat-icon matSuffix>gps_fixed</mat-icon>
+            </mat-form-field>
+            <mat-error *ngIf="!adressFormGroup.get('referencePoint').value">Esse campo não foi cadastrado</mat-error>
+            
+            <div *ngIf="!adressFormGroup.get('referencePoint').value">
+              <br>
+            </div>
+  
+            <div *ngIf="!adressFormGroup.get('referencePoint').value">
+              <br>
+            </div>
+          </div>
         </div>
 
         <mat-divider></mat-divider>
@@ -453,7 +462,17 @@
             <mat-icon matSuffix [ngStyle]="{'color': isChecked? 'grey' : ''}">contacts</mat-icon>
           </mat-form-field>
 
-          <div class="filled-or-empty-form-field">
+          <div *ngIf="isPageAdd()">
+            <mat-form-field appearance="outline">
+              <mat-label>Ponto de Referência</mat-label>
+              <input matInput placeholder="Ponto de Referência" formControlName="subordinateReferencePointCtrl"
+                [readonly]="isChecked" />
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+              <mat-icon matSuffix [ngStyle]="{'color': isChecked? 'grey' : ''}">gps_fixed</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
             <mat-form-field appearance="outline">
               <mat-label>Ponto de Referência</mat-label>
               <input matInput placeholder="Ponto de Referência" formControlName="subordinateReferencePointCtrl"
@@ -463,26 +482,29 @@
             </mat-form-field>
             <mat-error *ngIf="!adressFormGroup.get('subordinateReferencePointCtrl').value">Esse campo não foi cadastrado
             </mat-error>
+            <div *ngIf="!adressFormGroup.get('referencePoint').value">
+              <br>
+            </div>
           </div>
-        </div>
-
-
-
-        <div *ngIf="!adressFormGroup.get('referencePoint').value">
-          <br>
         </div>
 
         <mat-divider></mat-divider>
         <h3>Cadastro de contatos</h3>
 
-        <div *ngIf="addPage">
+        <div *ngIf="isPageAdd()">
           <app-simple-data-table [headers]="headersPhoneTable" [data]="phoneNumber$" [actions]="actions"
+            (addEvent)="onAddPhone($event)" (editEvent)="onEditPhone($event)">
+          </app-simple-data-table>
+        </div> 
+
+        <div *ngIf="isPageEdit()">
+          <app-simple-data-table [headers]="headersPhoneTable" [data]="apiPhoneNumber$" [actions]="actions"
             (addEvent)="onAddPhone($event)" (editEvent)="onEditPhone($event)">
           </app-simple-data-table>
         </div>
 
-        <div *ngIf="!addPage">
-          <app-simple-data-table [headers]="headersPhoneTable" [data]="apiPhoneNumber$" [actions]="actions"
+        <div *ngIf="isPageView()">
+          <app-simple-data-table [headers]="headersPhoneTable" [data]="apiPhoneNumber$" [actions]="viewActions"
             (addEvent)="onAddPhone($event)" (editEvent)="onEditPhone($event)">
           </app-simple-data-table>
         </div>
@@ -613,8 +635,14 @@
           </app-simple-data-table>
         </div>
 
-        <div *ngIf="!addPage">
+        <div *ngIf="isPageEdit()">
           <app-simple-data-table [headers]="headersBankTable" [data]="apiBankAccount$" [actions]="actions"
+            (addEvent)="onAddBankAccount($event)" (editEvent)="onEditBankAccount($event)">
+          </app-simple-data-table>
+        </div>
+
+        <div *ngIf="isPageView()">
+          <app-simple-data-table [headers]="headersBankTable" [data]="apiBankAccount$" [actions]="viewActions"
             (addEvent)="onAddBankAccount($event)" (editEvent)="onEditBankAccount($event)">
           </app-simple-data-table>
         </div>
@@ -622,12 +650,16 @@
         <mat-divider></mat-divider>
         <br />
 
-        <!-- [(ngModel)]="isCheckedBankAdress" -->
-        <div class="space-bottom">
+        <div *ngIf="isPageAdd() || isPageEdit()" class="space-bottom">
           <mat-checkbox class="example-margin" (change)="checkValueBankAdress($event)">
             Desassociar Domicílio Bancário da Empresa?
           </mat-checkbox>
+        </div>
 
+        <div *ngIf="isPageView()" class="space-bottom">
+          <mat-checkbox class="example-margin" (change)="checkValueBankAdress($event)" disabled>
+            Desassociar Domicílio Bancário da Empresa?
+          </mat-checkbox>
         </div>
 
         <div class="line-form">
@@ -774,7 +806,7 @@
 
           <div class="line-3-form">
 
-            <div class="filled-or-empty-form-field">
+            <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Cadastro BF</mat-label>
                 <input matInput [matDatepicker]="registrationDate" placeholder="Data Cadastro BF"
@@ -782,16 +814,32 @@
                 <mat-datepicker-toggle matSuffix [for]="registrationDate"></mat-datepicker-toggle>
                 <mat-datepicker #registrationDate></mat-datepicker>
               </mat-form-field>
-              <mat-error *ngIf="!complementFormGroup.get('registrationDate').value">Esse campo não foi cadastrado
-              </mat-error>
             </div>
 
-            <div
-              *ngIf="complementFormGroup.get('registrationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('registrationDate').value">
+            <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
+              <mat-form-field appearance="outline">
+                <mat-label>Cadastro BF</mat-label>
+                <input matInput [matDatepicker]="registrationDate" placeholder="Data Cadastro BF"
+                  formControlName="registrationDate">
+                <mat-datepicker-toggle matSuffix [for]="registrationDate"></mat-datepicker-toggle>
+                <mat-datepicker #registrationDate></mat-datepicker>
+              </mat-form-field>
+              <mat-error
+              *ngIf="complementFormGroup.get('registrationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('accreditationDate').value">
+              Esse campo não foi cadastrado</mat-error>         
               <br />
             </div>
 
-            <div class="filled-or-empty-form-field">
+            <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
+              <mat-form-field appearance="outline">
+                <mat-label>Envio GP</mat-label>
+                <input matInput [matDatepicker]="gpSendDate" placeholder="Data Envio GP" formControlName="gpSendDate">
+                <mat-datepicker-toggle matSuffix [for]="gpSendDate"></mat-datepicker-toggle>
+                <mat-datepicker #gpSendDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Envio GP</mat-label>
                 <input matInput [matDatepicker]="sendDate" placeholder="Data Envio GP" formControlName="gpSendDate" numbersOnly>
@@ -801,14 +849,20 @@
               <mat-error
                 *ngIf="complementFormGroup.get('gpSendDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('gpSendDate').value">
                 Esse campo não foi cadastrado</mat-error>
-            </div>
-
-            <div
-              *ngIf="complementFormGroup.get('gpSendDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('gpSendDate').value">
               <br />
             </div>
 
-            <div class="filled-or-empty-form-field">
+            <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
+              <mat-form-field appearance="outline">
+                <mat-label>Credenciamento GP</mat-label>
+                <input matInput [matDatepicker]="accreditationDate" placeholder="Data Credencialmento GP"
+                  formControlName="accreditationDate">
+                <mat-datepicker-toggle matSuffix [for]="accreditationDate"></mat-datepicker-toggle>
+                <mat-datepicker #accreditationDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Credenciamento GP</mat-label>
                 <input matInput [matDatepicker]="accreditationDate" placeholder="Data Credencialmento GP"
@@ -819,21 +873,27 @@
               <mat-error
                 *ngIf="complementFormGroup.get('accreditationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('accreditationDate').value">
                 Esse campo não foi cadastrado</mat-error>
+              <br>
             </div>
           </div>
 
-        </div>
-
-        <div
-          *ngIf="complementFormGroup.get('accreditationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('accreditationDate').value">
-          <br />
         </div>
 
         <div class="line-form">
 
           <div class="line-3-form">
 
-            <div class="filled-or-empty-form-field">
+            <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
+              <mat-form-field appearance="outline">
+                <mat-label>Afiliação GP</mat-label>
+                <input matInput [matDatepicker]="gpAffiliationDate" placeholder="Data Afiliação GP"
+                  formControlName="gpAffiliationDate">
+                <mat-datepicker-toggle matSuffix [for]="gpAffiliationDate"></mat-datepicker-toggle>
+                <mat-datepicker #gpAffiliationDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Afiliação GP</mat-label>
                 <input matInput [matDatepicker]="gpAffiliationDate" placeholder="Data Afiliação GP"
@@ -844,14 +904,20 @@
               <mat-error
                 *ngIf="complementFormGroup.get('gpAffiliationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('gpAffiliationDate').value">
                 Esse campo não foi cadastrado</mat-error>
+              <br>
             </div>
 
-            <div
-              *ngIf="complementFormGroup.get('gpAffiliationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('gpAffiliationDate').value">
-              <br />
+            <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
+              <mat-form-field appearance="outline">
+                <mat-label>Cadastramento SE</mat-label>
+                <input matInput [matDatepicker]="seRegistrationDate" placeholder="Data Cadastramento SE"
+                  formControlName="seRegistrationDate">
+                <mat-datepicker-toggle matSuffix [for]="seRegistrationDate"></mat-datepicker-toggle>
+                <mat-datepicker #seRegistrationDate></mat-datepicker>
+              </mat-form-field>
             </div>
 
-            <div class="filled-or-empty-form-field">
+            <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Cadastramento SE</mat-label>
                 <input matInput [matDatepicker]="seRegistrationDate" placeholder="Data Cadastramento SE"
@@ -862,14 +928,20 @@
               <mat-error
                 *ngIf="complementFormGroup.get('seRegistrationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('seRegistrationDate').value">
                 Esse campo não foi cadastrado</mat-error>
-            </div>
-
-            <div
-              *ngIf="complementFormGroup.get('seRegistrationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('seRegistrationDate').value">
               <br />
             </div>
 
-            <div class="filled-or-empty-form-field">
+            <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
+              <mat-form-field appearance="outline">
+                <mat-label>Descredencimento</mat-label>
+                <input matInput [matDatepicker]="discreditationDate" placeholder="Data Descredencimento"
+                  formControlName="discreditationDate">
+                <mat-datepicker-toggle matSuffix [for]="discreditationDate"></mat-datepicker-toggle>
+                <mat-datepicker #discreditationDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Descredencimento</mat-label>
                 <input matInput [matDatepicker]="discreditationDate" placeholder="Data Descredencimento"
@@ -880,15 +952,11 @@
               <mat-error
                 *ngIf="complementFormGroup.get('discreditationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('discreditationDate').value">
                 Esse campo não foi cadastrado</mat-error>
+              <br />
             </div>
 
           </div>
 
-        </div>
-
-        <div
-          *ngIf="complementFormGroup.get('discreditationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('discreditationDate').value">
-          <br />
         </div>
 
         <div class="group-actions-buttons">
@@ -914,13 +982,20 @@
 
         <div *ngIf="addPage">
           <app-simple-data-table [headers]="headersPartnerTable" [data]="partnerSource$" [actions]="actions"
-            (addEvent)="onAddPartner($event)" (editEvent)="onEditPartner($event)">
+            (addEvent)="onAddPartnerPage($event)" (editEvent)="onEditPartner($event)">
           </app-simple-data-table>
         </div>
 
-        <div *ngIf="!addPage">
+        <div *ngIf="isPageEdit()">
           <app-simple-data-table [headers]="headersPartnerTable" [data]="apiPartnerSource$" [actions]="actions"
-            (addEvent)="onAddPartner($event)" (editEvent)="onEditPartner($event)">
+            (addEvent)="onAddPartnerPage($event)" (editEvent)="onEditPartner($event)">
+          </app-simple-data-table>
+        </div>
+
+        
+        <div *ngIf="isPageView()">
+          <app-simple-data-table [headers]="headersPartnerTable" [data]="apiPartnerSource$" [actions]="viewActions"
+            (addEvent)="onAddPartnerPage($event)" (editEvent)="onEditPartner($event)">
           </app-simple-data-table>
         </div>
 
@@ -965,3 +1040,5 @@
   </mat-horizontal-stepper>
 
 </div>
+
+<router-outlet></router-outlet>

@@ -138,6 +138,7 @@ export interface PartnerAddress {
   idCompanyPartner?: any;
   number: string;
   complement: string;
+  street: Street;
 }
 
 export interface PartnerContact {
@@ -154,7 +155,7 @@ export interface CompanyPartner {
   partnerSequentialNumber: number;
   partnerName: string;
   cpf?: any;
-  dateOfBirth: Date;
+  dateOfBirth: Date|string;
 }
 
 export interface Migration {

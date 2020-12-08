@@ -59,18 +59,18 @@ export class RecoverPasswordTransactionComponent implements OnInit {
 
   sendEmailToRecover(): void {
     if (this.recoverPasswordForm.valid) {
-      
+
       let objectSendEmail = {
         email: this.recoverPasswordForm.get('email').value,
-        idCompany: 100800001,
+        idCompany: 1189,
         password: this.recoverPasswordForm.get('password').value
       }
       const message = 'Foi enviado para o seu e-mail cadastrado um link para redefinição de senha!';
 
-      this._generalService.openOkDialog(message, () => {}, 'Link enviado');
-
-      this.passwordService.alterPassword(objectSendEmail).subscribe((response) => {
-        console.log(response)
+      this.passwordService.sendPasswordLinkToEmail(objectSendEmail).subscribe((response) => {
+        console.log(response);
+        
+        this._generalService.openOkDialog(message, () => {}, 'Link enviado');
       })
     }
   }

@@ -32,11 +32,13 @@ export class RecoverPasswordAfterValidationComponent implements OnInit {
   }
 
   recoverValidatePassword(): void {
-    // let objectRecoverPassword = {
-    //   password:  this.validationRecoverPasswordForm.get('confirmNewPassword').value
-    // }
+    let formObject = {
+       password:  this.validationRecoverPasswordForm.get('confirmNewPassword').value
+     }
 
-    // this.passwordService.
+    this.passwordService.recoverPassword(formObject).subscribe((response) => {
+      console.log(response)
+    })
   }
 
   navigateToRecoverPassword(): void {
