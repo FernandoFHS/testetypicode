@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: angular
+  annotations:
+    networking.gke.io/managed-certificates: angular
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  rules:
+  - host: angular.qa.appmobbuy.tech
+    http:
+      paths:
+      - backend:
+          serviceName: angular
+          servicePort: 80

@@ -3,7 +3,7 @@ import { PlanResponse } from './../../../models/Plan';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { CreditCardFlagRequest } from 'src/app/models/CreditCardFlag';
@@ -41,8 +41,11 @@ export class AddPlanComponent implements OnInit {
   isEdit: boolean = false;
   isAdd: boolean = false;
   isView: boolean = false;
-  
 
+  isPageEdit: boolean;
+
+  idCompanyGroup: string;
+  
   agreementForm: FormGroup
 
   constructor(public dialogRef: MatDialogRef<AddPlanComponent>,
@@ -56,7 +59,8 @@ export class AddPlanComponent implements OnInit {
     private serviceEntityService: ServiceEntityService,
     private acquirerService: AcquirerService,
     private remunerationService: RemunerationService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   formControl = new FormControl('', [
@@ -65,15 +69,20 @@ export class AddPlanComponent implements OnInit {
 
   ngOnInit(): void {
     
-    
-    if(this.data.id){
-      this.isEdit = true;            
+    if (this.localStorageService.get('idCompanyGroup') == null) {
+      this.idCompanyGroup = this.route.snapshot.queryParamMap.get('idCompanyGroup');
+      this.localStorageService.set('idCompanyGroup', this.idCompanyGroup);
+    } else {
+      this.idCompanyGroup = this.localStorageService.get('idCompanyGroup');
+    }
+        
+    if(this.isPageEdit){
       this.planFormGroup = this._formBuilder.group({
         id: [this.data.id],
         saleType: [0],
         acquirer: [this.data.acquirer, Validators.required],
         creditCardFlag: [this.data.creditCardFlag, Validators.required],
-        remuneration:  [this.data.remuneration, Validators.required],
+        remuneration:  [this.data.remuneration],
         numberOfInstallments: [this.data.numberOfInstallments]
       })
 
@@ -84,7 +93,7 @@ export class AddPlanComponent implements OnInit {
       saleType: [0],
       acquirer: ['', Validators.required],
       creditCardFlag: ['', Validators.required],
-      remuneration: ['', Validators.required],
+      remuneration: [''],
       numberOfInstallments: ['']
     })
     }
@@ -112,21 +121,22 @@ export class AddPlanComponent implements OnInit {
   }
 
   saveAccount(form) {
-    // let planArray: PlanResponse[] = this.localStorageService.get('plan');
-    // if(!planArray){
-    //   planArray = [];
-    // }
-    //console.log('formTax.length - ', this.formTax.value.tax.length);
-    form.controls['numberOfInstallments'].setValue(12);
-    // form.controls['idServiceEntity'].setValue(form.value.serviceEntity.id); 
-    // form.controls['idCreditCardFlag'].setValue(form.value.creditCardFlag.id); 
-    // form.controls['idRemunerationType'].setValue(form.value.remunerationType.id);
+    
+    this.formTax.removeControl('isEditable');
+    if(!form.value.remuneration){
+      form.removeControl('remuneration');
+    }
+    form.controls['numberOfInstallments'].setValue(this.formTax.controls.tax.length);
+
     let planAndTax = {
       ...form.value,
       ...this.formTax.value
     };
     let planValidator = form.value;
     if (typeof planValidator === 'object') {
+      if(this.isPageEdit){
+        this.planArray.removeAt(this.planArray.value.findIndex(item => item === this.data))
+      }
       this.planArray.push(this._formBuilder.control(planAndTax))
       this.dataService.openSnackBar('Plano adicionado com sucesso', 'X');
       this.dialogRef.close(form);
@@ -151,16 +161,13 @@ export class AddPlanComponent implements OnInit {
       .pipe(take(1))
       .subscribe((data) => {
         this.serviceEntity$ = of(data.content);
-        // console.log(this.planFormGroup.controls.remuneration.controls.serviceEntity);
-        // this.planFormGroup.controls.get('remuneration.serviceEntity').setValue('1300');
-        this.planFormGroup.patchValue({
-          remuneration: ({
-            serviceEntity: data.content
+        if(data.content.length>0){
+          this.planFormGroup.patchValue({
+            remuneration: ({
+              serviceEntity: data.content
+            })
           })
-        })
-
-        // this.planFormGroup.controls['remuneration'].controls['serviceEntity'].setValue(data.content); 
-
+        }
       });
   }
   getAllCreditCardFlag() {

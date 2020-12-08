@@ -36,7 +36,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Conta Corrente</mat-label>
-        <input matInput placeholder="Conta Corrente" formControlName="account" required />
+        <input matInput placeholder="Conta Corrente" formControlName="account" required numbersOnly/>
         <mat-icon matSuffix>payment</mat-icon>
         <mat-error>Campo obrigatório</mat-error>
       </mat-form-field>
@@ -47,14 +47,14 @@
     <div class="line-form">
       <mat-form-field appearance="outline">
         <mat-label>Agência</mat-label>
-        <input matInput placeholder="Agência" formControlName="agency" required />
+        <input matInput placeholder="Agência" formControlName="agency" required numbersOnly />
         <mat-icon matSuffix>account_balance</mat-icon>
         <mat-error>Campo obrigatório</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Dígito Agência</mat-label>
-        <input matInput placeholder="Dígito Agência" formControlName="agencyDigit" maxlength="1" required />
+        <input matInput placeholder="Dígito Agência" formControlName="agencyDigit" maxlength="1" required numbersOnly/>
         <mat-icon matSuffix>looks_one</mat-icon>
         <mat-error>Campo obrigatório</mat-error>
       </mat-form-field>
@@ -63,14 +63,14 @@
     <div class="line-form">
       <mat-form-field appearance="outline">
         <mat-label>Dígito Conta</mat-label>
-        <input matInput placeholder="Dígito Conta" formControlName="digit" maxlength="1" required />
+        <input matInput placeholder="Dígito Conta" formControlName="digit" maxlength="1" required numbersOnly/>
         <mat-icon matSuffix>looks_3</mat-icon>
         <mat-error>Campo obrigatório</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Dígito Agência/Conta</mat-label>
-        <input matInput placeholder="Dígito Agência/Conta" formControlName="accountDigit" maxlength="1"required />
+        <input matInput placeholder="Dígito Agência/Conta" formControlName="accountDigit" maxlength="1"required numbersOnly/>
         <mat-icon matSuffix>looks_3</mat-icon>
         <mat-error>Campo obrigatório</mat-error>
       </mat-form-field>

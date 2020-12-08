@@ -26,6 +26,7 @@ export class ChangePasswordTransactionComponent implements OnInit {
   ngOnInit(): void {
     this.changePasswordForm = this._formBuilder.group(
       {
+        // documentNumberCompany: ['', [Validators.required]],
         actualPassword: ['', [Validators.required]],
         newPassword: ['', [Validators.required]],
         confirmNewPassword: ['', [Validators.required]],
@@ -45,23 +46,15 @@ export class ChangePasswordTransactionComponent implements OnInit {
 
     this.changePasswordForm.markAllAsTouched();
 
-    this.alterPasswordForm = {
-      documentNumberCompany: 'string',
-      idCompany: 2,
-      localTransaction: 'P',
-      passSale: this.changePasswordForm.get('actualPassword').value,
+    let alterPasswordForm = {
+      password: this.changePasswordForm.get('confirmNewPassword').value,
     };
 
-    if (this.changePasswordForm.valid) {
-      const password = this.changePasswordForm.get('newPassword').value;
-      const passwordconfirm = this.changePasswordForm.get('confirmNewPassword')
-        .value;
+    console.log(alterPasswordForm);
+    this._passwordService.alterPassword(alterPasswordForm).subscribe((response: any) => {
+        console.log(response);
+        this._notificationService.success('Senha alterada com sucesso!');
+      });
 
-      console.log(this.changePasswordForm);
-      this._passwordService.alterPassword(this.changePassword).subscribe((response: any) => {
-          console.log(response);
-          this._notificationService.success('Senha alterada com sucesso!');
-        });
-    }
   }
 }

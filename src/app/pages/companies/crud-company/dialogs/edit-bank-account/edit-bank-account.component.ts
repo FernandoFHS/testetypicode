@@ -103,7 +103,6 @@ export class EditBankAccountComponent implements OnInit {
   editAccount(form) {
     let localIndex = this.data.localIndex;
 
-
     let editableItem = {
       bank: this.accountFormGroup.get('bank').value,
       agency: this.accountFormGroup.get('agency').value,

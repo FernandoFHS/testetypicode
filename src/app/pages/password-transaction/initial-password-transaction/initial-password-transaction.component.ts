@@ -96,7 +96,7 @@ export class InitialPasswordTransactionComponent implements OnInit {
   hasNotPasswordSubmit(){
     this.createPasswordForm = {
       documentNumberCompany: this.passwordForm.get('documentNumberCompany').value,
-      idCompany: 100815773,
+      idCompany: 1190,
       localTransaction: "P",
       passSale: this.passwordForm.get('passwordconfirm').value
     }

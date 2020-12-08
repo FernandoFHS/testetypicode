@@ -144,16 +144,8 @@ export class AddPartnerComponent implements OnInit {
 
   formControl = new FormControl('', [
     Validators.required,
-    // Validators.email,
   ]);
 
-  // getErrorMessage() {
-  //   return this.formControl.hasError('required')
-  //     ? 'Campo Obrigatório'
-  //     : this.formControl.hasError('email')
-  //       ? 'Not a valid email'
-  //       : '';
-  // }
   getErrorMessage(controlName: string) {
     const control = this.partnerFormGroup.get(controlName);
     return control.hasError('required')
@@ -332,7 +324,7 @@ export class AddPartnerComponent implements OnInit {
     } else {
       console.log(editableItem);
     }
-    this.router.navigate(['/companies/edit/']);
+    this.router.navigate(['/companies/add/']);
   }
 
  
