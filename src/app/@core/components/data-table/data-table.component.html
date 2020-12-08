@@ -31,15 +31,15 @@
 
       <mat-cell *matCellDef="let row">
         <div *ngIf="!header.subValue && !header.deepValue">
-          {{row[header.value]}}
+          {{header.type == 'cpf/cnpj' ? (row[header.value] | mask : 'CPF_CNPJ') : row[header.value]}}
         </div>
 
         <div *ngIf="header.subValue && !header.deepValue">
-          {{row[header.value][header.subValue]}}
+          {{ header.type == 'cpf/cnpj' ? (row[header.value][header.subValue] | mask : 'CPF_CNPJ') : row[header.value][header.subValue] }}
         </div>
 
         <div *ngIf="header.subValue && header.deepValue">
-          {{row[header.value][header.subValue][header.deepValue]}}
+          {{header.type == 'cpf/cnpj' ? (row[header.value][header.subValue][header.deepValue] | mask : 'CPF_CNPJ') : row[header.value][header.subValue][header.deepValue] }}
         </div>
       </mat-cell>
     </ng-container>

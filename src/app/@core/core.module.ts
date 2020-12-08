@@ -29,7 +29,9 @@ import { RecoverButtonComponent } from './components/recover-button/recover-butt
 import { RefuseButtonComponent } from './components/refuse-button/refuse-button.component';
 import { AcceptButtonComponent } from './components/accept-button/accept-button.component';
 import { ChangeButtonComponent } from './components/change-button/change-button.component';
+import { NgxMaskModule, IConfig } from 'ngx-mask';
 
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 @NgModule({
   declarations: [
@@ -67,7 +69,8 @@ import { ChangeButtonComponent } from './components/change-button/change-button.
     AngularMaterialModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxMaskModule
   ],
   exports: [
     ContainerComponent,

@@ -22,8 +22,8 @@ export class EditPhoneComponent implements OnInit {
 
   ngOnInit(): void {
     this.phoneFormGroup = this._formBuilder.group({
-      contactName: ['', Validators.required],
-      companyPhone: ['', Validators.required],
+      contactName: [''],
+      companyPhone: [''],
     })
 
     if (this.phoneNumber != undefined) {
@@ -48,8 +48,8 @@ export class EditPhoneComponent implements OnInit {
     let index = this.data;
 
     let editableItem = {
-      contactName: this.phoneFormGroup.get('contactName').value,
-      companyPhone: this.phoneFormGroup.get('companyPhone').value,
+      contactName: this.phoneFormGroup?.get('contactName').value,
+      companyPhone: this.phoneFormGroup?.get('companyPhone').value,
     }
 
     if (index > -1) {

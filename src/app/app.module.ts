@@ -1,6 +1,6 @@
 import { PlansComponent } from './pages/plans/plans.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
 import { CompanyListComponent } from './pages/companies/list/list-company.component';
 import { AddCompanyComponent } from './pages/companies/crud-company/add-company.component';
-import { AddPartnerComponent } from './pages/companies/partners/add/add-partner.component';
+import { AddPartnerComponent } from './pages/companies/partners/local-partner/add-partner.component';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { AddBankAccountComponent } from './pages/companies/crud-company/dialogs/add-bank-account/add-bank-account.component';
 import { EditBankAccountComponent } from './pages/companies/crud-company/dialogs/edit-bank-account/edit-bank-account.component';
@@ -37,15 +37,20 @@ import { EditPartnerComponent } from './pages/edit-partner/edit-partner.componen
 import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
 import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
 import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
-import { CdkStepper } from '@angular/cdk/stepper';
+import { CdkStepper, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ListProfilesComponent } from './pages/profiles/list-profiles/list-profiles.component';
 import { ProfileComponent } from './pages/profiles/profiles.component';
 import { InitialPasswordTransactionComponent } from './pages/password-transaction/initial-password-transaction/initial-password-transaction.component';
 import { RecoverPasswordTransactionComponent } from './pages/password-transaction/recover/recover-password-transaction/recover-password-transaction.component';
 import { ChangePasswordTransactionComponent } from './pages/password-transaction/change-password-transaction/change-password-transaction.component';
 import { RecoverPasswordAfterValidationComponent } from './pages/recover-password-after-validation/recover-password-after-validation.component';
+import { EditApiDataComponent } from './pages/companies/partners/dinamic-partner/dinamic-partner';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
-
+registerLocaleData(localePt, 'pt-BR');
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 export const customCurrencyMaskConfig = {
@@ -98,7 +103,8 @@ export const customCurrencyMaskConfig = {
     InitialPasswordTransactionComponent,
     RecoverPasswordTransactionComponent,
     ChangePasswordTransactionComponent,
-    RecoverPasswordAfterValidationComponent
+    RecoverPasswordAfterValidationComponent,
+    EditApiDataComponent
   ],
   imports: [
     BrowserModule,
@@ -112,7 +118,25 @@ export const customCurrencyMaskConfig = {
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     Error404Module
   ],
-  providers: [CdkStepper],
+  providers: [CdkStepper,
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'pt-BR',
+    },
+    {
+      provide: LOCALE_ID, 
+      useValue: 'pt-BR'
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

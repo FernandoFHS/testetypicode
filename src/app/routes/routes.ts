@@ -14,7 +14,7 @@ import { ListProfilesComponent } from '../pages/profiles/list-profiles/list-prof
 import { AddProfileComponent } from '../pages/profiles/profile/crud-company/add-profile.component';
 import { CompanyListComponent } from '../pages/companies/list/list-company.component';
 import { AddCompanyComponent } from '../pages/companies/crud-company/add-company.component';
-import { AddPartnerComponent } from '../pages/companies/partners/add/add-partner.component';
+import { AddPartnerComponent } from '../pages/companies/partners/local-partner/add-partner.component';
 
 import { RulesComponent } from '../pages/rules/rules.component';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
@@ -31,6 +31,7 @@ import { InitialPasswordTransactionComponent } from '../pages/password-transacti
 import { ChangePasswordTransactionComponent } from '../pages/password-transaction/change-password-transaction/change-password-transaction.component';
 import { RecoverPasswordTransactionComponent } from '../pages/password-transaction/recover/recover-password-transaction/recover-password-transaction.component';
 import { RecoverPasswordAfterValidationComponent } from '../pages/recover-password-after-validation/recover-password-after-validation.component';
+import { EditApiDataComponent } from '../pages/companies/partners/dinamic-partner/dinamic-partner';
 
 export const routes: Routes = [
   {
@@ -126,6 +127,16 @@ export const routes: Routes = [
           {
             path: 'edit/:id',
             component: AddCompanyComponent,
+            children: [
+              {
+                path: 'partners/api-edit/:index/:id',
+                component: EditApiDataComponent,
+              },
+              {
+                path: 'partners/api-add',
+                component: EditApiDataComponent,
+              },
+            ]
           },
           {
             path: 'view/:id',
@@ -136,9 +147,13 @@ export const routes: Routes = [
             component: AddPartnerComponent,
           },
           {
-            path: 'partners/edit/:index',
+            path: 'partners/local-edit/:index',
             component: AddPartnerComponent,
           },
+          // {
+          //   path: 'edit/:id/partners/api-edit/:index',
+          //   component: EditApiDataComponent,
+          // },
         ]
       },
       {

@@ -2,9 +2,10 @@ import { RootObject } from './../@core/models/Company';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { Observable, Subject } from 'rxjs';
+import { Observable, pipe, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { CompanyContent } from '../models/Company';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -13,17 +14,20 @@ export class CompanyService {
 
   private _refreshTable = new Subject<void>();
 
-  private readonly API_URL = 'http://company.qa.appmobbuy.tech:8080/';
+  private readonly API_URL = 'http://company.qa.appmobbuy.tech:80/';
+  private datePipe = new DatePipe('pt-BR');
 
-  constructor(private httpClient: HttpClient, public _snackBar: MatSnackBar) { }
+  constructor(private httpClient: HttpClient, 
+    public _snackBar: MatSnackBar
+    ) { }
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   /** CRUD METHODS */
-  getAllCompanies(sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {
+  getAllCompanies(sort: string, order: string, page: number, size: number, idCompanyGroup: number): Observable<{ content: CompanyContent[] }> {
     const requestUrl =
-      `${this.API_URL}company?sort=${sort},${order}&page=${page}&size=${size}`;
+      `${this.API_URL}company/companyGroup?sort=${sort},${order}&page=${page}&size=${size}&idCompanyGroup=1008`;
 
     return this.httpClient.get<{ content: CompanyContent[] }>(requestUrl).pipe(
       map((data) => this._mapCompanyResponse(data)),
@@ -90,9 +94,14 @@ export class CompanyService {
   }
 
   readById(idCompany: number): Observable<CompanyContent> {
-    const url = `${this.API_URL}company/byid?idCompany=${idCompany}`;
+    const url = `${this.API_URL}company/byid?idCompanyGroup=1008&idCompany=${idCompany}`;
     return this.httpClient.get<CompanyContent>(url);
   }
+
+  // readById(idCompany: number): Observable<CompanyContent> {
+  //   const url = `${this.API_URL}company/byid?idCompany=${idCompany}`;
+  //   return this.httpClient.get<CompanyContent>(url);
+  // }
 
   update(company): Observable<CompanyContent> {
     return this.httpClient.put<CompanyContent>(this.API_URL + 'company', company);
