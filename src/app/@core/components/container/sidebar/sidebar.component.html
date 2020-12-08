@@ -11,7 +11,7 @@
 </div>
 
 <mat-nav-list accordion>
-  <span *ngFor="let item of menuList; let last = last">
+  <span *ngFor="let item of menuList">
 
     <span *ngIf="item.children && item.children.length > 0">
 
@@ -50,7 +50,7 @@
 
     <span *ngIf="!item.children || item.children.length === 0" accordion-link routerLinkActive="selected"
       [menuItem]="item" [group]="item.route">
-      <mat-list-item [routerLink]="[item.route]" [ngClass]="last ? 'm-b-20' : ''">
+      <mat-list-item [routerLink]="[item.route]">
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <mat-icon color="primary">
             {{item.icon_name}}

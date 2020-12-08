@@ -50,7 +50,6 @@ export class EditApiDataComponent implements OnInit {
   partnerArrayEdit: any[];
   idCompany: number;
   idPartner: number;
-  idCompanyGroup:number;
 
   apiPartnerSource$: any;
   partnerSourceEdit: any = this.localStorageService.get('editPartner');
@@ -103,7 +102,6 @@ export class EditApiDataComponent implements OnInit {
 
     this.idCompany = +this.activatedRoute.snapshot.paramMap.get('id');
     this.idPartner = +this.activatedRoute.snapshot.paramMap.get('index');
-    this.idCompanyGroup =this.localStorageService.get('idCompanyGroup');
     // this.activatedRoute.params.subscribe((data) => {
     //   console.log(data);
     // })
@@ -238,7 +236,7 @@ export class EditApiDataComponent implements OnInit {
   editPartner() {
     let idPartner = +this.activatedRoute.snapshot.paramMap.get('index');
     
-    this.companyService.readById(this.idCompany,this.idCompanyGroup).subscribe((company) => {
+    this.companyService.readById(this.idCompany).subscribe((company) => {
       this.apiPartnerSource$ = company.companyPartner;
 
       let editableItem = {

@@ -1,5 +1,4 @@
-import { RootPlan } from './../models/Plan';
-import { PaymentDeadLineRequest, PaymentDeadLineRoot } from './../models/PaymentDeadLine';
+import { PaymentDeadLineRequest } from './../models/PaymentDeadLine';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment'
@@ -8,12 +7,12 @@ import { environment } from 'src/environments/environment'
   providedIn: 'root'
 })
 export class PaymentDeadLineService {
-  private readonly url = `${environment.baseUrlPlans}paymentDeadLine`;
+  private readonly url = `${environment.baseUrl}paymentDeadLine`;
 
   constructor(private http: HttpClient) { }
 
   getAll() {
-    return this.http.get<PaymentDeadLineRoot>(this.url)
+    return this.http.get<PaymentDeadLineRequest>(this.url)
   }
   getById(id:number) {
     return this.http.get<PaymentDeadLineRequest>(`${this.url}/${id}`)

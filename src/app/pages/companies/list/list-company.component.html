@@ -1,6 +1,6 @@
 <div fxFlexFill>
 
-  <!-- <core-breadcrumb [model]="breadcrumbModel"></core-breadcrumb> -->
+  <core-breadcrumb [model]="breadcrumbModel"></core-breadcrumb>
 
   <div class="m-b-25">
     <label class="mat-display-1 page-title">
@@ -41,7 +41,7 @@
           (click)="loadModel()">
           FILTRAR
         </button>
-        <button mat-flat-button color="default" class="submit-button" fxFlex.gt-sm="10%" fxFlex.xs="35%" fxFlex.sm="20%"
+        <button mat-raised-button class="submit-button" fxFlex.gt-sm="10%" fxFlex.xs="35%" fxFlex.sm="20%"
           (click)="clearFilter()">
           LIMPAR
         </button>

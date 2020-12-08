@@ -1,8 +1,6 @@
-
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
@@ -20,8 +18,7 @@ export class EditPhoneComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: any,
     private localStorageService: LocalStorageService,
-    private _formBuilder: FormBuilder,
-    public dataService: DataService) { }
+    private _formBuilder: FormBuilder,) { }
 
   ngOnInit(): void {
     console.log(this.phoneNumber);
@@ -59,7 +56,6 @@ export class EditPhoneComponent implements OnInit {
     if (index > -1) {
       Object.assign(this.phoneNumber[index], editableItem);
       localStorage.setItem('phoneNumber', JSON.stringify(this.phoneNumber));
-      this.dataService.openSnackBar('Telefone editado com sucesso', 'X');
       this.dialogRef.close(this.phoneNumber);
     } else {
       console.log(editableItem);

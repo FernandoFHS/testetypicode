@@ -3,7 +3,6 @@
 </h3>
 <div mat-dialog-content>
   <form [formGroup]="accountFormGroup">
-    
     <mat-form-field appearance="outline">
       <mat-label>Banco</mat-label>
       <input matInput aria-label="Banco" formControlName="bank" [matAutocomplete]="auto" [formControl]="bankForm">
@@ -31,7 +30,7 @@
     <div class="line-form">
       <mat-form-field appearance="outline">
         <mat-label>Agência</mat-label>
-        <input matInput placeholder="Agência" formControlName="agency" numbersOnly/>
+        <input matInput placeholder="Agência" formControlName="agency" />
         <mat-icon matSuffix>account_balance</mat-icon>
         <mat-error *ngIf="formControl.invalid">{{
           getErrorMessage()
@@ -40,7 +39,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Dígito Agência</mat-label>
-        <input matInput placeholder="Dígito Agência" formControlName="agencyDigit" maxlength="1" numbersOnly />
+        <input matInput placeholder="Dígito Agência" formControlName="agencyDigit" />
         <mat-icon matSuffix>looks_one</mat-icon>
         <mat-error *ngIf="formControl.invalid">{{
           getErrorMessage()
@@ -50,7 +49,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Conta Corrente</mat-label>
-      <input matInput placeholder="Conta Corrente" formControlName="account" numbersOnly/>
+      <input matInput placeholder="Conta Corrente" formControlName="account" />
       <mat-icon matSuffix>payment</mat-icon>
       <mat-error *ngIf="formControl.invalid">{{ getErrorMessage() }}</mat-error>
     </mat-form-field>
@@ -58,7 +57,7 @@
     <div class="line-form">
       <mat-form-field appearance="outline">
         <mat-label>Dígito Conta</mat-label>
-        <input matInput placeholder="Dígito Conta" formControlName="digit" maxlength="1" numbersOnly />
+        <input matInput placeholder="Dígito Conta" formControlName="digit" />
         <mat-icon matSuffix>looks_3</mat-icon>
         <mat-error *ngIf="formControl.invalid">{{
           getErrorMessage()
@@ -67,7 +66,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Dígito Agência/Conta</mat-label>
-        <input matInput placeholder="Dígito Agência/Conta" formControlName="accountDigit" maxlength="1" numbersOnly />
+        <input matInput placeholder="Dígito Agência/Conta" formControlName="accountDigit" />
         <mat-icon matSuffix>looks_3</mat-icon>
         <mat-error *ngIf="formControl.invalid">{{
           getErrorMessage()

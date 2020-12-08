@@ -1,4 +1,4 @@
-import { MonitoringRuleConditionResponseModel } from './responses/monitoring-rule-condition.response.model';
+import { MonitoringRuleConditionResponseModel } from './response/monitoring-rule-condition.response.model';
 
 export class MonitoringRuleModel {
   active: boolean | string;

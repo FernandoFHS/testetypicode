@@ -52,10 +52,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.displayedColumns = this.headers.map((e) => e.value);
-
-    if (this.actions.add || this.actions.delete || this.actions.edit || this.actions.view) {
-      this.displayedColumns.push('actions');
-    }
+    this.displayedColumns.push('actions');
 
     if (!this.async) {
       this._loadSyncDataTable();
@@ -92,8 +89,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
         this.idItems,
         this.sort.direction,
         this.paginator.pageIndex,
-        10,
-        2
+        10
       ).subscribe((data) => {
         this.isLoadingResults = false;
         this.resultsLength = data['totalElements'];
@@ -105,8 +101,7 @@ export class DataTableComponent implements AfterViewInit, OnInit {
       this.idItems,
       this.sort.direction,
       this.paginator.pageIndex,
-      10,
-      2
+      10
     ).subscribe((data) => {
       this.isLoadingResults = false;
       this.resultsLength = data['totalElements'];

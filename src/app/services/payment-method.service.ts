@@ -1,4 +1,4 @@
-import { PaymentMethodRequest, PaymentMethodRoot } from './../models/PaymentMethod';
+import { PaymentMethodRequest } from './../models/PaymentMethod';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -7,12 +7,12 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class PaymentMethodService {
-  private readonly url = `${environment.baseUrlPlans}paymentMethod`;
+  private readonly url = `${environment.baseUrl}paymentMethod`;
 
   constructor(private http: HttpClient) { }
 
   getAll() {
-    return this.http.get<PaymentMethodRoot>(this.url)
+    return this.http.get<PaymentMethodRequest>(this.url)
   }
   getById(id:number) {
     return this.http.get<PaymentMethodRequest>(`${this.url}/${id}`)

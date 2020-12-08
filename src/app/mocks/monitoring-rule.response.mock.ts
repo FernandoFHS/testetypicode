@@ -1,4 +1,4 @@
-import { MonitoringRuleResponseModel } from '../models/responses/monitoring-rule.response.model';
+import { MonitoringRuleResponseModel } from '../models/response/monitoring-rule.response.model';
 
 export const MonitoringRuleResponseMock: MonitoringRuleResponseModel = {
   content: [

@@ -11,8 +11,8 @@ export class CompanyByLevelService {
 
   constructor(private http: HttpClient) {  }
 
-  getByLevel(idCompanyGroup) {
-    return this.http.get(`${this.url}?idCompanyGroup=${idCompanyGroup}&level=${70}`)
+  getByLevel() {
+    return this.http.get(this.url+"?idCompanyGroup=1008&level=70")
   }
 
 }

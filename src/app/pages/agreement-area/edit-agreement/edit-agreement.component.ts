@@ -10,7 +10,7 @@ export class EditAgreementComponent implements OnInit {
   
   breadcrumb_model: BreadcrumbModel = {
     active: {
-      title: 'Editar Contrato',
+      title: 'Editar Acordo',
       route: 'rule'
     },
     items: [

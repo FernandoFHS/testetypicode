@@ -1,8 +1,8 @@
 <div fxFlexFill [hidden]="router.url.includes('partners')">
 
-  <!-- <core-breadcrumb [model]="addBreadcrumbModel" *ngIf="isPageAdd()"></core-breadcrumb>
+  <core-breadcrumb [model]="addBreadcrumbModel" *ngIf="isPageAdd()"></core-breadcrumb>
   <core-breadcrumb [model]="editBreadcrumbModel" *ngIf="isPageEdit()"></core-breadcrumb>
-  <core-breadcrumb [model]="viewBreadcrumbModel" *ngIf="isPageView()"></core-breadcrumb> -->
+  <core-breadcrumb [model]="viewBreadcrumbModel" *ngIf="isPageView()"></core-breadcrumb>
 
   <div *ngIf="isPageAdd()">
     <div class="m-b-25">
@@ -104,21 +104,16 @@
 
         <div class="line-form">
 
-          <div class="short-line-form">
-
-            <mat-form-field appearance="outline">
-              <mat-label>Empresa Adquirente</mat-label>
-              <input matInput placeholder="Empresa Adquirente" formControlName="gpEstablishmentNumber" numbersOnly
-                maxlength="150" />
-              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-              <mat-icon matSuffix>home_work</mat-icon>
-            </mat-form-field>
-          </div>
+          <mat-form-field appearance="outline">
+            <mat-label>Empresa Adquirente</mat-label>
+            <input matInput placeholder="Empresa Adquirente" formControlName="gpEstablishmentNumber" />
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <mat-icon matSuffix>home_work</mat-icon>
+          </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Inscrição Estadual</mat-label>
-            <input matInput placeholder="Inscrição Estadual" formControlName="stateRegistration" numbersOnly
-              mask="000000000000" />
+            <input matInput placeholder="Inscrição Estadual" formControlName="stateRegistration" mask="000000000000" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>assignment</mat-icon>
           </mat-form-field>
@@ -133,8 +128,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Razão Social</mat-label>
-            <input matInput placeholder="Razão Social" formControlName="companyName"
-              oninput="this.value = this.value.toUpperCase() " maxlength="150" />
+            <input matInput placeholder="Razão Social" formControlName="companyName" #input
+              (input)="input.value=$event.target.value.toUpperCase()" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>assignment</mat-icon>
           </mat-form-field>
@@ -143,14 +138,14 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Nome Fantasia</mat-label>
-              <input matInput placeholder="Nome Fantasia" formControlName="fancyName" maxlength="150" />
+              <input matInput placeholder="Nome Fantasia" formControlName="fancyName" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>perm_contact_calendar</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Nome Reduzido</mat-label>
-              <input matInput placeholder="Razão Social" formControlName="companyShortName" maxlength="150" />
+              <input matInput placeholder="Razão Social" formControlName="companyShortName" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>short_text</mat-icon>
             </mat-form-field>
@@ -163,7 +158,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Atividade comercial</mat-label>
-            <input matInput formControlName="businessActivity" maxlength="150">
+            <input matInput formControlName="businessActivity">
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>meeting_room</mat-icon>
           </mat-form-field>
@@ -171,25 +166,17 @@
           <div class="short-line-2-form">
             <mat-form-field appearance="outline">
               <mat-label>Departamento</mat-label>
-              <input matInput placeholder="Departamento" formControlName="idDepartament" maxlength="6" numbersOnly />
+              <input matInput placeholder="Departamento" formControlName="idDepartament" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>meeting_room</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Data de abertura</mat-label>
-              <input matInput [matDatepicker]="dp" formControlName="openingDate" placeholder="00/00/0000" >
+              <input matInput [matDatepicker]="dp" formControlName="openingDate">
               <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
-              <mat-error *ngIf="!identificationFormGroup.get('openingDate').value">Data incorreta</mat-error>
             </mat-form-field>
-            <!-- 
-            <mat-form-field appearance="outline">
-              <mat-label>Data de abertura</mat-label>
-              <input  matInput [matDatepicker]="dp" formControlName="openingDate" (dateInput)="first($event.value.format('D/MM/YYYY'))" placeholder="Enter date">
-              <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-              <mat-datepicker #dp></mat-datepicker>
-            </mat-form-field> -->
           </div>
 
         </div>
@@ -212,7 +199,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>MCC</mat-label>
-              <input matInput placeholder="MCC" formControlName="mcccode" maxlength="4" numbersOnly mask="0000" />
+              <input matInput placeholder="MCC" formControlName="mcccode" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>assignment</mat-icon>
             </mat-form-field>
@@ -259,7 +246,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Logradouro</mat-label>
-            <input matInput placeholder="Digite o seu endereço" formControlName="streetName" maxlength="100" />
+            <input matInput placeholder="Digite o seu endereço" formControlName="streetName" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>add_road</mat-icon>
           </mat-form-field>
@@ -268,14 +255,14 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Número</mat-label>
-              <input matInput placeholder="Número" formControlName="number" maxlength="10" />
+              <input matInput placeholder="Número" formControlName="number" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>looks_one</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Complemento</mat-label>
-              <input matInput placeholder="Complemento" formControlName="complement" maxlength="100" />
+              <input matInput placeholder="Complemento" formControlName="complement" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>note_add</mat-icon>
             </mat-form-field>
@@ -288,7 +275,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Bairro</mat-label>
-            <input matInput placeholder="Bairro" formControlName="neighborhoodName" maxlength="100" />
+            <input matInput placeholder="Bairro" formControlName="neighborhoodName" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>map</mat-icon>
           </mat-form-field>
@@ -297,14 +284,14 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Município</mat-label>
-              <input matInput placeholder="Digite o seu município" formControlName="cityName" maxlength="100" />
+              <input matInput placeholder="Digite o seu município" formControlName="cityName" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>map</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Estado</mat-label>
-              <input matInput placeholder="Digite o seu estado" formControlName="uf" required maxlength="2" />
+              <input matInput placeholder="Digite o seu estado" formControlName="uf" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>map</mat-icon>
             </mat-form-field>
@@ -317,7 +304,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Nome do Responsável</mat-label>
-            <input matInput placeholder="Nome do Responsável" formControlName="responsibleNameCtrl" maxlength="100" />
+            <input matInput placeholder="Nome do Responsável" formControlName="responsibleNameCtrl" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>contacts</mat-icon>
           </mat-form-field>
@@ -325,7 +312,7 @@
           <div *ngIf="isPageAdd()">
             <mat-form-field appearance="outline">
               <mat-label>Ponto de Referência</mat-label>
-              <input matInput placeholder="Ponto de Referência" formControlName="referencePoint" maxlength="100" />
+              <input matInput placeholder="Ponto de Referência" formControlName="referencePoint" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>gps_fixed</mat-icon>
             </mat-form-field>
@@ -386,8 +373,10 @@
           <mat-form-field appearance="outline">
             <mat-label>Logradouro</mat-label>
             <input matInput placeholder="Digite o seu endereço" formControlName="subordinateStreetCtrl"
-              [readonly]="isChecked" maxlength="100" />
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+              [readonly]="isChecked" />
+            <mat-error *ngIf="formControl.invalid">{{
+            getErrorMessage()
+          }}</mat-error>
             <mat-icon matSuffix [ngStyle]="{ color: isChecked ? 'grey' : '' }">add_road</mat-icon>
           </mat-form-field>
 
@@ -396,15 +385,17 @@
             <mat-form-field appearance="outline">
               <mat-label>Número</mat-label>
               <input matInput placeholder="Digite o seu número" formControlName="subordinateNumberCtrl"
-                [readonly]="isChecked" maxlength="10"/>
-              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+                [readonly]="isChecked" />
+              <mat-error *ngIf="formControl.invalid">{{
+              getErrorMessage()
+            }}</mat-error>
               <mat-icon matSuffix [ngStyle]="{ color: isChecked ? 'grey' : '' }">looks_two</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Complemento</mat-label>
               <input matInput placeholder="Complemento" formControlName="subordinateComplementCtrl"
-                [readonly]="isChecked" maxlength="100" />
+                [readonly]="isChecked" />
               <mat-error *ngIf="formControl.invalid">{{
               getErrorMessage()
             }}</mat-error>
@@ -419,7 +410,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Bairro</mat-label>
-            <input matInput placeholder="Bairro" formControlName="subordinateNeighborhoodCtrl" [readonly]="isChecked" maxlength="100" />
+            <input matInput placeholder="Bairro" formControlName="subordinateNeighborhoodCtrl" [readonly]="isChecked" />
             <mat-error *ngIf="formControl.invalid">{{
             getErrorMessage()
           }}</mat-error>
@@ -431,7 +422,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Município</mat-label>
               <input matInput placeholder="Digite o seu município" formControlName="subordinateCityCtrl"
-                [readonly]="isChecked" maxlength="100" />
+                [readonly]="isChecked" />
               <mat-error *ngIf="formControl.invalid">{{
               getErrorMessage()
             }}</mat-error>
@@ -441,7 +432,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Estado</mat-label>
               <input matInput placeholder="Digite o seu estado" formControlName="subordinateStateCtrl"
-                [readonly]="isChecked"maxlength="100" />
+                [readonly]="isChecked" />
               <mat-error *ngIf="formControl.invalid">{{
               getErrorMessage()
             }}</mat-error>
@@ -457,7 +448,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Nome do Responsável</mat-label>
             <input matInput placeholder="Nome do Responsável" formControlName="subordinateResponsibleNameCtrl"
-              [readonly]="isChecked" maxlength="100" />
+              [readonly]="isChecked" />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix [ngStyle]="{'color': isChecked? 'grey' : ''}">contacts</mat-icon>
           </mat-form-field>
@@ -476,7 +467,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Ponto de Referência</mat-label>
               <input matInput placeholder="Ponto de Referência" formControlName="subordinateReferencePointCtrl"
-                [readonly]="isChecked" maxlength="100"/>
+                [readonly]="isChecked" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix [ngStyle]="{'color': isChecked? 'grey' : ''}">gps_fixed</mat-icon>
             </mat-form-field>
@@ -810,7 +801,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Cadastro BF</mat-label>
                 <input matInput [matDatepicker]="registrationDate" placeholder="Data Cadastro BF"
-                  formControlName="registrationDate" numbersOnly >
+                  formControlName="registrationDate">
                 <mat-datepicker-toggle matSuffix [for]="registrationDate"></mat-datepicker-toggle>
                 <mat-datepicker #registrationDate></mat-datepicker>
               </mat-form-field>
@@ -842,7 +833,7 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Envio GP</mat-label>
-                <input matInput [matDatepicker]="sendDate" placeholder="Data Envio GP" formControlName="gpSendDate" numbersOnly>
+                <input matInput [matDatepicker]="sendDate" placeholder="Data Envio GP" formControlName="gpSendDate">
                 <mat-datepicker-toggle matSuffix [for]="gpSendDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpSendDate></mat-datepicker>
               </mat-form-field>
@@ -866,7 +857,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Credenciamento GP</mat-label>
                 <input matInput [matDatepicker]="accreditationDate" placeholder="Data Credencialmento GP"
-                  formControlName="accreditationDate" numbersOnly>
+                  formControlName="accreditationDate">
                 <mat-datepicker-toggle matSuffix [for]="accreditationDate"></mat-datepicker-toggle>
                 <mat-datepicker #accreditationDate></mat-datepicker>
               </mat-form-field>
@@ -897,7 +888,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Afiliação GP</mat-label>
                 <input matInput [matDatepicker]="gpAffiliationDate" placeholder="Data Afiliação GP"
-                  formControlName="gpAffiliationDate" numbersOnly >
+                  formControlName="gpAffiliationDate">
                 <mat-datepicker-toggle matSuffix [for]="gpAffiliationDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpAffiliationDate></mat-datepicker>
               </mat-form-field>
@@ -921,7 +912,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Cadastramento SE</mat-label>
                 <input matInput [matDatepicker]="seRegistrationDate" placeholder="Data Cadastramento SE"
-                  formControlName="seRegistrationDate" numbersOnly >
+                  formControlName="seRegistrationDate">
                 <mat-datepicker-toggle matSuffix [for]="seRegistrationDate"></mat-datepicker-toggle>
                 <mat-datepicker #seRegistrationDate></mat-datepicker>
               </mat-form-field>
@@ -945,7 +936,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Descredencimento</mat-label>
                 <input matInput [matDatepicker]="discreditationDate" placeholder="Data Descredencimento"
-                  formControlName="discreditationDate" numbersOnly >
+                  formControlName="discreditationDate">
                 <mat-datepicker-toggle matSuffix [for]="discreditationDate"></mat-datepicker-toggle>
                 <mat-datepicker #discreditationDate></mat-datepicker>
               </mat-form-field>

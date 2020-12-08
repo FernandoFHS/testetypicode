@@ -1,7 +1,0 @@
-apiVersion: networking.gke.io/v1beta2
-kind: ManagedCertificate
-metadata:
-  name: angular
-spec:
-  domains:
-    - angular.qa.appmobbuy.tech

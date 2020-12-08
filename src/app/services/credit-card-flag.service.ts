@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CreditCardFlagService {
-  private readonly url = `${environment.baseUrlPlans}creditcardflag`;
+  private readonly url = `${environment.baseUrl}creditcardflag`;
 
   constructor(private http: HttpClient) { }
 

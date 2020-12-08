@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { CoreModule } from './@core/core.module';
@@ -24,18 +25,10 @@ import { DeletePhoneComponent } from './pages/companies/crud-company/dialogs/del
 import { DeletePartnerComponent } from './pages/companies/crud-company/dialogs/delete-partner/delete-partner.component';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { SimpleDataTableComponent } from './@core/components/simple-data-table/simple-data-table.component';
-import { AddPlanComponent } from './pages/dialogs/add-plan/add-plan.component';
 import { RulesComponent } from './pages/rules/rules.component';
 import { RuleComponent } from './pages/rules/rule/rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
 import { Error404Module } from './pages/errors/404/error-404.module';
-import { CurrentAccountComponent } from './pages/current-account/current-account.component';
-import { ExtractComponent } from './pages/current-account/extract/extract.component';
-import { TransactionsComponent } from './pages/transactions/transactions.component';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MglTimelineModule } from 'angular-mgl-timeline';
 import { EditPhoneComponent } from './pages/companies/crud-company/dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './pages/companies/crud-company/dialogs/add-phone/add-phone.component';
 import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
@@ -51,13 +44,11 @@ import { InitialPasswordTransactionComponent } from './pages/password-transactio
 import { RecoverPasswordTransactionComponent } from './pages/password-transaction/recover/recover-password-transaction/recover-password-transaction.component';
 import { ChangePasswordTransactionComponent } from './pages/password-transaction/change-password-transaction/change-password-transaction.component';
 import { RecoverPasswordAfterValidationComponent } from './pages/recover-password-after-validation/recover-password-after-validation.component';
+import { EditApiDataComponent } from './pages/companies/partners/dinamic-partner/dinamic-partner';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
-import { FuturePostingsComponent } from './pages/current-account/future-postings/future-postings.component';
-import { TaxTableComponent } from './pages/agreement-area/components/tax-table/tax-table.component';
-import { EditApiDataComponent } from './pages/companies/partners/dinamic-partner/dinamic-partner';
-
-
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 registerLocaleData(localePt, 'pt-BR');
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -109,17 +100,11 @@ export const customCurrencyMaskConfig = {
     AddAgreementComponent,
     PlansComponent,
     DeleteTaxComponent,
-    CurrentAccountComponent,
-    ExtractComponent,
-    TransactionsComponent,
     InitialPasswordTransactionComponent,
     RecoverPasswordTransactionComponent,
     ChangePasswordTransactionComponent,
     RecoverPasswordAfterValidationComponent,
-    FuturePostingsComponent,
-    AddPlanComponent,
-    TaxTableComponent,    
-    EditApiDataComponent,
+    EditApiDataComponent
   ],
   imports: [
     BrowserModule,
@@ -131,11 +116,9 @@ export const customCurrencyMaskConfig = {
     CoreModule,
     NgxSpinnerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-    Error404Module,
-    MglTimelineModule
+    Error404Module
   ],
-  providers: [
-    CdkStepper,
+  providers: [CdkStepper,
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { displayDefaultIndicatorType: false },
@@ -153,8 +136,7 @@ export const customCurrencyMaskConfig = {
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-  ],
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

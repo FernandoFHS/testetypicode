@@ -100,15 +100,13 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   bankingFormGroup: FormGroup;
   companyPartnerFormGroup: FormGroup;
   companyAdressFormGroup: FormGroup;
-
+  
 
   endereco: any;
   formulariocompleto: any;
 
   optionscompany: any;
   optionscnae: any;
-
-  dateformated: any;
 
 
   plus: any;
@@ -139,7 +137,6 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
   addPage: boolean;
   companyValidatorError = false;
-  idCompanyGroup: any;
 
   referencePointNullValue: boolean;
   accreditationDateNullValue: boolean;
@@ -240,7 +237,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.idCompanyGroup = this.localStorageService.get('idCompanyGroup');
+    // setInterval(() => console.log(this.apiPartnerSource$), 1000);
 
     this.isLoading = true;
 
@@ -314,20 +311,20 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       companyType: [this.identification?.companyType || '', Validators.required],
       situation: [this.identification?.situation || '', Validators.required],
       documentNumberCompany: [this.identification?.documentNumberCompany || '', Validators.required],
-      gpEstablishmentNumber: [parseInt(this.identification?.gpEstablishmentNumber) || ''],
+      gpEstablishmentNumber: [parseInt(this.identification?.gpEstablishmentNumber) || '', Validators.required],
       stateRegistration: [parseInt(this.identification?.stateRegistration) || '', Validators.required],
       companyName: [this.identification?.companyName || '', Validators.required],
       fancyName: [this.identification?.fancyName || '', Validators.required],
       companyShortName: [this.identification?.companyShortName || '', Validators.required],
       mcccode: [this.identification?.mcccode || '', Validators.required],
-      idDepartament: [parseInt(this.identification?.idDepartament) || ''],
+      idDepartament: [parseInt(this.identification?.idDepartament) || '', Validators.required],
       idCompanyOwner: [''],
       cnae: [this.identification?.cnae || '', Validators.required],
       idCnae: [this.identification?.idCnae || ''],
       businessActivity: [this.identification?.businessActivity || '', Validators.required],
       openingDate: [this.identification?.openingDate || '', Validators.required]
     },
-      { validator: autoCompleteValidator('companyResponsible') });
+      { validator: autoCompleteValidator('companyResponsible')});
 
     this.adressFormGroup = this._formBuilder.group({
       streetName: [this.adress?.streetName || '', Validators.required],
@@ -370,7 +367,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       estUrl: [this.complement?.estUrl || '', Validators.required],
       email: [this.complement?.email || '', Validators.required],
       posQuantity: [parseInt(this.complement?.posQuantity) || '', Validators.required],
-      logicalNumber: [{ value: 0, disabled: true }],
+      logicalNumber: [{value: 0, disabled: true}],
       idTerminal: [this.complement?.idTerminal || '', Validators.required],
       registerCode: [this.complement?.registerCode || '', Validators.required],
       registrationDate: [this.complement?.registrationDate || ''],
@@ -427,7 +424,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   private loadEditModel() {
     this.addPage = false;
 
-    this.companyService.readById(this.id, this.idCompanyGroup).subscribe((company) => {
+    this.companyService.readById(this.id).subscribe((company) => {
       this.apiPhoneNumber$ = company.companyContact;
       this.apiBankAccount$ = company.externalBankAccount;
       this.apiPartnerSource$ = company.companyPartner;
@@ -460,7 +457,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   private loadViewModel() {
     this.addPage = false;
 
-    this.companyService.readById(this.id, this.idCompanyGroup).subscribe((company) => {
+    this.companyService.readById(this.id).subscribe((company) => {
       this.apiPhoneNumber$ = company.companyContact;
       this.apiBankAccount$ = company.externalBankAccount;
       this.apiPartnerSource$ = company.companyPartner;
@@ -547,7 +544,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     this.companyAdressFormGroup = this._formBuilder.group({
       companyAddress: this._formBuilder.array(company.companyAddress),
     });
-
+  
     //Contact FormGroup
     this.contactFormGroup = this._formBuilder.group({
       companyContact: this._formBuilder.array(this.apiPhoneNumber$),
@@ -598,7 +595,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       neighborhoodName: [{ value: this.adress?.neighborhoodName || '', disabled: true }],
       cityName: [{ value: this.adress?.cityName || '', disabled: true }],
       stateName: [{ value: this.adress?.stateName || '', disabled: true }],
-      uf: [{ value: this.adress?.uf || '', disabled: true }],
+      uf: [{value: this.adress?.uf || '', disabled: true}],
       responsibleNameCtrl: [{ value: this.adress?.responsibleNameCtrl || '', disabled: true }],
       referencePoint: [{ value: this.adress?.referencePoint || '', disabled: true }],
       zipCode: [{ value: this.adress?.zipCode || '', disabled: true }],
@@ -666,29 +663,29 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       businessActivity: company.businessActivity,
       openingDate: company.openingDate
     });
+    
 
+      this.adressFormGroup.patchValue({
+        streetName: company.companyAddress[0].street.streetName,
+        number: company.companyAddress[0].number,
+        complement: company.companyAddress[0].complement,
+        neighborhoodName: company.companyAddress[0].street.neighborhood.neighborhoodName,
+        cityName: company.companyAddress[0].street.city.cityName,
+        uf: company.companyAddress[0].street.state.uf,
+        referencePoint: company.referencePoint,
+        zipCode: company.companyAddress[0].street.zipCode,
+        subordinateZipCode: company.companyAddress[1].street.zipCode,
+        subordinateNeighborhoodCtrl: company.companyAddress[1].street.streetName,
+        subordinateCityCtrl: company.companyAddress[1].street.city.cityName,
+        subordinateStreetCtrl: company.companyAddress[1].street.streetName,
+        subordinateNumberCtrl: company.companyAddress[1].number,
+        subordinateComplementCtrl: company.companyAddress[1].complement,
+        subordinateStateCtrl: company.companyAddress[1].street.state.uf,
+        subordinateReferencePointCtrl: company.referencePoint
+      });
 
-    this.adressFormGroup.patchValue({
-      streetName: company.companyAddress[0].street.streetName,
-      number: company.companyAddress[0].number,
-      complement: company.companyAddress[0].complement,
-      neighborhoodName: company.companyAddress[0].street.neighborhood.neighborhoodName,
-      cityName: company.companyAddress[0].street.city.cityName,
-      uf: company.companyAddress[0].street.state.uf,
-      referencePoint: company.referencePoint,
-      zipCode: company.companyAddress[0].street.zipCode,
-      subordinateZipCode: company.companyAddress[1].street.zipCode,
-      subordinateNeighborhoodCtrl: company.companyAddress[1].street.streetName,
-      subordinateCityCtrl: company.companyAddress[1].street.city.cityName,
-      subordinateStreetCtrl: company.companyAddress[1].street.streetName,
-      subordinateNumberCtrl: company.companyAddress[1].number,
-      subordinateComplementCtrl: company.companyAddress[1].complement,
-      subordinateStateCtrl: company.companyAddress[1].street.state.uf,
-      subordinateReferencePointCtrl: company.referencePoint
-    });
-
-    console.log(company.companyAddress)
-
+      console.log(company.companyAddress)
+    
     this.conditionFormGroup.patchValue({
       automaticCreditIndicator: company.automaticCreditIndicator,
       transactionAmount: company.transactionAmount,
@@ -886,12 +883,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       gpReturnDate: "string",
       gpSendDate: this.complementFormGroup.get('gpSendDate').value,
       idCompany: 0,
-      companyGroup: {
-        idCompany: parseInt(this.idCompanyGroup)
-      },
-      companyOwner: {
-        idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
-      },
+      idCompanyGroup: 1008,
+      idCompanyOwner: this.identificationFormGroup.get('idCompanyOwner').value,
       idDepartament: this.identificationFormGroup.get('idDepartament').value,
       idPlan: 0,
       idTerminal: this.complementFormGroup.get('idTerminal').value,
@@ -936,33 +929,59 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         }
       },
       companyPartner: this.localStorageService.get('partnerFormGroup'),
-
+      // companyPartner: [
+      //   {
+      //     idCompanyPartner: 0,
+      //     idCompany: 0,
+      //     partnerSequentialNumber: 1,
+      //     partnerName: this.partnerFormGroup.get('partnerName').value,
+      //     cpf: this.partnerFormGroup.get('cpf').value,
+      //     dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
+      //     partnerAddress: [
+      //       {
+      //         idPartnerAddress: 0,
+      //         number: this.partnerFormGroup.get('number').value,
+      //         complement: this.partnerFormGroup.get('complement').value,
+      //         street: {
+      //           idStreet: 0,
+      //           zipCode: this.partnerFormGroup.get('zipCode').value,
+      //           streetName: this.partnerFormGroup.get('streetName').value,
+      //           city: {
+      //             idCity: 0,
+      //             cityName: this.partnerFormGroup.get('cityName').value
+      //           },
+      //           neighborhood: {
+      //             idNeighborhood: 0,
+      //             neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value
+      //           },
+      //           state: {
+      //             idState: 0,
+      //             uf: this.partnerFormGroup.get('uf').value,
+      //           }
+      //         }
+      //       }
+      //     ],
+      //     partnerContact: [
+      //       {
+      //         idPartnerContact: 0,
+      //         phone: this.partnerFormGroup.get('phone').value
+      //       }
+      //     ]
+      //   }
+      // ]
     }
     console.log(form);
 
     this.companyService.create(form).subscribe((response: any) => {
       console.log(response);
       this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
-      this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
-      this.deleteLocalStorage();
+      this.router.navigate(['/companies/list']);
     });
 
   }
 
-  deleteLocalStorage() {
-    this.localStorageService.deleteItem('conditionFormGroup');
-    this.localStorageService.deleteItem('phoneNumber');
-    this.localStorageService.deleteItem('bankAccount');
-    this.localStorageService.deleteItem('complementFormGroup');
-    this.localStorageService.deleteItem('partnerFormGroup');
-    this.localStorageService.deleteItem('identificationFormGroup');
-    this.localStorageService.deleteItem('cep');
-    this.localStorageService.deleteItem('editPartner');
-    this.localStorageService.deleteItem('adressFormGroup');
-  }
-
   getCompanyLevel() {
-    this.CompanyByLevelService.getByLevel(this.idCompanyGroup)
+    this.CompanyByLevelService.getByLevel()
       // .pipe(take(1))
       .subscribe((response) => {
         this.optionscompany = response['content'];
@@ -1013,10 +1032,10 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   }
 
   updateCompany() {
-    this.companyService.readById(this.id, this.idCompanyGroup).subscribe((company) => {
+    this.companyService.readById(this.id).subscribe((company) => {
 
       const externalBank = this.bankingFormGroup;
-      console.log(externalBank);
+      console.log(externalBank);  
 
       const externalContact = this.contactFormGroup;
       console.log(externalContact);
@@ -1044,7 +1063,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         companyContact: this.apiPhoneNumber$,
 
         // companyLevel: company.companyLevel,
-
+        
         // companyLevelItem: {
         //   idCompanyLevel: company.companyLevelItem.idCompanyLevel,
         //   description: "Subadquirente",
@@ -1052,7 +1071,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         // },
 
         companyAddress: externalAdress.value.companyAddress,
-
+        
         companyName: this.identificationFormGroup.get('companyName').value,
         companyResponsibleName: this.identificationFormGroup.get('companyResponsibleName').value,
         companyShortName: this.identificationFormGroup.get('companyShortName').value,
@@ -1115,14 +1134,14 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
             idMcc: company.cnae.mcc.id
           }
         },
-        companyPartner: externalPartner.value.companyPartner,
+        companyPartner: externalPartner.value.companyPartner,   
       }
       console.log(editForm);
 
       this.companyService.update(editForm).subscribe((response: any) => {
         console.log(response);
-        this.dataService.openSnackBar('Empresa alterado com sucesso', 'X');
-        this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
+        this.dataService.openSnackBar('Empresa alterada com sucesso', 'X');
+        this.router.navigate(['/companies/list']);
       });
     })
 
@@ -1180,7 +1199,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     { text: 'Nome', value: 'partnerName' },
     { text: 'Data de Nascimento', value: 'dateOfBirth', type: 'date' },
     { text: 'CPF', value: 'cpf' },
-    // { text: 'Ações', value: 'action' }
+    { text: 'Telefone', value: 'phone' }
   ];
 
   actions: ActionModel = {
@@ -1236,8 +1255,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     if (this.isPageAdd()) {
       this.router.navigate(['/companies/partners/add']);
     } else {
-      this.router.navigate([`partners/api-add/`], { relativeTo: this.route })
-    }
+      this.router.navigate([`partners/api-add/`], {relativeTo: this.route})
+    } 
   }
 
   //Edit Methods
@@ -1284,7 +1303,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     if (this.isPageAdd()) {
       this.router.navigate([`/companies/partners/local-edit/${localIndex}`]);
     } else {
-      this.router.navigate([`partners/api-edit/${apiIndex}`, this.id], { relativeTo: this.route })
+      this.router.navigate([`partners/api-edit/${apiIndex}`, this.id], {relativeTo: this.route})
     }
   }
 
@@ -1331,7 +1350,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
   //Navigation Functions
   navigateToCompanyList() {
-    this.router.navigate(["/companies/list"], { queryParams: { idCompanyGroup: this.idCompanyGroup } })
+    this.router.navigate(['/companies/list'])
   }
 
   //submit form
@@ -1409,13 +1428,12 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   checkValue(e) {
     let a = e.checked;
 
-    if (this.isPageEdit() || this.isPageView()) {
-      this.companyService.readById(this.id, this.idCompanyGroup).subscribe((company) => {
+    this.companyService.readById(this.id).subscribe((company) => {
 
         if (this.adressFormGroup.get('zipCode').value.length != 8) {
           const message = 'Por favor, verifique novamente o CEP registrado acima.';
-
-          this._generalService.openOkDialog(message, () => { }, 'CEP inválido');
+  
+          this._generalService.openOkDialog(message, () => {}, 'CEP inválido');
         } else {
           if (a == true) {
             this.isChecked = true;
@@ -1451,7 +1469,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         if (a == true) {
           this.isChecked = true;
           let obj = {
-            subordinateZipCode: this.response.cep,
+            subordinateZipCode: company.companyAddress[1].street.zipCode,
             subordinateNeighborhoodCtrl: this.response.bairro,
             subordinateCityCtrl: this.response.localidade,
             subordinateStreetCtrl: this.response.logradouro,
@@ -1478,40 +1496,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
           };
           this.adressFormGroup.patchValue(obj);
         }
-      })
-    } else {
-      if (a == true) {
-        this.isChecked = true;
-        let obj = {
-          subordinateZipCode: this.response.cep,
-          subordinateNeighborhoodCtrl: this.response.bairro,
-          subordinateCityCtrl: this.response.localidade,
-          subordinateStreetCtrl: this.response.logradouro,
-          subordinateStateCtrl: this.response.uf,
-          subordinateNumberCtrl: this.adressFormGroup.get('number').value,
-          subordinateComplementCtrl: this.adressFormGroup.get('complement').value,
-          subordinateResponsibleNameCtrl: this.adressFormGroup.get('responsibleNameCtrl').value,
-          subordinateReferencePointCtrl: this.adressFormGroup.get('referencePoint').value,
-        };
-        this.adressFormGroup.patchValue(obj);
-      }
-      if (a == false) {
-        this.isChecked = false;
-        let obj = {
-          subordinateZipCode: '',
-          subordinateNeighborhoodCtrl: '',
-          subordinateCityCtrl: '',
-          subordinateStreetCtrl: '',
-          subordinateStateCtrl: '',
-          subordinateNumberCtrl: '',
-          subordinateComplementCtrl: '',
-          subordinateResponsibleNameCtrl: '',
-          subordinateReferencePointCtrl: '',
-        };
-        this.adressFormGroup.patchValue(obj);
-      }
-    }
-
+    })
   }
   onSelectionChanged(value) {
     let a = value.checked;

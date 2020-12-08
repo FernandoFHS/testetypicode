@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class RemunerationTypeService {
-  private readonly url = `${environment.baseUrlPlans}remunerationtype`;
+  private readonly url = `${environment.baseUrl}remunerationtype`;
 
   constructor(private http: HttpClient) { }
 

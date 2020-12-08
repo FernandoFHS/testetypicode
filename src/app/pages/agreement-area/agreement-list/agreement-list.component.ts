@@ -37,14 +37,13 @@ export class AgreementListComponent implements OnInit {
   }
 
   loadData = (sort: string, order: string, page: number, size: number) => {    
-    // this.agreementService.getAll().subscribe(data => {
-    //   console.log(data);
-    // })
+    this.agreementService.getAll().subscribe(data => {
+      console.log(data);
+    })
     //return this.planService.getAll();
-    return this.agreementService.getAllPaged(sort, order, page, size);
+    return this.agreementService.getAll();
     
   };
-  
 
 headers: HeaderModel[] = [
   { text: 'Código', value: 'id' },
@@ -54,7 +53,7 @@ headers: HeaderModel[] = [
 actions: ActionModel = {
   add: true,
   edit: true,
-  delete: true,
+  delete: false,
   view: false
 };
 
@@ -69,16 +68,15 @@ onDelete(row: any) {
 }
 
 
-onEdit(agreement) {  
+onEdit(agreement) {
+  //console.log('esse é o meu index para editar ' + index);
+  console.log(agreement.id);
+  
   this.router.navigate(['/agreements/edit/'+agreement.id]);
 }
 
 onAdd(index: number) {
   this.router.navigate(['/agreements/add']);
-}
-
-onView(agreement) {
-  this.router.navigate(['/agreements/view/'+agreement.id]);
 }
 
 }

@@ -29,7 +29,6 @@ import { RecoverButtonComponent } from './components/recover-button/recover-butt
 import { RefuseButtonComponent } from './components/refuse-button/refuse-button.component';
 import { AcceptButtonComponent } from './components/accept-button/accept-button.component';
 import { ChangeButtonComponent } from './components/change-button/change-button.component';
-import { OnlyNumbersDirective } from './directives/only-numbers.directive';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -47,7 +46,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     AccordionLinkDirective,
     AccordionAnchorDirective,
     InputHelperDirective,
-    OnlyNumbersDirective,
 
     DataTableComponent,
     BreadcrumbComponent,
@@ -62,7 +60,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     RecoverButtonComponent,
     RefuseButtonComponent,
     AcceptButtonComponent,
-    ChangeButtonComponent,
+    ChangeButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -100,7 +98,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     AccordionLinkDirective,
     AccordionAnchorDirective,
     InputHelperDirective,
-    OnlyNumbersDirective,
 
     AngularMaterialModule,
     ReactiveFormsModule,
