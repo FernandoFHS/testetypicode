@@ -17,18 +17,24 @@ export class PasswordService {
   }
 
   checkLoginPassword() {
-    return this.http.get(`${this.url}registrationPass/checkExistence?idCompany=${100815773}`)
+    return this.http.get(`${this.url}registrationPass/checkExistence?idCompany=${1190}`)
   }
 
   alterPassword(password) {
-    return this.http.put(`${this.url}registrationPass`,password)
+    return this.http.put(`${this.url}registrationPass?idCompany=${1190}&localTransaction=${'P'}&passSale=${123456}`, password)
   }
   
   createPassword(password) {
     return this.http.post(`${this.url}registrationPass`,password)
   }
 
-  // recoverPassword() {
-  //   return this.http.put(`${this.url}registrationPass/${this.recoverPasswordUrl}?idCompany=${100815773}`)
-  // }
+  sendPasswordLinkToEmail(password) {
+    return this.http.post(`${this.url}registrationPass/alterPassword`, password)
+  }
+
+  recoverPassword(password) {
+    return this.http.put(`${this.url}registrationPass/${this.recoverPasswordUrl}?idCompany=${1190}`,
+    {password: password}
+    )
+  }
 }

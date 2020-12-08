@@ -93,14 +93,15 @@ export class CompanyListComponent implements OnInit {
     const filter = {
       idCompany: form.id,
       documentNumberCompany: form.documentNumberCompany,
-      companyName: form.filter
+      companyName: form.filter,
+      idCompanyGroup:this.idCompanyGroup
     }
     return this.companyService.getAllCompaniesByFilter(filter, sort, order, page, size)
   }
 
-  headers: HeaderModelCompany[] = [
+  headers: HeaderModelCompany|any[] = [
     { text: 'Código', value: 'idCompany', subValue: null, deepValue: null },
-    { text: 'CPF / CNPJ', value: 'documentNumberCompany', subValue: null, deepValue: null },
+    { text: 'CPF / CNPJ', value: 'documentNumberCompany', subValue: null, deepValue: null, type: 'cpf/cnpj' },
     { text: 'Tipo', value: 'companyType', subValue: null, deepValue: null },
     { text: 'Razão Social', value: 'companyName', subValue: null, deepValue: null },
     { text: 'MCC', value: 'cnae', subValue: 'mcc', deepValue: 'code' },
@@ -116,20 +117,6 @@ export class CompanyListComponent implements OnInit {
     delete: false,
     view: true
   };
-
-  dinamicAddRouter = "/company-list/add-company";
-
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  //   // this.resultsLength = 
-
-  //   console.log(this.dataSource)
-
-  //   if (this.dataSource.paginator) {
-  //     this.dataSource.paginator.firstPage();
-  //   }
-  // }
 
   loadModel() {
     this.companyFormGroup.get('filter').setValue('', { emitEvent: false });
