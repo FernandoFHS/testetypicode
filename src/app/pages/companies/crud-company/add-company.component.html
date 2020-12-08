@@ -178,7 +178,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Data de abertura</mat-label>
-              <input matInput [matDatepicker]="dp" formControlName="openingDate" placeholder="00/00/0000" >
+              <input matInput [matDatepicker]="dp" formControlName="openingDate" placeholder="00/00/0000">
               <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
               <mat-error *ngIf="!identificationFormGroup.get('openingDate').value">Data incorreta</mat-error>
@@ -322,7 +322,7 @@
             <mat-icon matSuffix>contacts</mat-icon>
           </mat-form-field>
 
-          <div *ngIf="isPageAdd()">
+          <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
             <mat-form-field appearance="outline">
               <mat-label>Ponto de Referência</mat-label>
               <input matInput placeholder="Ponto de Referência" formControlName="referencePoint" maxlength="100" />
@@ -339,11 +339,11 @@
               <mat-icon matSuffix>gps_fixed</mat-icon>
             </mat-form-field>
             <mat-error *ngIf="!adressFormGroup.get('referencePoint').value">Esse campo não foi cadastrado</mat-error>
-            
+
             <div *ngIf="!adressFormGroup.get('referencePoint').value">
               <br>
             </div>
-  
+
             <div *ngIf="!adressFormGroup.get('referencePoint').value">
               <br>
             </div>
@@ -396,7 +396,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Número</mat-label>
               <input matInput placeholder="Digite o seu número" formControlName="subordinateNumberCtrl"
-                [readonly]="isChecked" maxlength="10"/>
+                [readonly]="isChecked" maxlength="10" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix [ngStyle]="{ color: isChecked ? 'grey' : '' }">looks_two</mat-icon>
             </mat-form-field>
@@ -419,7 +419,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Bairro</mat-label>
-            <input matInput placeholder="Bairro" formControlName="subordinateNeighborhoodCtrl" [readonly]="isChecked" maxlength="100" />
+            <input matInput placeholder="Bairro" formControlName="subordinateNeighborhoodCtrl" [readonly]="isChecked"
+              maxlength="100" />
             <mat-error *ngIf="formControl.invalid">{{
             getErrorMessage()
           }}</mat-error>
@@ -441,7 +442,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Estado</mat-label>
               <input matInput placeholder="Digite o seu estado" formControlName="subordinateStateCtrl"
-                [readonly]="isChecked"maxlength="100" />
+                [readonly]="isChecked" maxlength="100" />
               <mat-error *ngIf="formControl.invalid">{{
               getErrorMessage()
             }}</mat-error>
@@ -462,7 +463,7 @@
             <mat-icon matSuffix [ngStyle]="{'color': isChecked? 'grey' : ''}">contacts</mat-icon>
           </mat-form-field>
 
-          <div *ngIf="isPageAdd()">
+          <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
             <mat-form-field appearance="outline">
               <mat-label>Ponto de Referência</mat-label>
               <input matInput placeholder="Ponto de Referência" formControlName="subordinateReferencePointCtrl"
@@ -476,7 +477,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Ponto de Referência</mat-label>
               <input matInput placeholder="Ponto de Referência" formControlName="subordinateReferencePointCtrl"
-                [readonly]="isChecked" maxlength="100"/>
+                [readonly]="isChecked" maxlength="100" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix [ngStyle]="{'color': isChecked? 'grey' : ''}">gps_fixed</mat-icon>
             </mat-form-field>
@@ -495,7 +496,7 @@
           <app-simple-data-table [headers]="headersPhoneTable" [data]="phoneNumber$" [actions]="actions"
             (addEvent)="onAddPhone($event)" (editEvent)="onEditPhone($event)">
           </app-simple-data-table>
-        </div> 
+        </div>
 
         <div *ngIf="isPageEdit()">
           <app-simple-data-table [headers]="headersPhoneTable" [data]="apiPhoneNumber$" [actions]="actions"
@@ -810,7 +811,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Cadastro BF</mat-label>
                 <input matInput [matDatepicker]="registrationDate" placeholder="Data Cadastro BF"
-                  formControlName="registrationDate" numbersOnly >
+                  formControlName="registrationDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="registrationDate"></mat-datepicker-toggle>
                 <mat-datepicker #registrationDate></mat-datepicker>
               </mat-form-field>
@@ -825,8 +826,8 @@
                 <mat-datepicker #registrationDate></mat-datepicker>
               </mat-form-field>
               <mat-error
-              *ngIf="complementFormGroup.get('registrationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('accreditationDate').value">
-              Esse campo não foi cadastrado</mat-error>         
+                *ngIf="complementFormGroup.get('registrationDate').value == '0000-00-00T00:00:00' || !complementFormGroup.get('accreditationDate').value">
+                Esse campo não foi cadastrado</mat-error>
               <br />
             </div>
 
@@ -842,7 +843,8 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Envio GP</mat-label>
-                <input matInput [matDatepicker]="sendDate" placeholder="Data Envio GP" formControlName="gpSendDate" numbersOnly>
+                <input matInput [matDatepicker]="sendDate" placeholder="Data Envio GP" formControlName="gpSendDate"
+                  numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="gpSendDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpSendDate></mat-datepicker>
               </mat-form-field>
@@ -897,7 +899,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Afiliação GP</mat-label>
                 <input matInput [matDatepicker]="gpAffiliationDate" placeholder="Data Afiliação GP"
-                  formControlName="gpAffiliationDate" numbersOnly >
+                  formControlName="gpAffiliationDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="gpAffiliationDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpAffiliationDate></mat-datepicker>
               </mat-form-field>
@@ -921,7 +923,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Cadastramento SE</mat-label>
                 <input matInput [matDatepicker]="seRegistrationDate" placeholder="Data Cadastramento SE"
-                  formControlName="seRegistrationDate" numbersOnly >
+                  formControlName="seRegistrationDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="seRegistrationDate"></mat-datepicker-toggle>
                 <mat-datepicker #seRegistrationDate></mat-datepicker>
               </mat-form-field>
@@ -945,7 +947,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Descredencimento</mat-label>
                 <input matInput [matDatepicker]="discreditationDate" placeholder="Data Descredencimento"
-                  formControlName="discreditationDate" numbersOnly >
+                  formControlName="discreditationDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="discreditationDate"></mat-datepicker-toggle>
                 <mat-datepicker #discreditationDate></mat-datepicker>
               </mat-form-field>
@@ -992,7 +994,7 @@
           </app-simple-data-table>
         </div>
 
-        
+
         <div *ngIf="isPageView()">
           <app-simple-data-table [headers]="headersPartnerTable" [data]="apiPartnerSource$" [actions]="viewActions"
             (addEvent)="onAddPartnerPage($event)" (editEvent)="onEditPartner($event)">
