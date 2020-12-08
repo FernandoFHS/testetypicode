@@ -239,6 +239,10 @@
               (click)="filter()">
               FILTRAR
             </button>
+            <button mat-flat-button color="default" class="submit-button" fxFlex.gt-sm="10%" fxFlex.xs="35%"
+              fxFlex.sm="20%" (click)="clearFilter()">
+              LIMPAR
+            </button>
           </div>
 
         </form>
@@ -263,8 +267,8 @@
     <div fxFlex="100%" fxLayoutAlign="start start" fxLayout="row wrap" *ngIf="model?.content?.length > 0 && !isLoading">
 
       <mgl-timeline [side]="'right'" [alternate]="false" fxFlex="100%" [mobileWidthThreshold]="90000" [toggle]="true"
-        class="timeline" infiniteScroll [infiniteScrollDistance]="2"
-        [infiniteScrollThrottle]="50" (scrolled)="onScroll()" [scrollWindow]="false" #divTimeline>
+        class="timeline" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+        (scrolled)="onScroll()" [scrollWindow]="false" #divTimeline>
 
         <mgl-timeline-entry *ngFor="let item of model?.content">
 
