@@ -842,7 +842,7 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Envio GP</mat-label>
-                <input matInput [matDatepicker]="sendDate" placeholder="Data Envio GP" formControlName="gpSendDate" numbersOnly>
+                <input matInput [matDatepicker]="gpSendDate" placeholder="Data Envio GP" formControlName="gpSendDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="gpSendDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpSendDate></mat-datepicker>
               </mat-form-field>

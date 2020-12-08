@@ -69,8 +69,9 @@ export class RecoverPasswordTransactionComponent implements OnInit {
 
       this.passwordService.sendPasswordLinkToEmail(objectSendEmail).subscribe((response) => {
         console.log(response);
-        
-        this._generalService.openOkDialog(message, () => {}, 'Link enviado');
+        this._generalService.openOkDialog(message, () => {
+          this.router.navigate(['/password-transaction']);
+        }, 'Link enviado');
       })
     }
   }
