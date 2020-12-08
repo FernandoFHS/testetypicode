@@ -36,6 +36,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatRippleModule } from '@angular/material/core';
 import { getPortuguesPaginatorIntl } from '../components/data-table/paginator.translate';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
     imports: [
@@ -74,7 +75,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         MatPaginatorModule,
         MatRippleModule,
         LayoutModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        ScrollingModule
     ],
     exports: [
         BrowserModule,
@@ -112,7 +114,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         MatPaginatorModule,
         MatRippleModule,
         LayoutModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        ScrollingModule
     ],
     providers: [{ provide: MatPaginatorIntl, useValue: getPortuguesPaginatorIntl() }]
 })

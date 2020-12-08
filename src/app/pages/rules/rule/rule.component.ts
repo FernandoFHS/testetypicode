@@ -6,7 +6,7 @@ import { MonitoringRuleService } from 'src/app/services/monitoring-rule.service'
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { NotificationService } from 'src/app/services/notification.service';
-import { MonitoringRuleVariableResponseModel } from 'src/app/models/response/monitoring-rule-variable.response.model';
+import { MonitoringRuleVariableResponseModel } from 'src/app/models/responses/monitoring-rule-variable.response.model';
 import { MonitoringRuleRequestModel } from 'src/app/models/requests/monitoring-rule.request.model';
 import { MonitoringRuleConditionRequestModel } from 'src/app/models/requests/monitoring-rule-condition.request.model';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -18,7 +18,7 @@ import { ConditionTypeListModel } from 'src/app/models/rules/condition-type-list
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { PageTypeEnum } from 'src/app/enums/page-type.enum';
 import { MonitoringRuleModel } from 'src/app/models/monitoring-rule.model';
-import { MonitoringRuleConditionResponseModel } from 'src/app/models/response/monitoring-rule-condition.response.model';
+import { MonitoringRuleConditionResponseModel } from 'src/app/models/responses/monitoring-rule-condition.response.model';
 import { GeneralService } from 'src/app/services/general.service';
 import { MonitoringRuleChangeStatusRequestModel } from 'src/app/models/requests/monitoring-rule-change-status.request.model';
 import { RuleConditionTypeListEnum } from 'src/app/enums/rule-condition-type-list.enum';

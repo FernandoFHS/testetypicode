@@ -1,5 +1,5 @@
 import { VariableDataTypeEnum } from '../enums/variable-data-type.enum';
-import { MonitoringRuleVariableResponseModel } from '../models/response/monitoring-rule-variable.response.model';
+import { MonitoringRuleVariableResponseModel } from '../models/responses/monitoring-rule-variable.response.model';
 
 export const MonitoringRuleVariableResponseMock: MonitoringRuleVariableResponseModel[] = [
   {
