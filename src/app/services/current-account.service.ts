@@ -71,8 +71,8 @@ export class CurrentAccountService {
         params = params.append('idCompany', filter.idCompany);
 
         // TODO
-        params = params.append('pageNumber', page.toString());
-        params = params.append('pageSize', size.toString());
+        params = params.append('page', page.toString());
+        params = params.append('size', size.toString());
         // params = params.append('paged', `${false}`); // TODO
 
         return this._http.get<ExtractResponseModel>(`${environment.bff.url_financial}/transaction`, {
@@ -107,9 +107,9 @@ export class CurrentAccountService {
         params = params.append('idCompany', idCompany.toString());
 
         // TODO
-        // params = params.append('pageNumber', page.toString());
-        // params = params.append('pageSize', size.toString());
-        params = params.append('paged', `${false}`); // TODO
+        params = params.append('page', page.toString());
+        params = params.append('size', size.toString());
+        // params = params.append('paged', `${false}`); // TODO
 
         return this._http.get<ExtractResponseModel>(`${environment.bff.url_financial}/transaction/accountSettlement`, {
           params: params,
