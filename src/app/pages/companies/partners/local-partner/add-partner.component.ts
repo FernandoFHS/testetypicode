@@ -16,6 +16,9 @@ import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
+import { NotificationService } from 'src/app/services/notification.service';
+import { PartnerService } from 'src/app/services/partner.service';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-add-partner',
@@ -47,6 +50,9 @@ export class AddPartnerComponent implements OnInit {
   partner: any;
   index: any;
   addPage: boolean;
+  idPartner: any;
+  idCompany: any;
+  idPartnerEditPage: any;
 
   partnerFormGroup: FormGroup;
 
@@ -81,48 +87,53 @@ export class AddPartnerComponent implements OnInit {
     private router: Router,
     public _snackBar: MatSnackBar,
     private localStorageService: LocalStorageService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private notificationService: NotificationService,
+    private partnerService: PartnerService,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
-    // this.loadParams().then(() => {
-    //   this.partnerFormGroup = this._formBuilder.group({
-    //     partnerSequentialNumber: [{ value: '', disabled: true }, Validators.required],
-    //     partnerName: [this.partner?.partnerName || '', Validators.required],
-    //     cpf: [this.partner?.cpf || '', Validators.required],
-    //     dateOfBirth: [this.partner?.dateOfBirth || '', Validators.required],
-    //     zipCode: [this.partner?.zipCode || '', Validators.required],
-    //     streetName: [this.partner?.streetName || '', Validators.required],
-    //     number: [this.partner?.number || '', Validators.required],
-    //     complement: [this.partner?.complement || ''],
-    //     neighborhoodName: [this.partner?.neighborhoodName || '', Validators.required],
-    //     cityName: [this.partner?.cityName || '', Validators.required],
-    //     uf: [this.partner?.uf || '', Validators.required],
-    //     phone: [this.partner?.phone || '', Validators.required]
-    //   });
-    // });
 
-    this.loadParams().then(() => {
-      this.partnerFormGroup =new FormGroup({
-        partnerSequentialNumber:new FormControl({ value: '', disabled: true },Validators.required),
-        partnerName:new FormControl(this.partner?.partnerName || '', Validators.required),
-        cpf:new FormControl(this.partner?.cpf || '', Validators.required),
-        dateOfBirth:new FormControl(this.partner?.dateOfBirth || '', Validators.required),
-        zipCode:new FormControl(this.partner?.zipCode || '', Validators.required),
-        streetName:new FormControl(this.partner?.streetName || '', Validators.required),
-        number:new FormControl(this.partner?.number || '', Validators.required),
-        complement:new FormControl(this.partner?.complement || '', Validators.required),
-        neighborhoodName:new FormControl(this.partner?.neighborhoodName || '', Validators.required),
-        cityName:new FormControl(this.partner?.cityName || '', Validators.required),
-        uf:new FormControl(this.partner?.uf || '', Validators.required),
-        phone:new FormControl(this.partner?.phone || '', Validators.required),
-      });
-    });
+    this.idCompany = +this.activatedRoute.snapshot.paramMap.get('id');
+    this.idPartner = +this.activatedRoute.snapshot.paramMap.get('index');
+    this.idPartnerEditPage = +this.activatedRoute.snapshot.paramMap.get('local-edit/index');
+    console.log(this.idPartnerEditPage);
 
+    console.log(this.idPartner)
 
-    if (!this.index) {
+    if (this.idPartner || this.idPartner == 0 && this.idPartnerEditPage) {
+      this.addPage = false;
+      this.loadEditForm();
+      if (this.partnerSource != undefined) {
+        this.getLocalStorage('partnerFormGroup');
+      }
+    } else {
       this.addPage = true;
-      this.partnerFormGroup = new FormGroup({
+      this.loadAddForm();
+    }
+  }
+
+  loadAddForm() {
+    this.addPage = true;
+    this.partnerFormGroup = new FormGroup({
+    cpf: new FormControl(''),
+    dateOfBirth: new FormControl(''),
+    cityName: new FormControl(''),
+    neighborhoodName: new FormControl(''),
+    uf: new FormControl(''),
+    streetName: new FormControl(''),
+    complement: new FormControl(''),
+    number: new FormControl(''),
+    phone: new FormControl(''),
+    zipCode: new FormControl(''),
+    partnerName: new FormControl(''),
+    partnerSequentialNumber: new FormControl({ value: '', disabled: true }),
+    })
+  }
+
+  loadEditForm() {
+    this.partnerFormGroup = new FormGroup({
       cpf: new FormControl(''),
       dateOfBirth: new FormControl(''),
       cityName: new FormControl(''),
@@ -135,11 +146,7 @@ export class AddPartnerComponent implements OnInit {
       zipCode: new FormControl(''),
       partnerName: new FormControl(''),
       partnerSequentialNumber: new FormControl({ value: '', disabled: true }),
-		 
-    });
-    } else {
-      this.addPage = false;
-    }
+      })
   }
 
   formControl = new FormControl('', [
@@ -159,35 +166,69 @@ export class AddPartnerComponent implements OnInit {
     this.router.navigate(['/companies/add']);
   }
 
-  loadParams(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      try {
-        this.activatedRoute.params.subscribe((params) => {
-          const index = params['index'];
-          console.log(index);
-          if (typeof (index) == 'string') {
+  // loadParams(): Promise<void> {
+  //   return new Promise<void>((resolve, reject) => {
+  //     try {
+  //       this.activatedRoute.params.subscribe((params) => {
+  //         let idPartner = params['index'];
+  //         console.log(idPartner);
+  //         if (typeof (idPartner) == 'string') {
 
-            const partnerArray = this.localStorageService.get('editPartner');
+  //           const partnerArray = this.localStorageService.get('editPartner');
 
-            if (partnerArray && partnerArray.length > 0) {
-              const partner = partnerArray[index];
-              this.partner = partner;
-              this.index = index;
+  //           if (partnerArray && partnerArray.length > 0) {
+  //             const partner = partnerArray[idPartner];
+  //             this.partner = partner;
+  //             idPartner = idPartner;
 
-              resolve();
-            } else {
-              // TODO - Redireiconar usuario para ? informando que o Sócio não foi encontrado
-              reject();
-            }
-          }
-        });
-      }
-      catch (error) {
-        // TODO - Redirecionar usuario para lista informadno que houve um erro ao carregar o Sócio
-        reject();
-      }
+  //             resolve();
+  //           } else {
+  //             // TODO - Redireiconar usuario para ? informando que o Sócio não foi encontrado
+  //             reject();
+  //           }
+  //         }
+  //       });
+  //     }
+  //     catch (error) {
+  //       // TODO - Redirecionar usuario para lista informadno que houve um erro ao carregar o Sócio
+  //       reject();
+  //     }
 
-    });
+  //   });
+  // }
+
+  getLocalStorage(item) {
+    if (item == 'partnerFormGroup') {
+
+      // cpf: new FormControl(''),
+      // dateOfBirth: new FormControl(''),
+      // cityName: new FormControl(''),
+      // neighborhoodName: new FormControl(''),
+      // uf: new FormControl(''),
+      // streetName: new FormControl(''),
+      // complement: new FormControl(''),
+      // number: new FormControl(''),
+      // phone: new FormControl(''),
+      // zipCode: new FormControl(''),
+      // partnerName: new FormControl(''),
+      // partnerSequentialNumber: new FormControl({ value: '', disabled: true }),
+      let localStorage = {
+        cpf: this.partnerSource[this.idPartner].cpf,
+        dateOfBirth: this.partnerSource[this.idPartner].dateOfBirth,
+        cityName: this.partnerSource[this.idPartner].partnerAddress[0].street.city.cityName,
+        neighborhoodName: this.partnerSource[this.idPartner].partnerAddress[0].street.neighborhood.neighborhoodName,
+        uf: this.partnerSource[this.idPartner].partnerAddress[0].street.state.uf,
+        streetName: this.partnerSource[this.idPartner].partnerAddress[0].street.streetName,
+        complement: this.partnerSource[this.idPartner].partnerAddress[0].complement,
+        number: this.partnerSource[this.idPartner].partnerAddress[0].number,
+        phone: this.partnerSource[this.idPartner].partnerContact[0].phone,
+        zipCode: this.partnerSource[this.idPartner].partnerAddress[0].street.zipCode,
+        partnerName: this.partnerSource[this.idPartner].partnerName,
+        partnerSequentialNumber: this.partnerSource[this.idPartner].partnerSequentialNumber,
+      };
+      this.partnerFormGroup.patchValue(localStorage);
+      console.log(localStorage);
+    }
   }
 
   getAdressByCep(value) {
@@ -242,41 +283,51 @@ export class AddPartnerComponent implements OnInit {
     }
     console.log(this.partner);
 
-    let partnerArrayEdit = this.localStorageService.get('editPartner');
-    if (!partnerArrayEdit) {
-      partnerArrayEdit = [];
-    }
+    // let partnerArrayEdit = this.localStorageService.get('editPartner');
+    // if (!partnerArrayEdit) {
+    //   partnerArrayEdit = [];
+    // }
 
-    let partnerArray = this.localStorageService.get('partnerFormGroup');
-    if (!partnerArray) {
-      partnerArray = [];
-    }
-    partnerArrayEdit.push(form.value);
-    this.localStorageService.set('editPartner', partnerArrayEdit);
+    // let partnerArray = this.localStorageService.get('partnerFormGroup');
+    // if (!partnerArray) {
+    //   partnerArray = [];
+    // }
+    // partnerArrayEdit.push(form.value);
+    // this.localStorageService.set('editPartner', partnerArrayEdit);
 
-    partnerArray.push(this.partner);
-    this.localStorageService.set('partnerFormGroup', partnerArray);
+    // partnerArray.push(this.partner);
+    // this.localStorageService.set('partnerFormGroup', partnerArray);
 
-    this.router.navigate(['/companies/add']);
+    // this.router.navigate(['/companies/add']);
+
+    // foneAdresstArray.push(form.value);
+
+    // this.localStorageService.set('phoneNumber', foneAdresstArray);
+    // this.dataService.openSnackBar('Telefone adicionado com sucesso', 'X');
+    // this.dialogRef.close(form);
+
+    this.partnerService.addPartner(this.partner);
+    this.notificationService.success('Sócio adicionado com sucesso');
+    this.location.back();
+    this.partnerService.backCompany()
+
+    // if (this.idPartner > -1) {
+    //   Object.assign(this.partnerSource[idPartner], editableItem);
+    //   localStorage.setItem('partnerFormGroup', JSON.stringify(this.partnerSource));
+    //   this.partnerService.editPartner({partner: editableItem, index: idPartner});
+    //   this.notificationService.success('Sócio editado com sucesso');
+    //   this.location.back();
+    //   this.partnerService.backCompany()
+    //   console.log(this.partnerSource[idPartner]);
+    // } else {
+    //   console.log(editableItem);
+    // }
   }
 
   editPartner() {
     let index = this.index;
-
-    let editable = {
-      cpf: parseInt(this.partnerFormGroup.get('cpf').value),
-      dateOfBirth: this.partnerFormGroup.get('dateOfBirth').value,
-      cityName: this.partnerFormGroup.get('cityName').value,
-      neighborhoodName: this.partnerFormGroup.get('neighborhoodName').value,
-      uf: this.partnerFormGroup.get('uf').value,
-      streetName: this.partnerFormGroup.get('streetName').value,
-      complement: this.partnerFormGroup.get('complement').value,
-      number: this.partnerFormGroup.get('number').value,
-      phone: this.partnerFormGroup.get('phone').value,
-      zipCode: this.partnerFormGroup.get('zipCode').value,
-      partnerName: this.partnerFormGroup.get('partnerName').value,
-      partnerSequentialNumber: 1,
-    }
+    let idPartner = +this.activatedRoute.snapshot.paramMap.get('index');
+    console.log(index);
 
     let editableItem =  {
       cpf : parseInt(this.partnerFormGroup.get('cpf').value),
@@ -311,20 +362,17 @@ export class AddPartnerComponent implements OnInit {
       
     }
 
-    if (index > -1) {
-      Object.assign(this.partnerSourceEdit[index], editable);
-      localStorage.setItem('editPartner', JSON.stringify(this.partnerSourceEdit));
-    } else {
-      console.log(editable);
-    }
-
-    if (index > -1) {
-      Object.assign(this.partnerSource[index], editableItem);
+    if (this.idPartner > -1) {
+      Object.assign(this.partnerSource[idPartner], editableItem);
       localStorage.setItem('partnerFormGroup', JSON.stringify(this.partnerSource));
+      this.partnerService.editPartner({partner: editableItem, index: idPartner});
+      this.notificationService.success('Sócio editado com sucesso');
+      this.location.back();
+      this.partnerService.backCompany()
+      console.log(this.partnerSource[idPartner]);
     } else {
       console.log(editableItem);
     }
-    this.router.navigate(['/companies/add/']);
   }
 
  

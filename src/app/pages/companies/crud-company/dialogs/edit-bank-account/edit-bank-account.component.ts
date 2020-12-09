@@ -92,31 +92,45 @@ export class EditBankAccountComponent implements OnInit {
       masterAccount: [''],
       idCompany: 0,
       idExternalBankAccount: 0,
-    })
+    })    
   }
 
   loadDinamicForm() {
+    // const companies = this.partnerService.getPartners();
+    // const companyPartner = companies[this.idPartner];
+
+    //   this.partnerFormGroup = this._formBuilder.group({
+    //     partnerSequentialNumber: [companyPartner.partnerSequentialNumber || 0],
+    //     partnerName: [companyPartner.partnerName || ''],
+    //     cpf: [companyPartner.cpf || ''],
+    //     dateOfBirth: [companyPartner.dateOfBirth ||''],
+    //     zipCode: [companyPartner.partnerAddress[0].street.zipCode || ''],
+    //     streetName: [companyPartner.partnerAddress[0].street.streetName || ''],
+    //     number: [companyPartner.partnerAddress[0].number || ''],
+    //     complement: [companyPartner.partnerAddress[0].complement || ''],
+    //     neighborhoodName: [companyPartner.partnerAddress[0].street.neighborhood.neighborhoodName || ''],
+    //     cityName: [companyPartner.partnerAddress[0].street.city.cityName || ''],
+    //     uf: [companyPartner.partnerAddress[0].street.state.uf || ''],
+    //     phone: [companyPartner.partnerContact[0].phone || '']
+    //   });
+
     const companies = this.partnerService.getBanks();
     const companyBank = companies[this.idBankDinamic];
 
     console.log(companyBank)
 
-    this.companyService.readById(this.idCompany, this.idCompanyGroup).subscribe((company) => {
-      console.log(company.externalBankAccount[this.idBankDinamic].bank.name?.trim())
-
-      this.accountFormGroup = this._formBuilder.group({
-        bank: [company.externalBankAccount[this.idBankDinamic].bank.name?.trim() || ''],
-        agency: [company.externalBankAccount[this.idBankDinamic].agency?.trim() || 0],
-        agencyDigit: [company.externalBankAccount[this.idBankDinamic].accountDigit?.trim() || 0],
-        account: [company.externalBankAccount[this.idBankDinamic].account?.trim() || 0],
-        digit: [company.externalBankAccount[this.idBankDinamic].digit?.trim() || 0],
-        accountDigit: [company.externalBankAccount[this.idBankDinamic].accountDigit?.trim() || 0],
-        idBank: [company.externalBankAccount[this.idBankDinamic].bank.idBank || 0],
-        accountType: [company.externalBankAccount[this.idBankDinamic].accountType?.trim() || 0],
-        masterAccount: [company.externalBankAccount[this.idBankDinamic].masterAccount || 0],
-        idCompany: [this.idCompany || 0],
-        idExternalBankAccount: [company.externalBankAccount[this.idBankDinamic].idExternalBankAccount || 0],
-      })
+    this.accountFormGroup = this._formBuilder.group({
+      bank: [companyBank.bank.name?.trim() || ''],
+      agency: [companyBank.agency?.trim() || 0],
+      agencyDigit: [companyBank.accountDigit?.trim() || 0],
+      account: [companyBank.account?.trim() || 0],
+      digit: [companyBank.digit?.trim() || 0],
+      accountDigit: [companyBank.accountDigit?.trim() || 0],
+      idBank: [companyBank.bank.idBank || 0],
+      accountType: [companyBank.accountType?.trim() || 0],
+      masterAccount: [companyBank.masterAccount || 0],
+      idCompany: [this.idCompany || 0],
+      idExternalBankAccount: [companyBank.idExternalBankAccount || 0],
     })
   }
 

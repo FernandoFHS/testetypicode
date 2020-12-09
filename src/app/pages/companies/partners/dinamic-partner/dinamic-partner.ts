@@ -104,9 +104,6 @@ export class EditApiDataComponent implements OnInit {
     this.idCompany = +this.activatedRoute.snapshot.paramMap.get('id');
     this.idPartner = +this.activatedRoute.snapshot.paramMap.get('index');
     this.idCompanyGroup =this.localStorageService.get('idCompanyGroup');
-    // this.activatedRoute.params.subscribe((data) => {
-    //   console.log(data);
-    // })
 
       if (this.idPartner || this.idPartner == 0 && this.idCompany) {
         this.isAddPage = false;
@@ -120,8 +117,6 @@ export class EditApiDataComponent implements OnInit {
   loadEditForm() {
     const companies = this.partnerService.getPartners();
     const companyPartner = companies[this.idPartner];
-
-      console.log(companyPartner)
 
       this.partnerFormGroup = this._formBuilder.group({
         partnerSequentialNumber: [companyPartner.partnerSequentialNumber || 0],
@@ -230,7 +225,7 @@ export class EditApiDataComponent implements OnInit {
     console.log(this.partner);
 
     this.partnerService.addPartner(this.partner);
-    this.notificationService.success('Sócio cadastrado com sucesso');
+    this.notificationService.success('Sócio adicionado com sucesso');
     this.location.back();
     this.partnerService.backCompany()
   }
