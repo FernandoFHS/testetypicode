@@ -15,6 +15,7 @@ import { CompanyService } from 'src/app/services/company.service';
 import { ActivatedRoute } from '@angular/router';
 import { PartnerService } from 'src/app/services/partner.service';
 import { DataService } from 'src/app/services/data.service';
+import { ExternalBankAccount } from 'src/app/models/Company';
 
 @Component({
   selector: 'app-edit-bank-account',
@@ -35,6 +36,7 @@ export class EditBankAccountComponent implements OnInit {
   idBankLocal: number;
   idBankDinamic: number;
   idCompanyGroup: any;
+  model: ExternalBankAccount;
 
   constructor(
     public dialogRef: MatDialogRef<EditBankAccountComponent>,
@@ -54,8 +56,9 @@ export class EditBankAccountComponent implements OnInit {
     this.idBankLocal = this.data.localIndex;
     this.idBankDinamic = this.data.apiIndex;
     this.idCompany = this.data.idCompany;
+    this.model = this.data.model;
 
-    console.log(this.route.snapshot.paramMap)
+    console.log(this.data);
 
     // console.log(this.idBankLocal);
     // console.log(this.idBankDinamic);
@@ -114,23 +117,24 @@ export class EditBankAccountComponent implements OnInit {
     //     phone: [companyPartner.partnerContact[0].phone || '']
     //   });
 
-    const companies = this.partnerService.getBanks();
-    const companyBank = companies[this.idBankDinamic];
+    // this.companyService.readById(this.idCompany, this.idCompanyGroup).subscribe((company) => {
+      // console.log(company.externalBankAccount[this.idBankDinamic].bank.name?.trim())
 
-    console.log(companyBank)
+      console.log(this.model)
 
-    this.accountFormGroup = this._formBuilder.group({
-      bank: [companyBank.bank.name?.trim() || ''],
-      agency: [companyBank.agency?.trim() || 0],
-      agencyDigit: [companyBank.accountDigit?.trim() || 0],
-      account: [companyBank.account?.trim() || 0],
-      digit: [companyBank.digit?.trim() || 0],
-      accountDigit: [companyBank.accountDigit?.trim() || 0],
-      idBank: [companyBank.bank.idBank || 0],
-      accountType: [companyBank.accountType?.trim() || 0],
-      masterAccount: [companyBank.masterAccount || 0],
-      idCompany: [this.idCompany || 0],
-      idExternalBankAccount: [companyBank.idExternalBankAccount || 0],
+      this.accountFormGroup = this._formBuilder.group({
+        bank: [this.model.bank || ''],
+        agency: [this.model.agency?.trim() || 0],
+        agencyDigit: [this.model.accountDigit?.trim() || 0],
+        account: [this.model.account?.trim() || 0],
+        digit: [this.model.digit?.trim() || 0],
+        accountDigit: [this.model.accountDigit?.trim() || 0],
+        idBank: [this.model.bank.idBank || 0],
+        accountType: [this.model.accountType?.trim() || 0],
+        masterAccount: [this.model.masterAccount || 0],
+        idCompany: [this.idCompany || 0],
+        idExternalBankAccount: [this.model.idExternalBankAccount || 0],
+      // })
     })
   }
 

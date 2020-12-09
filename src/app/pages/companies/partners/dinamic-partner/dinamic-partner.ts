@@ -118,6 +118,10 @@ export class EditApiDataComponent implements OnInit {
     const companies = this.partnerService.getPartners();
     const companyPartner = companies[this.idPartner];
 
+    console.log(companyPartner)
+    console.log(companies)
+
+
       this.partnerFormGroup = this._formBuilder.group({
         partnerSequentialNumber: [companyPartner.partnerSequentialNumber || 0],
         partnerName: [companyPartner.partnerName || ''],

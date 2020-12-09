@@ -297,7 +297,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Município</mat-label>
-              <input matInput placeholder="Digite o seu município" formControlName="cityName" maxlength="100" />
+              <input matInput placeholder="Digite o seu município" formControlName="cityName" required maxlength="100" />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>map</mat-icon>
             </mat-form-field>

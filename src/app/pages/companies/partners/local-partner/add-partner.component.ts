@@ -97,12 +97,9 @@ export class AddPartnerComponent implements OnInit {
 
     this.idCompany = +this.activatedRoute.snapshot.paramMap.get('id');
     this.idPartner = +this.activatedRoute.snapshot.paramMap.get('index');
-    this.idPartnerEditPage = +this.activatedRoute.snapshot.paramMap.get('local-edit/index');
-    console.log(this.idPartnerEditPage);
-
     console.log(this.idPartner)
 
-    if (this.idPartner || this.idPartner == 0 && this.idPartnerEditPage) {
+    if (this.router.url.includes('local-edit')) {
       this.addPage = false;
       this.loadEditForm();
       if (this.partnerSource != undefined) {
@@ -128,7 +125,7 @@ export class AddPartnerComponent implements OnInit {
     phone: new FormControl(''),
     zipCode: new FormControl(''),
     partnerName: new FormControl(''),
-    partnerSequentialNumber: new FormControl({ value: '', disabled: true }),
+    partnerSequentialNumber: new FormControl({ value: 0, disabled: true }),
     })
   }
 
@@ -145,7 +142,7 @@ export class AddPartnerComponent implements OnInit {
       phone: new FormControl(''),
       zipCode: new FormControl(''),
       partnerName: new FormControl(''),
-      partnerSequentialNumber: new FormControl({ value: '', disabled: true }),
+      partnerSequentialNumber: new FormControl({ value: 0, disabled: true }),
       })
   }
 
@@ -166,63 +163,19 @@ export class AddPartnerComponent implements OnInit {
     this.router.navigate(['/companies/add']);
   }
 
-  // loadParams(): Promise<void> {
-  //   return new Promise<void>((resolve, reject) => {
-  //     try {
-  //       this.activatedRoute.params.subscribe((params) => {
-  //         let idPartner = params['index'];
-  //         console.log(idPartner);
-  //         if (typeof (idPartner) == 'string') {
-
-  //           const partnerArray = this.localStorageService.get('editPartner');
-
-  //           if (partnerArray && partnerArray.length > 0) {
-  //             const partner = partnerArray[idPartner];
-  //             this.partner = partner;
-  //             idPartner = idPartner;
-
-  //             resolve();
-  //           } else {
-  //             // TODO - Redireiconar usuario para ? informando que o Sócio não foi encontrado
-  //             reject();
-  //           }
-  //         }
-  //       });
-  //     }
-  //     catch (error) {
-  //       // TODO - Redirecionar usuario para lista informadno que houve um erro ao carregar o Sócio
-  //       reject();
-  //     }
-
-  //   });
-  // }
-
   getLocalStorage(item) {
     if (item == 'partnerFormGroup') {
-
-      // cpf: new FormControl(''),
-      // dateOfBirth: new FormControl(''),
-      // cityName: new FormControl(''),
-      // neighborhoodName: new FormControl(''),
-      // uf: new FormControl(''),
-      // streetName: new FormControl(''),
-      // complement: new FormControl(''),
-      // number: new FormControl(''),
-      // phone: new FormControl(''),
-      // zipCode: new FormControl(''),
-      // partnerName: new FormControl(''),
-      // partnerSequentialNumber: new FormControl({ value: '', disabled: true }),
       let localStorage = {
         cpf: this.partnerSource[this.idPartner].cpf,
         dateOfBirth: this.partnerSource[this.idPartner].dateOfBirth,
-        cityName: this.partnerSource[this.idPartner].partnerAddress[0].street.city.cityName,
-        neighborhoodName: this.partnerSource[this.idPartner].partnerAddress[0].street.neighborhood.neighborhoodName,
-        uf: this.partnerSource[this.idPartner].partnerAddress[0].street.state.uf,
-        streetName: this.partnerSource[this.idPartner].partnerAddress[0].street.streetName,
-        complement: this.partnerSource[this.idPartner].partnerAddress[0].complement,
-        number: this.partnerSource[this.idPartner].partnerAddress[0].number,
-        phone: this.partnerSource[this.idPartner].partnerContact[0].phone,
-        zipCode: this.partnerSource[this.idPartner].partnerAddress[0].street.zipCode,
+        cityName: this.partnerSource[this.idPartner].cityName,
+        neighborhoodName: this.partnerSource[this.idPartner].neighborhoodName,
+        uf: this.partnerSource[this.idPartner].uf,
+        streetName: this.partnerSource[this.idPartner].streetName,
+        complement: this.partnerSource[this.idPartner].complement,
+        number: this.partnerSource[this.idPartner].number,
+        phone: this.partnerSource[this.idPartner].phone,
+        zipCode: this.partnerSource[this.idPartner].zipCode,
         partnerName: this.partnerSource[this.idPartner].partnerName,
         partnerSequentialNumber: this.partnerSource[this.idPartner].partnerSequentialNumber,
       };
@@ -282,29 +235,19 @@ export class AddPartnerComponent implements OnInit {
       
     }
     console.log(this.partner);
+   
+    let partnerArrayEdit = this.localStorageService.get('editPartner');
+    if (!partnerArrayEdit) {
+      partnerArrayEdit = [];
+    }
 
-    // let partnerArrayEdit = this.localStorageService.get('editPartner');
-    // if (!partnerArrayEdit) {
-    //   partnerArrayEdit = [];
-    // }
+    let partnerArray = this.localStorageService.get('partnerFormGroup');
+     if (!partnerArray) {
+       partnerArray = [];
+    }
 
-    // let partnerArray = this.localStorageService.get('partnerFormGroup');
-    // if (!partnerArray) {
-    //   partnerArray = [];
-    // }
-    // partnerArrayEdit.push(form.value);
-    // this.localStorageService.set('editPartner', partnerArrayEdit);
-
-    // partnerArray.push(this.partner);
-    // this.localStorageService.set('partnerFormGroup', partnerArray);
-
-    // this.router.navigate(['/companies/add']);
-
-    // foneAdresstArray.push(form.value);
-
-    // this.localStorageService.set('phoneNumber', foneAdresstArray);
-    // this.dataService.openSnackBar('Telefone adicionado com sucesso', 'X');
-    // this.dialogRef.close(form);
+    partnerArrayEdit.push(this.partner);
+    this.localStorageService.set('partnerFormGroup', partnerArrayEdit);
 
     this.partnerService.addPartner(this.partner);
     this.notificationService.success('Sócio adicionado com sucesso');
@@ -327,7 +270,7 @@ export class AddPartnerComponent implements OnInit {
   editPartner() {
     let index = this.index;
     let idPartner = +this.activatedRoute.snapshot.paramMap.get('index');
-    console.log(index);
+    console.log(idPartner);
 
     let editableItem =  {
       cpf : parseInt(this.partnerFormGroup.get('cpf').value),
@@ -359,8 +302,8 @@ export class AddPartnerComponent implements OnInit {
       ],
       partnerName: this.partnerFormGroup.get('partnerName').value,
       partnerSequentialNumber: 0,
-      
     }
+    console.log(this.partnerSource)
 
     if (this.idPartner > -1) {
       Object.assign(this.partnerSource[idPartner], editableItem);
