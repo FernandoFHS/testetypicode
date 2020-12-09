@@ -62,6 +62,7 @@ export class TaxTableComponent implements OnInit {
 
   editForm(index?:number): FormGroup {
     return this.fb.group({
+      id: [this.data[index].id],
       installment: [this.data[index].installment, Validators.required],
       antecipationTax: [this.data[index].antecipationTax, Validators.required],
       percentAdmTax: [this.data[index].percentAdmTax, Validators.required],
@@ -77,6 +78,7 @@ export class TaxTableComponent implements OnInit {
 
   initiateForm(): FormGroup {
     return this.fb.group({
+      id: [0],
       installment: ["", Validators.required],
       antecipationTax: ["", Validators.required],
       percentAdmTax: ["", Validators.required],
