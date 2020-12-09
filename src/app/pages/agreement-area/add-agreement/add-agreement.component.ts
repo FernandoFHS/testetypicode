@@ -27,8 +27,8 @@ import { AgreementContent, AgreementResponse } from 'src/app/models/Agreement';
 export class AddAgreementComponent implements OnInit {
 
   private _breadcrumbItems = [
-      { title: 'Home', route: '' },
-      { title: 'Contratos', route: '/agreements' },
+    { title: 'Home', route: '' },
+    { title: 'Contratos', route: '/agreements' },
   ];
   addBreadcrumbModel: BreadcrumbModel = {
     active: {
@@ -83,7 +83,7 @@ export class AddAgreementComponent implements OnInit {
   formData$: Observable<any>
 
   constructor(
-    private _formBuilder: FormBuilder, 
+    private _formBuilder: FormBuilder,
     private _spinnerService: NgxSpinnerService,
     private _notificationService: NotificationService,
     private companyService: CompanyService,
@@ -95,45 +95,46 @@ export class AddAgreementComponent implements OnInit {
     private _router: Router,
     private _planService: PlanService,
     private route: ActivatedRoute
-    
-    ) { }
 
-    async ngOnInit(): Promise<void> {
+  ) { }
 
-      if (this.localStorageService.get('idCompanyGroup') == null) {
-        this.idCompanyGroup = this.route.snapshot.queryParamMap.get('idCompanyGroup');
-        this.localStorageService.set('idCompanyGroup', this.idCompanyGroup);
-      } else {
-        this.idCompanyGroup = this.localStorageService.get('idCompanyGroup');
-      }
+  async ngOnInit(): Promise<void> {
+
+    if (this.localStorageService.get('idCompanyGroup') == null) {
+      this.idCompanyGroup = this.route.snapshot.queryParamMap.get('idCompanyGroup');
+      this.localStorageService.set('idCompanyGroup', this.idCompanyGroup);
+    } else {
+      this.idCompanyGroup = this.localStorageService.get('idCompanyGroup');
+    }
 
     await this._loadParams();
 
     if (this.isPageEdit()) {
       await this._loadModel();
       this._loadFormEdit();
-    }else if(this.isPageView()) {
+    } else if (this.isPageView()) {
       this.actions = {
         add: false,
         edit: false,
         delete: false,
-        view: false
+        view: true
       };
       await this._loadModel();
       this._loadFormEdit();
-    }else {
+    } else {
       this._loadFormAdd();
     }
 
-   
 
-    // this.form.valueChanges.subscribe(newValue=>{
-    //   this.formData$ = newValue;
-    // });
-    
+
+    this.form.valueChanges.subscribe(newValue => {
+      console.log(newValue);
+      
+    });
+
     //this.companyService.getAll().subscribe(companys => {
     // this._agreementService.getCompany(+this.idCompanyGroup).subscribe(companys => {
-      
+
     //   this.companys = companys.content;
     // });
   }
@@ -141,8 +142,8 @@ export class AddAgreementComponent implements OnInit {
   private _loadModel(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._agreementService.getById(this.id).subscribe((model) => {
-        console.log('model',model);
-        
+        console.log('model', model);
+
         this.model = model;
         resolve();
       }, (error) => {
@@ -195,9 +196,9 @@ export class AddAgreementComponent implements OnInit {
     });
     let instance = dialogRef.componentInstance;
     instance.agreementForm = this.form;
-    instance.isPageEdit = false;
+    instance.isPageAdd = true;
     dialogRef.afterClosed().subscribe((item) => {
-      if(item.value){
+      if (item.value) {
         this.plan.push(item.value);
         this.plan = [...this.plan];
         this.simpleDataTableService.refreshDataTable();
@@ -206,31 +207,38 @@ export class AddAgreementComponent implements OnInit {
   }
 
   onEditPlan(row: object) {
+    console.log('onEditPlan', row);
+
     let array = [] = this.planArray.value;
     let index = array.indexOf(row)
-    
-    let dialogRef = null;
 
-    // if(this.isPageEdit()){
-      dialogRef = this.dialog.open(AddPlanComponent, {
-        data: array[index]
-      });
-      let instance = dialogRef.componentInstance;
-      instance.agreementForm = this.form;
-      instance.isPageEdit = true;
-    // }else{
-    //   dialogRef = this.dialog.open(AddPlanComponent, {
-    //     data: this.model.plans.filter(e => e === row)[0]
-    //   });
-    // }
-    
+    let dialogRef = this.dialog.open(AddPlanComponent, {
+      data: array[index]
+    });
+    let instance = dialogRef.componentInstance;
+    instance.agreementForm = this.form;
+    instance.isPageEdit = true;
+
     dialogRef.afterClosed().subscribe((item) => {
       Object.assign(this.plan, item);
       this.simpleDataTableService.refreshDataTable();
     })
   }
 
-  onDeletePlan(row: object){
+  onViewPlan(row: object) {
+    console.log('onViewPlan', row);
+    let array = [] = this.planArray.value;
+    let index = array.indexOf(row)
+
+    let dialogRef = this.dialog.open(AddPlanComponent, {
+      data: array[index]
+    });
+    let instance = dialogRef.componentInstance;
+    instance.agreementForm = this.form;
+    instance.isPageView = true;
+  }
+
+  onDeletePlan(row: object) {
     // const index = this.plan.indexOf(row)
     // if (index > -1) {
     //   this.plan.splice(index, 1);
@@ -239,21 +247,24 @@ export class AddAgreementComponent implements OnInit {
     // } else {
     //   console.log(index);
     // }
-    
+
     let array = [] = this.planArray.value;
     let index = array.indexOf(row)
-
-    if(!this.model || !this.model.plans.includes(array[index])){
-      if(index > -1){
+    //console.log(array[index]);
+    //return 0
+    
+    //if (!this.model || !this.model.plans.includes(array[index])) {
+    if (array[index].id==0) {
+        if (index > -1) {
         this.planArray.removeAt(this.planArray.value.findIndex(item => item === array[index]))
-        setTimeout(_=>{ this.simpleDataTableService.refreshDataTable(); }, 50);
-      }else {
+        setTimeout(_ => { this.simpleDataTableService.refreshDataTable(); }, 50);
+      } else {
         this.simpleDataTableService.refreshDataTable();
       }
-    }else {
+    } else {
       this._notificationService.error('Não é possível excluir um plano em utilização!');
     }
-      
+
   }
   get planArray() {
     return this.form.get('plans') as FormArray;
@@ -276,8 +287,8 @@ export class AddAgreementComponent implements OnInit {
   private _loadFormEdit(): void {
     this.form = this._formBuilder.group({
       id: [this.model.id],
-      description: [{value: this.model.description, disabled: this.isPageView()}, [Validators.required]],
-      isFastInstallments: [{value: this.model.isFastInstallments, disabled: this.isPageView()}, [Validators.required]],
+      description: [{ value: this.model.description, disabled: this.isPageView() }, [Validators.required]],
+      isFastInstallments: [{ value: this.model.isFastInstallments, disabled: this.isPageView() }, [Validators.required]],
       idCompany: [this.model.idCompany],
       plans: this._formBuilder.array(this.model.plans),
     });
@@ -286,39 +297,41 @@ export class AddAgreementComponent implements OnInit {
 
   save(): void {
     this.form.markAllAsTouched();
-    // const isValid = this._validateForm();
-    const isValid = true;
+    const isValid = this.form.valid;
     if (isValid) {
       this._spinnerService.show();
+      this._agreementService.post(this.form.value).subscribe((response) => {
+        this._notificationService.success('Contrato criado com sucesso!');
+        this._spinnerService.hide();
+        this._router.navigate(['agreements/list']);
+      }, (error) => {
+        this._notificationService.error('Erro ao criar contrato, tente novamente.');
+        this._spinnerService.hide();
+      }, () => {
+        this._spinnerService.hide();
+      });
+    } else {
+      this._notificationService.error('Preencha todos os campos obrigatórios.');
     }
-    this._agreementService.post(this.form.value).subscribe((response) => {
-      this._notificationService.success('Contrato criado com sucesso!');
-      this._spinnerService.hide();
-      this._router.navigate(['agreements/list']);
-    }, (error) => {
-      this._notificationService.error('Erro ao criar contrato, tente novamente.');
-      this._spinnerService.hide();
-    }, () => {
-      this._spinnerService.hide();
-    });
   }
 
   update(): void {
     this.form.markAllAsTouched();
-    // const isValid = this._validateForm();
-    const isValid = true;
+    const isValid = this.form.valid;
     if (isValid) {
       this._spinnerService.show();
+      this._agreementService.put(this.form.value).subscribe((response) => {
+        this._notificationService.success('Contrato criado com sucesso!');
+        this._spinnerService.hide();
+        this._router.navigate(['agreements/list']);
+      }, (error) => {
+        this._notificationService.error('Erro ao criar contrato, tente novamente.');
+        this._spinnerService.hide();
+      }, () => {
+        this._spinnerService.hide();
+      });
+    } else {
+      this._notificationService.error('Preencha todos os campos obrigatórios.');
     }
-    this._agreementService.put(this.form.value).subscribe((response) => {
-      this._notificationService.success('Contrato criado com sucesso!');
-      this._spinnerService.hide();
-      this._router.navigate(['agreements/list']);
-    }, (error) => {
-      this._notificationService.error('Erro ao criar contrato, tente novamente.');
-      this._spinnerService.hide();
-    }, () => {
-      this._spinnerService.hide();
-    });
   }
 }
