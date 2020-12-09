@@ -358,6 +358,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [this.condition?.tableSaleCtrl || '', Validators.required],
+      tableSaleId:[''],
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || '', Validators.required],
       transactionAmount: [this.condition?.transactionAmount || '', Validators.required],
       tedAmount: [this.condition?.tedAmount || '', Validators.required],
@@ -417,13 +418,20 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.getCpfCnpjMask(this.identificationFormGroup.get('companyType').value);
     }
     this.checkValueBankAdress(true);
-
-    this.partnerService.onAddPartner().subscribe((partner) => {
-      this.apiPartnerSource$.push(partner);
-      console.log(this.apiPartnerSource$);
-      this.dataService.refreshTable();
+  
+    this.onEditPartnerSubscription = this.partnerService.onEditPartner().subscribe((params) => {
+      this.partnerSource$[params.index] = params.partner
+      this.partnerService.setAllPartners(this.partnerSource$);
+      console.log(this.partnerSource$);
+      this.phoneService.refreshDataTable();
     })
-    this.partnerService.onBackCompany().subscribe(() => {
+    this.onAddPartnerSubscription = this.partnerService.onAddPartner().subscribe((partner) => {
+      this.partnerSource$.push(partner)
+      this.partnerService.setAllPartners(this.partnerSource$);
+      console.log(this.partnerSource$);
+      this.phoneService.refreshDataTable();
+    })
+    this.onBackCompanySubscription = this.partnerService.onBackCompany().subscribe(() => {
       this.document.body.scrollTop = 0;
       console.log(this.stepper)
       this.stepper.selectedIndex = 4;
@@ -522,6 +530,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [this.condition?.tableSaleCtrl || ''],
+      tableSaleId:[''],
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || ''],
       transactionAmount: [this.condition?.transactionAmount || ''],
       tedAmount: [this.condition?.tedAmount || ''],
@@ -621,6 +630,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [{ value: this.condition?.tableSaleCtrl || '', disabled: true }],
+      tableSaleId:[''],
       automaticCreditIndicator: [{ value: this.condition?.automaticCreditIndicator || '', disabled: true }],
       transactionAmount: [{ value: this.condition?.transactionAmount || '', disabled: true }],
       tedAmount: [{ value: this.condition?.tedAmount || '', disabled: true }],
@@ -696,6 +706,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     console.log(company.companyAddress)
 
     this.conditionFormGroup.patchValue({
+      tableSaleCtrl: company.idPlan,
       automaticCreditIndicator: company.automaticCreditIndicator,
       transactionAmount: company.transactionAmount,
       tedAmount: company.tedAmount,
@@ -899,7 +910,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
       },
       idDepartament: this.identificationFormGroup.get('idDepartament').value,
-      idPlan: this.conditionFormGroup.get('tableSaleCtrl').value,
+      idPlan: this.conditionFormGroup.get('tableSaleId').value,
       idTerminal: this.complementFormGroup.get('idTerminal').value,
       ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
       inclusionRegistrationDateTime: "string",
@@ -989,9 +1000,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     this.AgreementByCompanygroupService.getAgreementByIdCompanyGroup(this.idCompanyGroup)
       // .pipe(take(1))
       .subscribe((response) => {
-        console.log(response)
         this.optionsplans = response['content'];
-        console.log(this.optionsplans);
         this.conditionFormGroup.get('tableSaleCtrl').valueChanges
           .pipe(
             startWith(''),
@@ -1036,6 +1045,11 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.saveForm(this.identificationFormGroup, 'identificationFormGroup');
       this.checkValueBankAdress(false)
     }
+  }
+
+  saveStep(){
+    const selectedSales = this.conditionFormGroup.get('tableSaleCtrl');
+    this.conditionFormGroup.get('tableSaleId').setValue(selectedSales?.value.id);
   }
 
   updateCompany() {
@@ -1105,7 +1119,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
           idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
         },
         idDepartament: this.identificationFormGroup.get('idDepartament').value,
-        idPlan: this.conditionFormGroup.get('idPlan').value,
+        idPlan: this.conditionFormGroup.get('tableSaleId').value,
         idTerminal: this.complementFormGroup.get('idTerminal').value,
         ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
         inclusionRegistrationDateTime: 0,
@@ -1256,6 +1270,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       data: { id: idBankAccount },
     });
     dialogRef.afterClosed().subscribe((item) => {
+      console.log(item);
       this.bankAccount$.push(item.value);
       this.apiBankAccount$.push(item.value);
       this.bankAccount$ = [...this.bankAccount$];
@@ -1274,37 +1289,61 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
   //Edit Methods
   onEditPhone(row: object) {
-    const index = this.phoneNumber$.indexOf(row)
-    const dialogRef = this.dialog.open(EditPhoneComponent, {
-      data: index
-    });
-    dialogRef.afterClosed().subscribe((item) => {
-      Object.assign(this.phoneNumber$, item);
-      this.phoneService.refreshDataTable();
-    })
+    if (this.isPageAdd()) {
+      const localIndex = this.phoneNumber$.indexOf(row);
+      const idCompany = this.id;
+      console.log(localIndex);
+
+      const dialogRef = this.dialog.open(EditPhoneComponent, {
+        data: {localIndex, idCompany} 
+      });
+      dialogRef.afterClosed().subscribe((item) => {
+        console.log(item);
+        Object.assign(this.phoneNumber$[localIndex], item);
+        this.dataService.refreshTable();
+      })
+    } else {
+      const apiIndex = this.apiPhoneNumber$.indexOf(row)
+      console.log(apiIndex);
+      const idCompany = this.id;
+
+      const dialogRef = this.dialog.open(EditPhoneComponent, {
+        data: {apiIndex, idCompany} 
+      });
+      dialogRef.afterClosed().subscribe((item) => {
+        console.log(item);
+        Object.assign(this.apiPhoneNumber$[apiIndex], item);
+        console.log(this.apiPhoneNumber$);
+        this.dataService.refreshTable();
+      })
+    }
   }
 
   onEditBankAccount(row: object) {
     if (this.isPageAdd()) {
       const localIndex = this.bankAccount$.indexOf(row);
+      const idCompany = this.id;
       console.log(localIndex);
 
       const dialogRef = this.dialog.open(EditBankAccountComponent, {
-        data: localIndex 
+        data: {localIndex, idCompany} 
       });
       dialogRef.afterClosed().subscribe((item) => {
-        Object.assign(this.bankAccount$, item);;
-        this.phoneService.refreshDataTable();
+        Object.assign(this.bankAccount$[localIndex], item);
+        this.dataService.refreshTable();
       })
     } else {
       const apiIndex = this.apiBankAccount$.indexOf(row)
-      const dialogRef = this.dialog.open(EditBankAccountComponent, {
-        data: apiIndex 
-      });
+      const idCompany = this.id;
 
+      const dialogRef = this.dialog.open(EditBankAccountComponent, {
+        data: {apiIndex, idCompany} 
+      });
       dialogRef.afterClosed().subscribe((item) => {
-        Object.assign(this.apiBankAccount$, item);;
-        this.phoneService.refreshDataTable();
+        console.log(item);
+        Object.assign(this.apiBankAccount$[apiIndex], item);
+        console.log(this.apiBankAccount$);
+        this.dataService.refreshTable();
       })
     }
   }
@@ -1612,8 +1651,6 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   saveForm(form, text) {
     this.localStorageService.set(text, form.value);
     this.localStorageService.set('cep', this.response);
-
-
   }
 
   saveAdress() {

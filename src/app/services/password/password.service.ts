@@ -16,12 +16,12 @@ export class PasswordService {
     return this.http.get(`${this.url}registrationPass/checkExistence`,password)
   }
 
-  checkLoginPassword() {
-    return this.http.get(`${this.url}registrationPass/checkExistence?idCompany=${1149}`)
+  checkLoginPassword(idCompany) {
+    return this.http.get(`${this.url}registrationPass/checkExistence?idCompany=${idCompany}`)
   }
 
-  alterPassword(password) {
-    return this.http.put(`${this.url}registrationPass?idCompany=${1149}&localTransaction=${'P'}&passSale=${123}`, password)
+  alterPassword(password, idCompany, passSale) {
+    return this.http.put(`${this.url}registrationPass?idCompany=${idCompany}&localTransaction=${'P'}&passSale=${passSale}`, password)
   }
   
   createPassword(password) {
@@ -32,9 +32,7 @@ export class PasswordService {
     return this.http.post(`${this.url}registrationPass/alterPassword`, password)
   }
 
-  recoverPassword(password) {
-    return this.http.put(`${this.url}registrationPass/${this.recoverPasswordUrl}?idCompany=${1190}`,
-    {password: password}
-    )
+  recoverPassword(password, token, idCompany) {
+    return this.http.put(`${this.url}registrationPass/${token}?idCompany=${idCompany}`, password)
   }
 }

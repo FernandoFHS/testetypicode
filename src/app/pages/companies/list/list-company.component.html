@@ -13,10 +13,10 @@
   </div> -->
 
   <form *ngIf="companyFormGroup" name="companyFormGroup" [formGroup]="companyFormGroup" novalidate>
-    <mat-form-field>
+    <!-- <mat-form-field>
       <mat-label>Filtro</mat-label>
       <input matInput formControlName="filter" placeholder="Procure por uma razão social" />
-    </mat-form-field>
+    </mat-form-field> -->
 
     <mat-expansion-panel (opened)="cardFilterOpened = true" (closed)="cardFilterOpened = false" class="mb-16"
       [expanded]="false">

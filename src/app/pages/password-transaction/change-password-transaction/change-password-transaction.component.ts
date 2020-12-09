@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
 import { NotificationService } from 'src/app/services/notification.service';
 import { PasswordService } from 'src/app/services/password/password.service';
@@ -15,15 +15,22 @@ export class ChangePasswordTransactionComponent implements OnInit {
   hide1 = true;
   hide2 = true;
   alterPasswordForm: any;
+  idCompany: any;
+  passSale: any;
 
   constructor(
     private _formBuilder: FormBuilder,
     private router: Router,
     private _notificationService: NotificationService,
-    private _passwordService: PasswordService
+    private _passwordService: PasswordService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+
+    this.idCompany = this.route.snapshot.queryParamMap.get('idCompany');
+    this.passSale = this.route.snapshot.queryParamMap.get('passSale');
+
     this.changePasswordForm = this._formBuilder.group(
       {
         // documentNumberCompany: ['', [Validators.required]],
@@ -51,9 +58,10 @@ export class ChangePasswordTransactionComponent implements OnInit {
     };
 
     console.log(alterPasswordForm);
-    this._passwordService.alterPassword(alterPasswordForm).subscribe((response: any) => {
+    this._passwordService.alterPassword(alterPasswordForm, this.idCompany, this.passSale).subscribe((response: any) => {
         console.log(response);
         this._notificationService.success('Senha alterada com sucesso!');
+        this.router.navigate(['/password-transaction']);
       });
 
   }

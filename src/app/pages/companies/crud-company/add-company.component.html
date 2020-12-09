@@ -550,8 +550,8 @@
                   cod. {{option.id }} {{ option.description}}
                 </mat-option>
               </mat-autocomplete>
-              <!-- <mat-error *ngIf="identificationFormGroup.get('companyResponsible').hasError('invalidAutoComplete')">
-                Selecione uma empresa da lista</mat-error> -->
+              <mat-error *ngIf="conditionFormGroup.get('tableSaleCtrl').hasError('invalidAutoComplete')">
+                Selecione uma tabela da lista</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
@@ -713,7 +713,7 @@
           <core-back-button (click)="saveForm(conditionFormGroup,'conditionFormGroup')" color="accent" fxFlex>Voltar
           </core-back-button>
 
-          <core-next-button (click)="saveForm(conditionFormGroup,'conditionFormGroup')" fxFlex>Avançar
+          <core-next-button (click)="saveForm(conditionFormGroup,'conditionFormGroup');saveStep()" fxFlex>Avançar
           </core-next-button>
 
         </div>
@@ -855,8 +855,7 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Envio GP</mat-label>
-                <input matInput [matDatepicker]="sendDate" placeholder="Data Envio GP" formControlName="gpSendDate"
-                  numbersOnly>
+                <input matInput [matDatepicker]="gpSendDate" placeholder="Data Envio GP" formControlName="gpSendDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="gpSendDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpSendDate></mat-datepicker>
               </mat-form-field>
