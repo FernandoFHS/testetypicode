@@ -29,9 +29,9 @@ export class CompanyService {
   /** CRUD METHODS */
 
   createCompanyAccount(idCompany) {
-    const createAccountURL = `${this.companyAccount_URL}accounts/accountAgency`;
+    const createAccountURL = `${this.companyAccount_URL}accounts`;
 
-    return this.httpClient.post<Account[]>(createAccountURL, idCompany); 
+    return this.httpClient.post(createAccountURL, {idCompany: idCompany}); 
   }
 
   getAllCompanies(sort: string, order: string, page: number, size: number, companyGroup: number): Observable<{ content: CompanyContent[] }> {

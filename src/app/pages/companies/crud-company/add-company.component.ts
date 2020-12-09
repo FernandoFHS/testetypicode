@@ -171,6 +171,12 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   onAddPartnerSubscription: Subscription;
   onBackCompanySubscription: Subscription;
 
+  // onEditBankSubscription: Subscription;
+  // onAddBankSubscription: Subscription;
+
+  // onEditPhoneSubscription: Subscription;
+  // onAddPhoneSubscription: Subscription;
+
   partnerSource$: any = this.localStorageService.get('partnerFormGroup');
 
   mcc: any;
@@ -257,14 +263,6 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.onEditPartnerSubscription.unsubscribe();
       this.onAddPartnerSubscription.unsubscribe();
       this.onBackCompanySubscription.unsubscribe();
-    }
-
-    if (this.isPageAdd()) {
-      console.log('Uhul')
-      this.onEditPartnerSubscription.unsubscribe();
-      this.onAddPartnerSubscription.unsubscribe();
-      this.onBackCompanySubscription.unsubscribe();
-      this.loadAddModel();
     }
   }
 
@@ -487,6 +485,18 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       console.log(this.apiPartnerSource$);
       this.phoneService.refreshDataTable();
     })
+    // this.onEditBankSubscription = this.partnerService.onEditBank().subscribe((params) => {
+    //   this.apiBankAccount$[params.index] = params.bank
+    //   this.partnerService.setAllBanks(this.apiBankAccount$);
+    //   console.log(this.apiBankAccount$);
+    //   this.phoneService.refreshDataTable();
+    // })
+    // this.onEditBankSubscription = this.partnerService.onEditPhone().subscribe((params) => {
+    //   this.apiPhoneNumber$[params.index] = params.phone
+    //   this.partnerService.setAllPhones(this.apiPhoneNumber$);
+    //   console.log(this.apiPhoneNumber$);
+    //   this.phoneService.refreshDataTable();
+    // })
     this.onAddPartnerSubscription = this.partnerService.onAddPartner().subscribe((partner) => {
       this.apiPartnerSource$.push(partner)
       this.partnerService.setAllPartners(this.apiPartnerSource$);
@@ -991,11 +1001,23 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     } else {
       this.companyService.create(form).subscribe((response: any) => {
         console.log(response);
+        this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
+          console.log(account);
+        });
         this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
         this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
         this.deleteLocalStorage();
       })
     }
+    // this.companyService.create(form).subscribe((response: any) => {
+    //   console.log(response.idCompany);
+    //   this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
+    //     console.log(account);
+    //   });
+    //   this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
+    //   this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
+    //   // this.deleteLocalStorage();
+    // })
 
   }
 
@@ -1355,7 +1377,6 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     if (this.isPageAdd()) {
       const localIndex = this.bankAccount$.indexOf(row);
       const idCompany = this.id;
-      console.log(localIndex);
 
       const dialogRef = this.dialog.open(EditBankAccountComponent, {
         data: { localIndex, idCompany }
@@ -1369,11 +1390,13 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       const idCompany = this.id;
 
       const dialogRef = this.dialog.open(EditBankAccountComponent, {
-        data: { apiIndex, idCompany }
+        data: {apiIndex, idCompany, model: row}, 
+        autoFocus: false 
       });
       dialogRef.afterClosed().subscribe((item) => {
         console.log(item);
         Object.assign(this.apiBankAccount$[apiIndex], item);
+        this.apiBankAccount$ = [...this.apiBankAccount$]
         console.log(this.apiBankAccount$);
         this.dataService.refreshTable();
       })
