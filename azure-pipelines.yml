@@ -1,24 +1,44 @@
-# Node.js with Angular
-# Build a Node.js project that uses Angular.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
-- main
-- release/*
-- develop
-
-pool:
-  vmImage: 'ubuntu-latest'
-
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
-
-- script: |
-    npm install -g @angular/cli
-    npm install
-    ng build --prod
-  displayName: 'npm install and build'
+  branches:
+    include:
+    - release/*
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: develop
+jobs:
+- job: Job_1
+  displayName: Agent job 1
+  pool:
+    vmImage: vs2017-win2016
+  steps:
+  - checkout: self
+  - task: NodeTool@0
+    displayName: Node Reference Available
+    inputs:
+      versionSpec: 14.x
+      checkLatest: true
+  - task: Npm@1
+    displayName: Angular CLI
+    inputs:
+      command: custom
+      verbose: false
+      customCommand: install  -g @angular/cli
+  - task: Npm@1
+    displayName: npm install
+    inputs:
+      verbose: false
+  - task: Npm@1
+    displayName: Create a deployment build
+    inputs:
+      command: custom
+      verbose: false
+      customCommand: run build
+  - task: AzureRmWebAppDeployment@4
+    displayName: 'Azure App Service Deploy: mobbuy-front'
+    inputs:
+      ConnectedServiceName: 73ddb1c7-1941-4c52-80b1-38e492681725
+      WebAppName: mobbuy-front
+      Package: dist/
+...
