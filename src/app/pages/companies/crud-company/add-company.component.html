@@ -49,7 +49,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Empresa Administradora</mat-label>
             <input type="text" placeholder="Empresa Administradora" aria-label="Number" matInput
-              formControlName="companyResponsible" [matAutocomplete]="autocompany">
+              formControlName="companyResponsible" [matAutocomplete]="autocompany" required>
             <mat-autocomplete #autocompany="matAutocomplete" [displayWith]="displayFnCompany">
               <mat-option *ngFor="let option of filteredCompanies" [value]="option">
                 {{option.companyName}}
@@ -82,7 +82,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Tipo</mat-label>
-              <mat-select name="type" #pessoa formControlName="companyType" (blur)="getCpfCnpjMask(pessoa.value)">
+              <mat-select name="type" #pessoa formControlName="companyType" (blur)="getCpfCnpjMask(pessoa.value)" required>
                 <mat-option></mat-option>
                 <mat-option value="PF"> Pessoa Física </mat-option>
                 <mat-option value="PJ"> Pessoa Jurídica </mat-option>
@@ -90,22 +90,29 @@
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             </mat-form-field>
 
+
+            <mat-form-field appearance="outline">
+              <mat-label>CPF/CNPJ</mat-label>
+              <input matInput placeholder="{{mask}}" formControlName="documentNumberCompany" mask="{{mask}}"
+                [showMaskTyped]="true" required />
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+              <mat-icon matSuffix>assignment_ind</mat-icon>
+            </mat-form-field>
+
           </div>
 
           <mat-form-field appearance="outline">
-            <mat-label>CPF/CNPJ</mat-label>
-            <input matInput placeholder="{{mask}}" formControlName="documentNumberCompany" mask="{{mask}}"
-              [showMaskTyped]="true" />
+            <mat-label>Inscrição Estadual</mat-label>
+            <input matInput placeholder="Inscrição Estadual" formControlName="stateRegistration" numbersOnly
+              mask="000000000000" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-            <mat-icon matSuffix>assignment_ind</mat-icon>
+            <mat-icon matSuffix>assignment</mat-icon>
           </mat-form-field>
 
         </div>
 
-        <div class="line-form">
-
+        <!-- <div class="line-form">
           <div class="short-line-form">
-
             <mat-form-field appearance="outline">
               <mat-label>Empresa Adquirente</mat-label>
               <input matInput placeholder="Empresa Adquirente" formControlName="gpEstablishmentNumber" numbersOnly
@@ -114,16 +121,7 @@
               <mat-icon matSuffix>home_work</mat-icon>
             </mat-form-field>
           </div>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Inscrição Estadual</mat-label>
-            <input matInput placeholder="Inscrição Estadual" formControlName="stateRegistration" numbersOnly
-              mask="000000000000" />
-            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-            <mat-icon matSuffix>assignment</mat-icon>
-          </mat-form-field>
-
-        </div>
+        </div> -->
 
         <mat-divider></mat-divider>
 
@@ -134,7 +132,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Razão Social</mat-label>
             <input matInput placeholder="Razão Social" formControlName="companyName"
-              oninput="this.value = this.value.toUpperCase() " maxlength="150" />
+              oninput="this.value = this.value.toUpperCase() " maxlength="150" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>assignment</mat-icon>
           </mat-form-field>
@@ -143,14 +141,14 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Nome Fantasia</mat-label>
-              <input matInput placeholder="Nome Fantasia" formControlName="fancyName" maxlength="150" />
+              <input matInput placeholder="Nome Fantasia" formControlName="fancyName" maxlength="150" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>perm_contact_calendar</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Nome Reduzido</mat-label>
-              <input matInput placeholder="Razão Social" formControlName="companyShortName" maxlength="150" />
+              <input matInput placeholder="Razão Social" formControlName="companyShortName" maxlength="150" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>short_text</mat-icon>
             </mat-form-field>
@@ -163,22 +161,22 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Atividade comercial</mat-label>
-            <input matInput formControlName="businessActivity" maxlength="150">
+            <input matInput formControlName="businessActivity" maxlength="150" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>meeting_room</mat-icon>
           </mat-form-field>
 
-          <div class="short-line-2-form">
-            <mat-form-field appearance="outline">
+         
+            <!-- <mat-form-field appearance="outline">
               <mat-label>Departamento</mat-label>
-              <input matInput placeholder="Departamento" formControlName="idDepartament" maxlength="6" numbersOnly />
+              <input matInput placeholder="Departamento" formControlName="idDepartament" maxlength="6" numbersOnly required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>meeting_room</mat-icon>
-            </mat-form-field>
+            </mat-form-field> -->
 
             <mat-form-field appearance="outline">
               <mat-label>Data de abertura</mat-label>
-              <input matInput [matDatepicker]="dp" formControlName="openingDate" placeholder="00/00/0000">
+              <input matInput [matDatepicker]="dp" formControlName="openingDate" placeholder="00/00/0000" required />
               <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
               <mat-error *ngIf="!identificationFormGroup.get('openingDate').value">Data incorreta</mat-error>
@@ -190,7 +188,7 @@
               <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
             </mat-form-field> -->
-          </div>
+          
 
         </div>
 
@@ -200,7 +198,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>CNAE</mat-label>
-              <input matInput aria-label="Cnae" formControlName="cnae" [matAutocomplete]="auto" (blur)="getMccByCnae()">
+              <input matInput aria-label="Cnae" formControlName="cnae" [matAutocomplete]="auto" (blur)="getMccByCnae()" required />
               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                 <mat-option *ngFor="let item of filteredCnaes" [value]="item">
                   <span>{{item.description}}</span>
@@ -212,7 +210,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>MCC</mat-label>
-              <input matInput placeholder="MCC" formControlName="mcccode" maxlength="4" numbersOnly mask="0000" />
+              <input matInput placeholder="MCC" formControlName="mcccode" maxlength="4" numbersOnly mask="0000" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>assignment</mat-icon>
             </mat-form-field>
@@ -246,7 +244,7 @@
             <mat-form-field appearance="outline">
               <mat-label>CEP</mat-label>
               <input matInput placeholder="Digite o seu cep" formControlName="zipCode" #keyZipCode
-                (blur)="getFirstCep(keyZipCode.value)" mask="00000-000" [showMaskTyped]="true" />
+                (blur)="getFirstCep(keyZipCode.value)" mask="00000-000" [showMaskTyped]="true" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>place</mat-icon>
             </mat-form-field>
@@ -259,7 +257,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Logradouro</mat-label>
-            <input matInput placeholder="Digite o seu endereço" formControlName="streetName" maxlength="100" />
+            <input matInput placeholder="Digite o seu endereço" formControlName="streetName" maxlength="100" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>add_road</mat-icon>
           </mat-form-field>
@@ -268,7 +266,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Número</mat-label>
-              <input matInput placeholder="Número" formControlName="number" maxlength="10" />
+              <input matInput placeholder="Número" formControlName="number" maxlength="10" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>looks_one</mat-icon>
             </mat-form-field>
@@ -288,7 +286,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Bairro</mat-label>
-            <input matInput placeholder="Bairro" formControlName="neighborhoodName" maxlength="100" />
+            <input matInput placeholder="Bairro" formControlName="neighborhoodName" maxlength="100" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>map</mat-icon>
           </mat-form-field>
@@ -297,14 +295,14 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Município</mat-label>
-              <input matInput placeholder="Digite o seu município" formControlName="cityName" maxlength="100" />
+              <input matInput placeholder="Digite o seu município" formControlName="cityName" maxlength="100" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>map</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Estado</mat-label>
-              <input matInput placeholder="Digite o seu estado" formControlName="uf" required maxlength="2" />
+              <input matInput placeholder="Digite o seu estado" formControlName="uf" required maxlength="2" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>map</mat-icon>
             </mat-form-field>
@@ -317,7 +315,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Nome do Responsável</mat-label>
-            <input matInput placeholder="Nome do Responsável" formControlName="responsibleNameCtrl" maxlength="100" />
+            <input matInput placeholder="Nome do Responsável" formControlName="responsibleNameCtrl" maxlength="100" required/>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>contacts</mat-icon>
           </mat-form-field>
@@ -372,7 +370,7 @@
               <mat-label>CEP</mat-label>
               <input matInput placeholder="Digite o seu cep" formControlName="subordinateZipCode" #subordinateZipCode
                 (blur)="getSecondCep(subordinateZipCode.value)" mask="00000-000" [readonly]="isChecked"
-                [showMaskTyped]="true" />
+                [showMaskTyped]="true" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix [ngStyle]="{'color': isChecked? 'grey' : ''}">place</mat-icon>
             </mat-form-field>
@@ -386,7 +384,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Logradouro</mat-label>
             <input matInput placeholder="Digite o seu endereço" formControlName="subordinateStreetCtrl"
-              [readonly]="isChecked" maxlength="100" />
+              [readonly]="isChecked" maxlength="100" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix [ngStyle]="{ color: isChecked ? 'grey' : '' }">add_road</mat-icon>
           </mat-form-field>
@@ -396,7 +394,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Número</mat-label>
               <input matInput placeholder="Digite o seu número" formControlName="subordinateNumberCtrl"
-                [readonly]="isChecked" maxlength="10" />
+                [readonly]="isChecked" maxlength="10" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix [ngStyle]="{ color: isChecked ? 'grey' : '' }">looks_two</mat-icon>
             </mat-form-field>
@@ -420,7 +418,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Bairro</mat-label>
             <input matInput placeholder="Bairro" formControlName="subordinateNeighborhoodCtrl" [readonly]="isChecked"
-              maxlength="100" />
+              maxlength="100" required />
             <mat-error *ngIf="formControl.invalid">{{
             getErrorMessage()
           }}</mat-error>
@@ -432,7 +430,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Município</mat-label>
               <input matInput placeholder="Digite o seu município" formControlName="subordinateCityCtrl"
-                [readonly]="isChecked" maxlength="100" />
+                [readonly]="isChecked" maxlength="100" required />
               <mat-error *ngIf="formControl.invalid">{{
               getErrorMessage()
             }}</mat-error>
@@ -442,7 +440,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Estado</mat-label>
               <input matInput placeholder="Digite o seu estado" formControlName="subordinateStateCtrl"
-                [readonly]="isChecked" maxlength="100" />
+                [readonly]="isChecked" maxlength="100" required />
               <mat-error *ngIf="formControl.invalid">{{
               getErrorMessage()
             }}</mat-error>
@@ -458,7 +456,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Nome do Responsável</mat-label>
             <input matInput placeholder="Nome do Responsável" formControlName="subordinateResponsibleNameCtrl"
-              [readonly]="isChecked" maxlength="100" />
+              [readonly]="isChecked" maxlength="100" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix [ngStyle]="{'color': isChecked? 'grey' : ''}">contacts</mat-icon>
           </mat-form-field>
@@ -543,8 +541,8 @@
             </mat-form-field> -->
             <mat-form-field appearance="outline">
               <mat-label>Tabela de Vendas</mat-label>
-              <input matInput placeholder="Tabela de Vendas" aria-label="Number" 
-                formControlName="tableSaleCtrl" [matAutocomplete]="autoplan">
+              <input matInput placeholder="Tabela de Vendas" aria-label="Number" formControlName="tableSaleCtrl"
+                [matAutocomplete]="autoplan" required />
               <mat-autocomplete #autoplan="matAutocomplete" [displayWith]="displayFnPlans">
                 <mat-option *ngFor="let option of filteredPlans" [value]="option">
                   cod. {{option.id }} {{ option.description}}
@@ -556,7 +554,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Crédito Automático</mat-label>
-              <mat-select name="type" formControlName="automaticCreditIndicator">
+              <mat-select name="type" formControlName="automaticCreditIndicator" required >
                 <mat-option value="S"> Sim </mat-option>
                 <mat-option value="N"> Não </mat-option>
               </mat-select>
@@ -598,7 +596,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Transação Referencial</mat-label>
-              <input matInput currencyMask [options]="customCurrencyMaskConfig" placeholder="R$ 0,00"
+              <input matInput currencyMask [options]="customCurrencyMaskConfigPercentage" placeholder="0.00%"
                 formControlName="referentialTransactionAmount" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>swap_horizontal_circle</mat-icon>
@@ -607,7 +605,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Taxa de Antecipação</mat-label>
-              <input matInput currencyMask [options]="customCurrencyMaskConfig" placeholder="R$ 0,00"
+              <input matInput currencyMask [options]="customCurrencyMaskConfigPercentage" placeholder="0.00%"
                 formControlName="anticipationFee" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>attach_money_cicle</mat-icon>
@@ -619,7 +617,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Ignora Regra de Liberação de AJ Manualmente</mat-label>
-              <mat-select name="type" formControlName="ignoreLiberationAJManual">
+              <mat-select name="type" formControlName="ignoreLiberationAJManual" required >
                 <mat-option [value]="true"> Sim </mat-option>
                 <mat-option [value]="false"> Não </mat-option>
               </mat-select>
@@ -628,7 +626,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Trata AJ Pelo Liquido ou Bruto</mat-label>
-              <mat-select name="type" formControlName="ajtype">
+              <mat-select name="type" formControlName="ajtype" required >
                 <mat-option value="B"> Pelo Bruto </mat-option>
                 <mat-option value="L"> Pelo Líquido </mat-option>
               </mat-select>
@@ -682,7 +680,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Tipo do beneficiado</mat-label>
               <mat-select name="type" #benefitedType formControlName="beneficiaryType"
-                (blur)="getCpfCnpjMask(benefitedType.value)">
+                (blur)="getCpfCnpjMask(benefitedType.value)" required >
                 <mat-option></mat-option>
                 <mat-option value="PF"> Pessoa Física </mat-option>
                 <mat-option value="PJ"> Pessoa Jurídica </mat-option>
@@ -692,14 +690,14 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Nome do Beneficiado</mat-label>
-              <input matInput placeholder="Nome do Beneficiado" formControlName="beneficiaryName" />
+              <input matInput placeholder="Nome do Beneficiado" formControlName="beneficiaryName" required/>
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix [ngStyle]="{ color: isCheckedBankAdress ? '' : 'gray' }">account_box</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>CPF/CNPJ</mat-label>
-              <input matInput placeholder="{{mask}}" formControlName="beneficiaryDocumentNumber" mask="{{mask}}" />
+              <input matInput placeholder="{{mask}}" formControlName="beneficiaryDocumentNumber" mask="{{mask}}" required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix [ngStyle]="{ color: isCheckedBankAdress ? '' : 'gray' }">assignment_ind</mat-icon>
             </mat-form-field>
@@ -733,7 +731,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Horário de funcionamento</mat-label>
-            <mat-select name="type" formControlName="openingHours">
+            <mat-select name="type" formControlName="openingHours" required >
               <mat-option value="1">Horário Comercial</mat-option>
               <mat-option value="2"> 24 horas </mat-option>
               <mat-option value="3"> Manhã </mat-option>
@@ -746,7 +744,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>URL Ecommerce</mat-label>
-            <input matInput placeholder="Ex: www.site.com.br" formControlName="ecommerceURL" />
+            <input matInput placeholder="Ex: www.site.com.br" formControlName="ecommerceURL" type="url" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>link</mat-icon>
           </mat-form-field>
@@ -757,14 +755,14 @@
 
           <mat-form-field appearance="outline">
             <mat-label>URL</mat-label>
-            <input matInput placeholder="Ex: www.site.com.br" formControlName="estUrl" />
+            <input matInput placeholder="Ex: www.site.com.br" formControlName="estUrl" type="url" required  />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>link</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput placeholder="Ex: teste@email.com" formControlName="email" />
+            <input matInput placeholder="Ex: teste@email.com" formControlName="email" type="email" required />
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             <mat-icon matSuffix>mail</mat-icon>
           </mat-form-field>
@@ -795,14 +793,14 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Id. Terminal (TID)</mat-label>
-              <input matInput placeholder="Id. Terminal (TID)" formControlName="idTerminal" />
+              <input matInput placeholder="Id. Terminal (TID)" formControlName="idTerminal" numbersOnly required/>
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>more_horiz</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
               <mat-label>Cód. Software Express</mat-label>
-              <input matInput placeholder="Cód. Software Express" formControlName="registerCode" />
+              <input matInput placeholder="Cód. Software Express" formControlName="registerCode" numbersOnly required />
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
               <mat-icon matSuffix>more_horiz</mat-icon>
             </mat-form-field>
@@ -855,7 +853,8 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Envio GP</mat-label>
-                <input matInput [matDatepicker]="gpSendDate" placeholder="Data Envio GP" formControlName="gpSendDate" numbersOnly>
+                <input matInput [matDatepicker]="gpSendDate" placeholder="Data Envio GP" formControlName="gpSendDate"
+                  numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="gpSendDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpSendDate></mat-datepicker>
               </mat-form-field>

@@ -121,8 +121,8 @@ export class TaxTableComponent implements OnInit {
     if(index>=0){
       const control = this.userTable.get("tax") as FormArray;
       //control.value[index].get('installment').value
-      let value = control.controls[index].controls[property].value
-      return value
+      // let value = control.controls[index].controls[property].value
+      // return value
     }else {
 
     }
