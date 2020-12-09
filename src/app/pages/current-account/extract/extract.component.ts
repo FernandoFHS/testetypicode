@@ -325,8 +325,8 @@ export class ExtractComponent implements OnInit {
       const form = this.form.getRawValue();
 
       const filter: GetExtractFilterModel = {
-        dateTransactionFinish: new Date(form.transaction_date_end),
-        dateTransactionStart: new Date(form.transaction_date_start),
+        dateTransactionFinish: form.transaction_date_end ? new Date(form.transaction_date_end) : null,
+        dateTransactionStart: form.transaction_date_start ? new Date(form.transaction_date_start) : null,
         idCompany: this.idCompany.toString()
       };
 
@@ -337,6 +337,8 @@ export class ExtractComponent implements OnInit {
         this.model.last = data.last;
       }, (error) => {
         console.log(error);
+        this._spinnerService.hide();
+        this._notificationService.error('Erro ao carregar Extrato.');
       }, () => {
         this._spinnerService.hide();
       });
