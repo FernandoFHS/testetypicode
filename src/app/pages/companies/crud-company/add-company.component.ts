@@ -90,7 +90,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
 
   cnaeForm = new FormControl();
-  isLinear = false;
+  isLinear = true;
   identificationFormGroup: FormGroup;
   adressFormGroup: FormGroup;
   conditionFormGroup: FormGroup;
