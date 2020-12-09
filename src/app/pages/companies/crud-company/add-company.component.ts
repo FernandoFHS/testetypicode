@@ -872,18 +872,18 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
       companyContact: this.localStorageService.get('phoneNumber'),
 
-      companyLevel: [
-        {
-          description: "string",
-          idCompany: 0,
-          idCompanyLevel: 0,
-          level: 0
-        }
-      ],
+      // companyLevel: [
+      //   {
+      //     description: "string",
+      //     idCompany: 0,
+      //     idCompanyLevel: 0,
+      //     level: 0
+      //   }
+      // ],
       companyLevelItem: {
-        idCompanyLevel: 1,
-        description: "Subadquirente",
-        level: 30
+        idCompanyLevel: 7,
+        description: "ESTABELECIMENTO COMERCIAL",
+        level: 70
       },
       companyName: this.identificationFormGroup.get('companyName').value,
       companyResponsibleName: this.identificationFormGroup.get('companyResponsibleName').value,
