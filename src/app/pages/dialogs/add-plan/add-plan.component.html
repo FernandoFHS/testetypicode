@@ -63,14 +63,14 @@
       
     </mat-expansion-panel> -->
 
-    <mat-form-field appearance="outline" *ngIf="remuneration$ | async as remunetation;">
+    <!-- <mat-form-field appearance="outline" *ngIf="remuneration$ | async as remunetation;">
       <mat-label>Remuneração</mat-label>
-      <mat-select [compareWith]="compareFn" formControlName="remuneration" required>
+      <mat-select [compareWith]="compareFn" formControlName="remuneration">
         <mat-option>Selecione a remuneração</mat-option>
         <mat-option *ngFor="let item of remunetation" [value]="item">Entidade de Serviço: {{item.serviceEntity.description}} - Tipo: {{item.remunerationType.description}}</mat-option>
       </mat-select>
       <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
     
 
     <mat-expansion-panel class="m-b-25" [expanded]="true">

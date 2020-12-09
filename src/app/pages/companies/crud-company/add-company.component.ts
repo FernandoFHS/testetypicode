@@ -1,3 +1,4 @@
+import { AgreementByCompanygroupService } from './../../../services/company/agreement-by-companygroup.service';
 import { map, take, startWith, filter } from 'rxjs/operators';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -107,6 +108,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
   optionscompany: any;
   optionscnae: any;
+  optionsplans: any;
 
   dateformated: any;
 
@@ -162,6 +164,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   cnae$: Observable<Array<Cnae>>;
   filteredCnaes: Observable<any[]>;
   filteredCompanies: Observable<any[]>;
+  filteredPlans: Observable<any[]>;
+
 
   addBreadcrumbModel: BreadcrumbModel = {
     active: {
@@ -212,6 +216,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     public phoneService: SimpleDataTableService,
     public changeDetectorRefs: ChangeDetectorRef,
     public CompanyByLevelService: CompanyByLevelService,
+    public AgreementByCompanygroupService: AgreementByCompanygroupService,
     private _generalService: GeneralService,
     private partnerService: PartnerService,
     @Inject(DOCUMENT) private document: Document
@@ -294,6 +299,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
     this.gelAllCnaes();
     this.getCompanyLevel();
+    this.getPlans();
 
   }
 
@@ -352,6 +358,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [this.condition?.tableSaleCtrl || '', Validators.required],
+      tableSaleId:[''],
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || '', Validators.required],
       transactionAmount: [this.condition?.transactionAmount || '', Validators.required],
       tedAmount: [this.condition?.tedAmount || '', Validators.required],
@@ -523,6 +530,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [this.condition?.tableSaleCtrl || ''],
+      tableSaleId:[''],
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || ''],
       transactionAmount: [this.condition?.transactionAmount || ''],
       tedAmount: [this.condition?.tedAmount || ''],
@@ -622,6 +630,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [{ value: this.condition?.tableSaleCtrl || '', disabled: true }],
+      tableSaleId:[''],
       automaticCreditIndicator: [{ value: this.condition?.automaticCreditIndicator || '', disabled: true }],
       transactionAmount: [{ value: this.condition?.transactionAmount || '', disabled: true }],
       tedAmount: [{ value: this.condition?.tedAmount || '', disabled: true }],
@@ -697,6 +706,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     console.log(company.companyAddress)
 
     this.conditionFormGroup.patchValue({
+      tableSaleCtrl: company.idPlan,
       automaticCreditIndicator: company.automaticCreditIndicator,
       transactionAmount: company.transactionAmount,
       tedAmount: company.tedAmount,
@@ -900,7 +910,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
       },
       idDepartament: this.identificationFormGroup.get('idDepartament').value,
-      idPlan: 0,
+      idPlan: this.conditionFormGroup.get('tableSaleId').value,
       idTerminal: this.complementFormGroup.get('idTerminal').value,
       ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
       inclusionRegistrationDateTime: "string",
@@ -986,6 +996,24 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
           });
       });
   }
+  getPlans() {
+    this.AgreementByCompanygroupService.getAgreementByIdCompanyGroup(this.idCompanyGroup)
+      // .pipe(take(1))
+      .subscribe((response) => {
+        this.optionsplans = response['content'];
+        this.conditionFormGroup.get('tableSaleCtrl').valueChanges
+          .pipe(
+            startWith(''),
+          ).subscribe((value) => {
+            if (typeof (value) == 'string') {
+              this.filteredPlans = this.optionsplans.filter((company) => {
+                console.log(company)
+                return company.description.toLowerCase().includes(value.toLowerCase())
+              })
+            }
+          });
+      });
+  }
 
   gelAllCnaes() {
     this.cnaeService.getAllCnae()
@@ -1017,6 +1045,11 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.saveForm(this.identificationFormGroup, 'identificationFormGroup');
       this.checkValueBankAdress(false)
     }
+  }
+
+  saveStep(){
+    const selectedSales = this.conditionFormGroup.get('tableSaleCtrl');
+    this.conditionFormGroup.get('tableSaleId').setValue(selectedSales?.value.id);
   }
 
   updateCompany() {
@@ -1077,10 +1110,16 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         // gpReturnDate: this.complementFormGroup.get('gpReturnDate').value,
         gpReturnDate: 0,
         gpSendDate: this.complementFormGroup.get('gpSendDate').value,
-        idCompanyGroup: company.companyGroup.idCompany,
+        // idCompanyGroup: company.companyGroup.idCompany,
         // idCompanyOwner: company.companyOwner.idCompany,
+        companyGroup: {
+          idCompany:company.companyGroup.idCompany,
+        },
+        companyOwner: {
+          idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
+        },
         idDepartament: this.identificationFormGroup.get('idDepartament').value,
-        idPlan: 0,
+        idPlan: this.conditionFormGroup.get('tableSaleId').value,
         idTerminal: this.complementFormGroup.get('idTerminal').value,
         ignoreLiberationAJManual: this.conditionFormGroup.get('ignoreLiberationAJManual').value,
         inclusionRegistrationDateTime: 0,
@@ -1416,6 +1455,14 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     }
   }
 
+  displayFnPlans = (item): string => {
+    if (item) {
+      return item.description;
+    } else {
+      return '';
+    }
+  }
+
   getMccByCnae() {
     let a = this.mcc
     let obj = {
@@ -1604,8 +1651,6 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   saveForm(form, text) {
     this.localStorageService.set(text, form.value);
     this.localStorageService.set('cep', this.response);
-
-
   }
 
   saveAdress() {

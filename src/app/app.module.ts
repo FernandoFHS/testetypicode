@@ -56,6 +56,7 @@ import localePt from '@angular/common/locales/pt';
 import { FuturePostingsComponent } from './pages/current-account/future-postings/future-postings.component';
 import { TaxTableComponent } from './pages/agreement-area/components/tax-table/tax-table.component';
 import { EditApiDataComponent } from './pages/companies/partners/dinamic-partner/dinamic-partner';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 
 
@@ -132,7 +133,8 @@ export const customCurrencyMaskConfig = {
     NgxSpinnerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     Error404Module,
-    MglTimelineModule
+    MglTimelineModule,
+    InfiniteScrollModule
   ],
   providers: [
     CdkStepper,
