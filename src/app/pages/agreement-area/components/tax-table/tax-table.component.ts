@@ -120,11 +120,8 @@ export class TaxTableComponent implements OnInit {
   selectLastGroup(index: number, property: string){
     if(index>=0){
       const control = this.userTable.get("tax") as FormArray;
-      //control.value[index].get('installment').value
-      // let value = control.controls[index].controls[property].value
-      // return value
-    }else {
-
+      const itemTax = control.controls[index] as FormArray
+      return itemTax.controls[property].value
     }
     return 0
   }
