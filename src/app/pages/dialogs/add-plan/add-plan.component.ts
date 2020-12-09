@@ -38,11 +38,9 @@ export class AddPlanComponent implements OnInit {
   acquirer$: Observable<Array<AcquirerRequest>>;
 
   formTax: any = ''
-  isEdit: boolean = false;
-  isAdd: boolean = false;
-  isView: boolean = false;
-
-  isPageEdit: boolean;
+  isPageEdit: boolean = false;
+  isPageAdd: boolean = false;
+  isPageView: boolean = false;
 
   idCompanyGroup: string;
   
@@ -76,30 +74,29 @@ export class AddPlanComponent implements OnInit {
       this.idCompanyGroup = this.localStorageService.get('idCompanyGroup');
     }
         
-    if(this.isPageEdit){
+    if(this.isPageAdd){
+      this.planFormGroup = this._formBuilder.group({
+        id: [0],
+        saleType: [0],
+        acquirer: ['', Validators.required],
+        creditCardFlag: ['', Validators.required],
+        // remuneration: [''],
+        numberOfInstallments: ['']
+      })
+    }else{
       this.planFormGroup = this._formBuilder.group({
         id: [this.data.id],
         saleType: [0],
-        acquirer: [this.data.acquirer, Validators.required],
-        creditCardFlag: [this.data.creditCardFlag, Validators.required],
-        remuneration:  [this.data.remuneration],
+        acquirer: [{value: this.data.acquirer, disabled: this.isPageView}, Validators.required],
+        creditCardFlag: [{value: this.data.creditCardFlag, disabled: this.isPageView}, Validators.required],
+        // remuneration:  [this.data.remuneration],
         numberOfInstallments: [this.data.numberOfInstallments]
       })
-
-    }else{
-
-    this.planFormGroup = this._formBuilder.group({
-      id: [0],
-      saleType: [0],
-      acquirer: ['', Validators.required],
-      creditCardFlag: ['', Validators.required],
-      remuneration: [''],
-      numberOfInstallments: ['']
-    })
+    
     }
 
-    this.getAllServices();
-    this.getAllRemunetarion();
+    // this.getAllServices();
+    // this.getAllRemunetarion();
     this.getAllCreditCardFlag();
     this.getAllAcquirer();
   }
@@ -123,6 +120,7 @@ export class AddPlanComponent implements OnInit {
   saveAccount(form) {
     
     this.formTax.removeControl('isEditable');
+
     if(!form.value.remuneration){
       form.removeControl('remuneration');
     }

@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators';
 import { PaymentMethodRequest } from './../../../../models/PaymentMethod';
 import { Observable, of } from 'rxjs';
 import { PaymentMethodService } from './../../../../services/payment-method.service';
@@ -21,9 +22,14 @@ export class TaxTableComponent implements OnInit {
   isEditable: boolean = true;
   touchedRows: any;
   @Input() data: TaxResponse[]; 
+  @Input() isPageView: boolean;
   paymentDeadLine$: Observable<PaymentDeadLineRequest>
   paymentMethod$: Observable<PaymentMethodRequest>
   headersTax
+  limitCredit: number = 12
+  limitInCash: number = 1
+  limitDebit: number = 1
+  countCredit: number
   constructor(private fb: FormBuilder,
     private _paymentDeadLineService: PaymentDeadLineService,
     private _paymentMethodService: PaymentMethodService) {}
@@ -65,7 +71,7 @@ export class TaxTableComponent implements OnInit {
       value: [this.data[index].value, Validators.required],
       paymentDeadLine: [this.data[index].paymentDeadLine, Validators.required],
       paymentMethod: [this.data[index].paymentMethod, Validators.required],
-      isEditable: [true]
+      isEditable: [!this.isPageView]
     });
   }
 
@@ -80,15 +86,17 @@ export class TaxTableComponent implements OnInit {
       value: ["", Validators.required],
       paymentDeadLine: ["", Validators.required],
       paymentMethod: ["", Validators.required],
-      isEditable: [true]
+      // isEditable: [!this.isPageView]
     });
   }
 
-  addTax(){    
+  addTax(){ 
     let control = this.userTable.get("tax") as FormArray;    
     for(let i=0; i < this.data.length; i++){
       control.push(this.editForm(i));
     }
+    //let array = [] = this.userTable.get("tax").value;   
+    //this.countInstallments = array.filter(item => item.paymentMethod.acronym === "C").length + 1
   }
 
   addRow() {
@@ -109,6 +117,18 @@ export class TaxTableComponent implements OnInit {
     group.get("isEditable").setValue(false);
   }
 
+  selectLastGroup(index: number, property: string){
+    if(index>=0){
+      const control = this.userTable.get("tax") as FormArray;
+      //control.value[index].get('installment').value
+      let value = control.controls[index].controls[property].value
+      return value
+    }else {
+
+    }
+    return 0
+  }
+
   saveUserDetails() {
     //console.log(this.userTable.value);
   }
@@ -127,4 +147,21 @@ export class TaxTableComponent implements OnInit {
   compareFn(c1:any, c2:any): boolean {  
     return c1 && c2 ? c1.id === c2.id : c1 === c2; 
   }
+  changePaymentMethod(e,group){
+    let value = 1;
+
+    if(group.get('paymentMethod').value.acronym=="C"){
+      let array = [] = this.userTable.get("tax").value;
+      let count = array.filter(item => item.paymentMethod.acronym === "C").length
+      value = count + 1;
+      this.countCredit = count;
+    }
+
+    group.get("installment").setValue(value);
+  }
+  // setTwoNumberDecimal(e,group) {
+  //   let attributes = [ ...e.srcElement.attributes ]
+  //   let formControlName = attributes[6].value    
+  //   group.get(formControlName).setValue(parseFloat(group.get(formControlName).value).toFixed(2));
+  // }
 }

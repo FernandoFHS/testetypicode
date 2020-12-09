@@ -1,5 +1,8 @@
 <h3 mat-dialog-title class="text-center m-b-20 font-light-bold title-size">
-  Adicionar Plano
+  <span *ngIf="isPageEdit">Editar Plano</span>
+  <span *ngIf="isPageAdd">Adicionar Plano</span>
+  <span *ngIf="isPageView">Visualizar Plano</span>
+  
 </h3>
 
 <div mat-dialog-content>
@@ -80,7 +83,7 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div style="width: 100%; overflow: scroll;">
-        <app-tax-table (onFormGroupChange)="onFormGroupChangeEvent($event)" [data]="data.tax"></app-tax-table>
+        <app-tax-table (onFormGroupChange)="onFormGroupChangeEvent($event)" [data]="data.tax" [isPageView]="isPageView"></app-tax-table>
       </div>
     </mat-expansion-panel>
     
@@ -88,7 +91,7 @@
       <button mat-raised-button color="accent" (click)="closeDialog()">
         Cancelar
       </button>
-      <button mat-raised-button color="primary" tabindex="-1" [disabled]="!planFormGroup.valid"
+      <button *ngIf="!isPageView" mat-raised-button color="primary" tabindex="-1" [disabled]="!planFormGroup.valid"
         (click)="saveAccount(planFormGroup)">
         Salvar
       </button>

@@ -11,16 +11,21 @@
         <th>Custo da Transação</th>
         <th>Valor</th>
         <th>Prazo Pagamento</th>
-        <th>Ações</th>
+        <th *ngIf="!isPageView">Ações</th>
       </thead>
       <tbody>
         <ng-container formArrayName="tax" *ngFor="let group of getFormControls.controls; let i=index; let first=first">
-          <tr *ngIf="group.get('isEditable').value" [formGroupName]="i">
-            <td>
+          <tr [formGroupName]="i">
+            <!-- <tr *ngIf="group.get('isEditable').value" [formGroupName]="i"> -->
+              <td>
               <mat-form-field *ngIf="paymentMethod$ | async as pm">
-                <mat-select [compareWith]="compareFn" formControlName="paymentMethod">
-                  <mat-option *ngFor="let option of pm" [value]="option">
-                    {{option.description ? (option.acronym + ' - ' + option.description) : option.acronym}}</mat-option>
+                <mat-select (selectionChange)="changePaymentMethod($event,group)" [compareWith]="compareFn" formControlName="paymentMethod">
+                  <ng-container *ngFor="let option of pm">
+                    <!-- <mat-option *ngIf="!(selectLastGroup(i-1,'installment') >= limitCredit && option.acronym == 'C') && !(selectLastGroup(i-1,'installment') >= limitDebit && option.acronym == 'D')  && !(selectLastGroup(i-1,'installment') >= limitInCash && option.acronym == 'A')" [value]="option"> -->
+                    <mat-option *ngIf="!(selectLastGroup(i-1,'installment') >= limitCredit && option.acronym == 'C')" [value]="option">
+                        {{option.description ? (option.acronym + ' - ' + option.description) : option.acronym}}
+                    </mat-option>
+                  </ng-container>
                 </mat-select>
               </mat-form-field>
             </td>
@@ -82,11 +87,12 @@
 
             <td>
               <mat-icon class="delete" *ngIf="!first" (click)="deleteRow(i)">delete_forever</mat-icon>
-              <mat-icon class="done" (click)="doneRow(group)">done</mat-icon>
+              <!-- <mat-icon class="done" (click)="doneRow(group)">done</mat-icon> -->
             </td>
           </tr>
-          <tr *ngIf="!group.get('isEditable').value">
-            <td>{{group.get('paymentMethod').value.acronym}}</td>
+          <!-- <tr *ngIf="!group.get('isEditable').value">
+            <td>{{group.get('paymentMethod').value.description ? (group.get('paymentMethod').value.acronym + ' - ' + group.get('paymentMethod').value.description) : group.get('paymentMethod').value.acronym}}
+            </td>
             <td>{{group.get('installment').value}}</td>
             <td>{{group.get('antecipationTax').value}}%</td>
             <td>{{group.get('percentAdmTax').value}}%</td>
@@ -95,13 +101,13 @@
             <td>R$ {{group.get('transactionCostAmount').value}}</td>
             <td>R$ {{group.get('value').value}}</td>
             <td>{{group.get('paymentDeadLine').value.description}}</td>
-            <td><mat-icon class="edit" (click)="editRow(group)">edit</mat-icon></td>
-          </tr>
+            <td *ngIf="!isPageView"><mat-icon class="edit" (click)="editRow(group)">edit</mat-icon></td>
+          </tr> -->
         </ng-container>
       </tbody>
     </table>
   </div>
-  <div class="action-container">
+  <div class="action-container" *ngIf="!isPageView">
     <button mat-raised-button type="submit" (click)="addRow()">
       Adicionar taxa
     </button>
