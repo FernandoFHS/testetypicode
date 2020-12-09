@@ -54,7 +54,7 @@ export class PartnerService {
   }
 
   setBanks(bank) {
-   this._partners.push(bank);
+   this.banks.push(bank);
   }
 
   getPhones() {
@@ -62,7 +62,7 @@ export class PartnerService {
   }
 
   setPhones(phone) {
-   this._partners.push(phone);
+   this.phones.push(phone);
   }
 
    setAllPartners(partners) {

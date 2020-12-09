@@ -49,6 +49,7 @@ import { GeneralService } from 'src/app/services/general.service';
 import { PartnerService } from 'src/app/services/partner.service';
 import { DOCUMENT } from '@angular/common';
 import { MatStepper } from '@angular/material/stepper';
+import { DataTableService } from 'src/app/@core/components/data-table/data-table.service';
 
 @Component({
   selector: 'app-add-company',
@@ -132,7 +133,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   complement: any = this.localStorageService.get('complementFormGroup');
   partner: any = this.localStorageService.get('editPartner');
   companyadress: any = [];
-  partnerSource$: any = [];
+  // partnerSource$: any = [];
   apiPartnerSource$: any = [];
   bankAccount$: any = [];
   apiBankAccount$: any = [];
@@ -155,7 +156,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   onAddPartnerSubscription: Subscription;
   onBackCompanySubscription: Subscription;
 
-  testesocio: any = this.localStorageService.get('partnerFormGroup');
+  partnerSource$: any = this.localStorageService.get('partnerFormGroup');
 
   mcc: any;
   companySelect: any;
@@ -219,6 +220,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     public AgreementByCompanygroupService: AgreementByCompanygroupService,
     private _generalService: GeneralService,
     private partnerService: PartnerService,
+    private dataTableService: DataTableService,
     @Inject(DOCUMENT) private document: Document
   ) { }
 
@@ -240,6 +242,14 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.onEditPartnerSubscription.unsubscribe();
       this.onAddPartnerSubscription.unsubscribe();
       this.onBackCompanySubscription.unsubscribe();
+    }
+
+    if (this.isPageAdd()) {
+      console.log('Uhul')
+      this.onEditPartnerSubscription.unsubscribe();
+      this.onAddPartnerSubscription.unsubscribe();
+      this.onBackCompanySubscription.unsubscribe();
+      this.loadAddModel();
     }
   }
 
@@ -265,12 +275,6 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.bankAccount$ = []
     } else {
       this.bankAccount$ = this.localStorageService.get('bankAccount');
-    }
-
-    if (this.localStorageService.get('partnerFormGroup') == null) {
-      this.partnerSource$ = []
-    } else {
-      this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
     }
 
     // this.contactFormGroup = this._formBuilder.group({
@@ -311,6 +315,12 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.phoneNumber$ = []
     } else {
       this.phoneNumber$ = this.localStorageService.get('phoneNumber');
+    }
+
+    if (this.localStorageService.get('partnerFormGroup') == null) {
+      this.partnerSource$ = []
+    } else {
+      this.partnerSource$ = this.localStorageService.get('partnerFormGroup');
     }
 
     this.identificationFormGroup = this._formBuilder.group({
@@ -392,6 +402,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       companyPartner: this._formBuilder.array(this.partnerSource$),
     });
 
+    console.log(this.companyPartnerFormGroup)
+
     this.companyAdressFormGroup = this._formBuilder.group({
       companyAddress: this._formBuilder.array(this.companyadress),
     });
@@ -420,6 +432,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     this.checkValueBankAdress(true);
   
     this.onEditPartnerSubscription = this.partnerService.onEditPartner().subscribe((params) => {
+      console.log(params);
       this.partnerSource$[params.index] = params.partner
       this.partnerService.setAllPartners(this.partnerSource$);
       console.log(this.partnerSource$);
@@ -435,6 +448,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.document.body.scrollTop = 0;
       console.log(this.stepper)
       this.stepper.selectedIndex = 4;
+      this.phoneService.refreshDataTable();
     })
   }
 
@@ -960,9 +974,14 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     this.companyService.create(form).subscribe((response: any) => {
       console.log(response);
       this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
+    });
+
+    this.companyService.create(form.idCompany).subscribe((response: any) => {
+      console.log(response);
+      this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
       this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
       this.deleteLocalStorage();
-    });
+    })
 
   }
 
@@ -1007,7 +1026,6 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
           ).subscribe((value) => {
             if (typeof (value) == 'string') {
               this.filteredPlans = this.optionsplans.filter((company) => {
-                console.log(company)
                 return company.description.toLowerCase().includes(value.toLowerCase())
               })
             }
@@ -1260,7 +1278,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.phoneNumber$.push(item.value);
       this.apiPhoneNumber$.push(item.value);
       this.phoneNumber$ = [...this.phoneNumber$];
-      this.apiPhoneNumber$ = [...this.apiPhoneNumber$]
+      this.apiPhoneNumber$ = [...this.apiPhoneNumber$];
       this.phoneService.refreshDataTable();
     })
   }
@@ -1279,9 +1297,9 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     })
   }
 
-  onAddPartnerPage(index: number) {
+  onAddPartnerPage  (index: number) {
     if (this.isPageAdd()) {
-      this.router.navigate(['/companies/partners/add']);
+      this.router.navigate(['partners/local-add/'], {relativeTo: this.route});
     } else {
       this.router.navigate([`partners/api-add/`], { relativeTo: this.route })
     }
@@ -1350,10 +1368,11 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
   onEditPartner(row: object) {
     const localIndex = this.partnerSource$.findIndex((c) => c == row);
+    console.log(localIndex)
     const apiIndex = this.apiPartnerSource$.findIndex((c) => c == row);
 
     if (this.isPageAdd()) {
-      this.router.navigate([`/companies/partners/local-edit/${localIndex}`]);
+      this.router.navigate([`partners/local-edit/${localIndex}`], { relativeTo: this.route});
     } else {
       this.router.navigate([`partners/api-edit/${apiIndex}`, this.id], { relativeTo: this.route })
     }

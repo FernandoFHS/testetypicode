@@ -5,6 +5,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import { Observable, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { CompanyContent } from '../models/Company';
+import { Account } from '../models/Account';
 import { DatePipe } from '@angular/common';
 
 @Injectable({
@@ -15,6 +16,7 @@ export class CompanyService {
   private _refreshTable = new Subject<void>();
 
   private readonly API_URL = 'http://company.qa.appmobbuy.tech/';
+  private readonly companyAccount_URL = 'http://account.qa.appmobbuy.tech/';
   private datePipe = new DatePipe('pt-BR');
 
   constructor(private httpClient: HttpClient, 
@@ -25,6 +27,13 @@ export class CompanyService {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   /** CRUD METHODS */
+
+  createCompanyAccount(idCompany) {
+    const createAccountURL = `${this.companyAccount_URL}accounts/accountAgency`;
+
+    return this.httpClient.post<Account[]>(createAccountURL, idCompany); 
+  }
+
   getAllCompanies(sort: string, order: string, page: number, size: number, companyGroup: number): Observable<{ content: CompanyContent[] }> {
     const requestUrl =
       `${this.API_URL}company/companyGroup?sort=${sort},${order}&page=${page}&size=${size}&idCompanyGroup=${companyGroup}`;
