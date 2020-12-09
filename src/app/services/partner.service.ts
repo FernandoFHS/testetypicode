@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { CompanyPartner } from 'src/app/models/Company';
+import { CompanyPartner, ExternalBankAccount, CompanyContact } from 'src/app/models/Company';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,8 @@ export class PartnerService {
   private _backToCompany = new Subject<void>();
 
   private _partners: CompanyPartner[] = [];
+  private banks: ExternalBankAccount[] = [];
+  private phones: CompanyContact[] = [];
 
   constructor() { }
 
@@ -46,6 +48,22 @@ export class PartnerService {
    setPartners(partner) {
     this._partners.push(partner);
    }
+
+   getBanks() {
+    return this.banks;
+  }
+
+  setBanks(bank) {
+   this._partners.push(bank);
+  }
+
+  getPhones() {
+    return this.phones;
+  }
+
+  setPhones(phone) {
+   this._partners.push(phone);
+  }
 
    setAllPartners(partners) {
     this._partners = partners;

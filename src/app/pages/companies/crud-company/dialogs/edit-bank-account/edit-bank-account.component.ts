@@ -13,6 +13,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { CompanyService } from 'src/app/services/company.service';
 import { ActivatedRoute } from '@angular/router';
+import { PartnerService } from 'src/app/services/partner.service';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
@@ -44,7 +45,8 @@ export class EditBankAccountComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private companyService: CompanyService,
     private route: ActivatedRoute,
-    private dataService:DataService
+    private partnerService: PartnerService,
+    private dataService: DataService
   ) { }
 
   ngOnInit(): void {
@@ -94,8 +96,13 @@ export class EditBankAccountComponent implements OnInit {
   }
 
   loadDinamicForm() {
+    const companies = this.partnerService.getBanks();
+    const companyBank = companies[this.idBankDinamic];
+
+    console.log(companyBank)
+
     this.companyService.readById(this.idCompany, this.idCompanyGroup).subscribe((company) => {
-      console.log('Entrou')
+      console.log(company.externalBankAccount[this.idBankDinamic].bank.name?.trim())
 
       this.accountFormGroup = this._formBuilder.group({
         bank: [company.externalBankAccount[this.idBankDinamic].bank.name?.trim() || ''],
@@ -110,7 +117,6 @@ export class EditBankAccountComponent implements OnInit {
         idCompany: [this.idCompany || 0],
         idExternalBankAccount: [company.externalBankAccount[this.idBankDinamic].idExternalBankAccount || 0],
       })
-      console.log(this.accountFormGroup)
     })
   }
 
