@@ -128,6 +128,16 @@ export const routes: Routes = [
           {
             path: 'add',
             component: AddCompanyComponent,
+            children: [
+              {
+                path: 'partners/local-add',
+                component: AddPartnerComponent,
+              },
+              {
+                path: 'partners/local-edit/:index',
+                component: AddPartnerComponent,
+              },
+            ]
           },
           {
             path: 'edit/:id',
@@ -147,14 +157,14 @@ export const routes: Routes = [
             path: 'view/:id',
             component: AddCompanyComponent
           },
-          {
-            path: 'partners/add',
-            component: AddPartnerComponent,
-          },
-          {
-            path: 'partners/local-edit/:index/',
-            component: AddPartnerComponent,
-          },
+          // {
+          //   path: 'partners/add',
+          //   component: AddPartnerComponent,
+          // },
+          // {
+          //   path: 'partners/local-edit/:index/',
+          //   component: AddPartnerComponent,
+          // },
         ]
       },
       {
