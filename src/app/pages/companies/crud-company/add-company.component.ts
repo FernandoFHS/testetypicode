@@ -88,9 +88,24 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     inputMode: CurrencyMaskInputMode.FINANCIAL
   };
 
+  customCurrencyMaskConfigPercentage = {
+    align: 'left',
+    allowNegative: false,
+    allowZero: true,
+    decimal: ',',
+    precision: 2,
+    prefix: '',
+    suffix: '%',
+    thousands: '.',
+    nullable: true,
+    min: null,
+    max: null,
+    inputMode: CurrencyMaskInputMode.FINANCIAL
+  };
+
 
   cnaeForm = new FormControl();
-  isLinear = false;
+  isLinear = true;
   identificationFormGroup: FormGroup;
   adressFormGroup: FormGroup;
   conditionFormGroup: FormGroup;
@@ -344,7 +359,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     this.adressFormGroup = this._formBuilder.group({
       streetName: [this.adress?.streetName || '', Validators.required],
       number: [this.adress?.number || '', Validators.required],
-      complement: [this.adress?.complement || '', Validators.required],
+      complement: [this.adress?.complement || ''],
       neighborhoodName: [this.adress?.neighborhoodName || '', Validators.required],
       cityName: [this.adress?.cityName || '', Validators.required],
       uf: [this.adress?.uf || '', Validators.required],
@@ -357,14 +372,14 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       subordinateCityCtrl: ['', Validators.required],
       subordinateStreetCtrl: ['', Validators.required],
       subordinateNumberCtrl: ['', Validators.required],
-      subordinateComplementCtrl: ['', Validators.required],
+      subordinateComplementCtrl: [''],
       subordinateStateCtrl: ['', Validators.required],
       subordinateResponsibleNameCtrl: ['', Validators.required],
       subordinateReferencePointCtrl: [''],
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [this.condition?.tableSaleCtrl || '', Validators.required],
-      tableSaleId:[''],
+      tableSaleId: [''],
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || '', Validators.required],
       transactionAmount: [this.condition?.transactionAmount || '', Validators.required],
       tedAmount: [this.condition?.tedAmount || '', Validators.required],
@@ -382,7 +397,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       ecommerceURL: [this.complement?.ecommerceURL || '', Validators.required],
       estUrl: [this.complement?.estUrl || '', Validators.required],
       email: [this.complement?.email || '', Validators.required],
-      posQuantity: [parseInt(this.complement?.posQuantity) || '', Validators.required],
+      posQuantity: [{ value: 0, disabled: true }],
       logicalNumber: [{ value: 0, disabled: true }],
       idTerminal: [this.complement?.idTerminal || '', Validators.required],
       registerCode: [this.complement?.registerCode || '', Validators.required],
@@ -426,7 +441,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       this.getCpfCnpjMask(this.identificationFormGroup.get('companyType').value);
     }
     this.checkValueBankAdress(true);
-  
+
     this.onEditPartnerSubscription = this.partnerService.onEditPartner().subscribe((params) => {
       console.log(params);
       this.partnerSource$[params.index] = params.partner
@@ -552,7 +567,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [this.condition?.tableSaleCtrl || ''],
-      tableSaleId:[''],
+      tableSaleId: [''],
       automaticCreditIndicator: [this.condition?.automaticCreditIndicator || ''],
       transactionAmount: [this.condition?.transactionAmount || ''],
       tedAmount: [this.condition?.tedAmount || ''],
@@ -569,7 +584,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       ecommerceURL: [this.complement?.ecommerceURL || ''],
       estUrl: [this.complement?.estUrl || ''],
       email: [this.complement?.email || ''],
-      posQuantity: [parseInt(this.complement?.posQuantity) || ''],
+      posQuantity: [{ value: 0, disabled: true }],
       logicalNumber: [{ value: 0, disabled: true }],
       idTerminal: [this.complement?.idTerminal || ''],
       registerCode: [this.complement?.registerCode || ''],
@@ -652,7 +667,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
     this.conditionFormGroup = this._formBuilder.group({
       tableSaleCtrl: [{ value: this.condition?.tableSaleCtrl || '', disabled: true }],
-      tableSaleId:[''],
+      tableSaleId: [''],
       automaticCreditIndicator: [{ value: this.condition?.automaticCreditIndicator || '', disabled: true }],
       transactionAmount: [{ value: this.condition?.transactionAmount || '', disabled: true }],
       tedAmount: [{ value: this.condition?.tedAmount || '', disabled: true }],
@@ -894,18 +909,18 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
       companyContact: this.localStorageService.get('phoneNumber'),
 
-      companyLevel: [
-        {
-          description: "string",
-          idCompany: 0,
-          idCompanyLevel: 0,
-          level: 0
-        }
-      ],
+      // companyLevel: [
+      //   {
+      //     description: "string",
+      //     idCompany: 0,
+      //     idCompanyLevel: 0,
+      //     level: 0
+      //   }
+      // ],
       companyLevelItem: {
-        idCompanyLevel: 1,
-        description: "Subadquirente",
-        level: 30
+        idCompanyLevel: 7,
+        description: "ESTABELECIMENTO COMERCIAL",
+        level: 70
       },
       companyName: this.identificationFormGroup.get('companyName').value,
       companyResponsibleName: this.identificationFormGroup.get('companyResponsibleName').value,
@@ -979,15 +994,28 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     }
     console.log(form);
 
-    this.companyService.create(form).subscribe((response: any) => {
-      console.log(response.idCompany);
-      this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
-        console.log(account);
-      });
-      this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
-      this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
-      // this.deleteLocalStorage();
-    })
+    if (this.localStorageService.get('partnerFormGroup') == undefined) {
+      this.dataService.errorSnackBar('Sócio não cadastrado', 'X');
+    } else {
+      this.companyService.create(form).subscribe((response: any) => {
+        console.log(response);
+        this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
+          console.log(account);
+        });
+        this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
+        this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
+        this.deleteLocalStorage();
+      })
+    }
+    // this.companyService.create(form).subscribe((response: any) => {
+    //   console.log(response.idCompany);
+    //   this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
+    //     console.log(account);
+    //   });
+    //   this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
+    //   this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
+    //   // this.deleteLocalStorage();
+    // })
 
   }
 
@@ -1071,7 +1099,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     }
   }
 
-  saveStep(){
+  saveStep() {
     const selectedSales = this.conditionFormGroup.get('tableSaleCtrl');
     this.conditionFormGroup.get('tableSaleId').setValue(selectedSales?.value.id);
   }
@@ -1137,7 +1165,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
         // idCompanyGroup: company.companyGroup.idCompany,
         // idCompanyOwner: company.companyOwner.idCompany,
         companyGroup: {
-          idCompany:company.companyGroup.idCompany,
+          idCompany: company.companyGroup.idCompany,
         },
         companyOwner: {
           idCompany: this.identificationFormGroup.get('idCompanyOwner').value,
@@ -1303,9 +1331,9 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     })
   }
 
-  onAddPartnerPage  (index: number) {
+  onAddPartnerPage(index: number) {
     if (this.isPageAdd()) {
-      this.router.navigate(['partners/local-add/'], {relativeTo: this.route});
+      this.router.navigate(['partners/local-add/'], { relativeTo: this.route });
     } else {
       this.router.navigate([`partners/api-add/`], { relativeTo: this.route })
     }
@@ -1319,7 +1347,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       console.log(localIndex);
 
       const dialogRef = this.dialog.open(EditPhoneComponent, {
-        data: {localIndex, idCompany} 
+        data: { localIndex, idCompany }
       });
       dialogRef.afterClosed().subscribe((item) => {
         console.log(item);
@@ -1332,7 +1360,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       const idCompany = this.id;
 
       const dialogRef = this.dialog.open(EditPhoneComponent, {
-        data: {apiIndex, idCompany} 
+        data: { apiIndex, idCompany }
       });
       dialogRef.afterClosed().subscribe((item) => {
         console.log(item);
@@ -1349,7 +1377,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       const idCompany = this.id;
 
       const dialogRef = this.dialog.open(EditBankAccountComponent, {
-        data: {localIndex, idCompany} 
+        data: { localIndex, idCompany }
       });
       dialogRef.afterClosed().subscribe((item) => {
         Object.assign(this.bankAccount$[localIndex], item);
@@ -1379,7 +1407,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     const apiIndex = this.apiPartnerSource$.findIndex((c) => c == row);
 
     if (this.isPageAdd()) {
-      this.router.navigate([`partners/local-edit/${localIndex}`], { relativeTo: this.route});
+      this.router.navigate([`partners/local-edit/${localIndex}`], { relativeTo: this.route });
     } else {
       this.router.navigate([`partners/api-edit/${apiIndex}`, this.id], { relativeTo: this.route })
     }

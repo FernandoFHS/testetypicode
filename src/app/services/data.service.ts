@@ -90,4 +90,13 @@ export class DataService {
       verticalPosition: this.verticalPosition,
     });
   }
+
+  errorSnackBar(message: string, action: string): void {
+    this._snackBar.open(message, action, {
+      duration: 3000,
+      panelClass: ['mat-snack-error'],
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+  }
 }

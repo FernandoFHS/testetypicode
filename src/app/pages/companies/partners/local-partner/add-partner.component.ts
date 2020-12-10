@@ -248,7 +248,7 @@ export class AddPartnerComponent implements OnInit {
 
     partnerArrayEdit.push(this.partner);
     this.localStorageService.set('partnerFormGroup', partnerArrayEdit);
-
+    console.log(partnerArrayEdit);
     this.partnerService.addPartner(this.partner);
     this.notificationService.success('Sócio adicionado com sucesso');
     this.location.back();

@@ -100,9 +100,9 @@ export class CompanyListComponent implements OnInit {
     { text: 'Tipo', value: 'companyType', subValue: null, deepValue: null },
     { text: 'Razão Social', value: 'companyName', subValue: null, deepValue: null },
     { text: 'MCC', value: 'cnae', subValue: 'mcc', deepValue: 'code' },
-    { text: 'Parceiro', value: 'userChangeCode', subValue: null, deepValue: null },
+    // { text: 'Parceiro', value: 'userChangeCode', subValue: null, deepValue: null },
     // { text: 'Status', value: 'companyStatus', subValue: null, deepValue: null },
-    { text: 'Tab.Vendas', value: 'salesTableNumber', subValue: null, deepValue: null },
+    // { text: 'Tab.Vendas', value: 'salesTableNumber', subValue: null, deepValue: null },
     { text: 'Situação', value: 'situation', subValue: null, deepValue: null },
   ];
 

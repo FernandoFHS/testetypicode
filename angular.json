@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "plan-front-end": {
+    "mobbuy": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/plan-front-end",
+            "outputPath": "dist/mobbuy",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -58,18 +58,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "plan-front-end:build"
+            "browserTarget": "mobbuy:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "plan-front-end:build:production"
+              "browserTarget": "mobbuy:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "plan-front-end:build"
+            "browserTarget": "mobbuy:build"
           }
         },
         "test": {
@@ -106,18 +106,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "plan-front-end:serve"
+            "devServerTarget": "mobbuy:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "plan-front-end:serve:production"
+              "devServerTarget": "mobbuy:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "plan-front-end",
+  "defaultProject": "mobbuy",
   "cli": {
     "analytics": false
   }
