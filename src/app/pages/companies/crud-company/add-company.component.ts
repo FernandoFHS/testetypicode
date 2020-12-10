@@ -344,7 +344,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       companyResponsibleName: [this.identification?.companyResponsibleName || ''],
       companyResponsible: [this.identification?.companyResponsible || ''],
       companyType: [this.identification?.companyType || '', Validators.required],
-      situation: [this.identification?.situation || '', Validators.required],
+      situation: [this.identification?.situation || true, Validators.required],
       documentNumberCompany: [this.identification?.documentNumberCompany || '', Validators.required],
       gpEstablishmentNumber: [parseInt(this.identification?.gpEstablishmentNumber) || ''],
       stateRegistration: [parseInt(this.identification?.stateRegistration) || '', Validators.required],
