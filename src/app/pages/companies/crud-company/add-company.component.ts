@@ -48,6 +48,8 @@ import { PartnerService } from 'src/app/services/partner.service';
 import { DatePipe, DOCUMENT } from '@angular/common';
 import { MatStepper } from '@angular/material/stepper';
 import { DataTableService } from 'src/app/@core/components/data-table/data-table.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-add-company',
@@ -134,6 +136,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   id: number;
 
   testeform: FormArray;
+  existentDocumentNumberCompanie: boolean = false;
   isChecked = false;
   isCheckedBankAdress = true;
   isCheckedSituation = false;
@@ -238,6 +241,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     private partnerService: PartnerService,
     private dataTableService: DataTableService,
     private datePipe: DatePipe,
+    private notificationService: NotificationService,
+    private _spinnerService: NgxSpinnerService,
     @Inject(DOCUMENT) private document: Document
   ) {
     this.today = this.datePipe.transform(this.today, 'yyyy-MM-dd')
@@ -410,7 +415,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
 
     this.companyPartnerFormGroup = this._formBuilder.group({
-      companyPartner: this._formBuilder.array(this.partnerSource$),
+      companyPartner: this._formBuilder.array(this.partnerSource$, Validators.required),
     });
 
     console.log(this.companyPartnerFormGroup)
@@ -420,11 +425,11 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
 
     this.contactFormGroup = this._formBuilder.group({
-      companyContact: this._formBuilder.array(this.phoneNumber$),
+      companyContact: this._formBuilder.array(this.phoneNumber$, Validators.required),
     });
 
     this.bankingFormGroup = this._formBuilder.group({
-      externalBankAccount: this._formBuilder.array(this.bankAccount$),
+      externalBankAccount: this._formBuilder.array(this.bankAccount$, Validators.required),
     });
 
     this.gelAllCnaes();
@@ -993,31 +998,52 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
     }
     console.log(form);
+    this._spinnerService.show();
 
-    if (this.localStorageService.get('partnerFormGroup') == undefined) {
-      this.dataService.errorSnackBar('Sócio não cadastrado', 'X');
-    } else {
-      this.companyService.create(form).subscribe((response: any) => {
-        console.log(response);
-        this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
-          console.log(account);
-        });
-        this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
-        this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
-        this.deleteLocalStorage();
-      })
-    }
-    // this.companyService.create(form).subscribe((response: any) => {
-    //   console.log(response.idCompany);
-    //   this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
-    //     console.log(account);
-    //   });
-    //   this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
-    //   this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
-    //   // this.deleteLocalStorage();
-    // })
+    this.companyService.getAllCompanies('idCompany', 'desc', 0, 10000, this.idCompanyGroup).subscribe((companies) => {
+      for (var i = 0; i< companies.content.length; i++) {
+        if (companies.content[i].documentNumberCompany == form.documentNumberCompany) {
+          this._spinnerService.hide();
+          this.existentDocumentNumberCompanie = true;
+          const sameDocumentNumberMessage = 'O CPF/CNPJ informado já possui registro no sistema. Por favor, verifique-o novamente.';
 
-  }
+          this._generalService.openOkDialog(sameDocumentNumberMessage, () => { 
+            this.stepper.selectedIndex = 0;
+          }, 'CPF/CNPJ já cadastrado!');
+          break;
+        } else {
+          if (this.localStorageService.get('partnerFormGroup') == undefined) {
+            this.dataService.errorSnackBar('Sócio não cadastrado', 'X');
+          } else {
+            this._spinnerService.hide();
+            this.companyService.create(form).subscribe((response: any) => {
+              console.log(response);
+              this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
+                console.log(account);
+              });
+              this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
+              this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
+              // this.deleteLocalStorage();
+            })
+            break
+          }         
+        }
+      }
+
+      // companies.content.some(company => {
+      //   if (company.documentNumberCompany == form.documentNumberCompany) {
+      //     console.log('Igual')
+      //     this.existentDocumentNumberCompanie = true;
+      //     const sameDocumentNumberMessage = 'O CPF/CNPJ informado já possui registro no sistema. Por favor, verifique-o novamente.';
+
+      //     return this._generalService.openOkDialog(sameDocumentNumberMessage, () => { }, 'CPF/CNPJ já cadastrado!');
+      //   } else {
+      //     console.log('Não igual')
+      //   }
+      // })
+    })
+
+}
 
   deleteLocalStorage() {
     this.localStorageService.deleteItem('conditionFormGroup');
@@ -1306,6 +1332,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   onAddPhone(idPhone: number) {
     const dialogRef = this.dialog.open(AddPhoneComponent, {
       data: { id: idPhone },
+      autoFocus: false
     });
     dialogRef.afterClosed().subscribe((item) => {
       // this.phoneNumber$ = this.localStorageService.get('phoneNumber');
@@ -1320,6 +1347,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   onAddBankAccount(idBankAccount: number) {
     const dialogRef = this.dialog.open(AddBankAccountComponent, {
       data: { id: idBankAccount },
+      autoFocus: false
     });
     dialogRef.afterClosed().subscribe((item) => {
       console.log(item);
@@ -1347,7 +1375,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       console.log(localIndex);
 
       const dialogRef = this.dialog.open(EditPhoneComponent, {
-        data: { localIndex, idCompany }
+        data: { localIndex, idCompany },
+        autoFocus: false
       });
       dialogRef.afterClosed().subscribe((item) => {
         console.log(item);
@@ -1360,7 +1389,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       const idCompany = this.id;
 
       const dialogRef = this.dialog.open(EditPhoneComponent, {
-        data: { apiIndex, idCompany }
+        data: { apiIndex, idCompany, model: row },
       });
       dialogRef.afterClosed().subscribe((item) => {
         console.log(item);

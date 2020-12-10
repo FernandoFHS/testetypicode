@@ -13,7 +13,7 @@
     <mat-form-field appearance="outline">
       <mat-label>Telefone</mat-label>
       <input matInput placeholder="(00) 00000-0000" formControlName="companyPhone"
-        mask="(00) 0000-0000 || (00) 0 0000-0000" />
+      required mask="(00) 0000-0000 || (00) 0 0000-0000" />
       <mat-icon matSuffix>phone</mat-icon>
       <mat-error>Campo obrigatório</mat-error>
     </mat-form-field>
@@ -22,7 +22,7 @@
       <button mat-raised-button color="accent" (click)="onNoClick()">
         Cancelar
       </button>
-      <button mat-raised-button color="primary" tabindex="-1" (click)="editPhone()">
+      <button mat-raised-button color="primary" [disabled]="phoneFormGroup.invalid" tabindex="-1" (click)="editPhone()">
         Salvar
       </button>
     </div>

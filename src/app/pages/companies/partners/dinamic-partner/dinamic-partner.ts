@@ -118,23 +118,19 @@ export class EditApiDataComponent implements OnInit {
     const companies = this.partnerService.getPartners();
     const companyPartner = companies[this.idPartner];
 
-    console.log(companyPartner)
-    console.log(companies)
-
-
       this.partnerFormGroup = this._formBuilder.group({
-        partnerSequentialNumber: [companyPartner.partnerSequentialNumber || 0],
-        partnerName: [companyPartner.partnerName || ''],
-        cpf: [companyPartner.cpf || ''],
-        dateOfBirth: [companyPartner.dateOfBirth ||''],
-        zipCode: [companyPartner.partnerAddress[0].street.zipCode || ''],
-        streetName: [companyPartner.partnerAddress[0].street.streetName || ''],
-        number: [companyPartner.partnerAddress[0].number || ''],
-        complement: [companyPartner.partnerAddress[0].complement || ''],
-        neighborhoodName: [companyPartner.partnerAddress[0].street.neighborhood.neighborhoodName || ''],
-        cityName: [companyPartner.partnerAddress[0].street.city.cityName || ''],
-        uf: [companyPartner.partnerAddress[0].street.state.uf || ''],
-        phone: [companyPartner.partnerContact[0].phone || '']
+        partnerSequentialNumber: [companyPartner.partnerSequentialNumber, Validators.required || 0],
+        partnerName: [companyPartner.partnerName, Validators.required || ''],
+        cpf: [companyPartner.cpf, Validators.required || ''],
+        dateOfBirth: [companyPartner.dateOfBirth, Validators.required ||''],
+        zipCode: [companyPartner.partnerAddress[0].street.zipCode, Validators.required || ''],
+        streetName: [companyPartner.partnerAddress[0].street.streetName, Validators.required || ''],
+        number: [companyPartner.partnerAddress[0].number, Validators.required || ''],
+        complement: [companyPartner.partnerAddress[0].complement, Validators.required || ''],
+        neighborhoodName: [companyPartner.partnerAddress[0].street.neighborhood.neighborhoodName, Validators.required || ''],
+        cityName: [companyPartner.partnerAddress[0].street.city.cityName, Validators.required || ''],
+        uf: [companyPartner.partnerAddress[0].street.state.uf, Validators.required || ''],
+        phone: [companyPartner.partnerContact[0].phone, Validators.required || '']
       });
   }
 

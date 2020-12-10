@@ -30,6 +30,12 @@ form .line-form .short-line-form .mat-form-field {
   height: 3em;
 }
 
+.cdk-global-scrollblock {
+  position: initial!important;
+  width: initial!important;
+  overflow: hidden!important;
+}
+
 @media (max-width: 600px) {
   .dialog-actions-buttons {
     display: flex;

@@ -50,7 +50,7 @@ export class CompanyService {
     return this.httpClient.get<CompanyContent[]>(requestUrl);
   }
   getAll(): Observable<RootObject> {  
-    return this.httpClient.get<RootObject>(`${this.API_URL}company/companyGroup`);
+    return this.httpClient.get<RootObject>(`${this.API_URL}company`);
   }
 
   getAllCompaniesByFilter(filter: { idCompany: number, documentNumberCompany: number, companyName: string, idCompanyGroup:number }, sort: string, order: string, page: number, size: number): Observable<{ content: CompanyContent[] }> {
