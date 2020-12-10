@@ -1,5 +1,5 @@
-import { environment } from './../../environments/environment';
-import { RemunerationTypeResponse } from './../models/RemunerationType';
+import { environment } from '../../../environments/environment';
+import { RemunerationTypeResponse } from '../../models/RemunerationType';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 

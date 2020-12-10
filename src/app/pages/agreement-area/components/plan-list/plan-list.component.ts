@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { PlanService } from './../../../../services/plan.service';
+import { PlanService } from 'src/app/services/plan.service';
 import { Component, OnInit } from '@angular/core';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { ActionModel } from 'src/app/@core/models/action.model';

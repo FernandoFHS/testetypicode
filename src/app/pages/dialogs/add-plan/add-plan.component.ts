@@ -1,21 +1,21 @@
-import { RemunerationService } from './../../../services/remuneration.service';
+import { RemunerationService } from 'src/app/services/agreement/remuneration.service';
 import { PlanResponse } from './../../../models/Plan';
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { CreditCardFlagRequest } from 'src/app/models/CreditCardFlag';
 import { AcquirerRequest } from 'src/app/models/plans/Acquirer';
 import { RemunerationTypeRequest } from 'src/app/models/RemunerationType';
 import { ServiceEntityRequest } from 'src/app/models/ServiceEntity';
-import { AcquirerService } from 'src/app/services/acquirer.service';
-import { CreditCardFlagService } from 'src/app/services/credit-card-flag.service';
+import { AcquirerService } from 'src/app/services/agreement/acquirer.service';
+import { CreditCardFlagService } from 'src/app/services/agreement/credit-card-flag.service';
 import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { RemunerationTypeService } from 'src/app/services/remuneration-type.service';
-import { ServiceEntityService } from 'src/app/services/service-entity.service';
+import { RemunerationTypeService } from 'src/app/services/agreement/remuneration-type.service';
+import { ServiceEntityService } from 'src/app/services/agreement/service-entity.service';
 
 @Component({
   selector: 'app-add-plan',

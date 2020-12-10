@@ -1,5 +1,4 @@
-import { RootPlan } from './../models/Plan';
-import { PaymentDeadLineRequest, PaymentDeadLineRoot } from './../models/PaymentDeadLine';
+import { PaymentDeadLineRequest, PaymentDeadLineRoot } from '../../models/PaymentDeadLine';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment'

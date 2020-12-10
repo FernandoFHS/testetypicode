@@ -1,8 +1,8 @@
-import { ServiceEntityRequest } from './../models/ServiceEntity';
+import { ServiceEntityRequest } from '../../models/ServiceEntity';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ServiceEntityResponse } from '../models/responses/ServiceEntityResponse'
+import { ServiceEntityResponse } from '../../models/responses/ServiceEntityResponse'
 
 @Injectable({
   providedIn: 'root'

@@ -1,13 +1,14 @@
+import { PaymentMethodService } from 'src/app/services/agreement/payment-method.service';
 import { filter } from 'rxjs/operators';
-import { PaymentMethodRequest } from './../../../../models/PaymentMethod';
+import { PaymentMethodRequest } from 'src/app/models/PaymentMethod';
 import { Observable, of } from 'rxjs';
-import { PaymentMethodService } from './../../../../services/payment-method.service';
-import { PaymentDeadLineService } from './../../../../services/payment-dead-line.service';
-import { TaxResponse } from './../../../../models/Plan';
+import { PaymentDeadLineService } from 'src/app/services/agreement/payment-dead-line.service';
+import { TaxResponse } from 'src/app/models/Plan';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { PaymentDeadLineRequest } from 'src/app/models/PaymentDeadLine';
 import { isNull } from '@angular/compiler/src/output/output_ast';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-tax-table',
@@ -32,6 +33,7 @@ export class TaxTableComponent implements OnInit {
   countCredit: number
   constructor(private fb: FormBuilder,
     private _paymentDeadLineService: PaymentDeadLineService,
+    private _notificationService: NotificationService,
     private _paymentMethodService: PaymentMethodService) {}
 
   ngOnInit(): void {
@@ -108,7 +110,11 @@ export class TaxTableComponent implements OnInit {
 
   deleteRow(index: number) {
     const control = this.userTable.get("tax") as FormArray;
-    control.removeAt(index);
+    if(control.controls[index].get('id').value<=0){
+      control.removeAt(index);
+    }else {
+      this._notificationService.error('Não é possível deletar taxas já utilizadas.')
+    }
   }
 
   editRow(group: FormGroup) {

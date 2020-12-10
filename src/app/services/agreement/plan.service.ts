@@ -1,4 +1,4 @@
-import { PlanRequest, RootPlan } from './../models/Plan';
+import { PlanRequest, RootPlan } from '../../models/Plan';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment'

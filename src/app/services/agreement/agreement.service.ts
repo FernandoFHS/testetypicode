@@ -1,11 +1,9 @@
-import { Company } from './../models/Company';
-import { AgreementContent, AgreementRequest, AgreementResponse } from './../models/Agreement';
+import { AgreementContent, AgreementRequest, AgreementResponse } from '../../models/Agreement';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { RootObject } from '../@core/models/Company';
+import { RootObject } from '../../@core/models/Company';
 
 @Injectable({
   providedIn: 'root'

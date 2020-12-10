@@ -1,4 +1,4 @@
-import { CreditCardFlagRequest, CreditCardFlagResponse } from './../models/CreditCardFlag';
+import { CreditCardFlagRequest, CreditCardFlagResponse } from '../../models/CreditCardFlag';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
