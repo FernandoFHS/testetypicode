@@ -29,13 +29,11 @@ import { AddBankAccountComponent } from './dialogs/add-bank-account/add-bank-acc
 import { EditBankAccountComponent } from './dialogs/edit-bank-account/edit-bank-account.component';
 import { DeleteBankAccountComponent } from './dialogs/delete-bank-account/delete-bank-account.component';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { DeletePhoneComponent } from './dialogs/delete-phone/delete-phone.component';
-import { DeletePartnerComponent } from './dialogs/delete-partner/delete-partner.component';
 import { EditPhoneComponent } from './dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './dialogs/add-phone/add-phone.component';
 import { CnaeService } from '../../../services/company/cnae.service';
 import { Cnae } from '../../../models/company/Cnae'
-import { Observable, of, Subject, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { SimpleDataTableService } from 'src/app/@core/components/simple-data-table/simple-data-table.service';
 import { CompanyService } from '../../../services/company.service';
@@ -47,7 +45,7 @@ import { PageTypeEnum } from 'src/app/enums/page-type.enum';
 import { autoCompleteValidator } from 'src/app/app.validators';
 import { GeneralService } from 'src/app/services/general.service';
 import { PartnerService } from 'src/app/services/partner.service';
-import { DOCUMENT } from '@angular/common';
+import { DatePipe, DOCUMENT } from '@angular/common';
 import { MatStepper } from '@angular/material/stepper';
 import { DataTableService } from 'src/app/@core/components/data-table/data-table.service';
 
@@ -70,6 +68,7 @@ import { DataTableService } from 'src/app/@core/components/data-table/data-table
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    DatePipe
   ],
 })
 export class AddCompanyComponent implements OnInit, OnDestroy {
@@ -156,12 +155,6 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   onAddPartnerSubscription: Subscription;
   onBackCompanySubscription: Subscription;
 
-  // onEditBankSubscription: Subscription;
-  // onAddBankSubscription: Subscription;
-
-  // onEditPhoneSubscription: Subscription;
-  // onAddPhoneSubscription: Subscription;
-
   partnerSource$: any = this.localStorageService.get('partnerFormGroup');
 
   mcc: any;
@@ -210,6 +203,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('stepper') stepper: MatStepper;
 
+  today: any = new Date();
+
   constructor(
     private _formBuilder: FormBuilder,
     private CepService: CepService,
@@ -227,8 +222,11 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     private _generalService: GeneralService,
     private partnerService: PartnerService,
     private dataTableService: DataTableService,
+    private datePipe: DatePipe,
     @Inject(DOCUMENT) private document: Document
-  ) { }
+  ) {
+    this.today = this.datePipe.transform(this.today, 'yyyy-MM-dd')
+   }
 
   private _filterCnaes(value: string): Cnae[] {
     const filterValue = value.toLowerCase();

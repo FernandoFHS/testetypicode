@@ -178,9 +178,9 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Data de abertura</mat-label>
-              <input matInput [matDatepicker]="dp" formControlName="openingDate" placeholder="00/00/0000">
-              <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-              <mat-datepicker #dp></mat-datepicker>
+              <input matInput [matDatepicker]="openingDatePicker" [max]="today" formControlName="openingDate" placeholder="00/00/0000">
+              <mat-datepicker-toggle matSuffix [for]="openingDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #openingDatePicker></mat-datepicker>
               <mat-error *ngIf="!identificationFormGroup.get('openingDate').value">Data incorreta</mat-error>
             </mat-form-field>
             <!-- 
@@ -822,7 +822,7 @@
             <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Cadastro BF</mat-label>
-                <input matInput [matDatepicker]="registrationDate" placeholder="Data Cadastro BF"
+                <input matInput [matDatepicker]="registrationDate" [max]="today" placeholder="Data Cadastro BF"
                   formControlName="registrationDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="registrationDate"></mat-datepicker-toggle>
                 <mat-datepicker #registrationDate></mat-datepicker>
@@ -832,7 +832,7 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Cadastro BF</mat-label>
-                <input matInput [matDatepicker]="registrationDate" placeholder="Data Cadastro BF"
+                <input matInput [matDatepicker]="registrationDate" [max]="today" placeholder="Data Cadastro BF"
                   formControlName="registrationDate">
                 <mat-datepicker-toggle matSuffix [for]="registrationDate"></mat-datepicker-toggle>
                 <mat-datepicker #registrationDate></mat-datepicker>
@@ -846,7 +846,7 @@
             <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Envio GP</mat-label>
-                <input matInput [matDatepicker]="gpSendDate" placeholder="Data Envio GP" formControlName="gpSendDate">
+                <input matInput [matDatepicker]="gpSendDate" [max]="today" placeholder="Data Envio GP" formControlName="gpSendDate">
                 <mat-datepicker-toggle matSuffix [for]="gpSendDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpSendDate></mat-datepicker>
               </mat-form-field>
@@ -855,7 +855,7 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Envio GP</mat-label>
-                <input matInput [matDatepicker]="gpSendDate" placeholder="Data Envio GP" formControlName="gpSendDate" numbersOnly>
+                <input matInput [matDatepicker]="gpSendDate" [max]="today" placeholder="Data Envio GP" formControlName="gpSendDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="gpSendDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpSendDate></mat-datepicker>
               </mat-form-field>
@@ -868,7 +868,7 @@
             <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Credenciamento GP</mat-label>
-                <input matInput [matDatepicker]="accreditationDate" placeholder="Data Credencialmento GP"
+                <input matInput [matDatepicker]="accreditationDate" [max]="today" placeholder="Data Credencialmento GP"
                   formControlName="accreditationDate">
                 <mat-datepicker-toggle matSuffix [for]="accreditationDate"></mat-datepicker-toggle>
                 <mat-datepicker #accreditationDate></mat-datepicker>
@@ -878,7 +878,7 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Credenciamento GP</mat-label>
-                <input matInput [matDatepicker]="accreditationDate" placeholder="Data Credencialmento GP"
+                <input matInput [matDatepicker]="accreditationDate" [max]="today" placeholder="Data Credencialmento GP"
                   formControlName="accreditationDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="accreditationDate"></mat-datepicker-toggle>
                 <mat-datepicker #accreditationDate></mat-datepicker>
@@ -899,7 +899,7 @@
             <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Afiliação GP</mat-label>
-                <input matInput [matDatepicker]="gpAffiliationDate" placeholder="Data Afiliação GP"
+                <input matInput [matDatepicker]="gpAffiliationDate" [max]="today" placeholder="Data Afiliação GP"
                   formControlName="gpAffiliationDate">
                 <mat-datepicker-toggle matSuffix [for]="gpAffiliationDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpAffiliationDate></mat-datepicker>
@@ -909,7 +909,7 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Afiliação GP</mat-label>
-                <input matInput [matDatepicker]="gpAffiliationDate" placeholder="Data Afiliação GP"
+                <input matInput [matDatepicker]="gpAffiliationDate" [max]="today" placeholder="Data Afiliação GP"
                   formControlName="gpAffiliationDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="gpAffiliationDate"></mat-datepicker-toggle>
                 <mat-datepicker #gpAffiliationDate></mat-datepicker>
@@ -923,7 +923,7 @@
             <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Cadastramento SE</mat-label>
-                <input matInput [matDatepicker]="seRegistrationDate" placeholder="Data Cadastramento SE"
+                <input matInput [matDatepicker]="seRegistrationDate" [max]="today" placeholder="Data Cadastramento SE"
                   formControlName="seRegistrationDate">
                 <mat-datepicker-toggle matSuffix [for]="seRegistrationDate"></mat-datepicker-toggle>
                 <mat-datepicker #seRegistrationDate></mat-datepicker>
@@ -933,7 +933,7 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Cadastramento SE</mat-label>
-                <input matInput [matDatepicker]="seRegistrationDate" placeholder="Data Cadastramento SE"
+                <input matInput [matDatepicker]="seRegistrationDate" [max]="today" placeholder="Data Cadastramento SE"
                   formControlName="seRegistrationDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="seRegistrationDate"></mat-datepicker-toggle>
                 <mat-datepicker #seRegistrationDate></mat-datepicker>
@@ -947,7 +947,7 @@
             <div *ngIf="isPageAdd()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Descredencimento</mat-label>
-                <input matInput [matDatepicker]="discreditationDate" placeholder="Data Descredencimento"
+                <input matInput [matDatepicker]="discreditationDate" [max]="today" placeholder="Data Descredencimento"
                   formControlName="discreditationDate">
                 <mat-datepicker-toggle matSuffix [for]="discreditationDate"></mat-datepicker-toggle>
                 <mat-datepicker #discreditationDate></mat-datepicker>
@@ -957,7 +957,7 @@
             <div *ngIf="isPageEdit() || isPageView()" class="filled-or-empty-form-field">
               <mat-form-field appearance="outline">
                 <mat-label>Descredencimento</mat-label>
-                <input matInput [matDatepicker]="discreditationDate" placeholder="Data Descredencimento"
+                <input matInput [matDatepicker]="discreditationDate" [max]="today" placeholder="Data Descredencimento"
                   formControlName="discreditationDate" numbersOnly>
                 <mat-datepicker-toggle matSuffix [for]="discreditationDate"></mat-datepicker-toggle>
                 <mat-datepicker #discreditationDate></mat-datepicker>
