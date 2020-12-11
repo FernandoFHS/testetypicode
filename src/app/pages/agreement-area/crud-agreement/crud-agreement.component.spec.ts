@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TaxListComponent } from './tax-list.component';
+import { CrudAgreementComponent } from './crud-agreement.component';
 
-describe('TaxListComponent', () => {
-  let component: TaxListComponent;
-  let fixture: ComponentFixture<TaxListComponent>;
+describe('CrudAgreementComponent', () => {
+  let component: CrudAgreementComponent;
+  let fixture: ComponentFixture<CrudAgreementComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TaxListComponent ]
+      declarations: [ CrudAgreementComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TaxListComponent);
+    fixture = TestBed.createComponent(CrudAgreementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

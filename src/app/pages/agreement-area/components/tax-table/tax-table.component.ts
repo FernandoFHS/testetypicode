@@ -1,5 +1,4 @@
 import { PaymentMethodService } from 'src/app/services/agreement/payment-method.service';
-import { filter } from 'rxjs/operators';
 import { PaymentMethodRequest } from 'src/app/models/PaymentMethod';
 import { Observable, of } from 'rxjs';
 import { PaymentDeadLineService } from 'src/app/services/agreement/payment-dead-line.service';
@@ -7,8 +6,8 @@ import { TaxResponse } from 'src/app/models/Plan';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { PaymentDeadLineRequest } from 'src/app/models/PaymentDeadLine';
-import { isNull } from '@angular/compiler/src/output/output_ast';
 import { NotificationService } from 'src/app/services/notification.service';
+import {pairwise,startWith, take} from 'rxjs/operators'
 
 @Component({
   selector: 'app-tax-table',
@@ -27,18 +26,18 @@ export class TaxTableComponent implements OnInit {
   paymentDeadLine$: Observable<PaymentDeadLineRequest>
   paymentMethod$: Observable<PaymentMethodRequest>
   headersTax
-  limitCredit: number = 12
+  limitCredit: number = 11
   limitInCash: number = 1
   limitDebit: number = 1
   countCredit: number
+  countDebit: number
+  countInCash: number
   constructor(private fb: FormBuilder,
     private _paymentDeadLineService: PaymentDeadLineService,
     private _notificationService: NotificationService,
     private _paymentMethodService: PaymentMethodService) {}
 
-  ngOnInit(): void {
-    //console.log(this.data);
-    
+  ngOnInit(): void {    
     this.touchedRows = [];
     this.userTable = this.fb.group({
       tax: this.fb.array([])
@@ -48,6 +47,8 @@ export class TaxTableComponent implements OnInit {
     }else{
       this.addRow();
     }
+
+    
     
     this.onFormGroupChange.emit(this.userTable);
     this._paymentDeadLineService.getAll().subscribe(resp=>{    
@@ -56,6 +57,8 @@ export class TaxTableComponent implements OnInit {
     this._paymentMethodService.getAll().subscribe(resp=>{    
       this.paymentMethod$ = of(resp.content)
     })    
+
+    this.countTypes();
   }
 
   ngAfterOnInit() {
@@ -74,7 +77,7 @@ export class TaxTableComponent implements OnInit {
       value: [this.data[index].value, Validators.required],
       paymentDeadLine: [this.data[index].paymentDeadLine, Validators.required],
       paymentMethod: [this.data[index].paymentMethod, Validators.required],
-      isEditable: [!this.isPageView]
+      // isEditable: [!this.isPageView]
     });
   }
 
@@ -152,21 +155,21 @@ export class TaxTableComponent implements OnInit {
   compareFn(c1:any, c2:any): boolean {  
     return c1 && c2 ? c1.id === c2.id : c1 === c2; 
   }
-  changePaymentMethod(e,group){
-    let value = 1;
-
-    if(group.get('paymentMethod').value.acronym=="C"){
-      let array = [] = this.userTable.get("tax").value;
-      let count = array.filter(item => item.paymentMethod.acronym === "C").length
-      value = count + 1;
-      this.countCredit = count;
-    }
-
-    group.get("installment").setValue(value);
+  countTypes(old?,value?){
+    this.getFormControls.controls.forEach(resp=>{
+      this.countCredit = this.getFormControls.controls.filter(item => item.value.paymentMethod.acronym === "C").length
+      this.countInCash = this.getFormControls.controls.filter(item => item.value.paymentMethod.acronym === "A").length
+      this.countDebit = this.getFormControls.controls.filter(item => item.value.paymentMethod.acronym === "D").length
+    })
   }
-  // setTwoNumberDecimal(e,group) {
-  //   let attributes = [ ...e.srcElement.attributes ]
-  //   let formControlName = attributes[6].value    
-  //   group.get(formControlName).setValue(parseFloat(group.get(formControlName).value).toFixed(2));
-  // }
+  changePaymentMethod(e,group,oldAcronym){
+    group.get("installment").setValue(1);
+    let value = 2
+    this.getFormControls.controls.forEach(resp=>{
+      if(resp.get('paymentMethod').value.acronym=="C"){
+        resp.get("installment").setValue(value++);
+      }
+    })
+    this.countTypes();
+  }
 }

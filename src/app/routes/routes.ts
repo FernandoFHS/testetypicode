@@ -1,5 +1,4 @@
 
-import { EditAgreementComponent } from './../pages/agreement-area/edit-agreement/edit-agreement.component';
 import { Routes } from '@angular/router';
 import { ContainerComponent } from '../@core/components/container/container.component';
 import { ThemesComponent } from '../@core/components/themes/themes.component';
@@ -18,9 +17,8 @@ import { RulesComponent } from '../pages/rules/rules.component';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 import { AgreementListComponent } from '../pages/agreement-area/agreement-list/agreement-list.component';
 import { ListRulesComponent } from '../pages/rules/list-rules/list-rules.component';
-import { PlansComponent } from '../pages/plans/plans.component';
 import { AgreementAreaComponent } from '../pages/agreement-area/agreement-area.component';
-import { AddAgreementComponent } from '../pages/agreement-area/add-agreement/add-agreement.component';
+import { CrudAgreementComponent } from '../pages/agreement-area/crud-agreement/crud-agreement.component';
 import { RuleComponent } from '../pages/rules/rule/rule.component';
 import { ContainerGuard } from '../@core/components/container/container.guard';
 import { Error404Component } from '../pages/errors/404/error-404.component';
@@ -224,21 +222,17 @@ export const routes: Routes = [
           },
           {
             path: 'add',
-            component: AddAgreementComponent
+            component: CrudAgreementComponent
           },
           {
             path: 'edit/:id',
-            component: AddAgreementComponent
+            component: CrudAgreementComponent
           },
           {
             path: 'view/:id',
-            component: AddAgreementComponent
+            component: CrudAgreementComponent
           }
         ]
-      },
-      {
-        path: 'plans',
-        component: PlansComponent,
       },
       {
         path: '**',

@@ -1,12 +1,10 @@
-import { PlanService } from './../../../services/plan.service';
-import { AddPlanComponent } from './../../dialogs/add-plan/add-plan.component';
+import { PlanService } from '../../../services/agreement/plan.service';
+import { AddPlanComponent } from '../../dialogs/add-plan/add-plan.component';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
-import { RootObject } from 'src/app/@core/models/Company';
 import { CompanyService } from 'src/app/services/company.service';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,17 +12,17 @@ import { SimpleDataTableService } from 'src/app/@core/components/simple-data-tab
 import { ActionModel } from 'src/app/@core/models/action.model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NotificationService } from 'src/app/services/notification.service';
-import { AgreementService } from 'src/app/services/agreement.service';
+import { AgreementService } from 'src/app/services/agreement/agreement.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageTypeEnum } from 'src/app/enums/page-type.enum';
-import { AgreementContent, AgreementResponse } from 'src/app/models/Agreement';
+import { AgreementResponse } from 'src/app/models/Agreement';
 
 @Component({
-  selector: 'app-add-agreement',
-  templateUrl: './add-agreement.component.html',
-  styleUrls: ['./add-agreement.component.scss']
+  selector: 'app-crud-agreement',
+  templateUrl: './crud-agreement.component.html',
+  styleUrls: ['./crud-agreement.component.scss']
 })
-export class AddAgreementComponent implements OnInit {
+export class CrudAgreementComponent implements OnInit {
 
   private _breadcrumbItems = [
     { title: 'Home', route: '' },
@@ -65,6 +63,8 @@ export class AddAgreementComponent implements OnInit {
   model: AgreementResponse;
 
   headersPlan: HeaderModel[] = [
+    
+    { text: 'numberOfInstallments', value: 'numberOfInstallments' },
     { text: 'Adquirente', value: 'acquirer', subValue: 'description' },
     { text: 'Bandeira', value: 'creditCardFlag', subValue: 'flagName' },
   ];
@@ -80,7 +80,7 @@ export class AddAgreementComponent implements OnInit {
   isLoading: boolean;
   id: number;
 
-  formData$: Observable<any>
+  formData: any = []
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -129,6 +129,7 @@ export class AddAgreementComponent implements OnInit {
 
     this.form.valueChanges.subscribe(newValue => {
       console.log(newValue);
+      console.log(newValue.plans);
       
     });
 
@@ -139,11 +140,22 @@ export class AddAgreementComponent implements OnInit {
     // });
   }
 
+  refreshPlanDataTable(data?){
+    if(data){
+      this.localStorageService.set('plans', data)
+    }else {
+      this.localStorageService.set('plans', this.form.controls.plans.value)
+    }
+    
+    this.formData = this.localStorageService.get('plans')
+    this.simpleDataTableService.refreshDataTable();
+  }
+
   private _loadModel(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._agreementService.getById(this.id).subscribe((model) => {
         console.log('model', model);
-
+        this.refreshPlanDataTable(model.plans);
         this.model = model;
         resolve();
       }, (error) => {
@@ -213,7 +225,7 @@ export class AddAgreementComponent implements OnInit {
     let index = array.indexOf(row)
 
     let dialogRef = this.dialog.open(AddPlanComponent, {
-      data: array[index]
+      data: row
     });
     let instance = dialogRef.componentInstance;
     instance.agreementForm = this.form;
@@ -295,8 +307,12 @@ export class AddAgreementComponent implements OnInit {
 
   }
 
-  save(): void {
-    this.form.markAllAsTouched();
+  save() {
+    this.form.markAllAsTouched();  
+    if(this.form.value.plans.length==0){
+      this._notificationService.error('É necessário criar ao menos um plano.');
+      return 0;
+    }
     const isValid = this.form.valid;
     if (isValid) {
       this._spinnerService.show();
@@ -315,17 +331,21 @@ export class AddAgreementComponent implements OnInit {
     }
   }
 
-  update(): void {
+  update() {
     this.form.markAllAsTouched();
+    if(this.form.value.plans.length==0){
+      this._notificationService.error('É necessário criar ao menos um plano.');
+      return 0;
+    }
     const isValid = this.form.valid;
     if (isValid) {
       this._spinnerService.show();
       this._agreementService.put(this.form.value).subscribe((response) => {
-        this._notificationService.success('Contrato criado com sucesso!');
+        this._notificationService.success('Contrato atualizado com sucesso!');
         this._spinnerService.hide();
         this._router.navigate(['agreements/list']);
       }, (error) => {
-        this._notificationService.error('Erro ao criar contrato, tente novamente.');
+        this._notificationService.error('Erro ao atualizar contrato, tente novamente.');
         this._spinnerService.hide();
       }, () => {
         this._spinnerService.hide();

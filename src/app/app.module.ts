@@ -1,4 +1,3 @@
-import { PlansComponent } from './pages/plans/plans.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -41,11 +40,9 @@ import { MglTimelineModule } from 'angular-mgl-timeline';
 import { EditPhoneComponent } from './pages/companies/crud-company/dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './pages/companies/crud-company/dialogs/add-phone/add-phone.component';
 import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
-import { DeleteTaxComponent } from './pages/plans/delete-tax/delete-tax.component';
 import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
 import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
-import { EditAgreementComponent } from './pages/agreement-area/edit-agreement/edit-agreement.component';
-import { AddAgreementComponent } from './pages/agreement-area/add-agreement/add-agreement.component';
+import { CrudAgreementComponent } from './pages/agreement-area/crud-agreement/crud-agreement.component';
 import { CdkStepper } from '@angular/cdk/stepper';
 import { ListProfilesComponent } from './pages/profiles/list-profiles/list-profiles.component';
 import { ProfileComponent } from './pages/profiles/profiles.component';
@@ -103,14 +100,10 @@ export const customCurrencyMaskConfig = {
     EditPhoneComponent,
     AddPhoneComponent,
     AgreementAreaComponent,
-    DeleteTaxComponent,
     EditPartnerComponent,
     ListRulesComponent,
     AgreementListComponent,
-    EditAgreementComponent,
-    AddAgreementComponent,
-    PlansComponent,
-    DeleteTaxComponent,
+    CrudAgreementComponent,
     CurrentAccountComponent,
     ExtractComponent,
     TransactionsComponent,

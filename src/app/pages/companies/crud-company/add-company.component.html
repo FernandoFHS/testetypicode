@@ -476,8 +476,12 @@
         <h3>Cadastro de contatos</h3>
 
         <div *ngIf="addPage">
-          <app-simple-data-table [headers]="headersPhoneTable" [data]="phoneNumber$" [actions]="actions"
-            (addEvent)="onAddPhone($event)" (editEvent)="onEditPhone($event)">
+          <app-simple-data-table 
+          [headers]="headersPhoneTable" 
+          [data]="phoneNumber$" 
+          [actions]="actions"
+            (addEvent)="onAddPhone($event)" 
+            (editEvent)="onEditPhone($event)">
           </app-simple-data-table>
         </div>
 
