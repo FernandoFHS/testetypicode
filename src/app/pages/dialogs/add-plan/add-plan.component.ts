@@ -1,21 +1,22 @@
-import { RemunerationService } from './../../../services/remuneration.service';
+import { RemunerationService } from 'src/app/services/agreement/remuneration.service';
 import { PlanResponse } from './../../../models/Plan';
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { CreditCardFlagRequest } from 'src/app/models/CreditCardFlag';
 import { AcquirerRequest } from 'src/app/models/plans/Acquirer';
 import { RemunerationTypeRequest } from 'src/app/models/RemunerationType';
 import { ServiceEntityRequest } from 'src/app/models/ServiceEntity';
-import { AcquirerService } from 'src/app/services/acquirer.service';
-import { CreditCardFlagService } from 'src/app/services/credit-card-flag.service';
+import { AcquirerService } from 'src/app/services/agreement/acquirer.service';
+import { CreditCardFlagService } from 'src/app/services/agreement/credit-card-flag.service';
 import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { RemunerationTypeService } from 'src/app/services/remuneration-type.service';
-import { ServiceEntityService } from 'src/app/services/service-entity.service';
+import { RemunerationTypeService } from 'src/app/services/agreement/remuneration-type.service';
+import { ServiceEntityService } from 'src/app/services/agreement/service-entity.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-add-plan',
@@ -46,6 +47,10 @@ export class AddPlanComponent implements OnInit {
   
   agreementForm: FormGroup
 
+  usedAcquirer: any = []
+  usedFlag: any = []
+
+
   constructor(public dialogRef: MatDialogRef<AddPlanComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: any,
@@ -58,15 +63,15 @@ export class AddPlanComponent implements OnInit {
     private acquirerService: AcquirerService,
     private remunerationService: RemunerationService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _notificationService: NotificationService
   ) { }
 
   formControl = new FormControl('', [
     Validators.required,
   ]);
 
-  ngOnInit(): void {
-    
+  ngOnInit(): void {    
     if (this.localStorageService.get('idCompanyGroup') == null) {
       this.idCompanyGroup = this.route.snapshot.queryParamMap.get('idCompanyGroup');
       this.localStorageService.set('idCompanyGroup', this.idCompanyGroup);
@@ -120,7 +125,11 @@ export class AddPlanComponent implements OnInit {
   saveAccount(form) {
     
     this.formTax.removeControl('isEditable');
-
+    if(!this.formTax.valid){
+      this._notificationService.error('Preencha todos os campos das taxas!');
+      return 0
+    }
+    
     if(!form.value.remuneration){
       form.removeControl('remuneration');
     }
@@ -141,6 +150,24 @@ export class AddPlanComponent implements OnInit {
     } else {
       this.planValidatorError = true;
     }
+  }
+  verifySamePlan(acquirer: boolean){
+    this.usedAcquirer = []
+    this.usedFlag = []
+    this.planArray.controls.forEach(resp=>{
+      if(this.data.id!=resp.value.id){
+        if(acquirer){
+          if(resp.value.acquirer.id == this.planFormGroup.value.acquirer.id){
+            this.usedFlag.push(resp.value.creditCardFlag.id)
+          }
+        }else {
+          if(resp.value.creditCardFlag.id == this.planFormGroup.value.creditCardFlag.id){
+            this.usedAcquirer.push(resp.value.acquirer.id)
+          }
+        }
+      }
+      
+    })
   }
 
   get planArray() {    
@@ -179,7 +206,7 @@ export class AddPlanComponent implements OnInit {
     this.acquirerService.getAll()
       .pipe(take(1))
       .subscribe((data) => {
-        this.acquirer$ = of(data.content);
+        this.acquirer$ = of(data.content);        
       });
   }
   getAllRemunetarionType() {

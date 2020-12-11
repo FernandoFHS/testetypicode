@@ -1,3 +1,4 @@
+import { Observable, of } from 'rxjs';
 import { LocalStorageService } from './../../../services/local-storage.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -8,7 +9,8 @@ import { ActionModel } from 'src/app/@core/models/action.model';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { HeaderModel } from 'src/app/@core/models/header.model';
 import { DeleteProfileComponent } from '../../delete-profile/delete-profile.component';
-import { AgreementService } from 'src/app/services/agreement.service';
+import { AgreementService } from 'src/app/services/agreement/agreement.service';
+import { AgreementContent, AgreementRoot, AgreementResponse } from 'src/app/models/Agreement';
 
 @Component({
   selector: 'app-agreement-list',
@@ -18,6 +20,8 @@ import { AgreementService } from 'src/app/services/agreement.service';
 export class AgreementListComponent implements OnInit {
 
   idCompanyGroup: string;
+
+  agreements$: any = [];
 
   breadcrumb_model: BreadcrumbModel = {
     active: {
@@ -44,6 +48,10 @@ export class AgreementListComponent implements OnInit {
     } else {
       this.idCompanyGroup = this.localStorageService.get('idCompanyGroup');
     }
+    this.agreementService.getAll(+this.idCompanyGroup).subscribe(resp=>{
+      this.localStorageService.set('agreements',resp.content)
+    })
+    this.agreements$ = this.localStorageService.get('agreements')
   }
 
   loadData = (sort: string, order: string, page: number, size: number) => {
@@ -64,14 +72,12 @@ export class AgreementListComponent implements OnInit {
 
   dinamicAddRouter = "/company-list/add-company";
 
-
   onDelete(row: any) {
     const { idProfile } = row;
     const dialogRef = this.dialog.open(DeleteProfileComponent, {
       data: { id: idProfile },
     });
   }
-
 
   onEdit(agreement) {
     this.router.navigate(['/agreements/edit/' + agreement.id]);
@@ -84,5 +90,4 @@ export class AgreementListComponent implements OnInit {
   onView(agreement) {
     this.router.navigate(['/agreements/view/' + agreement.id]);
   }
-
 }

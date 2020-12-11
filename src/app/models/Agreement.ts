@@ -7,6 +7,10 @@ export interface AgreementRequest{
   idAcquirer: number
 }
 
+export interface AgreementRoot{
+  content: AgreementResponse[],
+}
+
 export interface AgreementContent{
   id: number;
   idCompany: number,

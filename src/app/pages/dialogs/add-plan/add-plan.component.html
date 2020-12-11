@@ -9,18 +9,18 @@
   <form [formGroup]="planFormGroup">
     <mat-form-field appearance="outline" *ngIf="acquirer$ | async as acquirer;">
       <mat-label>Adquirente</mat-label>
-      <mat-select [compareWith]="compareFn" formControlName="acquirer" required>
+      <mat-select  (selectionChange)="verifySamePlan(true)" [compareWith]="compareFn" formControlName="acquirer" required>
         <mat-option>Selecione um Adquirente</mat-option>
-        <mat-option *ngFor="let item of acquirer" [value]="item">{{item.description}}</mat-option>
+        <mat-option *ngFor="let item of acquirer" [value]="item" [disabled]="usedAcquirer.includes(item.id)">{{item.description}}</mat-option>
       </mat-select>
       <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" *ngIf="creditCardFlag$ | async as creditCardFlag;">
       <mat-label>Bandeira Cartão de Crédito</mat-label>
-      <mat-select [compareWith]="compareFn"  formControlName="creditCardFlag"  required disable>
+      <mat-select   (selectionChange)="verifySamePlan(false)" [compareWith]="compareFn"  formControlName="creditCardFlag"  required disable>
         <mat-option>Selecione uma bandeira de cartão</mat-option>
-        <mat-option *ngFor="let item of creditCardFlag" [value]="item">{{item.flagName}} </mat-option>
+        <mat-option *ngFor="let item of creditCardFlag" [value]="item" [disabled]="usedFlag.includes(item.id)">{{item.flagName}} </mat-option>
       </mat-select>
       <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
     </mat-form-field>

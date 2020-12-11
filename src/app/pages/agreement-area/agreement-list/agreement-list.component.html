@@ -6,7 +6,7 @@
     </label>
   </div>
 
-  <core-data-table 
+  <!-- <core-data-table 
     [headers]="headers" 
     [actions]="actions" 
     (addEvent)="onAdd($event)" 
@@ -16,17 +16,18 @@
     [loadFunc]="loadData" 
     [idItems]="'id'"
     >
-  </core-data-table>
+  </core-data-table> -->
 
-  <!-- <app-simple-data-table 
+  <app-simple-data-table *ngIf="agreements$" 
         [headers]="headers" 
-        [loadFunc]="loadData" 
+        [data]="agreements$" 
         [actions]="actions"
         (addEvent)="onAdd($event)" 
         (editEvent)="onEdit($event)"
-        (deleteEvent)="onDelete($event)"
-        [idItems]="'id'"
+        (viewEvent)="onView($event)"
         >
-  </app-simple-data-table> -->
+  </app-simple-data-table>
+
+  
 
 </div>
