@@ -63,8 +63,6 @@ export class CrudAgreementComponent implements OnInit {
   model: AgreementResponse;
 
   headersPlan: HeaderModel[] = [
-    
-    { text: 'numberOfInstallments', value: 'numberOfInstallments' },
     { text: 'Adquirente', value: 'acquirer', subValue: 'description' },
     { text: 'Bandeira', value: 'creditCardFlag', subValue: 'flagName' },
   ];
