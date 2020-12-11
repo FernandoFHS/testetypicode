@@ -99,27 +99,6 @@ export class EditBankAccountComponent implements OnInit {
   }
 
   loadDinamicForm() {
-    // const companies = this.partnerService.getPartners();
-    // const companyPartner = companies[this.idPartner];
-
-    //   this.partnerFormGroup = this._formBuilder.group({
-    //     partnerSequentialNumber: [companyPartner.partnerSequentialNumber || 0],
-    //     partnerName: [companyPartner.partnerName || ''],
-    //     cpf: [companyPartner.cpf || ''],
-    //     dateOfBirth: [companyPartner.dateOfBirth ||''],
-    //     zipCode: [companyPartner.partnerAddress[0].street.zipCode || ''],
-    //     streetName: [companyPartner.partnerAddress[0].street.streetName || ''],
-    //     number: [companyPartner.partnerAddress[0].number || ''],
-    //     complement: [companyPartner.partnerAddress[0].complement || ''],
-    //     neighborhoodName: [companyPartner.partnerAddress[0].street.neighborhood.neighborhoodName || ''],
-    //     cityName: [companyPartner.partnerAddress[0].street.city.cityName || ''],
-    //     uf: [companyPartner.partnerAddress[0].street.state.uf || ''],
-    //     phone: [companyPartner.partnerContact[0].phone || '']
-    //   });
-
-    // this.companyService.readById(this.idCompany, this.idCompanyGroup).subscribe((company) => {
-      // console.log(company.externalBankAccount[this.idBankDinamic].bank.name?.trim())
-
       console.log(this.model)
 
       this.accountFormGroup = this._formBuilder.group({

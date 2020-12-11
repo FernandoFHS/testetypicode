@@ -189,6 +189,12 @@ form .line-form .line-3-form .filled-or-empty-form-field mat-error {
   font-size: 14px;
 }
 
+.cdk-global-scrollblock {
+  position: initial!important;
+  width: initial!important;
+  overflow: hidden!important;
+}
+
 @media (max-width: 1800px) {
   input,
   input::-webkit-input-placeholder {

@@ -165,14 +165,14 @@
   <div *ngIf="addPage">
     <div class="group-buttons-actions">
       <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
-      <core-save-button (click)="savePartner(partnerFormGroup)">Salvar </core-save-button>
+      <core-save-button [disabled]="!partnerFormGroup.valid" (click)="savePartner(partnerFormGroup)">Salvar </core-save-button>
     </div>
   </div>
 
   <div *ngIf="!addPage">
     <div class="group-buttons-actions">
       <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
-      <core-save-button (click)="editPartner()">Atualizar </core-save-button>
+      <core-save-button [disabled]="!partnerFormGroup.valid" (click)="editPartner()">Atualizar </core-save-button>
     </div>
   </div>
 </div>

@@ -3,6 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { CompanyContact } from 'src/app/models/Company';
 import { CompanyService } from 'src/app/services/company.service';
 import { DataService } from 'src/app/services/data.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -21,6 +22,7 @@ export class EditPhoneComponent implements OnInit {
   idPhoneLocal: number;
   idPhoneDinamic: number;
   idCompanyGroup: any;
+  model: CompanyContact;
 
   constructor(
     public dialogRef: MatDialogRef<EditPhoneComponent>,
@@ -37,6 +39,7 @@ export class EditPhoneComponent implements OnInit {
     this.idPhoneLocal = this.data.localIndex;
     this.idPhoneDinamic = this.data.apiIndex;
     this.idCompany = this.data.idCompany;
+    this.model = this.data.model;
 
     this.idCompanyGroup = this.localStorageService.get('idCompanyGroup');
     console.log(this.idCompanyGroup);
@@ -81,8 +84,8 @@ export class EditPhoneComponent implements OnInit {
       console.log('Entrou')
 
       this.phoneFormGroup = this._formBuilder.group({
-        contactName: [company.companyContact[this.data.apiIndex].contactName || ''],
-        companyPhone: [company.companyContact[this.data.apiIndex].companyPhone || 0],
+        contactName: [this.model.contactName || ''],
+        companyPhone: [this.model.companyPhone || 0],
       })
       console.log(this.phoneFormGroup.get('companyPhone'));
     })

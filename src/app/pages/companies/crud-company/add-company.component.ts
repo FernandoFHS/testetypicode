@@ -29,13 +29,11 @@ import { AddBankAccountComponent } from './dialogs/add-bank-account/add-bank-acc
 import { EditBankAccountComponent } from './dialogs/edit-bank-account/edit-bank-account.component';
 import { DeleteBankAccountComponent } from './dialogs/delete-bank-account/delete-bank-account.component';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { DeletePhoneComponent } from './dialogs/delete-phone/delete-phone.component';
-import { DeletePartnerComponent } from './dialogs/delete-partner/delete-partner.component';
 import { EditPhoneComponent } from './dialogs/edit-phone/edit-phone.component';
 import { AddPhoneComponent } from './dialogs/add-phone/add-phone.component';
 import { CnaeService } from '../../../services/company/cnae.service';
 import { Cnae } from '../../../models/company/Cnae'
-import { Observable, of, Subject, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { SimpleDataTableService } from 'src/app/@core/components/simple-data-table/simple-data-table.service';
 import { CompanyService } from '../../../services/company.service';
@@ -47,9 +45,11 @@ import { PageTypeEnum } from 'src/app/enums/page-type.enum';
 import { autoCompleteValidator } from 'src/app/app.validators';
 import { GeneralService } from 'src/app/services/general.service';
 import { PartnerService } from 'src/app/services/partner.service';
-import { DOCUMENT } from '@angular/common';
+import { DatePipe, DOCUMENT } from '@angular/common';
 import { MatStepper } from '@angular/material/stepper';
 import { DataTableService } from 'src/app/@core/components/data-table/data-table.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-add-company',
@@ -70,6 +70,7 @@ import { DataTableService } from 'src/app/@core/components/data-table/data-table
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    DatePipe
   ],
 })
 export class AddCompanyComponent implements OnInit, OnDestroy {
@@ -135,6 +136,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   id: number;
 
   testeform: FormArray;
+  existentDocumentNumberCompanie: boolean = false;
   isChecked = false;
   isCheckedBankAdress = true;
   isCheckedSituation = false;
@@ -170,12 +172,6 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   onEditPartnerSubscription: Subscription;
   onAddPartnerSubscription: Subscription;
   onBackCompanySubscription: Subscription;
-
-  // onEditBankSubscription: Subscription;
-  // onAddBankSubscription: Subscription;
-
-  // onEditPhoneSubscription: Subscription;
-  // onAddPhoneSubscription: Subscription;
 
   partnerSource$: any = this.localStorageService.get('partnerFormGroup');
 
@@ -225,6 +221,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('stepper') stepper: MatStepper;
 
+  today: any = new Date();
+
   constructor(
     private _formBuilder: FormBuilder,
     private CepService: CepService,
@@ -242,8 +240,13 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     private _generalService: GeneralService,
     private partnerService: PartnerService,
     private dataTableService: DataTableService,
+    private datePipe: DatePipe,
+    private notificationService: NotificationService,
+    private _spinnerService: NgxSpinnerService,
     @Inject(DOCUMENT) private document: Document
-  ) { }
+  ) {
+    this.today = this.datePipe.transform(this.today, 'yyyy-MM-dd')
+  }
 
   private _filterCnaes(value: string): Cnae[] {
     const filterValue = value.toLowerCase();
@@ -341,7 +344,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       companyResponsibleName: [this.identification?.companyResponsibleName || ''],
       companyResponsible: [this.identification?.companyResponsible || ''],
       companyType: [this.identification?.companyType || '', Validators.required],
-      situation: [this.identification?.situation || '', Validators.required],
+      situation: [this.identification?.situation || true, Validators.required],
       documentNumberCompany: [this.identification?.documentNumberCompany || '', Validators.required],
       gpEstablishmentNumber: [parseInt(this.identification?.gpEstablishmentNumber) || ''],
       stateRegistration: [parseInt(this.identification?.stateRegistration) || '', Validators.required],
@@ -412,7 +415,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
 
     this.companyPartnerFormGroup = this._formBuilder.group({
-      companyPartner: this._formBuilder.array(this.partnerSource$),
+      companyPartner: this._formBuilder.array(this.partnerSource$, Validators.required),
     });
 
     console.log(this.companyPartnerFormGroup)
@@ -422,11 +425,11 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     });
 
     this.contactFormGroup = this._formBuilder.group({
-      companyContact: this._formBuilder.array(this.phoneNumber$),
+      companyContact: this._formBuilder.array(this.phoneNumber$, Validators.required),
     });
 
     this.bankingFormGroup = this._formBuilder.group({
-      externalBankAccount: this._formBuilder.array(this.bankAccount$),
+      externalBankAccount: this._formBuilder.array(this.bankAccount$, Validators.required),
     });
 
     this.gelAllCnaes();
@@ -995,29 +998,38 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
     }
     console.log(form);
+    this._spinnerService.show();
 
-    if (this.localStorageService.get('partnerFormGroup') == undefined) {
-      this.dataService.errorSnackBar('Sócio não cadastrado', 'X');
-    } else {
-      this.companyService.create(form).subscribe((response: any) => {
-        console.log(response);
-        // this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
-        //   console.log(account);
-        // });
-        this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
-        this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
-        this.deleteLocalStorage();
-      })
-    }
-    // this.companyService.create(form).subscribe((response: any) => {
-    //   console.log(response.idCompany);
-    //   this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
-    //     console.log(account);
-    //   });
-    //   this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
-    //   this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
-    //   // this.deleteLocalStorage();
-    // })
+    this.companyService.getAllCompanies('idCompany', 'desc', 0, 1000, this.idCompanyGroup).subscribe((companies) => {
+      for (var i = 0; i < companies.content.length; i++) {
+        if (companies.content[i].documentNumberCompany == form.documentNumberCompany) {
+          this._spinnerService.hide();
+          this.existentDocumentNumberCompanie = true;
+          const sameDocumentNumberMessage = 'O CPF/CNPJ informado já possui registro no sistema. Por favor, verifique-o novamente.';
+
+          this._generalService.openOkDialog(sameDocumentNumberMessage, () => {
+            this.stepper.selectedIndex = 0;
+          }, 'CPF/CNPJ já cadastrado!');
+          break;
+        } else {
+          if (this.localStorageService.get('partnerFormGroup') == undefined) {
+            this.dataService.errorSnackBar('Sócio não cadastrado', 'X');
+          } else {
+            this._spinnerService.hide();
+            this.companyService.create(form).subscribe((response: any) => {
+              console.log(response);
+              // this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
+              //   console.log(account);
+              // });
+              this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
+              this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
+              // this.deleteLocalStorage();
+            })
+            break
+          }
+        }
+      }
+    })
 
   }
 
@@ -1308,6 +1320,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   onAddPhone(idPhone: number) {
     const dialogRef = this.dialog.open(AddPhoneComponent, {
       data: { id: idPhone },
+      autoFocus: false
     });
     dialogRef.afterClosed().subscribe((item) => {
       // this.phoneNumber$ = this.localStorageService.get('phoneNumber');
@@ -1322,6 +1335,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
   onAddBankAccount(idBankAccount: number) {
     const dialogRef = this.dialog.open(AddBankAccountComponent, {
       data: { id: idBankAccount },
+      autoFocus: false
     });
     dialogRef.afterClosed().subscribe((item) => {
       console.log(item);
@@ -1349,7 +1363,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       console.log(localIndex);
 
       const dialogRef = this.dialog.open(EditPhoneComponent, {
-        data: { localIndex, idCompany }
+        data: { localIndex, idCompany },
+        autoFocus: false
       });
       dialogRef.afterClosed().subscribe((item) => {
         console.log(item);
@@ -1362,7 +1377,7 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       const idCompany = this.id;
 
       const dialogRef = this.dialog.open(EditPhoneComponent, {
-        data: { apiIndex, idCompany }
+        data: { apiIndex, idCompany, model: row },
       });
       dialogRef.afterClosed().subscribe((item) => {
         console.log(item);
@@ -1390,8 +1405,8 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       const idCompany = this.id;
 
       const dialogRef = this.dialog.open(EditBankAccountComponent, {
-        data: {apiIndex, idCompany, model: row}, 
-        autoFocus: false 
+        data: { apiIndex, idCompany, model: row },
+        autoFocus: false
       });
       dialogRef.afterClosed().subscribe((item) => {
         console.log(item);
