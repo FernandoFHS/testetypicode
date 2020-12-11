@@ -1001,9 +1001,9 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
     } else {
       this.companyService.create(form).subscribe((response: any) => {
         console.log(response);
-        this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
-          console.log(account);
-        });
+        // this.companyService.createCompanyAccount(response.idCompany).subscribe((account) => {
+        //   console.log(account);
+        // });
         this.dataService.openSnackBar('Estabelecimento criado com sucesso', 'X');
         this.router.navigate(['/companies/list'], { queryParams: { idCompanyGroup: this.idCompanyGroup } });
         this.deleteLocalStorage();
@@ -1139,11 +1139,11 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
 
         // companyLevel: company.companyLevel,
 
-        // companyLevelItem: {
-        //   idCompanyLevel: company.companyLevelItem.idCompanyLevel,
-        //   description: "Subadquirente",
-        //   level: 30
-        // },
+        companyLevelItem: {
+          idCompanyLevel: 7,
+          description: "ESTABELECIMENTO COMERCIAL",
+          level: 70
+        },
 
         companyAddress: externalAdress.value.companyAddress,
 

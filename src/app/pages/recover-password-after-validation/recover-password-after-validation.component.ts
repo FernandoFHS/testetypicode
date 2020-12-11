@@ -49,6 +49,7 @@ export class RecoverPasswordAfterValidationComponent implements OnInit {
      }
 
     this.passwordService.recoverPassword(formObject, this.token, this.idCompany).subscribe((response) => {
+      console.log(response);
       this.notificationService.success('Senha redefinida com sucesso!');
       this.router.navigate(['/password-transaction']);
     })

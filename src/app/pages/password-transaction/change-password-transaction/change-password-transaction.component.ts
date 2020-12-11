@@ -29,7 +29,7 @@ export class ChangePasswordTransactionComponent implements OnInit {
   ngOnInit(): void {
 
     this.idCompany = this.route.snapshot.queryParamMap.get('idCompany');
-    this.passSale = this.route.snapshot.queryParamMap.get('passSale');
+    // this.passSale = this.route.snapshot.queryParamMap.get('passSale');
 
     this.changePasswordForm = this._formBuilder.group(
       {
@@ -57,8 +57,11 @@ export class ChangePasswordTransactionComponent implements OnInit {
       password: this.changePasswordForm.get('confirmNewPassword').value,
     };
 
+    let actualPasswordForm = this.changePasswordForm.get('actualPassword').value;
+
     console.log(alterPasswordForm);
-    this._passwordService.alterPassword(alterPasswordForm, this.idCompany, this.passSale).subscribe((response: any) => {
+    console.log(actualPasswordForm)
+    this._passwordService.alterPassword(alterPasswordForm, this.idCompany,actualPasswordForm).subscribe((response: any) => {
         console.log(response);
         this._notificationService.success('Senha alterada com sucesso!');
         this.router.navigate(['/password-transaction']);

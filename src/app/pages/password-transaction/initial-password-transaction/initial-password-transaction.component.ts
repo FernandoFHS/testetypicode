@@ -91,8 +91,6 @@ export class InitialPasswordTransactionComponent implements OnInit {
 
   checkPassword() {
     this._passwordService.checkLoginPassword(this.idCompany).subscribe((response: any) => {
-      console.log(response);
-
       if (response == null) {
         this.hasPassword = true;
       }   
@@ -102,15 +100,21 @@ export class InitialPasswordTransactionComponent implements OnInit {
   hasNotPasswordSubmit(){
     this.createPasswordForm = {
       documentNumberCompany: this.passwordForm.get('documentNumberCompany').value,
-      idCompany: 1190,
+      idCompany: this.idCompany,
       localTransaction: "P",
       passSale: this.passwordForm.get('passwordconfirm').value
     }
+    
+    console.log(this.passwordForm);
+    if(this.passwordForm.valid == true){
     this._passwordService.createPassword(this.createPasswordForm).subscribe((response:any) =>{
       console.log(response);
       this.notificationService.success('Senha criada com sucesso!');
-      this.router.navigate(['/password-transaction']);
-    })
+      this.checkPassword();
+      this.router.navigate(['/password-transaction/initial'], { queryParams: { idCompany: this.idCompany }});
+    })}else{
+      this.notificationService.error('Digite todos os dados no campos!');
+    }
     console.log(this.createPasswordForm);
   }
 

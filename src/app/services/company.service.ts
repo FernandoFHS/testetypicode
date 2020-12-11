@@ -15,7 +15,8 @@ export class CompanyService {
 
   private _refreshTable = new Subject<void>();
 
-  private readonly API_URL = 'http://company.qa.appmobbuy.tech/';
+  // private readonly API_URL = 'http://company.qa.appmobbuy.tech/';
+  private readonly API_URL = 'http://bffmaintenance.qa.appmobbuy.tech:8080/';
   private readonly companyAccount_URL = 'http://account.qa.appmobbuy.tech/';
   private datePipe = new DatePipe('pt-BR');
 
@@ -28,11 +29,11 @@ export class CompanyService {
 
   /** CRUD METHODS */
 
-  createCompanyAccount(idCompany) {
-    const createAccountURL = `${this.companyAccount_URL}accounts`;
+  // createCompanyAccount(idCompany) {
+  //   const createAccountURL = `${this.companyAccount_URL}accounts`;
 
-    return this.httpClient.post(createAccountURL, {idCompany: idCompany}); 
-  }
+  //   return this.httpClient.post(createAccountURL, {idCompany: idCompany}); 
+  // }
 
   getAllCompanies(sort: string, order: string, page: number, size: number, companyGroup: number): Observable<{ content: CompanyContent[] }> {
     const requestUrl =
@@ -118,7 +119,7 @@ export class CompanyService {
   // }
 
   update(company): Observable<CompanyContent> {
-    return this.httpClient.put<CompanyContent>(this.API_URL + 'company', company);
+    return this.httpClient.patch<CompanyContent>(this.API_URL + 'company', company);
   }
 
   delete(idCompany: number): Observable<CompanyContent> {
