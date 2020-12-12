@@ -6,6 +6,15 @@
     </label>
   </div>
 
+  <div fxLayout="row wrap" class="m-b-25 m-t-20" fxLayoutAlign="end end">
+    <button mat-flat-button color="primary" class="float-right" (click)="onAdd($event)">
+      <mat-icon [inline]="true" class="m-r-5">
+        add
+      </mat-icon>
+      Cadastrar
+    </button>
+  </div>
+
   <!-- <core-data-table 
     [headers]="headers" 
     [actions]="actions" 
@@ -22,7 +31,6 @@
         [headers]="headers" 
         [data]="agreements$" 
         [actions]="actions"
-        (addEvent)="onAdd($event)" 
         (editEvent)="onEdit($event)"
         (viewEvent)="onView($event)"
         >

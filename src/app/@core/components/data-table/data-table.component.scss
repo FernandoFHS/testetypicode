@@ -7,6 +7,18 @@
   flex: 0 0 100px;
 }
 
+th, td{
+  white-space: nowrap;
+  padding: 0 5px !important;
+}
+
+.table-container {
+  //height: 400px;
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+}
+
 mat-row {
   mat-cell:not(:last-child) {
     padding-right: 15px;
@@ -16,6 +28,9 @@ mat-row {
 mat-table {
   width: 100%;
 }
+table {
+  width: 100%;
+}
 
 mat-paginator {
   margin-bottom: 20px;
@@ -23,4 +38,20 @@ mat-paginator {
 
 .example-tooltip-green {
   background: #b71c1c;
+}
+.mat-table-sticky:first-child {
+  border-right: 1px solid #e0e0e0;
+}
+
+.mat-table-sticky:last-child {
+  border-left: 1px solid #e0e0e0;
+}
+
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  text-align: center !important;
+  padding-right: 0px !important;
+}
+
+.mat-cell:first-of-type, .mat-header-cell:first-of-type, .mat-footer-cell:first-of-type {
+  padding-left: 24px !important;
 }

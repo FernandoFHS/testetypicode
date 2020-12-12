@@ -64,7 +64,7 @@ export class AgreementListComponent implements OnInit {
   ];
 
   actions: ActionModel = {
-    add: true,
+    add: false,
     edit: true,
     delete: false,
     view: true
