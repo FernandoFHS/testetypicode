@@ -93,7 +93,6 @@ export class DataTableComponent implements AfterViewInit, OnInit {
         this.sort.direction,
         this.paginator.pageIndex,
         10,
-        2
       ).subscribe((data) => {
         this.isLoadingResults = false;
         this.resultsLength = data['totalElements'];

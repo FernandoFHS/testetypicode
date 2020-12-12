@@ -11,6 +11,11 @@ import {
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { CompanyService } from 'src/app/services/company.service';
+import { ActivatedRoute } from '@angular/router';
+import { PartnerService } from 'src/app/services/partner.service';
+import { DataService } from 'src/app/services/data.service';
+import { ExternalBankAccount } from 'src/app/models/Company';
 
 @Component({
   selector: 'app-edit-bank-account',
@@ -20,11 +25,18 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 export class EditBankAccountComponent implements OnInit {
   accountFormGroup: FormGroup;
   bankAccount: any = this.localStorageService.get('bankAccount');
+  dinamicBankAccount: any;
   bankForm = new FormControl();
   bank: Array<Bank>;
   bank$: Observable<Array<Bank>>;
   filteredBanks: Observable<Bank[]>;
   bankValidatorError = false;
+  isLocalData: boolean;
+  idCompany: number;
+  idBankLocal: number;
+  idBankDinamic: number;
+  idCompanyGroup: any;
+  model: ExternalBankAccount;
 
   constructor(
     public dialogRef: MatDialogRef<EditBankAccountComponent>,
@@ -32,10 +44,45 @@ export class EditBankAccountComponent implements OnInit {
     public data: any,
     private bankService: BankService,
     private _formBuilder: FormBuilder,
-    private localStorageService: LocalStorageService
-  ) {}
+    private localStorageService: LocalStorageService,
+    private companyService: CompanyService,
+    private route: ActivatedRoute,
+    private partnerService: PartnerService,
+    private dataService: DataService
+  ) { }
 
   ngOnInit(): void {
+
+    this.idBankLocal = this.data.localIndex;
+    this.idBankDinamic = this.data.apiIndex;
+    this.idCompany = this.data.idCompany;
+    this.model = this.data.model;
+
+    console.log(this.data);
+
+    // console.log(this.idBankLocal);
+    // console.log(this.idBankDinamic);
+    // console.log(this.idCompany);
+
+    this.idCompanyGroup = this.localStorageService.get('idCompanyGroup');
+    console.log(this.idCompanyGroup);
+
+    if (this.idBankLocal || this.idBankLocal == 0) {
+      this.isLocalData = true;
+      console.log('É local')
+      this.loadLocalForm();
+      if (this.bankAccount != undefined) {
+        this.getLocalStorage('bankAccount');
+      }
+    } else {
+      this.isLocalData = false;
+      console.log('É dinâmico')
+      this.loadDinamicForm();
+    }
+    this.getAllBanks();
+  }
+
+  loadLocalForm() {
     this.accountFormGroup = this._formBuilder.group({
       bank: ['', Validators.required],
       agency: ['', Validators.required],
@@ -43,18 +90,31 @@ export class EditBankAccountComponent implements OnInit {
       account: ['', Validators.required],
       digit: [''],
       accountDigit: [''],
-      idBank:[''],
-      accountType:[''],
+      idBank: [''],
+      accountType: [''],
       masterAccount: [''],
       idCompany: 0,
       idExternalBankAccount: 0,
-    });
+    })    
+  }
 
-    if (this.bankAccount != undefined) {
-      this.getLocalStorage('bankAccount');
-    }
+  loadDinamicForm() {
+      console.log(this.model)
 
-    this.getAllBanks();
+      this.accountFormGroup = this._formBuilder.group({
+        bank: [this.model.bank || ''],
+        agency: [this.model.agency?.trim() || 0],
+        agencyDigit: [this.model.accountDigit?.trim() || 0],
+        account: [this.model.account?.trim() || 0],
+        digit: [this.model.digit?.trim() || 0],
+        accountDigit: [this.model.accountDigit?.trim() || 0],
+        idBank: [this.model.bank.idBank || 0],
+        accountType: [this.model.accountType?.trim() || 0],
+        masterAccount: [this.model.masterAccount || 0],
+        idCompany: [this.idCompany || 0],
+        idExternalBankAccount: [this.model.idExternalBankAccount || 0],
+      // })
+    })
   }
 
   private _filterBanks(value: string): Bank[] {
@@ -93,16 +153,12 @@ export class EditBankAccountComponent implements OnInit {
   ]);
 
   getErrorMessage() {
-    return this.formControl.hasError('required')
-      ? 'Campo Obrigatório'
-      : this.formControl.hasError('email')
-      ? 'Not a valid email'
-      : '';
+    console.log('ERRO')
   }
 
   editAccount(form) {
-    let localIndex = this.data.localIndex;
-
+    console.log('Uhul');
+    //   let localIndex = this.data.localIndex;
 
     let editableItem = {
       bank: this.accountFormGroup.get('bank').value,
@@ -111,37 +167,51 @@ export class EditBankAccountComponent implements OnInit {
       account: this.accountFormGroup.get('account').value,
       digit: this.accountFormGroup.get('digit').value,
       accountDigit: this.accountFormGroup.get('accountDigit').value,
-      masterAccount:this.accountFormGroup.get('masterAccount').value,
-      accountType:this.accountFormGroup.get('accountType').value,
+      masterAccount: this.accountFormGroup.get('masterAccount').value,
+      accountType: this.accountFormGroup.get('accountType').value,
     };
 
     let bankValidator = form.value.bank;
     console.log(bankValidator);
 
-    if (typeof bankValidator === 'object') {
-      if (localIndex > -1) {
-        Object.assign(this.bankAccount[localIndex], editableItem);
-        localStorage.setItem('bankAccount', JSON.stringify(this.bankAccount));
-        this.dialogRef.close(this.bankAccount);
+    if (this.isLocalData) {
+      if (typeof bankValidator === 'object') {
+        if (this.idBankLocal > -1) {
+          Object.assign(this.bankAccount[this.idBankLocal], editableItem);
+          localStorage.setItem('bankAccount', JSON.stringify(this.bankAccount));
+          this.dataService.openSnackBar('Conta editada com sucesso', 'X');
+          this.dialogRef.close(editableItem);
+        } else {
+          console.log(editableItem);
+        }
       } else {
-        console.log(editableItem);
+        this.bankValidatorError = true;
       }
     } else {
-      this.bankValidatorError = true;
+      if (typeof bankValidator === 'object') {
+        if (this.idBankDinamic > -1) {
+          this.dataService.openSnackBar('Conta editada com sucesso', 'X');
+          this.dialogRef.close(editableItem);
+        } else {
+          console.log(editableItem);
+        }
+      } else {
+        this.bankValidatorError = true;
+      }
     }
   }
 
   getLocalStorage(item) {
     if (item == 'bankAccount') {
       let localStorage = {
-        bank: this.bankAccount[this.data].bank,
-        agency: this.bankAccount[this.data].agency,
-        agencyDigit: this.bankAccount[this.data].agencyDigit,
-        account: this.bankAccount[this.data].account,
-        digit: this.bankAccount[this.data].digit,
-        accountDigit: this.bankAccount[this.data].accountDigit,
-        masterAccount:this.bankAccount[this.data].masterAccount,
-        accountType:this.bankAccount[this.data].accountType,
+        bank: this.bankAccount[this.data.localIndex].bank,
+        agency: this.bankAccount[this.data.localIndex].agency,
+        agencyDigit: this.bankAccount[this.data.localIndex].agencyDigit,
+        account: this.bankAccount[this.data.localIndex].account,
+        digit: this.bankAccount[this.data.localIndex].digit,
+        accountDigit: this.bankAccount[this.data.localIndex].accountDigit,
+        masterAccount: this.bankAccount[this.data.localIndex].masterAccount,
+        accountType: this.bankAccount[this.data.localIndex].accountType,
       };
       this.accountFormGroup.patchValue(localStorage);
     }

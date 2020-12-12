@@ -45,6 +45,11 @@
 }
 
 .timeline {
+  height: 500px;
+  overflow: auto;
+  padding-right: 20px;
+  margin-top: 25px;
+
   .timeline-icon {
     color: white;
   }
@@ -59,6 +64,7 @@
 
       th {
         font-weight: normal;
+        width: calc(100% / 4);
       }
     }
   }
@@ -66,6 +72,7 @@
   mgl-timeline-entry-header,
   mgl-timeline-entry-dot {
     cursor: pointer;
+    z-index: 9999;
 
     &:hover {
       opacity: 0.7;
@@ -89,8 +96,36 @@
   }
 
   ::ng-deep .mgl-timeline-line {
-    border: solid 1px rgba(0, 0, 0, 0.12) !important;
-    background-color: #f5f5f5;
+    // border: solid 1px rgba(0, 0, 0, 0.12) !important;
+    // background-color: #f5f5f5;
+    display: none;
+  }
+
+  mgl-timeline-entry {
+    ::ng-deep .mgl-timeline-entry-card-header:before {
+      width: 10px;
+      background-color: #f5f5f5;
+      height: 300%;
+      content: "";
+      position: absolute;
+      left: calc((100% - 10px) / 2);
+      left: -10px;
+      top: -96%;
+      border: solid 1px rgba(0, 0, 0, 0.12);
+      border-top: none;
+      border-bottom: 0px;
+      z-index: 0;
+    }
+
+    ::ng-deep &:last-child .mgl-timeline-entry-card-header:before {
+      height: 250% !important;
+      border-bottom: solid 1px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    ::ng-deep &:first-of-type .mgl-timeline-entry-card-header:before {
+      border-top: solid 1px rgba(0, 0, 0, 0.12) !important;
+      top: -40% !important;
+    }
   }
 }
 

@@ -35,6 +35,12 @@ a.link {
     }
 }
 
+.cdk-global-scrollblock {
+    position: initial!important;
+    width: initial!important;
+    overflow: hidden!important;
+}
+
 .img-responsive {
     width: 100%;
     height: auto;
@@ -828,8 +834,7 @@ list inline
 }
 
 html .page-wrapper {
-    // height: calc(100vh - 100px);
-    height: calc(100vh - 64px);
+    // height: calc(100vh - 64px); // TODO
 
     .page-content {
         height: 100%;

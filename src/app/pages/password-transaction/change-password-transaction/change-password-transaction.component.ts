@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
 import { NotificationService } from 'src/app/services/notification.service';
 import { PasswordService } from 'src/app/services/password/password.service';
@@ -15,17 +15,25 @@ export class ChangePasswordTransactionComponent implements OnInit {
   hide1 = true;
   hide2 = true;
   alterPasswordForm: any;
+  idCompany: any;
+  passSale: any;
 
   constructor(
     private _formBuilder: FormBuilder,
     private router: Router,
     private _notificationService: NotificationService,
-    private _passwordService: PasswordService
+    private _passwordService: PasswordService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+
+    this.idCompany = this.route.snapshot.queryParamMap.get('idCompany');
+    // this.passSale = this.route.snapshot.queryParamMap.get('passSale');
+
     this.changePasswordForm = this._formBuilder.group(
       {
+        // documentNumberCompany: ['', [Validators.required]],
         actualPassword: ['', [Validators.required]],
         newPassword: ['', [Validators.required]],
         confirmNewPassword: ['', [Validators.required]],
@@ -45,23 +53,19 @@ export class ChangePasswordTransactionComponent implements OnInit {
 
     this.changePasswordForm.markAllAsTouched();
 
-    this.alterPasswordForm = {
-      documentNumberCompany: 'string',
-      idCompany: 2,
-      localTransaction: 'P',
-      passSale: this.changePasswordForm.get('actualPassword').value,
+    let alterPasswordForm = {
+      password: this.changePasswordForm.get('confirmNewPassword').value,
     };
 
-    if (this.changePasswordForm.valid) {
-      const password = this.changePasswordForm.get('newPassword').value;
-      const passwordconfirm = this.changePasswordForm.get('confirmNewPassword')
-        .value;
+    let actualPasswordForm = this.changePasswordForm.get('actualPassword').value;
 
-      console.log(this.changePasswordForm);
-      this._passwordService.alterPassword(this.changePassword).subscribe((response: any) => {
-          console.log(response);
-          this._notificationService.success('Senha alterada com sucesso!');
-        });
-    }
+    console.log(alterPasswordForm);
+    console.log(actualPasswordForm)
+    this._passwordService.alterPassword(alterPasswordForm, this.idCompany,actualPasswordForm).subscribe((response: any) => {
+        console.log(response);
+        this._notificationService.success('Senha alterada com sucesso!');
+        this.router.navigate(['/password-transaction']);
+      });
+
   }
 }

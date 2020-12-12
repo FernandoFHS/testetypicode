@@ -10,3 +10,9 @@
 .example-tooltip-green {
   background: #b71c1c;
 }
+
+.cdk-global-scrollblock {
+  position: initial!important;
+  width: initial!important;
+  overflow: hidden!important;
+}

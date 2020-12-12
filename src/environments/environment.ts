@@ -1,9 +1,13 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:8090/api/',
-  baseUrlCompany: 'http://company.qa.appmobbuy.tech/',
+  // baseUrlCompany: 'http://company.qa.appmobbuy.tech/',
+  baseUrlCompany: 'http://bffmaintenance.qa.appmobbuy.tech:8080/',
+
   baseUrlPlans: 'http://register-plans.qa.appmobbuy.tech/',
-  baseUrlPassword:'http://password-maintenance.qa.appmobbuy.tech/',
+  // baseUrlPassword:'http://password-maintenance.qa.appmobbuy.tech/',
+  baseUrlPassword:'http://bffmaintenance.qa.appmobbuy.tech:8080/',
+
   baseUrlRecoverPassword: 'http://company-front.qa.appmobbuy.tech/password-recover-validation',
   api: {
     url: 'https://mobbuy-monitoring.azurewebsites.net',

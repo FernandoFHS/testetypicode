@@ -28,7 +28,7 @@
   <div class="card-box">
     <mat-card class="mat-elevation-z2">
       <mat-card-content>
-        <form [formGroup]="partnerFormGroup">
+        <form *ngIf="partnerFormGroup" [formGroup]="partnerFormGroup">
           <div class="line-form">
             <div class="short-line-form">
               <mat-form-field appearance="outline">
@@ -165,14 +165,14 @@
   <div *ngIf="addPage">
     <div class="group-buttons-actions">
       <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
-      <core-save-button (click)="savePartner(partnerFormGroup)">Salvar </core-save-button>
+      <core-save-button [disabled]="!partnerFormGroup.valid" (click)="savePartner(partnerFormGroup)">Salvar </core-save-button>
     </div>
   </div>
 
   <div *ngIf="!addPage">
     <div class="group-buttons-actions">
       <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
-      <core-save-button (click)="editPartner()">Atualizar </core-save-button>
+      <core-save-button [disabled]="!partnerFormGroup.valid" (click)="editPartner()">Atualizar </core-save-button>
     </div>
   </div>
 </div>

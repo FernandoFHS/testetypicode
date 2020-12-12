@@ -5,14 +5,13 @@ import { ThemesComponent } from '../@core/components/themes/themes.component';
 import { CompanyComponent } from '../pages/companies/company.component';
 import { HomeComponent } from '../pages/home/home.component';
 import { LoginComponent } from '../pages/login/login.component';
-// import { UserComponent } from '../pages/user/user.component';
 import { PasswordTransactionComponent } from '../pages/password-transaction/password-transaction.component';
 import { LoginGuard } from '../pages/login/login.guard';
 import { ListProfilesComponent } from '../pages/profiles/list-profiles/list-profiles.component';
 import { AddProfileComponent } from '../pages/profiles/profile/crud-company/add-profile.component';
 import { CompanyListComponent } from '../pages/companies/list/list-company.component';
 import { AddCompanyComponent } from '../pages/companies/crud-company/add-company.component';
-import { AddPartnerComponent } from '../pages/companies/partners/add/add-partner.component';
+import { AddPartnerComponent } from '../pages/companies/partners/local-partner/add-partner.component';
 import { RulesComponent } from '../pages/rules/rules.component';
 import { EditPartnerComponent } from '../pages/edit-partner/edit-partner.component';
 import { AgreementListComponent } from '../pages/agreement-area/agreement-list/agreement-list.component';
@@ -31,6 +30,7 @@ import { CurrentAccountComponent } from '../pages/current-account/current-accoun
 import { ExtractComponent } from '../pages/current-account/extract/extract.component';
 import { TransactionsComponent } from '../pages/transactions/transactions.component';
 import { FuturePostingsComponent } from '../pages/current-account/future-postings/future-postings.component';
+import { EditApiDataComponent } from '../pages/companies/partners/dinamic-partner/dinamic-partner';
 
 export const routes: Routes = [
   {
@@ -39,7 +39,7 @@ export const routes: Routes = [
     canActivate: [LoginGuard]
   },
   {
-    path: 'password-recover-validation',
+    path: 'password-recover-validation/:token',
     component: RecoverPasswordAfterValidationComponent
   },
   {
@@ -126,23 +126,43 @@ export const routes: Routes = [
           {
             path: 'add',
             component: AddCompanyComponent,
+            children: [
+              {
+                path: 'partners/local-add',
+                component: AddPartnerComponent,
+              },
+              {
+                path: 'partners/local-edit/:index',
+                component: AddPartnerComponent,
+              },
+            ]
           },
           {
             path: 'edit/:id',
             component: AddCompanyComponent,
+            children: [
+              {
+                path: 'partners/api-edit/:index/:id',
+                component: EditApiDataComponent,
+              },
+              {
+                path: 'partners/api-add',
+                component: EditApiDataComponent,
+              },
+            ]
           },
           {
             path: 'view/:id',
             component: AddCompanyComponent
           },
-          {
-            path: 'partners/add',
-            component: AddPartnerComponent,
-          },
-          {
-            path: 'partners/edit/:index',
-            component: AddPartnerComponent,
-          },
+          // {
+          //   path: 'partners/add',
+          //   component: AddPartnerComponent,
+          // },
+          // {
+          //   path: 'partners/local-edit/:index/',
+          //   component: AddPartnerComponent,
+          // },
         ]
       },
       {
@@ -155,11 +175,11 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'initial/100800001',
+            redirectTo: 'initial',
             pathMatch: 'full'
           },
           {
-            path: 'initial/100800001',
+            path: 'initial',
             component: InitialPasswordTransactionComponent
           },
           {

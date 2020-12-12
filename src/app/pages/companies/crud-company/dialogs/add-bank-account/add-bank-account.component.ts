@@ -24,6 +24,7 @@ export class AddBankAccountComponent implements OnInit {
   bank$: Observable<Array<Bank>>;
   filteredBanks: Observable<Bank[]>;
   bankValidatorError = false;
+  trueMasterAccount: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddBankAccountComponent>,
@@ -53,7 +54,19 @@ export class AddBankAccountComponent implements OnInit {
       })
 
       this.getAllBanks();
+      this.masterAccountValidator();
   }
+
+  masterAccountValidator() {
+    let bankAccoutStorage = this.localStorageService.get('bankAccount');
+    console.log(bankAccoutStorage)
+    for (var i = 0; i <= bankAccoutStorage.length; i++) {
+      console.log(bankAccoutStorage[i].masterAccount);
+      if (bankAccoutStorage[i].masterAccount == true) {
+        this.trueMasterAccount = true;
+      }
+    }
+  } 
 
   getAllBanks(){
     this.bankService.getAllCnae()
@@ -113,6 +126,7 @@ export class AddBankAccountComponent implements OnInit {
     if(!bankAccountArray){
       bankAccountArray= [];
     }
+    
     bankAccountArray.push(form.value);
 
     let bankValidator = form.value.bank;

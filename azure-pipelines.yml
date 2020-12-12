@@ -1,0 +1,44 @@
+trigger:
+  branches:
+    include:
+    - release/*
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: develop
+jobs:
+- job: Job_1
+  displayName: Agent job 1
+  pool:
+    vmImage: vs2017-win2016
+  steps:
+  - checkout: self
+  - task: NodeTool@0
+    displayName: Node Reference Available
+    inputs:
+      versionSpec: 14.x
+      checkLatest: true
+  - task: Npm@1
+    displayName: Angular CLI
+    inputs:
+      command: custom
+      verbose: false
+      customCommand: install  -g @angular/cli
+  - task: Npm@1
+    displayName: npm install
+    inputs:
+      verbose: false
+  - task: Npm@1
+    displayName: Create a deployment build
+    inputs:
+      command: custom
+      verbose: false
+      customCommand: run build
+  - task: AzureRmWebAppDeployment@4
+    displayName: 'Azure App Service Deploy: mobbuy-front'
+    inputs:
+      ConnectedServiceName: 73ddb1c7-1941-4c52-80b1-38e492681725
+      WebAppName: mobbuy-front
+      Package: dist/
+...

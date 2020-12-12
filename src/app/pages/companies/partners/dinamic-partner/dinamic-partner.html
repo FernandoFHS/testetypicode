@@ -1,0 +1,175 @@
+<div fxFlexFill>
+
+  <div *ngIf="isAddPage">
+    <core-breadcrumb [model]="addBreadcrumbModel"></core-breadcrumb>
+  </div>
+
+  <div *ngIf="!isAddPage">
+    <core-breadcrumb [model]="editBreadcrumbModel"></core-breadcrumb>
+  </div>
+
+  <div *ngIf="isAddPage">
+    <div class="m-b-25">
+      <label class="mat-display-1 page-title">
+        Incluir Sócio
+      </label>
+    </div>
+  </div>
+
+  <div *ngIf="!isAddPage">
+    <div class="m-b-25">
+      <label class="mat-display-1 page-title">
+        Editar Sócio
+      </label>
+    </div>
+  </div>
+
+  <div class="card-box">
+    <mat-card class="mat-elevation-z2">
+      <mat-card-content>
+        <form *ngIf="partnerFormGroup" [formGroup]="partnerFormGroup">
+          <div class="line-form">
+            <div class="short-line-form">
+              <mat-form-field appearance="outline">
+                <mat-label>Número Sequência</mat-label>
+                <input matInput placeholder="Número Sequência" formControlName="partnerSequentialNumber" />
+                <mat-icon matSuffix>fast_forward</mat-icon>
+                <mat-error *ngIf="partnerFormGroup.get('partnerSequentialNumber').invalid">Uhul</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="line-form">
+            <mat-form-field appearance="outline">
+              <mat-label>Nome</mat-label>
+              <input matInput placeholder="Nome" formControlName="partnerName" required />
+              <mat-icon matSuffix>account_box</mat-icon>
+              <mat-error *ngIf="partnerFormGroup.get('partnerName').invalid">{{getErrorMessage('partnerName')}}</mat-error>
+            </mat-form-field>
+
+            <div class="short-line-form">
+              <mat-form-field appearance="outline">
+                <mat-label>CPF</mat-label>
+                <input matInput placeholder="000.000.000-00" formControlName="cpf" mask="000.000.000-00" required />
+                <mat-icon matSuffix>assignment_ind</mat-icon>
+                <mat-error *ngIf="partnerFormGroup.get('cpf').invalid">{{getErrorMessage('cpf')}}</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Data de nascimento</mat-label>
+                <input matInput [matDatepicker]="dp" formControlName="dateOfBirth" placeholder="00/00/0000" required />
+                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp></mat-datepicker>
+                <mat-error *ngIf="partnerFormGroup.get('dateOfBirth').invalid">{{getErrorMessage('dateOfBirth')}}</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+          <h3>Endereço</h3>
+
+          <div class="line-form">
+            <div class="short-line-form">
+
+              <mat-form-field appearance="outline">
+                <mat-label>CEP</mat-label>
+                <input matInput placeholder="CEP" formControlName="zipCode" #cep (blur)="getAdressByCep(cep.value)"
+                  mask="00000-000" required [showMaskTyped]="true" />
+                <mat-icon matSuffix>place</mat-icon>
+                <mat-error *ngIf="partnerFormGroup.get('zipCode').invalid">{{getErrorMessage('zipCode')}}</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+          <div class="line-form">
+            <mat-form-field appearance="outline">
+              <mat-label>Logradouro</mat-label>
+              <input matInput placeholder="Logradouro" formControlName="streetName" required />
+              <mat-icon matSuffix>add_road</mat-icon>
+              <mat-error *ngIf="partnerFormGroup.get('streetName').invalid">{{getErrorMessage('streetName')}}</mat-error>
+            </mat-form-field>
+
+          <div class="short-line-form">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Número</mat-label>
+              <input matInput placeholder="Número" formControlName="number" required />
+              <mat-icon matSuffix>looks_one</mat-icon>
+              <mat-error *ngIf="partnerFormGroup.get('number').invalid">{{getErrorMessage('number')}}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Complemento</mat-label>
+              <input matInput placeholder="Complemento" formControlName="complement" />
+              <mat-icon matSuffix>note_add</mat-icon>
+              <mat-error *ngIf="partnerFormGroup.get('complement').invalid">{{getErrorMessage('complement')}}</mat-error>
+              <mat-error *ngIf="!partnerFormGroup.get('complement').value">Esse campo não foi cadastrado</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+          <div class="line-form">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Bairro</mat-label>
+              <input matInput placeholder="Bairro" formControlName="neighborhoodName" required />
+              <mat-icon matSuffix>map</mat-icon>
+              <mat-error *ngIf="partnerFormGroup.get('neighborhoodName').invalid">{{getErrorMessage('neighborhoodName')}}</mat-error>
+            </mat-form-field>
+
+            <div class="short-line-form">
+
+              <mat-form-field appearance="outline">
+                <mat-label>Município</mat-label>
+                <input matInput placeholder="Município" formControlName="cityName" required />
+                <mat-icon matSuffix>map</mat-icon>
+                <mat-error *ngIf="partnerFormGroup.get('cityName').invalid">{{getErrorMessage('cityName')}}</mat-error>
+              </mat-form-field>
+
+
+              <mat-form-field appearance="outline">
+                <mat-label>Estado</mat-label>
+                <input matInput placeholder="Estado" formControlName="uf" required />
+                <mat-icon matSuffix>map</mat-icon>
+                <mat-error *ngIf="partnerFormGroup.get('uf').invalid">{{getErrorMessage('uf')}}</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+          <h3>Contato</h3>
+
+          <div class="line-form">
+            <div class="short-line-form">
+              <mat-form-field appearance="outline">
+                <mat-label>Telefone/Celular</mat-label>
+                <input matInput placeholder="(00) 0000-0000" formControlName="phone" [showMaskTyped]="true"
+                  mask="(00) 0000-0000||(00) 0 0000-0000" required />
+                <mat-icon matSuffix>call</mat-icon>
+                <mat-error *ngIf="partnerFormGroup.get('phone').invalid">{{getErrorMessage('phone')}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="isAddPage">
+    <div class="group-buttons-actions">
+      <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
+      <core-save-button [disabled]="!partnerFormGroup.valid" (click)="savePartner()">Salvar </core-save-button>
+    </div>
+  </div>
+
+  <div *ngIf="!isAddPage">
+    <div class="group-buttons-actions">
+      <core-cancel-button button (click)="onNoClick()">Cancelar </core-cancel-button>
+      <core-save-button [disabled]="!partnerFormGroup.valid" (click)="editPartner()">Atualizar </core-save-button>
+    </div>
+  </div>
+</div>

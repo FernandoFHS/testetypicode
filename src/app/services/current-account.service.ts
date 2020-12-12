@@ -60,13 +60,19 @@ export class CurrentAccountService {
         let params = new HttpParams();
 
         // TODO
-        params = params.append('dateTransactionStart', this.formatDateToAPI(filter.dateTransactionStart, true));
-        params = params.append('dateTransactionFinish', this.formatDateToAPI(filter.dateTransactionFinish, false));
+        if (filter.dateTransactionStart) {
+          params = params.append('dateTransactionStart', this.formatDateToAPI(filter.dateTransactionStart, true));
+        }
+
+        if (filter.dateTransactionFinish) {
+          params = params.append('dateTransactionFinish', this.formatDateToAPI(filter.dateTransactionFinish, false));
+        }
+
         params = params.append('idCompany', filter.idCompany);
 
         // TODO
-        params = params.append('pageNumber', page.toString());
-        params = params.append('pageSize', size.toString());
+        params = params.append('page', page.toString());
+        params = params.append('size', size.toString());
         // params = params.append('paged', `${false}`); // TODO
 
         return this._http.get<ExtractResponseModel>(`${environment.bff.url_financial}/transaction`, {
@@ -87,19 +93,23 @@ export class CurrentAccountService {
     }
   }
 
-  getFutureReleasesByIdCompany(idCompany: number, page: number, size: number): Observable<ExtractResponseModel> {
+  getFuturePostingsByIdCompany(idCompany: number, page: number, size: number): Observable<ExtractResponseModel> {
     try {
       if (environment.bff.mock) {
-        return of(ExtractResponseModel.mock());
+        const response = ExtractResponseModel.mock();
+
+        response.content = response.content.slice((size * page), (size * page) + size);
+
+        return of(response);
       }
       else {
         let params = new HttpParams();
         params = params.append('idCompany', idCompany.toString());
 
         // TODO
-        // params = params.append('pageNumber', page.toString());
-        // params = params.append('pageSize', size.toString());
-        params = params.append('paged', `${false}`); // TODO
+        params = params.append('page', page.toString());
+        params = params.append('size', size.toString());
+        // params = params.append('paged', `${false}`); // TODO
 
         return this._http.get<ExtractResponseModel>(`${environment.bff.url_financial}/transaction/accountSettlement`, {
           params: params,

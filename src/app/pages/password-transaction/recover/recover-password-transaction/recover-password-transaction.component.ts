@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BreadcrumbModel } from 'src/app/@core/models/breadcrumb';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
 import { GeneralService } from 'src/app/services/general.service';
@@ -15,6 +15,7 @@ import { PasswordService } from 'src/app/services/password/password.service';
 export class RecoverPasswordTransactionComponent implements OnInit {
   recoverPasswordForm: FormGroup;
   hide1 = true;
+  idCompany:any;
 
   hasPassword: boolean = false;
 
@@ -41,12 +42,16 @@ export class RecoverPasswordTransactionComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private _notificationService: NotificationService,
     private _generalService: GeneralService,
     private passwordService: PasswordService
   ) { }
 
   ngOnInit(): void {
+
+    this.idCompany = this.route.snapshot.queryParamMap.get('idCompany');
+
     this.recoverPasswordForm = this._formBuilder.group({
       email: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -59,18 +64,19 @@ export class RecoverPasswordTransactionComponent implements OnInit {
 
   sendEmailToRecover(): void {
     if (this.recoverPasswordForm.valid) {
-      
+
       let objectSendEmail = {
         email: this.recoverPasswordForm.get('email').value,
-        idCompany: 100800001,
+        idCompany: this.idCompany,
         password: this.recoverPasswordForm.get('password').value
       }
       const message = 'Foi enviado para o seu e-mail cadastrado um link para redefinição de senha!';
 
-      this._generalService.openOkDialog(message, () => {}, 'Link enviado');
-
-      this.passwordService.alterPassword(objectSendEmail).subscribe((response) => {
-        console.log(response)
+      this.passwordService.sendPasswordLinkToEmail(objectSendEmail).subscribe((response) => {
+        console.log(response);
+        this._generalService.openOkDialog(message, () => {
+          this.router.navigate(['/password-transaction']);
+        }, 'Link enviado');
       })
     }
   }

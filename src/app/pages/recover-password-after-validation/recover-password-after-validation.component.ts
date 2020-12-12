@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmedValidator } from 'src/app/@core/validators/confirmed.validator';
+import { NotificationService } from 'src/app/services/notification.service';
 import { PasswordService } from 'src/app/services/password/password.service';
 
 @Component({
@@ -13,13 +14,24 @@ export class RecoverPasswordAfterValidationComponent implements OnInit {
   validationRecoverPasswordForm: FormGroup;
   hide1 = true;
   hide2 = true;
+  token: any;
+  idCompany: any;
 
   constructor(private _formBuilder: FormBuilder, 
     private router: Router, 
-    private passwordService: PasswordService
+    private route: ActivatedRoute, 
+    private passwordService: PasswordService,
+    private notificationService: NotificationService
     ) {}
 
   ngOnInit(): void {
+    // this.token = +this.route.snapshot.queryParams.get('token');
+    this.token = this.route.snapshot.params['token'];
+    // this.idCompany = this.route.snapshot.params['idCompany'];
+    this.idCompany = this.route.snapshot.queryParamMap.get('idCompany');
+    console.log(this.token);
+    console.log(this.idCompany);
+
     this.validationRecoverPasswordForm = this._formBuilder.group(
       {
         newPassword: ['', Validators.required],
@@ -32,11 +44,15 @@ export class RecoverPasswordAfterValidationComponent implements OnInit {
   }
 
   recoverValidatePassword(): void {
-    // let objectRecoverPassword = {
-    //   password:  this.validationRecoverPasswordForm.get('confirmNewPassword').value
-    // }
+    let formObject = {
+       password:  this.validationRecoverPasswordForm.get('confirmNewPassword').value
+     }
 
-    // this.passwordService.
+    this.passwordService.recoverPassword(formObject, this.token, this.idCompany).subscribe((response) => {
+      console.log(response);
+      this.notificationService.success('Senha redefinida com sucesso!');
+      this.router.navigate(['/password-transaction']);
+    })
   }
 
   navigateToRecoverPassword(): void {

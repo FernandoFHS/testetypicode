@@ -71,9 +71,6 @@ export class CompanyListComponent implements OnInit {
 
     this.companyFormGroup.get('filter').valueChanges.pipe(
       debounceTime(1500),
-      // switchMap((filter) => {
-
-      // })
     ).subscribe(() => {
       this.companyFormGroup.get('id').setValue('');
       this.companyFormGroup.get('documentNumberCompany').setValue('');
@@ -83,9 +80,7 @@ export class CompanyListComponent implements OnInit {
   }
 
   loadData = (sort: string, order: string, page: number, size: number) => {
-
-    return this.companyService.getAllCompanies(sort, order, page, size, this.idCompanyGroup);
-    
+    return this.companyService.getAllCompanies(sort, order, page, size, this.idCompanyGroup);   
   };
 
   loadDataByFilter = (sort: string, order: string, page: number, size: number) => {
@@ -93,20 +88,21 @@ export class CompanyListComponent implements OnInit {
     const filter = {
       idCompany: form.id,
       documentNumberCompany: form.documentNumberCompany,
-      companyName: form.filter
+      companyName: form.filter,
+      idCompanyGroup: this.idCompanyGroup
     }
     return this.companyService.getAllCompaniesByFilter(filter, sort, order, page, size)
   }
 
-  headers: HeaderModelCompany[] = [
+  headers: HeaderModelCompany|any[] = [
     { text: 'Código', value: 'idCompany', subValue: null, deepValue: null },
-    { text: 'CPF / CNPJ', value: 'documentNumberCompany', subValue: null, deepValue: null },
+    { text: 'CPF / CNPJ', value: 'documentNumberCompany', subValue: null, deepValue: null, type: 'cpf/cnpj' },
     { text: 'Tipo', value: 'companyType', subValue: null, deepValue: null },
     { text: 'Razão Social', value: 'companyName', subValue: null, deepValue: null },
     { text: 'MCC', value: 'cnae', subValue: 'mcc', deepValue: 'code' },
-    { text: 'Parceiro', value: 'userChangeCode', subValue: null, deepValue: null },
+    // { text: 'Parceiro', value: 'userChangeCode', subValue: null, deepValue: null },
     // { text: 'Status', value: 'companyStatus', subValue: null, deepValue: null },
-    { text: 'Tab.Vendas', value: 'salesTableNumber', subValue: null, deepValue: null },
+    // { text: 'Tab.Vendas', value: 'salesTableNumber', subValue: null, deepValue: null },
     { text: 'Situação', value: 'situation', subValue: null, deepValue: null },
   ];
 
@@ -117,30 +113,12 @@ export class CompanyListComponent implements OnInit {
     view: true
   };
 
-  dinamicAddRouter = "/company-list/add-company";
-
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  //   // this.resultsLength = 
-
-  //   console.log(this.dataSource)
-
-  //   if (this.dataSource.paginator) {
-  //     this.dataSource.paginator.firstPage();
-  //   }
-  // }
-
   loadModel() {
     this.companyFormGroup.get('filter').setValue('', { emitEvent: false });
     this.dataTableService.refreshDataTable();
   }
 
   clearFilter() {
-    // let allInputs = document.querySelectorAll('input');
-    // console.log(allInputs)
-    // allInputs.forEach((input) => input.value = '');
-
     this.companyFormGroup.get('id').setValue('');
     this.companyFormGroup.get('documentNumberCompany').setValue('');
 

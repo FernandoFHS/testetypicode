@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { DeleteProfileComponent } from './pages/delete-profile/delete-profile.component';
 import { CompanyListComponent } from './pages/companies/list/list-company.component';
 import { AddCompanyComponent } from './pages/companies/crud-company/add-company.component';
-import { AddPartnerComponent } from './pages/companies/partners/add/add-partner.component';
+import { AddPartnerComponent } from './pages/companies/partners/local-partner/add-partner.component';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { AddBankAccountComponent } from './pages/companies/crud-company/dialogs/add-bank-account/add-bank-account.component';
 import { EditBankAccountComponent } from './pages/companies/crud-company/dialogs/edit-bank-account/edit-bank-account.component';
@@ -25,7 +25,6 @@ import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SimpleDataTableComponent } from './@core/components/simple-data-table/simple-data-table.component';
 import { AddPlanComponent } from './pages/dialogs/add-plan/add-plan.component';
-
 import { RulesComponent } from './pages/rules/rules.component';
 import { RuleComponent } from './pages/rules/rule/rule.component';
 import { ListRulesComponent } from './pages/rules/list-rules/list-rules.component';
@@ -33,7 +32,6 @@ import { Error404Module } from './pages/errors/404/error-404.module';
 import { CurrentAccountComponent } from './pages/current-account/current-account.component';
 import { ExtractComponent } from './pages/current-account/extract/extract.component';
 import { TransactionsComponent } from './pages/transactions/transactions.component';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MglTimelineModule } from 'angular-mgl-timeline';
@@ -42,8 +40,8 @@ import { AddPhoneComponent } from './pages/companies/crud-company/dialogs/add-ph
 import { AgreementAreaComponent } from './pages/agreement-area/agreement-area.component';
 import { EditPartnerComponent } from './pages/edit-partner/edit-partner.component';
 import { AgreementListComponent } from './pages/agreement-area/agreement-list/agreement-list.component';
+import { CdkStepper, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { CrudAgreementComponent } from './pages/agreement-area/crud-agreement/crud-agreement.component';
-import { CdkStepper } from '@angular/cdk/stepper';
 import { ListProfilesComponent } from './pages/profiles/list-profiles/list-profiles.component';
 import { ProfileComponent } from './pages/profiles/profiles.component';
 import { InitialPasswordTransactionComponent } from './pages/password-transaction/initial-password-transaction/initial-password-transaction.component';
@@ -54,6 +52,7 @@ import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { FuturePostingsComponent } from './pages/current-account/future-postings/future-postings.component';
 import { TaxTableComponent } from './pages/agreement-area/components/tax-table/tax-table.component';
+import { EditApiDataComponent } from './pages/companies/partners/dinamic-partner/dinamic-partner';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 
@@ -113,7 +112,8 @@ export const customCurrencyMaskConfig = {
     RecoverPasswordAfterValidationComponent,
     FuturePostingsComponent,
     AddPlanComponent,
-    TaxTableComponent    
+    TaxTableComponent,    
+    EditApiDataComponent,
   ],
   imports: [
     BrowserModule,
