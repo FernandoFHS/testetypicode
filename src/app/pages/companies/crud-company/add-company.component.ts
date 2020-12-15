@@ -725,25 +725,26 @@ export class AddCompanyComponent implements OnInit, OnDestroy {
       openingDate: company.openingDate
     });
 
-
-    this.adressFormGroup.patchValue({
-      streetName: company.companyAddress[0].street.streetName,
-      number: company.companyAddress[0].number,
-      complement: company.companyAddress[0].complement,
-      neighborhoodName: company.companyAddress[0].street.neighborhood.neighborhoodName,
-      cityName: company.companyAddress[0].street.city.cityName,
-      uf: company.companyAddress[0].street.state.uf,
-      referencePoint: company.referencePoint,
-      zipCode: company.companyAddress[0].street.zipCode,
-      subordinateZipCode: company.companyAddress[1].street.zipCode,
-      subordinateNeighborhoodCtrl: company.companyAddress[1].street.streetName,
-      subordinateCityCtrl: company.companyAddress[1].street.city.cityName,
-      subordinateStreetCtrl: company.companyAddress[1].street.streetName,
-      subordinateNumberCtrl: company.companyAddress[1].number,
-      subordinateComplementCtrl: company.companyAddress[1].complement,
-      subordinateStateCtrl: company.companyAddress[1].street.state.uf,
-      subordinateReferencePointCtrl: company.referencePoint
-    });
+    if(company.companyAddress.length>0){
+      this.adressFormGroup.patchValue({
+        streetName: company.companyAddress[0].street.streetName,
+        number: company.companyAddress[0].number,
+        complement: company.companyAddress[0].complement,
+        neighborhoodName: company.companyAddress[0].street.neighborhood.neighborhoodName,
+        cityName: company.companyAddress[0].street.city.cityName,
+        uf: company.companyAddress[0].street.state.uf,
+        referencePoint: company.referencePoint,
+        zipCode: company.companyAddress[0].street.zipCode,
+        subordinateZipCode: company.companyAddress[1].street.zipCode,
+        subordinateNeighborhoodCtrl: company.companyAddress[1].street.streetName,
+        subordinateCityCtrl: company.companyAddress[1].street.city.cityName,
+        subordinateStreetCtrl: company.companyAddress[1].street.streetName,
+        subordinateNumberCtrl: company.companyAddress[1].number,
+        subordinateComplementCtrl: company.companyAddress[1].complement,
+        subordinateStateCtrl: company.companyAddress[1].street.state.uf,
+        subordinateReferencePointCtrl: company.referencePoint
+      });
+    }
 
     console.log(company.companyAddress)
 
